@@ -1,0 +1,5 @@
+# Generado por Snyk
+.dccache
+
+# Módulos Nodejs
+backend/node_modules
