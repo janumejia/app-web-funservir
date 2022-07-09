@@ -1,19 +1,18 @@
 const bcrypt = require("bcrypt") // Para cifrar las contraseñas
-const User = require("../model/user")
+const User = require("../model/user") // Traemos el esquema del usuario
 
 const register = async (req, res) => {
     const {name, email, password} = req.body
 
-    // console.log(`Entra a ruta /register`)
     // Comprobamos si ya existe un usuario con ese correo 
     User.findOne({email})
-    .then((user) => {
+    .then((user) => { // Si todo sale bien...
         if(user){
             return res.json({message: "Ya existe un usuario con ese correo"})
-        } else if(!name || !email || !password){
+        } else if(!name || !email || !password){ // Si hay algún campo vació
             return res.json({message: "Debes completar todos los campos"})
-        } else{
-            bcrypt.hash(password, 10, (error, hashPassword) => {
+        } else{ // Si no existe un usuario con ese email
+            bcrypt.hash(password, 10, (error, hashPassword) => { // Genera el hash de la contraseña ingresada
                 if(error) res.json({ error })
                 else{
                     const newUser = new User({
