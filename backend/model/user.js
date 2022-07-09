@@ -1,6 +1,6 @@
-const {model, Schema} = require("mongoose")
+const {model, Schema} = require("mongoose") 
 
-const userSchema = new Schema({
+const userSchema = new Schema({ // Opciones de mongoose para definir esquema:https://mongoosejs.com/docs/schematypes.html#schematype-options
     name: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
