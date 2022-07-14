@@ -1,62 +1,71 @@
 .formContainer {
-    background-color: white;
-    border-radius: 8px;
-    min-width: 300px;
-    width: 60%;
-    max-width: 500px;
-    padding: 40px;
+    // Recuadro que contiene todo los de registro
+    background-color: white; // El color de fondo del recuadro que contiene los campos de registrarse
+    border-radius: 8px; // Borde en curva
+    min-width: 300px; // Si se reduce la pantalla, es la minima cantidad de pixeles es que se puede reducir la anchura del recuadro...
+    max-width: 500px; // Si se reduce la pantalla, es la máxima cantidad de pixeles es que se puede reducir la anchura del recuadro...
+    width: 95%; // Si se reduce la pantalla, cuando el recuadro ocupa el 95% de la pantalla se empezará a reducir de max-width -> min-width
+    padding: 40px; // Borde interno del recuadro
     display: flex;
     flex-direction: column;
     justify-content: center;
 
-    h3 {
-        font-size: 20px;
-        font-weight: normal;
+    h2 {
+        // Título que dice registrarse
+        font-style: normal;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bolder;
         color: #2f2f2f;
     }
 
-    h2 {
-        font-size: 30px;
-        font-weight: bolder;
-        color: #6358dc;
-    }
-
     form {
-        margin-top: 30px;
+        margin-top: 30px; // Distancia entre el titulo y el recuadro que contiene los inputs
         display: flex;
         flex-direction: column;
-        gap: 25px;
+        gap: 20px; // Distancia entre cuadros de inputs
 
         .inputContainer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #ececec;
-            padding: 10px 15px;
-            border-radius: 8px;
+            background-color: #EAEBF6;
+            padding: 15px 15px;
+            border-radius: 4px;
 
             .left {
                 display: flex;
                 flex-direction: column;
                 gap: 3px;
-                width: 80%;
+                width: 100%;
 
                 label {
                     font-size: 11px;
                 }
 
                 input {
-                    border: none;
-                    font-weight: bold;
-                    background-color: inherit;
-                    font-size: 13px;
-                    color: #2f2f2f;
+                    border: none; // El texto sin borde
+                    font-weight: 100; // El ancho de las letras (Está en delgado)
+                    background-color: inherit; // Que el fondo de las letras sea transparente
+                    font-size: 18px; // Tamaño letra input
+                    color: #2f2f2f; // Color letras
                 }
             }
 
+            // Para el icono del lado derecho del input
             svg {
                 width: 25px;
                 height: 20px;
+            }
+        }
+
+        .checkboxPolicies {
+            font-size: 18px;
+            margin-top: 8px;
+            vertical-align: text-bottom;
+
+            input {
+                accent-color: #F91942;
             }
         }
 
@@ -67,24 +76,24 @@
             padding: 10px 0;
             cursor: pointer;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px; // tamaño letras del botón
             color: white;
-            background-color: #6358dc;
+            background-color: #F91942;
             border-radius: 8px;
             transition-duration: 0.3s;
         }
 
         button:hover {
-            background-color: #4235d6;
+            background-color: #ff496b;;
         }
 
         p {
             text-align: center;
-            font-size: 12px;
+            font-size: 18px;
 
             b {
                 cursor: pointer;
-                color: #6358dc;
+                color: #000000;
             }
 
             b:hover {

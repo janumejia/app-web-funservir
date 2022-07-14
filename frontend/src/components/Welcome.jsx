@@ -32,7 +32,7 @@ const Welcome = () => {
       </h2>
       <div className={styles.buttons}>
         <button onClick={() => navigate("/login")}>Login</button>
-        <button onClick={() => navigate("/")}>Register</button>
+        <button onClick={() => navigate("/RegisterUser")}>Register</button>
       </div>
     </div>
   );
