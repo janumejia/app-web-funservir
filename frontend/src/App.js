@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Login from './components/Login';
-import Register from './components/Register';
-import Welcome from './components/Welcome';
-import RegisterUser from './components/RegisterUser'; // Nuevo
-import Home from './components/Home';
+import Login from './views/Login';
+import Register from './views/Register';
+import Welcome from './views/Welcome';
+import RegisterUser from './views/RegisterUser'; // Nuevo
+import Home from './views/Home';
+import LoginUser from './views/inputs/BasicForm'
 
 import styles from "./App.module.scss" 
 
@@ -14,7 +15,7 @@ const App = () => {
       <Routes>
         {/* <Route path="/" element={<Register />} /> */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/loginUser" element={<LoginUser />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/registerUser" element={<RegisterUser />} />
       </Routes>
