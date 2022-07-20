@@ -19,7 +19,7 @@ const RegisterUserT = ({ usuario }) => {
     sexo: "",
     direccion: "",
     discapacidad: [],
-    tutor: false,
+    tutor: "",
     fundacion: ""
   });
   const [message, setMessage] = useState();
@@ -31,12 +31,14 @@ const RegisterUserT = ({ usuario }) => {
   const HandleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
-
-  const HandleChangeArray = (e) => {
-    setInputs(...inputs, [e.target.name].concat(e.target.value));
-    console.log(inputs.discapacidad);
-  }
   
+  const HandleChangeArray = (e) => {
+    let newArray = [...inputs.discapacidad, e.target.id]
+    if (inputs.discapacidad.includes(e.target.id)) {
+      newArray = newArray.filter(disa => disa !== e.target.id)
+    }
+    setInputs({ ...inputs, discapacidad: newArray });
+  }
   // Al presionar el botón de registrarse
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -120,16 +122,45 @@ const RegisterUserT = ({ usuario }) => {
             </div>
           </div>
           <div className={styles.inputContainer}>
-
             <div className={styles.radioGroup}>
               <h4>Discapacidad: (Seleccione ninguna, una o varias)</h4>
-              <Checkbox checked={discapacidad} onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
-              <Checkbox checked={discapacidad} onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
-              <Checkbox checked={discapacidad} onChange={(e) => HandleChangeArray(e)} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
-              <Checkbox checked={discapacidad} onChange={(e) => HandleChangeArray(e)} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
-              <Checkbox checked={discapacidad} onChange={(e) => HandleChangeArray(e)} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
+              <FormControlLabel value="Motora" control={<Checkbox id="Motora" onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }} />} label="Motora" />
+              <FormControlLabel value="Visual" control={<Checkbox id="Visual" onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }} />} label="Visual" />
+              <FormControlLabel value="Auditiva" control={<Checkbox id="Auditiva" onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }} />} label="Auditiva" />
+              <FormControlLabel value="Intelectual" control={<Checkbox id="Intelectual" onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }} />} label="Intelectual" />
+              <FormControlLabel value="Psicosocial" control={<Checkbox id="Psicosocial" onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }} />} label="Psicosocial" />
             </div>
           </div>
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <label>¿Eres tutor?</label>
+              <RadioGroup
+                row aria-labelledby="demo-controlled-radio-buttons-group"
+                name="tutor"
+                value={tutor}
+                onChange={(e) => HandleChange(e)}
+              >
+                <FormControlLabel value={true} control={<Radio />} label="Sí" />
+                <FormControlLabel value={false} control={<Radio />} label="No" />
+              </RadioGroup>
+            </div>
+          </div>
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <input
+                onChange={(e) => HandleChange(e)}
+                value={fundacion}
+                name="fundacion"
+                id="fundacion"
+                type="text"
+                placeholder="Fundación..."
+                autoComplete="off"
+              />
+            </div>
+          </div>
+          <button type="submit" onClick={console.log(inputs)}>
+            {loading ? "Cargando..." : "Únete"}
+          </button>
         </form>
       </div>
       {message && <div className={styles.toast}>{message}</div>}
