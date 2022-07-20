@@ -11,7 +11,8 @@ const RegisterUser = () => {
     email: "",
     name: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    childComponents: false
   });
   const [message, setMessage] = useState();
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,6 @@ const RegisterUser = () => {
   const HandleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
-  let childComponent = false;
   // Al presionar el botón de registrarse
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +38,8 @@ const RegisterUser = () => {
           setMessage("");
         }, 1500);
       } else if (agreePolicies) { // ¿Si aceptó las políticas?
-        childComponent = true;
+        setInputs({...inputs, childComponents:true});
+
       } else { // No aceptó las políticas
         setMessage("Debes aceptar los términos y condiciones");
         setTimeout(() => {
@@ -59,10 +60,10 @@ const RegisterUser = () => {
   const handleAgreePolicies = () => { // Al presionar sobre el checkbox cambia al estado opuesto
     setAgreePolicies(!agreePolicies);
   };
-
+  
   return (
     <>
-      <div className={styles.formContainer}>
+      {!inputs.childComponents?<><div className={styles.formContainer}>
         <h2>Registrarse</h2>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className={styles.inputContainer}>
@@ -145,6 +146,7 @@ const RegisterUser = () => {
         </form>
       </div>
       {message && <div className={styles.toast}>{message}</div>}
+      </>:<RegisterUserT usuario= {inputs}/>}
     </>
   );
 };

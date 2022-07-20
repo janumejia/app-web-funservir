@@ -3,17 +3,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from '@mui/material/Checkbox';
 import Radio from "@mui/material/Radio";
 
 import styles from "./styles.module.scss";
 
-const RegisterUserT = ({usuario}) => {
-  
+const RegisterUserT = ({ usuario }) => {
 
+  const { name, email, password } = usuario;
   const [inputs, setInputs] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: name,
+    email: email,
+    password: password,
     edad: "",
     sexo: "",
     direccion: "",
@@ -31,6 +32,11 @@ const RegisterUserT = ({usuario}) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
+  const HandleChangeArray = (e) => {
+    setInputs(...inputs, [e.target.name].concat(e.target.value));
+    console.log(inputs.discapacidad);
+  }
+  
   // Al presionar el botón de registrarse
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -73,26 +79,56 @@ const RegisterUserT = ({usuario}) => {
         <h2>Registro de usuario nuevo</h2>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className={styles.inputContainer}>
-            <RadioGroup
-              aria-labelledby="demo-controlled-radio-buttons-group"
-              name="controlled-radio-buttons-group"
-              value={sexo}
-              onChange={(e) => HandleChange(e)}
-            >
-              <FormControlLabel value="Femenino" control={<Radio />} label="Female" />
-              <FormControlLabel value="Masculino" control={<Radio />} label="Male" />
-              <FormControlLabel value="Otro" control={<Radio />} label="Other" />
-            </RadioGroup>
+            <div className={styles.left}>
+              <input
+                onChange={(e) => HandleChange(e)}
+                value={edad}
+                name="edad"
+                id="edad"
+                type="text"
+                placeholder="Ingrese su edad"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <h4>Sexo: </h4>
+              <RadioGroup
+                row aria-labelledby="demo-controlled-radio-buttons-group"
+                name="sexo"
+                value={sexo}
+                onChange={(e) => HandleChange(e)}
+              >
+                <FormControlLabel value="Femenino" control={<Radio />} label="Female" />
+                <FormControlLabel value="Masculino" control={<Radio />} label="Male" />
+                <FormControlLabel value="Otro" control={<Radio />} label="Other" />
+              </RadioGroup>
+            </div>
+          </div>
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <input
+                onChange={(e) => HandleChange(e)}
+                value={direccion}
+                name="direccion"
+                id="direccion"
+                type="text"
+                placeholder="Ingrese su dirección de residencia"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+          <div className={styles.inputContainer}>
 
-            <button type="submit">
-              {loading ? "Cargando..." : "Regístrate"}
-            </button>
-            <p>
-              <b>¿Eres dueño de un sitio?</b>
-            </p>
-            <p>
-              <b onClick={() => navigate("/login")}>¿Ya tienes cuenta?</b>
-            </p>
+            <div className={styles.radioGroup}>
+              <h4>Discapacidad: (Seleccione ninguna, una o varias)</h4>
+              <Checkbox checked={discapacidad} onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
+              <Checkbox checked={discapacidad} onChange={HandleChangeArray} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
+              <Checkbox checked={discapacidad} onChange={(e) => HandleChangeArray(e)} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
+              <Checkbox checked={discapacidad} onChange={(e) => HandleChangeArray(e)} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
+              <Checkbox checked={discapacidad} onChange={(e) => HandleChangeArray(e)} inputProps={{ 'aria-label': 'controlled' }}></Checkbox>
+            </div>
           </div>
         </form>
       </div>
