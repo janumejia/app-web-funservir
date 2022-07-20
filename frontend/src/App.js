@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Welcome from './views/welcome/Welcome';
-import RegisterUser from './views/forms/login/registerUser/RegisterUser'; // Nuevo
+import RegisterUser from './views/forms/registerUser/RegisterUser'; // Nuevo
 import Home from './views/home/Home';
 import LoginUser from './views/forms/login';
+import RegisterUser2Part from './views/forms/registerUser2';
 
 import styles from "./App.module.scss" 
 
