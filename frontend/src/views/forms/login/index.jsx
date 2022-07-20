@@ -1,7 +1,7 @@
 import React from 'react';
-import LoginForm from './LoginForm.module.css'
-import TextField from './TextField'
-import RedButton from './RedBtn';
+import LoginForm from './styles.module.css'
+import TextField from '../../../components/commons/inputs/inputForm'
+import RedButton from '../../../components/commons/buttons/redButton';
 
 const FormularioB = () => {
   return(

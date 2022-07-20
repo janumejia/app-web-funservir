@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Login from './views/Login';
-import Register from './views/Register';
-import Welcome from './views/Welcome';
-import RegisterUser from './views/RegisterUser'; // Nuevo
-import Home from './views/Home';
-import LoginUser from './views/inputs/BasicForm'
+import Welcome from './views/welcome/Welcome';
+import RegisterUser from './views/forms/login/registerUser/RegisterUser'; // Nuevo
+import Home from './views/home/Home';
+import LoginUser from './views/forms/login';
 
 import styles from "./App.module.scss" 
 
