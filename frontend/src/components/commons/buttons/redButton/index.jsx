@@ -1,5 +1,5 @@
 import React from 'react';
-import RedBtn from './RedBtn.module.css';
+import RedBtn from './styles.module.css';
 const RedButton = (props) =>{
     return (
         <div>
