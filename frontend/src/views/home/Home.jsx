@@ -1,9 +1,8 @@
 import React from 'react'
-import Radio from '../../components/commons/radioButtonGroup';
 
 const Home = () => {
   return (
-    <Radio/>
+    <h2>Welcome!</h2>
   )
 }
 
