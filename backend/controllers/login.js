@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
     const { email, password } = req.body
-
+    
     User.findOne({ email }).then((user) => {
         if (!user) {
             return res.json({ message: "Correo no encontrado" })
