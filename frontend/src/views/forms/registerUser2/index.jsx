@@ -19,7 +19,7 @@ const RegisterUserT = ({ usuario }) => {
     sexo: "",
     direccion: "",
     discapacidad: [],
-    tutor: "",
+    tutor: false,
     fundacion: ""
   });
   const [message, setMessage] = useState();
@@ -52,10 +52,10 @@ const RegisterUserT = ({ usuario }) => {
         .then((res) => {
           const { data } = res;
           setMessage(data.message);
-          setInputs({ name: "", password: "", email: "", confirmPassword: "" });
+          setInputs({ name: "", password: "", email: "", edad: "", sexo: "", direccion: " ", discapacidad: " ", tutor: " ", fundacion: " "});
           setTimeout(() => {
             setMessage("");
-            navigate("/login");
+            navigate("/loginUser");
           }, 1500);
         })
         .catch((error) => {
@@ -102,9 +102,9 @@ const RegisterUserT = ({ usuario }) => {
                 value={sexo}
                 onChange={(e) => HandleChange(e)}
               >
-                <FormControlLabel value="Femenino" control={<Radio />} label="Female" />
-                <FormControlLabel value="Masculino" control={<Radio />} label="Male" />
-                <FormControlLabel value="Otro" control={<Radio />} label="Other" />
+                <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                <FormControlLabel value="O" control={<Radio />} label="Otro" />
               </RadioGroup>
             </div>
           </div>
@@ -141,7 +141,7 @@ const RegisterUserT = ({ usuario }) => {
                 onChange={(e) => HandleChange(e)}
               >
                 <FormControlLabel value={true} control={<Radio />} label="Sí" />
-                <FormControlLabel value={false} control={<Radio />} label="No" />
+                <FormControlLabel value={false} control={<Radio />} label="No" defaultChecked/>
               </RadioGroup>
             </div>
           </div>
@@ -158,7 +158,7 @@ const RegisterUserT = ({ usuario }) => {
               />
             </div>
           </div>
-          <button type="submit" onClick={console.log(inputs)}>
+          <button type="submit">
             {loading ? "Cargando..." : "Únete"}
           </button>
         </form>

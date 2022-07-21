@@ -37,8 +37,8 @@ const RegisterUser = () => {
           setMessage("");
         }, 1500);
       } else if (agreePolicies) { // ¿Si aceptó las políticas?
-        setInputs({...inputs, childComponents:true});
-
+        setLoading(true);
+        setInputs({...inputs, childComponents:true}); //https://stackoverflow.com/questions/61054275/usestate-with-boolean-value-in-react revisar useEffect para limpiar el estado
       } else { // No aceptó las políticas
         setMessage("Debes aceptar los términos y condiciones");
         setTimeout(() => {
@@ -145,7 +145,7 @@ const RegisterUser = () => {
         </form>
       </div>
       {message && <div className={styles.toast}>{message}</div>}
-      </>:<RegisterUserT usuario= {inputs}/>}
+      </>:<RegisterUserT usuario= {inputs}/> }
     </>
   );
 };
