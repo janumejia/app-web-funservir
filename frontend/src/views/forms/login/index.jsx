@@ -1,6 +1,5 @@
 import React from 'react';
 import LoginForm from './styles.module.css'
-import RedButton from '../../../components/commons/buttons/redButton';
 import styles from './styles.module.scss'
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -16,7 +15,6 @@ const FormularioB = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
   const { email, password } = inputs;
 
   const HandleChange = (e) => {
@@ -30,7 +28,7 @@ const FormularioB = () => {
     if (password !== "" && email !== "") {
       const Usuario = {
         email,
-        password,
+        password
       };
       setLoading(true);
       await axios
@@ -96,7 +94,9 @@ const FormularioB = () => {
             </div>
           </div>
           <a href="/" className={LoginForm.ForgotPswd}>{'¿Olvidaste tu contraseña?'}</a>
-          <RedButton type="submit" value={'Inicia Sesión'} />
+          <button type="submit">
+            {loading ? "Cargando..." : "Inicia sesión"}
+          </button>
           <div>
             <input type="checkbox" className={LoginForm.checkmark} />Recordarme
           </div>
