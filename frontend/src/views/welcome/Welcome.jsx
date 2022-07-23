@@ -31,7 +31,7 @@ const Welcome = () => {
         {name ? "Te pudiste autenticar correctamente🎉" : "Te estamos viendo..."}
       </h2>
       <div className={styles.buttons}>
-        <button onClick={() => navigate("/loginUser")}>Login</button>
+        <button onClick={() => navigate("/login")}>Login</button>
         <button onClick={() => navigate("/RegisterUser")}>Register</button>
       </div>
     </div>

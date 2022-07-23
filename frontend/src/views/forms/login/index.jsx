@@ -39,7 +39,7 @@ const FormularioB = () => {
           setTimeout(() => {
             setMessage("");
             localStorage.setItem("token", data?.user.token);
-            navigate(`/welcome`);
+            navigate(`/`);
           }, 1500);
         })
         .catch((error) => {
@@ -64,7 +64,7 @@ const FormularioB = () => {
   return (
     <div className={LoginForm.Container}>
       <div className={styles.formContainer}>
-        <h2>Registrarse</h2>
+        <h2>Iniciar Sesión</h2>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className={styles.inputContainer}>
             <div className={styles.left}>
