@@ -15,7 +15,7 @@ app.use(express.json()) // Nos permitirá ver el body que contiene las peticione
 /* Rutas de nuestra APP */
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/register", controllers.register)
-app.post("/login", controllers.login)
+app.post("/loginUser", controllers.login)
 
 const PORT = 4000 // Puerto por donde funcionará nuestro servidor
 

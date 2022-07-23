@@ -1,16 +1,17 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import RegisterUserT from "../registerUser2/index.jsx";
 import styles from "./styles.module.scss";
 
 const RegisterUser = () => {
-  //
+
+
   const [inputs, setInputs] = useState({
     email: "",
     name: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    childComponents: false
   });
   const [message, setMessage] = useState();
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,6 @@ const RegisterUser = () => {
   const HandleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
-
   // Al presionar el botón de registrarse
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -32,37 +32,13 @@ const RegisterUser = () => {
 
       // ¿Las contraseñas no son iguales?
       if (password !== confirmPassword) {
-        setMessage("Las contraseñas con coinciden");
+        setMessage("Las contraseñas no coinciden");
         setTimeout(() => {
           setMessage("");
         }, 1500);
       } else if (agreePolicies) { // ¿Si aceptó las políticas?
-        const User = {
-          name,
-          email,
-          password,
-        };
         setLoading(true);
-        await axios
-          .post("http://localhost:4000/register", User)
-          .then((res) => {
-            const { data } = res;
-            setMessage(data.message);
-            setInputs({ name: "", password: "", email: "", confirmPassword: "" });
-            setTimeout(() => {
-              setMessage("");
-              navigate("/login");
-            }, 1500);
-          })
-          .catch((error) => {
-            console.error(error);
-            setMessage("Hubo un error");
-            setTimeout(() => {
-              setMessage("");
-            }, 1500);
-          });
-
-        setLoading(false);
+        setInputs({...inputs, childComponents:true}); //https://stackoverflow.com/questions/61054275/usestate-with-boolean-value-in-react revisar useEffect para limpiar el estado
       } else { // No aceptó las políticas
         setMessage("Debes aceptar los términos y condiciones");
         setTimeout(() => {
@@ -83,10 +59,10 @@ const RegisterUser = () => {
   const handleAgreePolicies = () => { // Al presionar sobre el checkbox cambia al estado opuesto
     setAgreePolicies(!agreePolicies);
   };
-
+  
   return (
     <>
-      <div className={styles.formContainer}>
+      {!inputs.childComponents?<><div className={styles.formContainer}>
         <h2>Registrarse</h2>
         <form onSubmit={(e) => onSubmit(e)}>
           <div className={styles.inputContainer}>
@@ -161,7 +137,7 @@ const RegisterUser = () => {
             {loading ? "Cargando..." : "Regístrate"}
           </button>
           <p>
-            <b>¿Eres dueño de un sitio?</b>
+            <b>¿Eres dueño de un sitio?</b> {/*Poner el navigate al due;o de sitio*/}
           </p>
           <p>
             <b onClick={() => navigate("/login")}>¿Ya tienes cuenta?</b>
@@ -169,6 +145,7 @@ const RegisterUser = () => {
         </form>
       </div>
       {message && <div className={styles.toast}>{message}</div>}
+      </>:<RegisterUserT usuario= {inputs}/> }
     </>
   );
 };
