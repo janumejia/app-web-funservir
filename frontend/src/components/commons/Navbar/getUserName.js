@@ -8,7 +8,7 @@ const UserName = () => {
   useEffect(() => {
     if (token) {
       axios
-        .get(`http://localhost:4000/user`, {
+        .get(`${REACT_APP_HOST_BACK}/user`, {
           headers: {
             token: token,
           },

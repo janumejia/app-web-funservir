@@ -1,8 +1,2 @@
 # Generado por Snyk
 .dccache
-
-# Módulos Nodejs
-backend/node_modules
-
-# Variables de entorno
-backend/.env
