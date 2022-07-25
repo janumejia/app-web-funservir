@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt") // Para cifrar las contraseñas
+const bcrypt = require("bcryptjs") // Para cifrar las contraseñas
 const User = require("../model/user") // Traemos el esquema del usuario
 
 const register = async (req, res) => {

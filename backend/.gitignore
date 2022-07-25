@@ -1,0 +1,7 @@
+# Módulos Nodejs
+node_modules
+# Variables de entorno
+.env
+
+#Snyk
+.dccache

@@ -32,7 +32,7 @@ const FormularioB = () => {
       };
       setLoading(true);
       await axios
-        .post("http://localhost:4000/loginUser", Usuario)
+        .post("${window.env.REACT_APP_HOST_BACK}/loginUser", Usuario)
         .then((res) => {
           const { data } = res;
           setMessage(data.message);

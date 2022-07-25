@@ -1,8 +1,9 @@
-require('dotenv').config() // Para traer las variables de entorno
+// require('dotenv').config()
+require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const mongoose = require("mongoose")
 
-const { MONGO_HOST, MONGO_DATABASE } = process.env // Como es un objeto podemos traer las variables de entorno
-const MONGO_URL = `mongodb://${MONGO_HOST}/${MONGO_DATABASE}`
+// Como es un objeto podemos traer las variables de entorno
+const MONGO_URL = `${process.env.MONGO_URL}`
 
 const db = async () => {
     await mongoose.connect(MONGO_URL) // Al método mongoose le debemos pasar donde se encuentra la BD

@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env' })
 const express = require("express")
 const cors = require("cors")
 const db = require("./database/db")
@@ -17,10 +18,12 @@ app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( p
 app.post("/register", controllers.register)
 app.post("/loginUser", controllers.login)
 
-const PORT = 4000 // Puerto por donde funcionará nuestro servidor
+// Leer puerto por donde funcionará nuestro servidor
+const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
+const port = process.env.PORT
 
-app.listen(PORT, () =>{ // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
-    console.log(`Servidor funcionando en el puerto ${PORT}`)
+app.listen(port, host, () =>{ // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
+    console.log(`Servidor funcionando en el puerto ${port} y host ${host}`)
     db() // Llamamos a la función db
 })
 
