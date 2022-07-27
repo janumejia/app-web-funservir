@@ -14,7 +14,7 @@ const Welcome = () => {
   useEffect(() => {
     if (token) {
       axios
-        .get(`${window.env.REACT_APP_HOST_BACK}/user`, {
+        .get(`${process.env.REACT_APP_HOST_BACK}/user`, {
           headers: {
             token: token,
           },
