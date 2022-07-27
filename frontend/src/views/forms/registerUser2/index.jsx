@@ -48,7 +48,7 @@ const RegisterUserT = ({ usuario }) => {
 
       setLoading(true);
       await axios
-        .post("${window.env.REACT_APP_HOST_BACK}/register", inputs)
+        .post(`${process.env.REACT_APP_HOST_BACK}/register`, inputs)
         .then((res) => {
           const { data } = res;
           setMessage(data.message);
