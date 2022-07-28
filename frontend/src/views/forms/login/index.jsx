@@ -35,16 +35,22 @@ const FormularioB = () => {
         .post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, Usuario)
         .then((res) => {
           const { data } = res;
-          setMessage(data.message);
-          setTimeout(() => {
-            setMessage("");
-            localStorage.setItem("token", data?.user.token);
-            navigate(`/`);
-          }, 1500);
+          setMessage(data.message); 
+          if (Object.values(data.user).length!==0) {
+            setTimeout(() => {
+              setMessage("");
+              localStorage.setItem("token", data?.user.token);
+              navigate(`/`);
+            }, 1500);
+          }else{
+            setTimeout(() => {
+              setMessage("");
+            }, 1500);
+          }
         })
         .catch((error) => {
           console.error(error);
-          setMessage("Correo o contraseña incorrecta");
+          setMessage("Sin conexión");
           setTimeout(() => {
             setMessage("");
           }, 1500);
