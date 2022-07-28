@@ -4,7 +4,7 @@ const verifyToken = async (req, res, next) => {
   const token = req.headers["token"];
 
   if (token) {
-    jwt.verify(token, "secreto", (error, data) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error, data) => {
       if (error) return res.status(400).json({ message: "Token invalido" });
       else {
         req.user = data;

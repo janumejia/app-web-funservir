@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs") // Toca bcryptjs porque la version pura de javascript, en cambio bcrypt require de python
 const User = require("../model/user")
 const jwt = require("jsonwebtoken");
@@ -18,7 +19,7 @@ const login = async (req, res) => {
                             name,
                         };
 
-                        const token = jwt.sign(data, "secreto", { //revisar el método "sign"
+                        const token = jwt.sign(data, process.env.JWT_SECRET, {
                             expiresIn: 86400 /* 24hs */,
                         });
 

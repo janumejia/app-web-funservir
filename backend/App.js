@@ -7,6 +7,7 @@ const controllers = require("./controllers") // No es necesario poner index.js, 
 const verifyToken = require("./middlewares/verifyToken");
 
 const app = express()
+app.disable('x-powered-by');
 
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
  en este caso responde las peticiones desde cualquier origen (inseguro) */
