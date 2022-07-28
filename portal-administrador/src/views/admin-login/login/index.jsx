@@ -34,6 +34,7 @@ const AdminLogin = () => {
         .post("http://localhost:4000/adminLogin", Usuario)
         .then((res) => {
           const { data } = res;
+          console.log(data.message);
           setMessage(data.message);
           setTimeout(() => {
             setMessage("");
@@ -43,7 +44,7 @@ const AdminLogin = () => {
         })
         .catch((error) => {
           console.error(error);
-          setMessage("Correo o contraseña incorrecta");
+          setMessage("Correo o contraseña incorrecta????");
           setTimeout(() => {
             setMessage("");
           }, 1500);
