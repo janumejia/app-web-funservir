@@ -1,4 +1,4 @@
-const bcrypt = requre("bcryptjs")
+const bcrypt = require("bcryptjs")
 const User = require("../model/user")
 const jwt = require("jsonwebtoken")
 
@@ -26,10 +26,12 @@ const AdminLogin = async (req, res) =>{
                         message: "Usuario autenticado correctamente",
                         user:{token}
                     })
+                }else{
+                    res.json({ message: "Correo o contraseña incorrecta", user:{}})
                 }
             })
-        }else {
-            res.json({message: "Correo o contraseña incorrecta"})
+        }else{
+            res.json({ message: "Correo o contraseña incorrecta", user:{}})
         }
     })
 

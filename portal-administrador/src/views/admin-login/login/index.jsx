@@ -34,13 +34,18 @@ const AdminLogin = () => {
         .post("http://localhost:4000/adminLogin", Usuario)
         .then((res) => {
           const { data } = res;
-          console.log(data.message);
           setMessage(data.message);
-          setTimeout(() => {
-            setMessage("");
-            localStorage.setItem("token", data?.user.token);
-            navigate(`/`);
-          }, 1500);
+          if (Object.values(data.user).length!==0) {
+            setTimeout(() => {
+              setMessage("");
+              localStorage.setItem("token", data?.user.token);
+              navigate(`/`);
+            }, 1500);
+          }else{
+            setTimeout(() => {
+              setMessage("");
+            }, 1500);
+          }
         })
         .catch((error) => {
           console.error(error);

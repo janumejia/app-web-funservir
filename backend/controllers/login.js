@@ -24,16 +24,14 @@ const login = async (req, res) => {
 
                         res.json({
                             message: "Usuario autenticado correctamente",
-                            user: {
-                                id,
-                                name, //Revisar esta info por qué se está mandando
-                                token,
-                            }
+                            user: { token }
                         })
                     } else {
-                        res.json({ message: "Correo o contraseña incorrecta" })
+                        res.json({ message: "Correo o contraseña incorrecta", user:{}})
                     }
                 })
+        }else{
+            res.json({ message: "Correo o contraseña incorrecta", user:{}})
         }
     })
 }
