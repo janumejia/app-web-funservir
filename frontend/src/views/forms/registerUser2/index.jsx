@@ -20,7 +20,8 @@ const RegisterUserT = ({ usuario }) => {
     direccion: "",
     discapacidad: [],
     tutor: false,
-    fundacion: ""
+    fundacion: "",
+    userType: 'R' //Usuario regular
   });
   const [message, setMessage] = useState();
   const [loading, setLoading] = useState(false);

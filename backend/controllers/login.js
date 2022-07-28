@@ -6,9 +6,7 @@ const login = async (req, res) => {
     const { email, password } = req.body
     
     User.findOne({ email }).then((user) => {
-        if (!user) {
-            return res.json({ message: "Correo no encontrado" })
-        } else {
+        if (user) {
             /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
                 .then((isCorrect) => {
@@ -20,7 +18,7 @@ const login = async (req, res) => {
                             name,
                         };
 
-                        const token = jwt.sign(data, "secreto", {
+                        const token = jwt.sign(data, "secreto", { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
 
@@ -28,12 +26,12 @@ const login = async (req, res) => {
                             message: "Usuario autenticado correctamente",
                             user: {
                                 id,
-                                name,
+                                name, //Revisar esta info por qué se está mandando
                                 token,
                             }
                         })
                     } else {
-                        res.json({ message: "Contraseña incorrecta" })
+                        res.json({ message: "Correo o contraseña incorrecta" })
                     }
                 })
         }
