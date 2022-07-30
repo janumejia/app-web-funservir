@@ -4,6 +4,7 @@ const cors = require("cors")
 const db = require("./database/db")
 
 const controllers = require("./controllers") // No es necesario poner index.js, por defecto lo toma
+const controllersAdmin = require("./controllers/controllersAdmin")
 const verifyToken = require("./middlewares/verifyToken");
 
 const app = express()
@@ -17,7 +18,8 @@ app.use(express.json()) // Nos permitirá ver el body que contiene las peticione
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/register", controllers.register)
 app.post("/loginUser", controllers.login)
-app.post("/adminLogin", controllers.adminLogin)
+app.post("/adminLogin", controllersAdmin.adminLogin)
+app.post("/editUser", controllersAdmin.editUser)
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
