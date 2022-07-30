@@ -30,14 +30,14 @@
     align-items: center;
     padding: 0.25rem;
   }
-  .nav li.active {
+  .active {
     background-color: #555;
     border-radius: 50px;
-    margin: 2px 0px;
+    pointer-events: none;
+    
   }
   .nav li:hover {
     background-color: #777;
     border-radius: 50px;
-    margin: 2px 0px;
   }
   

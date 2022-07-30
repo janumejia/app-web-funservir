@@ -5,7 +5,6 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     edad: {type: String, required: true},
-    edad: {type: String, required: true},
     sexo: {type: String, required: true},
     direccion: {type: String, required: true},
     discapacidad: {type: [String], required:true},
