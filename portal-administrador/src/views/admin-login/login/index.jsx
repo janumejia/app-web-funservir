@@ -31,7 +31,7 @@ const AdminLogin = () => {
       };
       setLoading(true);
       await axios
-        .post("http://localhost:4000/adminLogin", Usuario)
+        .post(`http://localhost:4000/adminLogin`, Usuario)
         .then((res) => {
           const { data } = res;
           setMessage(data.message);
@@ -49,7 +49,7 @@ const AdminLogin = () => {
         })
         .catch((error) => {
           console.error(error);
-          setMessage("Correo o contraseña incorrecta????");
+          setMessage("Error en conexión con el servidor");
           setTimeout(() => {
             setMessage("");
           }, 1500);

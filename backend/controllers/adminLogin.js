@@ -6,8 +6,10 @@ const AdminLogin = async (req, res) =>{
 
     const {email, password} = req.body;
 
-    User.findOne({email}).then((user)=>{
-        if(user && user.userType === 'A'){
+    console.log(email + " " + password)
+    User.findOne({ email })
+    .then((user)=>{
+        if(user && user.userType === 'A'){ // Si ha encontrado un usuario y tiene el rol de administrador ("A")
             bcrypt.compare(password, user.password)
             .then((isCorrect)=>{
                 if(isCorrect){
@@ -18,7 +20,7 @@ const AdminLogin = async (req, res) =>{
                         name
                     };
 
-                    const token = jwt.sign(data, "secreto", {
+                    const token = jwt.sign(data, process.env.JWT_SECRET, {
                         expiresIn: '1m'
                     });
                     
