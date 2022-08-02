@@ -18,7 +18,7 @@ const AdminLogin = async (req, res) =>{
                         name
                     };
 
-                    const token = jwt.sign(data, "secreto", {
+                    const token = jwt.sign(data, process.env.JWT_SECRET, {
                         expiresIn: '1m'
                     });
                     
