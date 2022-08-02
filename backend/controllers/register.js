@@ -1,8 +1,9 @@
+require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs") // Para cifrar las contraseñas
 const User = require("../model/user") // Traemos el esquema del usuario
 
 const register = async (req, res) => {
-    const { name, email, password, edad, sexo, direccion, discapacidad, tutor, fundacion } = req.body
+    const { name, email, password, edad, sexo, direccion, discapacidad, tutor, fundacion, userType } = req.body
 
     // Comprobamos si ya existe un usuario con ese correo 
     User.findOne({ email })
@@ -12,7 +13,7 @@ const register = async (req, res) => {
             } else if (!name || !email || !password || !edad || !sexo || !direccion || !discapacidad || !fundacion) { // Si hay algún campo vació
                 return res.json({ message: "Debes completar todos los campos" })
             } else { // Si no existe un usuario con ese email
-                bcrypt.hash(password, 10, (error, hashPassword) => { // Genera el hash de la contraseña ingresada
+                bcrypt.hash(password, process.env.SALT_BCRYPT, (error, hashPassword) => { // Genera el hash de la contraseña ingresada
                     if (error) res.json({ error })
                     else {
                         const newUser = new User({
@@ -24,7 +25,8 @@ const register = async (req, res) => {
                             direccion,
                             discapacidad,
                             tutor,
-                            fundacion
+                            fundacion,
+                            userType
                         })
                         newUser.save()
                             .then((user) => { // Si todo sale bien...

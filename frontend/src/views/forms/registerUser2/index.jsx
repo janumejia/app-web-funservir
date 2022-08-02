@@ -44,6 +44,8 @@ const RegisterUserT = ({ usuario }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    console.log(inputs)
+
     //¿Si están todos los campos llenos?
     if (edad !== "" && sexo !== "" && direccion !== "" && discapacidad !== "" && fundacion !== "") {
 

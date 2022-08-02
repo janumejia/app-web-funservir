@@ -1,14 +1,14 @@
+require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs")
-const User = require("../model/user")
+const User = require("../../model/user")
 const jwt = require("jsonwebtoken")
 
 const AdminLogin = async (req, res) =>{
 
     const {email, password} = req.body;
 
-    User.findOne({ email })
-    .then((user)=>{
-        if(user && user.userType === 'A'){ // Si ha encontrado un usuario y tiene el rol de administrador ("A")
+    User.findOne({email}).then((user)=>{
+        if(user && user.userType === 'A'){
             bcrypt.compare(password, user.password)
             .then((isCorrect)=>{
                 if(isCorrect){

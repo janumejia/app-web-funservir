@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
     const { email, password } = req.body
     
-    User.findOne({ email }).then((user) => {
+    User.findOne({ email })
+    .then((user) => {
         if (user) {
             /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
