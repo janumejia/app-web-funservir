@@ -107,7 +107,7 @@ const FormularioB = () => {
             <input type="checkbox" className={LoginForm.checkmark} />Recordarme
           </div>
           <hr />
-          <a href="/" className={LoginForm.Member}>{'¿Aún no eres miembro?'}</a>
+          <a href="/registerUser" className={LoginForm.Member}>{'¿Aún no eres miembro?'}</a>
         </form>
       </div>
       {message && <div className={styles.toast}>{message}</div>}
