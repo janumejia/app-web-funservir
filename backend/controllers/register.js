@@ -28,7 +28,6 @@ const register = async (req, res) => {
                             fundacion,
                             userType
                         })
-                        console.log("nice")
                         newUser.save()
                             .then((user) => { // Si todo sale bien...
                                 res.json({ message: "Usuario creado correctamente", user })

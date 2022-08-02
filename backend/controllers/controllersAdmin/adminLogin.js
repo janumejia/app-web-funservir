@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs")
 const User = require("../../model/user")
 const jwt = require("jsonwebtoken")
@@ -18,7 +19,7 @@ const AdminLogin = async (req, res) =>{
                         name
                     };
 
-                    const token = jwt.sign(data, "secreto", {
+                    const token = jwt.sign(data, process.env.JWT_SECRET, {
                         expiresIn: '1m'
                     });
                     

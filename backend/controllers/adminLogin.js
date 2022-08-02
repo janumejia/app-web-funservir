@@ -6,7 +6,6 @@ const AdminLogin = async (req, res) =>{
 
     const {email, password} = req.body;
 
-    console.log(email + " " + password)
     User.findOne({ email })
     .then((user)=>{
         if(user && user.userType === 'A'){ // Si ha encontrado un usuario y tiene el rol de administrador ("A")
