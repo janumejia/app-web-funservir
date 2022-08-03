@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./styles.css"
 
-export default function Navbar(props) {
+export default function Navbar() {
 
     const [name, setName] = useState("");
     const token = localStorage.getItem("token");

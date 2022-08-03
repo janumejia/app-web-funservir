@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs") // Toca bcryptjs porque la version pura de ja
 const User = require("../model/user")
 const jwt = require("jsonwebtoken");
 
+
 const login = async (req, res) => {
     const { email, password } = req.body
     
