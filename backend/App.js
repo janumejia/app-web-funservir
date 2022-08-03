@@ -21,6 +21,7 @@ app.post("/register", controllers.register)
 app.post("/loginUser", controllers.login)
 app.post("/adminLogin", controllersAdmin.adminLogin)
 app.post("/editUser", controllersAdmin.editUser)
+app.post("/addElement", controllersAdmin.addInclusiveElement)
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
