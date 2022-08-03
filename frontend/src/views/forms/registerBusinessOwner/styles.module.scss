@@ -1,0 +1,156 @@
+.formContainer {
+    // Recuadro que contiene todo los de registro
+    background-color: white; // El color de fondo del recuadro que contiene los campos de registrarse
+    border-radius: 8px; // Borde en curva
+    min-width: 300px; // Si se reduce la pantalla, es la minima cantidad de pixeles es que se puede reducir la anchura del recuadro...
+    max-width: 500px; // Si se reduce la pantalla, es la máxima cantidad de pixeles es que se puede reducir la anchura del recuadro...
+    width: 95%; // Si se reduce la pantalla, cuando el recuadro ocupa el 95% de la pantalla se empezará a reducir de max-width -> min-width
+    padding: 40px; // Borde interno del recuadro
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h2 {
+        // Título que dice registrarse
+        font-style: normal;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bolder;
+        color: #2f2f2f;
+    }
+
+    form {
+        margin-top: 30px; // Distancia entre el titulo y el recuadro que contiene los inputs
+        display: flex;
+        flex-direction: column;
+        gap: 20px; // Distancia entre cuadros de inputs
+
+        .inputContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EAEBF6;
+            padding: 15px 15px;
+            border-radius: 4px;
+
+            .left {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                width: 100%;
+
+                label {
+                    font-size: 11px;
+                }
+
+                input {
+                    border: none; // El texto sin borde
+                    font-weight: 100; // El ancho de las letras (Está en delgado)
+                    background-color: inherit; // Que el fondo de las letras sea transparente
+                    font-size: 18px; // Tamaño letra input
+                    color: #2f2f2f; // Color letras
+                }
+            }
+
+            // Para el icono del lado derecho del input
+            svg {
+                width: 25px;
+                height: 20px;
+            }
+        }
+
+        .checkboxPolicies {
+            font-size: 18px;
+            margin-top: 8px;
+            vertical-align: text-bottom;
+            
+            input {
+                accent-color: #F91942;
+                margin-right: 5px;
+            }
+        }
+
+        button {
+            margin-top: 10px;
+            border: none;
+            width: 100%;
+            padding: 10px 0;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 18px; // tamaño letras del botón
+            color: white;
+            background-color: #F91942;
+            border-radius: 8px;
+            transition-duration: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff496b;;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+
+            b {
+                cursor: pointer;
+                color: #000000;
+            }
+
+            b:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.toast {
+    transition-duration: 0.3s;
+    background-color: #6358dc75;
+    border-radius: 8px;
+    width: 30%;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.welcome {
+    padding: 35px 75px;
+    background-color: white;
+    border-radius: 8px;
+    text-align: center;
+
+    h2 {
+        font-weight: bold;
+        color: #6358dc;
+        font-size: 25px;
+    }
+
+    h3 {
+        font-weight: normal;
+        color: #2f2f2f;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 25px;
+        justify-content: center;
+        margin-top: 15px;
+
+        button {
+            background-color: #6358dc;
+            border: none;
+            cursor: pointer;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 3px;
+            transition-duration: 0.3s;
+        }
+
+        button:hover {
+            background-color: #4235d6;
+        }
+    }
+}

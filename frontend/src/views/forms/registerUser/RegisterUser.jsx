@@ -137,7 +137,7 @@ const RegisterUser = () => {
             {loading ? "Cargando..." : "Regístrate"}
           </button>
           <p>
-            <b>¿Eres dueño de un sitio?</b> {/*Poner el navigate al due;o de sitio*/}
+            <b onClick={() => navigate("/registerBusinessOwner")}>¿Eres dueño de un sitio?</b> {/*Poner el navigate al due;o de sitio*/}
           </p>
           <p>
             <b onClick={() => navigate("/login")}>¿Ya tienes cuenta?</b>

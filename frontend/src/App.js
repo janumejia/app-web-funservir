@@ -1,10 +1,13 @@
 import React from 'react';
 import { Routes, Route } from "react-router-dom"
-import RegisterUser from './views/forms/registerUser/RegisterUser'; // Nuevo
+
+// Importación de componentes para las rutas del sistema
 import Home from './views/home/Home';
 import LoginUser from './views/forms/login';
-import Navbar from './components/commons/Navbar/Navbar'
+import RegisterUser from './views/forms/registerUser/RegisterUser';
+import RegisterBusinessOwner from './views/forms/registerBusinessOwner';
 
+import Navbar from './components/commons/Navbar/Navbar'
 
 import styles from "./App.module.scss"
 
@@ -17,6 +20,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/loginUser" element={<LoginUser />} />
             <Route path="/registerUser" element={<RegisterUser />} />
+            <Route path="/registerBusinessOwner" element={<RegisterBusinessOwner />} />
           </Routes>
         </div>
     </>
