@@ -66,20 +66,21 @@ const RegisterBusinessOwner2 = ({ usuario }) => {
 
     const { dropzoneOpen, fileUploaded  } = inputDropzone
 
-    // Abrir DropzoneDialog
-    const DropzoneDialogHandleOpen = () => {
-        setInputDropzone({ dropzoneOpen: true })
-    }
-
+    
     // Cerrar DropzoneDialog
     const DropzoneDialogHandleClose = () => {
         setInputDropzone({ dropzoneOpen: false })
     }
-
+    
     // Guardar archivo subido en el DropzoneDialog
     const DropzoneDialogHandleSave = (file) => {
         setInputDropzone({ dropzoneOpen: false })
         setInputs({ ...inputs, fileUploaded: file })
+    }
+
+    // Abrir DropzoneDialog
+    const DropzoneDialogHandleOpen = () => {
+        setInputDropzone({ dropzoneOpen: true })
     }
 
 
@@ -204,7 +205,7 @@ const RegisterBusinessOwner2 = ({ usuario }) => {
 
                     <div className={styles.inputContainer}>
                         <div className={styles.left}>
-                            {!fileUploaded ? "Sube aquí tu RUT" : "Archivo RUT cargado"}
+                            {fileUploaded ? "Sube aquí tu RUT" : "Archivo RUT cargado" }
                             <Button onClick={() => DropzoneDialogHandleOpen()} >
                                 <BsUpload />
                             </Button>
