@@ -204,7 +204,8 @@ export const Text = styled.p`
   font-size: 15px;
   font-weight: 700;
   color: ${themeGet('text.2', '#777777')};
-  line-height: 1;
+  margin-top: 40px; ${'' /* Comentar si se habilitan los botones de iniciar sesión con Facebook, Github, Firebase o Google+ */}
+  line-height: 3; ${'' /* Distancia entre salto de línea */}
   a {
     color: ${themeGet('primary.0', '#008489')};
     &:hover,
