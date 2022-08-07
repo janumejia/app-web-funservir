@@ -19,6 +19,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dotenv": "^0.1.3",
+    "react-icons": "^4.4.0",
     "react-mui-dropzone": "^4.0.6",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
@@ -28,7 +29,7 @@
   },
   "scripts": {
     "start": "react-dotenv && serve -s build",
-    "dev": "react-dotenv && react-scripts start",
+    "dev": "set PORT=3002 && react-dotenv && react-scripts start",
     "build": "react-dotenv && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
