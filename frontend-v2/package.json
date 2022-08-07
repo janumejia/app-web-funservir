@@ -1,0 +1,66 @@
+{
+  "name": "frontend-v2",
+  "description": "frontend de aplicativo Funservir",
+  "version": "0.2.0",
+  "private": true,
+  "author": "Andrés y Julián",
+  "dependencies": {
+    "@glidejs/glide": "^3.5.1",
+    "@react-google-maps/api": "^2.7.0",
+    "@styled-system/theme-get": "^5.1.2",
+    "antd": "^4.17.2",
+    "dayjs": "^1.10.7",
+    "history": "^5.1.0",
+    "little-state-machine": "^4.2.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-accessible-accordion": "^4.0.0",
+    "react-content-loader": "^6.0.3",
+    "react-dates": "^21.8.0",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.20.4",
+    "react-icons": "^4.3.1",
+    "react-image-gallery": "^1.2.7",
+    "react-multi-carousel": "^2.6.5",
+    "react-router-dom": "^6.0.2",
+    "react-scripts": "^4.0.3",
+    "react-scroll": "^1.8.4",
+    "react-share": "^4.4.0",
+    "react-stickynode": "^4.0.0",
+    "react-waypoint": "^10.1.0",
+    "styled-components": "^5.3.3",
+    "styled-system": "^5.1.5"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "start:cra": "react-scripts start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "serve": "serve -s build",
+    "eject": "react-scripts eject",
+    "host:firebase": "firebase deploy",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.3",
+    "cross-env": "^7.0.3",
+    "customize-cra": "^1.0.0",
+    "husky": "^7.0.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.0",
+    "react-app-rewired": "^2.1.8",
+    "rimraf": "^3.0.2",
+    "serve": "^13.0.2"
+  }
+}
