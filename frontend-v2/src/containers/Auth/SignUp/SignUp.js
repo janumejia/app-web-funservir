@@ -23,14 +23,20 @@ const SignUp = () => {
           src="/images/logo-alt.svg"
           title="TripFinder."
         />
-        <Title>Welcome To TripFinder</Title>
-        <TitleInfo>Please Register for your account</TitleInfo>
+        <Title>Registro de usuario</Title>
+        <TitleInfo>Ingresa tus datos para registrarte</TitleInfo>
         <SignUpForm />
-        <Divider>Or Register Up With </Divider>
-        <SocialLogin />
+        {/* Descomentar para habilitar los botones de registrarse con Facebook, Github, Firebase o Google+ */}
+        {/* <Divider>O regístrate con</Divider>
+        <SocialLogin /> */}
         <Text>
-          Already Have an Account! &nbsp;
-          <Link to={LOGIN_PAGE}>Login</Link>
+          ¿Ya tienes cuenta?&nbsp;
+          <Link to={LOGIN_PAGE}>Inicia sesión</Link>
+          <br/>
+          ¿Eres dueño de un sitio?&nbsp;
+          <Link to={LOGIN_PAGE}>Registro dueño de sitio</Link>
+        </Text>
+        <Text>
         </Text>
       </FormWrapper>
       <BannerWrapper>

@@ -29,13 +29,13 @@ const SignUpForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
-        label="Username"
+        label="Nombre completo"
         htmlFor="username"
         error={
           errors.username && (
             <>
               {errors.username?.type === 'required' && (
-                <span>This field is required!</span>
+                <span>¡Este campo es requerido!</span>
               )}
             </>
           )
@@ -52,16 +52,16 @@ const SignUpForm = () => {
         />
       </FormControl>
       <FormControl
-        label="Email"
+        label="Correo electrónico"
         htmlFor="email"
         error={
           errors.email && (
             <>
               {errors.email?.type === 'required' && (
-                <span>This field is required!</span>
+                <span>¡Este campo es requerido!</span>
               )}
               {errors.email?.type === 'pattern' && (
-                <span>Please enter a valid email address!</span>
+                <span>El formato de correo no es válido</span>
               )}
             </>
           )
@@ -86,19 +86,19 @@ const SignUpForm = () => {
         />
       </FormControl>
       <FormControl
-        label="Password"
+        label="Contraseña"
         htmlFor="password"
         error={
           errors.password && (
             <>
               {errors.password?.type === 'required' && (
-                <span>This field is required!</span>
+                <span>¡Este campo es requerido!</span>
               )}
               {errors.password?.type === 'minLength' && (
-                <span>Password must be at lest 6 characters!</span>
+                <span>La contraseña debe tener mínimo 8 caracteres</span>
               )}
               {errors.password?.type === 'maxLength' && (
-                <span>Password must not be longer than 20 characters!</span>
+                <span>La contraseña debe no debe superar 20 caracteres</span>
               )}
             </>
           )
@@ -108,19 +108,19 @@ const SignUpForm = () => {
           name="password"
           defaultValue=""
           control={control}
-          rules={{ required: true, minLength: 6, maxLength: 20 }}
+          rules={{ required: true, minLength: 8, maxLength: 20 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input.Password onChange={onChange} onBlur={onBlur} value={value} />
           )}
         />
       </FormControl>
       <FormControl
-        label="Confirm password"
+        label="Confirmar contraseña"
         htmlFor="confirmPassword"
         error={
           confirmPassword &&
           password !== confirmPassword && (
-            <span>Your password is not same!</span>
+            <span>Las contraseñas no coinciden</span>
           )
         }
       >
@@ -145,7 +145,7 @@ const SignUpForm = () => {
               <Switch onChange={onChange} checked={value} />
             )}
           />
-          <Label>Remember Me</Label>
+          <Label>Recordarme</Label>
         </SwitchWrapper>
         <SwitchWrapper>
           <Controller
@@ -157,7 +157,7 @@ const SignUpForm = () => {
               <Switch onChange={onChange} checked={value} />
             )}
           />
-          <Label>I agree with terms and conditions</Label>
+          <Label>Acepto los términos y condiciones</Label>
         </SwitchWrapper>
       </FieldWrapper>
       <Button

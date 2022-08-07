@@ -25,16 +25,16 @@ export default function SignInForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
-        label="Email"
+        label="Correo electrónico"
         htmlFor="email"
         error={
           errors.email && (
             <>
               {errors.email?.type === 'required' && (
-                <span>This field is required!</span>
+                <span>¡Este campo es requerido!</span>
               )}
               {errors.email?.type === 'pattern' && (
-                <span>Please enter a valid email address!</span>
+                <span>El formato de correo no es válido</span>
               )}
             </>
           )
@@ -59,19 +59,19 @@ export default function SignInForm() {
         />
       </FormControl>
       <FormControl
-        label="Password"
+        label="Contraseña"
         htmlFor="password"
         error={
           errors.password && (
             <>
               {errors.password?.type === 'required' && (
-                <span>This field is required!</span>
+                <span>¡Este campo es requerido!</span>
               )}
               {errors.password?.type === 'minLength' && (
-                <span>Password must be at lest 6 characters!</span>
+                <span>La contraseña debe tener mínimo 8 caracteres</span>
               )}
               {errors.password?.type === 'maxLength' && (
-                <span>Password must not be longer than 20 characters!</span>
+                <span>La contraseña debe no debe superar 20 caracteres</span>
               )}
             </>
           )
@@ -81,7 +81,7 @@ export default function SignInForm() {
           name="password"
           defaultValue=""
           control={control}
-          rules={{ required: true, minLength: 6, maxLength: 20 }}
+          rules={{ required: true, minLength: 8, maxLength: 20 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input.Password onChange={onChange} onBlur={onBlur} value={value} />
           )}
@@ -98,9 +98,9 @@ export default function SignInForm() {
               <Switch onChange={onChange} checked={value} />
             )}
           />
-          <Label>Remember Me</Label>
+          <Label>Recordarme</Label>
         </SwitchWrapper>
-        <Link to={FORGET_PASSWORD_PAGE}>Forget Password ?</Link>
+        <Link to={FORGET_PASSWORD_PAGE}>¿Olvidaste tu contraseña?</Link>
       </FieldWrapper>
       <Button
         className="signin-btn"
@@ -110,7 +110,7 @@ export default function SignInForm() {
         style={{ width: '100%' }}
       >
         <MdLockOpen />
-        Login
+        Iniciar sesión
       </Button>
     </form>
   );

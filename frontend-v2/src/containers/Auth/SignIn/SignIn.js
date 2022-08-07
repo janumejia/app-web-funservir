@@ -23,14 +23,17 @@ const SignIn = () => {
           src="/images/logo-alt.svg"
           title="TripFinder."
         />
-        <Title>Welcome Back</Title>
-        <TitleInfo>Please log into your account</TitleInfo>
+        <Title>Inicio de sesión</Title>
+        <TitleInfo>Por favor, ingrese a su cuenta</TitleInfo>
         <SignInForm />
-        <Divider>Or log in with </Divider>
-        <SocialLogin />
+        
+        {/* Descomentar para habilitar los botones de iniciar sesión con Facebook, Github, Firebase o Google+ */}
+        {/* <Divider>O inicia sesión con</Divider>
+        <SocialLogin /> */}
+        
         <Text>
-          Don't Have an Account?&nbsp;
-          <Link to={REGISTRATION_PAGE}>Registration</Link>
+          ¿Aún no eres miembro?&nbsp;
+          <Link to={REGISTRATION_PAGE}>Regístrate</Link>
         </Text>
       </FormWrapper>
       <BannerWrapper>
