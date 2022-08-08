@@ -65,7 +65,7 @@ export default function Header() {
                   withLink
                   linkTo="/"
                   src="/images/logo-alt.svg"
-                  title="TripFinder."
+                  title="Funservir"
                 />
               </>
             }
@@ -88,7 +88,7 @@ export default function Header() {
                   withLink
                   linkTo="/"
                   src="/images/logo-alt.svg"
-                  title="TripFinder."
+                  title="Funservir"
                 />
               </>
               <NavbarSearch />

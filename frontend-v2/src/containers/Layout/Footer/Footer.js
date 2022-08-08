@@ -11,7 +11,7 @@ const Footer = () => {
           withLink
           linkTo="/"
           src="/images/logo-alt.svg"
-          title="TripFinder."
+          title="Funservir"
         />
       }
       menu={<FooterMenu />}
