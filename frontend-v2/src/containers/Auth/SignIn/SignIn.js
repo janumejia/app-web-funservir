@@ -20,8 +20,8 @@ const SignIn = () => {
         <Logo
           withLink
           linkTo="/"
-          src="/images/logo-alt.svg"
-          title="TripFinder."
+          src="/images/logo-funservir.png"
+          title="Funservir"
         />
         <Title>Inicio de sesión</Title>
         <TitleInfo>Por favor, ingrese a su cuenta</TitleInfo>
@@ -37,7 +37,7 @@ const SignIn = () => {
         </Text>
       </FormWrapper>
       <BannerWrapper>
-        <img src="/images/login-page-bg.jpg" alt="Auth page banner" />
+        <img src="/images/login-page-bg.jpg" alt="Imagen página autenticación" />
       </BannerWrapper>
     </Wrapper>
   );

@@ -21,7 +21,7 @@ const SignUp = () => {
           withLink
           linkTo="/"
           src="/images/logo-alt.svg"
-          title="TripFinder."
+          title="Funservir"
         />
         <Title>Registro de usuario</Title>
         <TitleInfo>Ingresa tus datos para registrarte</TitleInfo>
@@ -40,7 +40,7 @@ const SignUp = () => {
         </Text>
       </FormWrapper>
       <BannerWrapper>
-        <img src="/images/login-page-bg.jpg" alt="Auth page banner" />
+        <img src="/images/login-page-bg.jpg" alt="Imagen página autenticación" />
       </BannerWrapper>
     </Wrapper>
   );

@@ -30,7 +30,7 @@ export default function ForgetPassWord() {
           withLink
           linkTo="/"
           src="/images/logo-alt.svg"
-          title="TripFinder."
+          title="Funservir"
         />
         <Title>Welcome Back</Title>
         <TitleInfo>Enter your email to recover your account</TitleInfo>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const AuthContext = React.createContext();
+export const AuthContext = React.createContext(); // Retorna un provider y un consumer
 
 const fakeUserData = {
   id: 1,

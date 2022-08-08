@@ -8,12 +8,12 @@ const Logo = ({ className, withLink, linkTo, title, src }) => {
     <LogoArea className={className}>
       {withLink ? (
         <NavLink to={linkTo}>
-          {src && <img src={src} alt="TripFinder." />}
+          {src && <img src={src} alt="Funservir" />}
           {title && <h3>{title}</h3>}
         </NavLink>
       ) : (
         <Fragment>
-          {src && <img src={src} alt="TripFinder." />}
+          {src && <img src={src} alt="Funservir" />}
           {title && <h3>{title}</h3>}
         </Fragment>
       )}
