@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const AuthContext = React.createContext(); // Retorna un provider y un consumer
+// Para usar Context usamos React.createContext() , que retorna un provider y un consumer
+export const AuthContext = React.createContext(); 
 
 const fakeUserData = {
   id: 1,
@@ -36,13 +37,15 @@ const AuthProvider = (props) => {
   };
 
   return (
+    // Aquí usamos el provider de nuestro Context (Authcontext), y le pasamos un objeto con las variables que queremos globalizar 
+    // mediante la propiedad "value" (tener en cuenta que tiene doble llave porque es un objeto)
     <AuthContext.Provider
       value={{
         loggedIn,
         logOut,
         signIn,
         signUp,
-        user,
+        user, 
       }}
     >
       <>{props.children}</>
