@@ -37,8 +37,12 @@ const AuthProvider = (props) => {
   };
 
   return (
-    // Aquí usamos el provider de nuestro Context (Authcontext), y le pasamos un objeto con las variables que queremos globalizar 
-    // mediante la propiedad "value" (tener en cuenta que tiene doble llave porque es un objeto)
+    /* Aquí usamos el provider de nuestro Context (Authcontext), y le pasamos un objeto con las variables que queremos globalizar 
+        mediante la propiedad "value" (tener en cuenta que tiene doble llave porque es un objeto)
+      
+        Para usar esas variables globales desde una componente hija, debemos usar useContext() 
+    */
+
     <AuthContext.Provider
       value={{
         loggedIn,
