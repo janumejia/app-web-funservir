@@ -38,7 +38,7 @@ const RegisterUser = () => {
         }, 1500);
       } else if (agreePolicies) { // ¿Si aceptó las políticas?
         setLoading(true);
-        setInputs({...inputs, childComponents:true}); //https://stackoverflow.com/questions/61054275/usestate-with-boolean-value-in-react revisar useEffect para limpiar el estado
+        setInputs({ ...inputs, childComponents: true }); //https://stackoverflow.com/questions/61054275/usestate-with-boolean-value-in-react revisar useEffect para limpiar el estado
       } else { // No aceptó las políticas
         setMessage("Debes aceptar los términos y condiciones");
         setTimeout(() => {
@@ -59,12 +59,55 @@ const RegisterUser = () => {
   const handleAgreePolicies = () => { // Al presionar sobre el checkbox cambia al estado opuesto
     setAgreePolicies(!agreePolicies);
   };
-  
+
   return (
     <>
-      {!inputs.childComponents?<><div className={styles.formContainer}>
+      {!inputs.childComponents ? <><div className={styles.formContainer}>
         <h2>Registrarse</h2>
         <form onSubmit={(e) => onSubmit(e)}>
+
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <input
+                onChange={(e) => HandleChange(e)}
+                value={name}
+                name="name"
+                id="name"
+                type="text"
+                placeholder="Nombre completo"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <input
+                onChange={(e) => HandleChange(e)}
+                value={email}
+                name="email"
+                id="email"
+                type="email"
+                placeholder="Correo electrónico"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+
+          <div className={styles.inputContainer}>
+            <div className={styles.left}>
+              <input
+                onChange={(e) => HandleChange(e)}
+                value={password}
+                name="password"
+                id="password"
+                type="password"
+                placeholder="Contraseña"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+
           <div className={styles.inputContainer}>
             <div className={styles.left}>
               <input
@@ -144,8 +187,8 @@ const RegisterUser = () => {
           </p>
         </form>
       </div>
-      {message && <div className={styles.toast}>{message}</div>}
-      </>:<RegisterUserT usuario= {inputs}/> }
+        {message && <div className={styles.toast}>{message}</div>}
+      </> : <RegisterUserT usuario={inputs} />}
     </>
   );
 };
