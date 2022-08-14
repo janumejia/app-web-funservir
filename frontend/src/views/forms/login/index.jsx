@@ -4,8 +4,11 @@ import styles from './styles.module.scss'
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { UserContext } from '../../../UserContext';
+import { useContext } from 'react';
 const FormularioB = () => {
+
+  const {setValue} = useContext(UserContext);
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -40,6 +43,7 @@ const FormularioB = () => {
             setTimeout(() => {
               setMessage("");
               localStorage.setItem("token", data?.user.token);
+              setValue(data.user.name);
               navigate(`/`);
             }, 1500);
           }else{
