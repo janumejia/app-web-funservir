@@ -4,7 +4,7 @@ const User = require("../model/user") // Traemos el esquema del usuario
 
 const register = async (req, res) => {
     const { name, email, password, edad, sexo, direccion, discapacidad, tutor, fundacion, userType } = req.body
-    
+
     // Comprobamos si ya existe un usuario con ese correo 
     User.findOne({ email })
         .then((user) => { // Si todo sale bien...

@@ -19,14 +19,13 @@ const login = async (req, res) => {
                             id,
                             name,
                         };
-
-                        const token = jwt.sign(data, process.env.JWT_SECRET, {
+                        const token = jwt.sign(data, process.env.JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
 
                         res.json({
                             message: "Usuario autenticado correctamente",
-                            user: { token }
+                            user: { token, name }
                         })
                     } else {
                         res.json({ message: "Correo o contraseña incorrecta", user:{}})
