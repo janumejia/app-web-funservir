@@ -8,6 +8,7 @@ const register = async (req, res) => {
     // Comprobamos si ya existe un usuario con ese correo 
     User.findOne({ email })
         .then((user) => { // Si todo sale bien...
+            console.log(user)
             if (user) {
                 return res.json({ message: "Ya existe un usuario con ese correo" })
             } else if (!name || !email || !password || !edad || !sexo || !direccion || !discapacidad || !fundacion) { // Si hay algún campo vació
