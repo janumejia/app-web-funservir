@@ -6,6 +6,7 @@ import NavbarWrapper, {
   MenuArea,
   AvatarWrapper,
   AuthWrapper,
+  AuthWrapper2, // Modificación del Juli
   MenuWrapper,
 } from './Navbar.style';
 
@@ -49,7 +50,7 @@ const Navbar = ({
             <AvatarWrapper>{profileMenu}</AvatarWrapper>
           ) : (
             authMenu && (
-              <AuthWrapper className="auth_menu">{authMenu}</AuthWrapper>
+              <AuthWrapper2 className="auth_menu">{authMenu}</AuthWrapper2> 
             )
           )}
         </MenuArea>

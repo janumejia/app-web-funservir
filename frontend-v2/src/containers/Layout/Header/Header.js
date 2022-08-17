@@ -25,7 +25,6 @@ import HeaderWrapper, {
   LogoArea,
 } from './Header.style';
 
-const avatarImg = `http://s3.amazonaws.com/redqteam.com/isomorphic-reloaded-image/profilepic.png`;
 const LogoIcon = () => (
   <svg width="25" height="27.984" viewBox="0 0 25 27.984">
     <g transform="translate(0 0)">
@@ -41,13 +40,15 @@ const LogoIcon = () => (
 export default function Header() {
   let location = useLocation();
   const [{ searchVisibility }] = useContext(LayoutContext);
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, user } = useContext(AuthContext); // Agregamos si está logueado y la info del usuario
   const { width } = useWindowSize();
   const [state, setState] = useState(false);
   const sidebarHandler = () => {
     setState(!state);
   };
   const headerType = location.pathname === '/' ? 'transparent' : 'default';
+  const avatarImg = user.avatar; // Traemos el link del avatar de usuario de nuestra variable global
+  const userName = user.name; // Traemos el nombre del usuario de nuestra variable global
 
   return (
     <HeaderWrapper>
@@ -120,10 +121,10 @@ export default function Header() {
                     <Logo src={avatarImg} />
                   </AvatarImage>
                   <AvatarInfo>
-                    <Text as="h3" content="Nova Scotia" />
+                    <Text as="h3" content={userName} />
                     <TextLink
                       link={AGENT_PROFILE_PAGE}
-                      content="View Profile"
+                      content="Ver perfil"
                     />
                   </AvatarInfo>
                 </AvatarWrapper>

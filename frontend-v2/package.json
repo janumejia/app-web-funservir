@@ -9,6 +9,7 @@
     "@react-google-maps/api": "^2.7.0",
     "@styled-system/theme-get": "^5.1.2",
     "antd": "^4.17.2",
+    "axios": "^0.27.2",
     "dayjs": "^1.10.7",
     "history": "^5.1.0",
     "little-state-machine": "^4.2.0",

@@ -30,11 +30,11 @@ const SignUpForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
         label="Nombre completo"
-        htmlFor="username"
+        htmlFor="name"
         error={
-          errors.username && (
+          errors.name && (
             <>
-              {errors.username?.type === 'required' && (
+              {errors.name?.type === 'required' && (
                 <span>¡Este campo es requerido!</span>
               )}
             </>
@@ -42,7 +42,7 @@ const SignUpForm = () => {
         }
       >
         <Controller
-          name="username"
+          name="name"
           defaultValue=""
           control={control}
           rules={{ required: true }}

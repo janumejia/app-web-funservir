@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { useAuth } from "../../../Hooks/useAuth"
+
 const AdminLogin = () => {
+  const { login } = useAuth()
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -30,32 +33,35 @@ const AdminLogin = () => {
         password
       };
       setLoading(true);
-      await axios
-        .post("http://localhost:4000/adminLogin", Usuario)
-        .then((res) => {
-          const { data } = res;
-          setMessage(data.message);
-          if (Object.values(data.user).length!==0) {
-            setTimeout(() => {
-              setMessage("");
-              localStorage.setItem("token", data?.user.token);
-              navigate(`/`);
-            }, 1500);
-          }else{
-            setTimeout(() => {
-              setMessage("");
-            }, 1500);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          setMessage("Correo o contraseña incorrecta????");
-          setTimeout(() => {
-            setMessage("");
-          }, 1500);
-        });
-      setInputs({ password: "", email: "" });
-      setLoading(false);
+      const res = login(inputs)
+      
+      // await axios
+      //   .post("http://localhost:4000/adminLogin", Usuario)
+      //   .then((res) => {
+      //     const { data } = res;
+      //     setMessage(data.message);
+      //     if (Object.values(data.user).length!==0) {
+      //       setTimeout(() => {
+      //         setMessage("");
+      //         useLocalStorage("user", data?.user.token);
+      //         navigate(`/`);
+      //       }, 1500);
+      //     }else{
+      //       setTimeout(() => {
+      //         setMessage("");
+      //       }, 1500);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //     setMessage("Correo o contraseña incorrecta????");
+      //     setTimeout(() => {
+      //       setMessage("");
+      //     }, 1500);
+      //   });
+      // setInputs({ password: "", email: "" });
+      // setLoading(false);
+
     } else { // No están todos los campos llenos
       setMessage("Debes completar todos los campos");
       setTimeout(() => {
