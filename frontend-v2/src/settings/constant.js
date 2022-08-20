@@ -24,5 +24,6 @@ export const ADD_HOTEL_PAGE = '/add-hotel';
 // Login / Registration Page
 export const LOGIN_PAGE = '/sign-in';
 export const REGISTRATION_PAGE = '/sign-up';
+export const REGISTRATION_SITE_OWNER_PAGE = '/sign-up-site-owner'; // Ruta dueño de sitio
 export const CHANGE_PASSWORD_PAGE = '/change-password';
 export const FORGET_PASSWORD_PAGE = '/forget-password';
