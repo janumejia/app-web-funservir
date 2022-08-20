@@ -14,6 +14,7 @@ import {
   PRIVACY_PAGE,
   LOGIN_PAGE,
   REGISTRATION_PAGE,
+  REGISTRATION_SITE_OWNER_PAGE, // Importación ruta dueño de sitio
   FORGET_PASSWORD_PAGE,
   ADD_HOTEL_PAGE,
   AGENT_IMAGE_EDIT_PAGE,
@@ -54,6 +55,7 @@ const PricingPage = React.lazy(() => import('containers/Pricing/Pricing'));
 const PrivacyPage = React.lazy(() => import('containers/Privacy/Privacy'));
 const SignInPage = React.lazy(() => import('containers/Auth/SignIn/SignIn'));
 const SignUpPage = React.lazy(() => import('containers/Auth/SignUp/SignUp'));
+const SignUpSiteOwnerPage = React.lazy(() => import('containers/Auth/SignUpSiteOwner/SignUp')); // Registro dueño de sitio
 const ForgetPasswordPage = React.lazy(() =>
   import('containers/Auth/ForgetPassword')
 );
@@ -167,6 +169,14 @@ export default function AppRoutes() {
           element={
             <React.Suspense fallback={<Loader />}>
               <SignUpPage />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path={REGISTRATION_SITE_OWNER_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <SignUpSiteOwnerPage />
             </React.Suspense>
           }
         />
