@@ -19,7 +19,7 @@ const LoadMore = ({
           loadMoreComponent
         ) : (
           <Button loading={loading} onClick={handleLoadMore}>
-            {buttonText || 'Load More'}
+            {buttonText || 'Cargar más'}
           </Button>
         )}
       </Box>

@@ -17,7 +17,9 @@ export default function Listing() {
   let location = useLocation();
   const { width } = useWindowSize();
   const [showMap, setShowMap] = useState(false);
-  let url = '/data/hotel.json';
+
+  let url = `${process.env.REACT_APP_HOST_BACK}/getSite`; // La URL para traer los sitios de interés
+
   const { data, loading, loadMoreData, total, limit } = useDataApi(url);
   let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5];
   if (location.search) {

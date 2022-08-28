@@ -5,7 +5,7 @@ import useDataApi from 'library/hooks/useDataApi';
 import { FixedMap } from './Listing.style';
 
 const ListingMap = () => {
-  const { data, loading } = useDataApi('/data/hotel.json');
+  const { data, loading } = useDataApi('http://localhost:4000/getSite');
   if (isEmpty(data) || loading) return <div>Loading</div>;
 
   return (
