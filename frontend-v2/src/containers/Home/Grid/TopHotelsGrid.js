@@ -9,7 +9,7 @@ import useWindowSize from 'library/hooks/useWindowSize';
 import useDataApi from 'library/hooks/useDataApi';
 import { LISTING_POSTS_PAGE, SINGLE_POST_PAGE } from 'settings/constant';
 const TopHotelsGrid = () => {
-  const { data, loading } = useDataApi('/data/top-hotel.json');
+  const { data, loading } = useDataApi('http://localhost:4000/getSite');
   const { width } = useWindowSize();
 
   let posts = data;

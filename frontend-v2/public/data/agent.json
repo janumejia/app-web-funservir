@@ -1280,8 +1280,8 @@
         },
         "location": {
           "id": 67404,
-          "lat": 40.706877,
-          "lng": -74.011265,
+          "lat": 4.640560,
+          "lng": -74.117027,
           "formattedAddress": "52623 Donnie Roads",
           "zipcode": "68225-1064",
           "city": "Nestorview",
@@ -1378,10 +1378,10 @@
         },
         "location": {
           "id": 57557,
-          "lat": 40.7168,
+          "lat": 4.7168,
           "lng": -74.0465,
           "formattedAddress": "28740 Purdy Rue",
-          "zipcode": "26632",
+          "zipcode": "111311",
           "city": "East Lonshire",
           "state_long": "Michigan",
           "state_short": "ME",

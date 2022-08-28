@@ -97,7 +97,8 @@ const CategorySearch = ({ location }) => {
   };
 
   return (
-    <CategorySearchWrapper>
+    <>
+    {/* <CategorySearchWrapper>
       <ViewWithPopup
         className={amenities.length ? 'activated' : ''}
         key={getAmenities.id}
@@ -256,6 +257,8 @@ const CategorySearch = ({ location }) => {
         </div>
       </div>
     </CategorySearchWrapper>
+    */}
+    </>
   );
 };
 

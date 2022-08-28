@@ -5,7 +5,7 @@ import useOnClickOutside from 'library/hooks/useOnClickOutside';
 
 import { LOGIN_PAGE, REGISTRATION_PAGE, REGISTRATION_SITE_OWNER_PAGE } from 'settings/constant';
 
-const AuthMenu = ({ className }) => {
+const AuthMenu = ({ className, avatar }) => {
   // Para aparecer y ocultar las opciones del botón de registrarse
   const [state, setState] = useState(false);
 
@@ -23,17 +23,39 @@ const AuthMenu = ({ className }) => {
 
   // Lo de abajo también lo modificó Julián
   return (
-    <Menu className={className}>
-      <Menu.Item key="0">
-        <NavLink to={LOGIN_PAGE}>Iniciar sesión</NavLink>
-      </Menu.Item>
-      <Menu.Item onClick={closeDropdown} key="1">
-        <NavLink to={REGISTRATION_PAGE}>Registrato normal</NavLink>
-      </Menu.Item>
-      <Menu.Item onClick={closeDropdown} key="2">
-        <NavLink to={REGISTRATION_SITE_OWNER_PAGE}>Dueño de sitio</NavLink>
-      </Menu.Item>
-    </Menu>
+    <div className="right-side">
+      <div className="sign-in-button">
+        <Menu className={className}>
+          <Menu.Item key="0">
+            <NavLink to={LOGIN_PAGE}>Iniciar sesión</NavLink>
+          </Menu.Item>
+          <Menu.Item onClick={closeDropdown} key="1">
+            <NavLink to={REGISTRATION_PAGE}>Registro normal</NavLink>
+          </Menu.Item>
+          {/* <Menu.Item onClick={closeDropdown} key="2">
+          <NavLink to={REGISTRATION_SITE_OWNER_PAGE}>Dueño de sitio</NavLink>
+        </Menu.Item> */}
+        </Menu>
+      </div>
+      <div className="sign-up-button">
+        <div className="avatar-dropdown" ref={dropdownRef}>
+          <div className="dropdown-handler" onClick={handleDropdown}>
+            {avatar}
+          </div>
+          <Menu className={`dropdown-menu ${state ? 'active' : 'hide'}`}>
+            <Menu.Item onClick={closeDropdown} key="0">
+              <NavLink to={LOGIN_PAGE}>Registro normal</NavLink>
+            </Menu.Item>
+            {/* <Menu.Item onClick={closeDropdown} key="1">
+          <NavLink to={ADD_HOTEL_PAGE}>Add Hotel</NavLink>
+        </Menu.Item> */}
+            <Menu.Item onClick={closeDropdown} key="2">
+              <NavLink to={LOGIN_PAGE}>Dueño de sitio</NavLink>
+            </Menu.Item>
+          </Menu>
+        </div>
+      </div>
+    </div>
   );
 };
 

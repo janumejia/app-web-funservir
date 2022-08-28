@@ -267,7 +267,6 @@ export const AuthWrapper = styled.div`
 export const AuthWrapper2 = styled.div`
   margin-left: 74px;
 
-
       ${'' /* Botón de iniciar sesión */}
       ul,
       .ant-menu,
@@ -438,6 +437,157 @@ export const AuthWrapper2 = styled.div`
       }
     
 
+`;
+
+// Creado por Julián (vacío y de pruebas)
+export const AuthWrapper3 = styled.div`
+  
+  .right-side{
+    
+    .sign-in-button{
+      margin-left: 0px;
+
+      ul,
+      .ant-menu,
+      ul.ant-menu {
+        display: flex;
+        align-items: center;
+        border: 0;
+        background-color: transparent;
+
+        li {
+          margin: 0;
+          padding: 0;
+          height: auto;
+          margin-bottom: 0 !important;
+          ${'' /* color: ${themeGet('text.0', '#2C2C2C')}; */}
+          color: ${themeGet('color.1', '#ffffff')};
+          font-size: 15px;
+          line-height: 18px;
+          font-weight: 400;
+          transition: color 0.2s ease-in-out;
+          &.ant-menu-item-selected {
+            background-color: transparent;
+          }
+
+          a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            min-height: 38px;
+            border-radius: 3px;
+            color: ${themeGet('color.1', '#ffffff')};
+            ${'' /* color: ${themeGet('text.0', '#2C2C2C')}; */}
+            transition: color 0.2s ease-in-out;
+            &:hover {
+              color: ${themeGet('primary.0', '#008489')};
+            }
+          }
+
+          ${'' /* Estilos para el ultimo botón a la derecha */}
+          &:last-child {
+              margin: 10;
+              padding: 10;
+              border: 10;
+            a {
+              color: ${themeGet('color.1', '#ffffff')};
+              ${'' /* color: #063970; */}
+              background-color: ${themeGet('primary.0', '#008489')};
+              transition: opacity 0.2s ease;
+
+              &:hover {
+                opacity: 0.9;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .sign-up-button{
+      margin-left: 0px;
+
+      .avatar-dropdown {
+        position: relative;
+        background-color: #008489;
+
+        .dropdown-handler {
+          width: 40px;
+          height: 40px;
+          overflow: hidden;
+          border-radius: 50%;
+          cursor: pointer;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .dropdown-menu {
+          min-width: 180px;
+          border-right: 0;
+          position: absolute;
+          right: 0;
+          top: 45px;
+          border-radius: 4px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s ease;
+          &.hide {
+            opacity: 0;
+            visibility: hidden;
+          }
+          &.active {
+            opacity: 1;
+            visibility: visible;
+          }
+          li {
+            color: ${themeGet('text.0', '#2C2C2C')};
+            font-size: 15px;
+            line-height: 18px;
+            font-weight: 400;
+            height: auto;
+            padding: 0;
+            transition: color 0.2s ease-in-out;
+            &.ant-menu-item-selected,
+            &.ant-menu-item-active {
+              background-color: transparent;
+            }
+            a {
+              display: block;
+              padding: 8px 16px;
+              color: ${themeGet('text.0', '#2C2C2C')};
+              transition: color 0.2s ease-in-out;
+              &:hover {
+                color: ${themeGet('primary.0', '#008489')};
+              }
+              &.active {
+                font-weight: 700;
+                color: ${themeGet('primary.0', '#008489')};
+              }
+            }
+            button {
+              padding: 0;
+              border: 0;
+              cursor: pointer;
+              padding: 8px 16px;
+              width: 100%;
+              text-align: left;
+              background-color: transparent;
+              transition: color 0.2s ease-in-out;
+              &:hover {
+                color: ${themeGet('primary.0', '#008489')};
+              }
+              &:focus {
+                outline: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 `;
 
 export default NavbarWrapper;

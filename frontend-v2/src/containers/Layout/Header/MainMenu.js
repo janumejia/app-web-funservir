@@ -11,7 +11,8 @@ import {
 
 const MainMenu = ({ className }) => {
   return (
-    <Menu className={className}>
+    <>
+     {/* <Menu className={className}>
       <Menu.Item key="0">
         <NavLink to={HOME_PAGE}>Hotels</NavLink>
       </Menu.Item>
@@ -24,7 +25,8 @@ const MainMenu = ({ className }) => {
       <Menu.Item key="3">
         <NavLink to={PRICING_PLAN_PAGE}>Pricing</NavLink>
       </Menu.Item>
-    </Menu>
+    </Menu> */}
+    </>
   );
 };
 

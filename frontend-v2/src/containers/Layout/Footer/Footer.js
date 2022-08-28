@@ -15,7 +15,7 @@ const Footer = () => {
         />
       }
       menu={<FooterMenu />}
-      copyright={`Copyright @ ${new Date().getFullYear()} RedQ, Inc.`}
+      // copyright={`Copyright @ ${new Date().getFullYear()} RedQ, Inc.`}
     />
   );
 };

@@ -9,8 +9,7 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     direccion: {type: String, required: true},
     discapacidad: {type: [String], required:true},
     tutor: {type: Boolean, required:true},
-    fundacion: {type: String, required: true},
-    userType: {type: String, required: true}
+    fundacion: {type: String, required: true}
 })
 
 module.exports = model("User", userSchema) // Después mongo le pone la s (users)
