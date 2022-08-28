@@ -62,7 +62,7 @@ const PostGrid = ({
         <TextLink
           link={`${link}/${slug}`}
           icon={<FiExternalLink />}
-          content="View Details"
+          content="Ver detalles"
         />
       }
     >

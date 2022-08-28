@@ -12,14 +12,14 @@ const MapWithSearchBox = (props) => {
   const [locationInput, setLocationInput] = useState({ searchedLocation: '' });
   const [locationDetails, setLocationDetails] = useState({
     center: {
-      lat: 40.7128,
-      lng: -74.006,
+      lat: 4.640560, 
+      lng: -74.117027,
     },
     markers: [
       {
         position: {
-          lat: 40.7128,
-          lng: -74.006,
+          lat: 4.640560,
+          lng: -74.117027,
         },
       },
     ],

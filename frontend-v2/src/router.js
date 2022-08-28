@@ -14,6 +14,10 @@ import {
   PRIVACY_PAGE,
   LOGIN_PAGE,
   REGISTRATION_PAGE,
+  REGISTRATION_PART_2_PROFILE_PAGE, // Importación ruta agregar más info - editar perfil
+  REGISTRATION_PART_2_IMAGE_EDIT_PAGE, // Importación ruta agregar más info - editar imagen perfil
+  REGISTRATION_PART_2_PASSWORD_CHANGE_PAGE, // Importación ruta agregar más info - cambiar password
+  REGISTRATION_PART_2_ACCOUNT_SETTINGS_PAGE, // Importación ruta agregar más info - banner lado izquierdo
   REGISTRATION_SITE_OWNER_PAGE, // Importación ruta dueño de sitio
   FORGET_PASSWORD_PAGE,
   ADD_HOTEL_PAGE,
@@ -172,6 +176,43 @@ export default function AppRoutes() {
             </React.Suspense>
           }
         />
+        {/* Para la segunda página de registro normal */}
+        <Route
+          path={AGENT_ACCOUNT_SETTINGS_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <RequireAuth>
+                <AgentAccountSettingsPage />
+              </RequireAuth>
+            </React.Suspense>
+          }
+        >
+          <Route
+            path={AGENT_ACCOUNT_SETTINGS_PAGE}
+            element={
+              <React.Suspense fallback={<Loader />}>
+                <AgentCreateOrUpdateForm />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={AGENT_IMAGE_EDIT_PAGE}
+            element={
+              <React.Suspense fallback={<Loader />}>
+                <AgentPictureChangeForm />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={AGENT_PASSWORD_CHANGE_PAGE}
+            element={
+              <React.Suspense fallback={<Loader />}>
+                <ChangePassWord />
+              </React.Suspense>
+            }
+          />
+        </Route>
+        {/* Fin - Segunda página de registro normal */}
         <Route
           path={REGISTRATION_SITE_OWNER_PAGE}
           element={

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FaWifi, FaCarAlt, FaSwimmer, FaAirFreshener, FaAccessibleIcon, FaBlind } from 'react-icons/fa'; // Documentación React Icons: https://react-icons.github.io/react-icons
 import GridCardWrapper, {
   ImageWrapper,
   FavoriteIcon,
@@ -31,7 +32,12 @@ const GridCard = ({
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
         <MetaWrapper className="meta_wrapper">
-          {price && <PriceArea className="price">{price}</PriceArea>}
+
+          {/* {price && <PriceArea className="price">{price}</PriceArea>} */}
+
+          {/* Iconos inclusivos que aparecen en la vista previa del sitio */}
+          <FaWifi /> <FaCarAlt /> <FaAccessibleIcon/> <FaBlind />
+          
           {rating && <RatingArea className="rating">{rating}</RatingArea>}
           {viewDetailsBtn || editBtn ? (
             <ButtonGroup className="button_group">
@@ -41,8 +47,10 @@ const GridCard = ({
           ) : null}
         </MetaWrapper>
       </ContentWrapper>
+      
+      {/* Este es el corazón que aparece en el sitio */}
+      {/* {favorite && <FavoriteIcon>{favorite}</FavoriteIcon>} */}
 
-      {favorite && <FavoriteIcon>{favorite}</FavoriteIcon>}
     </GridCardWrapper>
   );
 };

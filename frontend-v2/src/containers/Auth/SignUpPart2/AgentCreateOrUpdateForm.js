@@ -3,21 +3,22 @@ import { useForm, Controller } from 'react-hook-form';
 import { Row, Col, Input, Select, Button } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import DatePicker from 'components/UI/AntdDatePicker/AntdDatePicker';
+import RadioGroup from 'components/UI/RadioGroup/RadioGroup';
 import { FormTitle } from './AccountSettings.style';
 
 const genderOptions = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
-  { label: 'Other', value: 'Other' },
+  { label: 'Hombre', value: 'male' },
+  { label: 'Mujer', value: 'female' },
+  { label: 'Otro', value: 'Other' },
 ];
-const languageOptions = [
+const disabilities = [
   { label: 'English', value: 'english' },
   { label: 'Spanish', value: 'spanish' },
   { label: 'French', value: 'french' },
   { label: 'Russian', value: 'russian' },
 ];
 
-const AgentCreateOrUpdateForm = () => {
+const AgentCreateOrUpdateForm = ({dataUser}) => {
   const {
     control,
     formState: { errors },
@@ -26,9 +27,10 @@ const AgentCreateOrUpdateForm = () => {
   const onSubmit = (data) => console.log(data);
   return (
     <Fragment>
-      <FormTitle>Basic Information</FormTitle>
+      {/* <FormTitle>Hola {dataUser.name}, falta poco para terminar tu registro</FormTitle> */}
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
-        <Row gutter={30}>
+        {/* Parte de pedir el nombre y apellido */}
+        {/* <Row gutter={30}>
           <Col lg={12}>
             <FormControl
               label="First name"
@@ -63,11 +65,11 @@ const AgentCreateOrUpdateForm = () => {
               />
             </FormControl>
           </Col>
-        </Row>
+        </Row> */}
         <Row gutter={30}>
           <Col lg={12}>
             <FormControl
-              label="Date of birth"
+              label="Fecha de nacimiento"
               htmlFor="dateOfBirthday"
               error={
                 errors.dateOfBirthday && <span>This field is required!</span>
@@ -92,7 +94,7 @@ const AgentCreateOrUpdateForm = () => {
             <Row gutter={30}>
               <Col md={12}>
                 <FormControl
-                  label="I am"
+                  label="Me identifico"
                   htmlFor="agentGender"
                   error={
                     errors.agentGender && <span>This field is required!</span>
@@ -114,7 +116,7 @@ const AgentCreateOrUpdateForm = () => {
                   />
                 </FormControl>
               </Col>
-              <Col md={12}>
+              {/* <Col md={12}>
                 <FormControl
                   label="Preferred Language"
                   htmlFor="preferredLanguage"
@@ -139,43 +141,26 @@ const AgentCreateOrUpdateForm = () => {
                     )}
                   />
                 </FormControl>
-              </Col>
+              </Col> */}
             </Row>
           </Col>
         </Row>
         <Row gutter={30}>
           <Col lg={12}>
-            <FormControl
-              label="Email address"
-              htmlFor="email"
-              error={
-                errors.email && (
-                  <>
-                    {errors.email?.type === 'required' && (
-                      <span>This field is required!</span>
-                    )}
-                    {errors.email?.type === 'pattern' && (
-                      <span>Please enter a valid email address!</span>
-                    )}
-                  </>
-                )
-              }
+          <FormControl
+              label="Dirección de residencia"
+              htmlFor="address"
+              error={errors.address && <span>This field is required!</span>}
             >
               <Controller
-                name="email"
+                name="address"
                 defaultValue=""
                 control={control}
                 rules={{
                   required: true,
-                  pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input
-                    type="email"
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                  />
+                  <Input onChange={onChange} onBlur={onBlur} value={value} />
                 )}
               />
             </FormControl>
@@ -211,28 +196,36 @@ const AgentCreateOrUpdateForm = () => {
               />
             </FormControl>
           </Col>
+          {/* Discapacidades que tiene la persona */}
+          <Col md={24}>
+                <FormControl
+                  label="Limitaciones"
+                  htmlFor="preferredLanguage"
+                  error={
+                    errors.preferredLanguage && (
+                      <span>This field is required!</span>
+                    )
+                  }
+                >
+                  <Controller
+                    name="preferredLanguage"
+                    defaultValue=""
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <RadioGroup
+                        options={disabilities}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </Col>
           <Col lg={24}>
             <FormControl
-              label="Where you live"
-              htmlFor="address"
-              error={errors.address && <span>This field is required!</span>}
-            >
-              <Controller
-                name="address"
-                defaultValue=""
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Input onChange={onChange} onBlur={onBlur} value={value} />
-                )}
-              />
-            </FormControl>
-          </Col>
-          <Col lg={24}>
-            <FormControl
-              label="Describe Yourself (Optional)"
+              label="Describete (Opcional)"
               htmlFor="describeYourself"
             >
               <Controller

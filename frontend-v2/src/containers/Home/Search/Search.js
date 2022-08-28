@@ -13,8 +13,8 @@ const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
   return (
     <BannerWrapper>
       <GlideCarousel
-        controls={false}
-        options={{ gap: 0, autoplay: 5000, animationDuration: 1000 }}
+        controls={true}
+        options={{ gap: 0, autoplay: 10000, animationDuration: 1000 }}
         bullets={true}
         numberOfBullets={4}
       >
@@ -38,12 +38,11 @@ const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
         <SearchWrapper>
           <Heading
             {...searchTitleStyle}
-            content="Latest reviews. Lowest prices."
+            content="Busca tu sitios de interés inclusivo"
           />
           <Text
             {...searchDescriptionStyle}
-            content="compares prices from 200+ booking sites to help you find the lowest
-          price on the right hotel for you."
+            content="" // Aquí va el texto que aparece abajo de "Busca tu sitios de interés inclusivo"
           />
           <SearchForm />
         </SearchWrapper>

@@ -182,7 +182,7 @@ const AgentCreateOrUpdateForm = () => {
           </Col>
           <Col lg={12}>
             <FormControl
-              label="Número telefónico"
+              label="Phone number"
               htmlFor="phoneNumber"
               error={
                 errors.phoneNumber && (

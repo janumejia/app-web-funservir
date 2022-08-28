@@ -14,9 +14,11 @@ const Home = () => {
         onEnter={() => dispatch({ type: 'HIDE_TOP_SEARCHBAR' })}
         onLeave={() => dispatch({ type: 'SHOW_TOP_SEARCHBAR' })}
       />
-      <LocationGrid />
+      
+      {/* Secciones que tiene la pantalla principal/Home */}
+      {/* <LocationGrid />
       <TopHotelsGrid />
-      <LuxaryHotelsGrid />
+      <LuxaryHotelsGrid /> */}
     </>
   );
 };

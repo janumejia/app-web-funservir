@@ -18,13 +18,13 @@ const Rating = (props) => {
   }
   let listingCondition;
   if (rating && rating === 5) {
-    listingCondition = 'Awesome';
+    listingCondition = 'Excelente';
   } else if (4 <= rating && rating < 5) {
-    listingCondition = 'Good';
+    listingCondition = 'Bueno';
   } else if (3 <= rating && rating < 4) {
-    listingCondition = 'Average';
+    listingCondition = 'Regular';
   } else if (2 <= rating && rating < 3) {
-    listingCondition = 'Bad';
+    listingCondition = 'Malo';
   } else if (rating >= 1) {
     listingCondition = 'Terrible';
   } else {

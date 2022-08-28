@@ -7,7 +7,7 @@ import FormControl from 'components/UI/FormControl/FormControl';
 import { AuthContext } from 'context/AuthProvider';
 import { FieldWrapper, SwitchWrapper, Label } from '../Auth.style';
 
-const SignUpForm = ({ setIsPart2, setDataUser }) => {
+const SignUpForm = () => {
   const { signUp, loggedIn } = useContext(AuthContext);
   const {
     control,
@@ -20,9 +20,7 @@ const SignUpForm = ({ setIsPart2, setDataUser }) => {
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
   const onSubmit = (data) => {
-    setDataUser(data);
-    setIsPart2(true); // Para cambiar a la otra página de registro
-    // signUp(data);
+    signUp(data);
   };
   if (loggedIn) {
     return <Navigate to="/" replace={true} />;
