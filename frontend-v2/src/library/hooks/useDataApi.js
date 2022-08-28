@@ -4,7 +4,7 @@ import { useState, useReducer, useEffect } from 'react';
 async function SuperFetch(
   url,
   method = 'GET',
-  // Configuración del encabezado de la petición:
+  // Configuración del encabezado de la petición a la API:
   headers = {
     'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
   },
@@ -57,7 +57,7 @@ function dataFetchReducer(state, action) {
         error: true,
       };
     
-    // Cargar más.
+    // Para cargar más (botón "Cargar más" de la parte inferior) sitios en la página de resultados: 10, 20, 30, etc.
       case 'LOAD_MORE':
       return {
         ...state,
@@ -94,29 +94,33 @@ const useDataApi = (initialUrl, limit = 10, initialData = []) => {
     let didCancel = false;
 
     const fetchData = async () => {
-      dispatch({ type: 'FETCH_INIT' });
+      dispatch({ type: 'FETCH_INIT' }); // Cambiamos el estado de la pagina a cargado mientras recibe la respuesta de la API
 
       try {
-        const result = await SuperFetch(url);
+        const result = await SuperFetch(url); // Aquí recibimos el JSON de respuesta de la API con nuestros sitios
         if (!didCancel) {
-          dispatch({ type: 'FETCH_SUCCESS', payload: result });
+          dispatch({ type: 'FETCH_SUCCESS', payload: result }); // OK
         }
-      } catch (error) {
+      } catch (error) { // NO OK
         if (!didCancel) {
           dispatch({ type: 'FETCH_FAILURE' });
         }
       }
     };
 
-    fetchData();
+    fetchData(); // Ejecución del método anterior
 
     return () => {
       didCancel = true;
     };
   }, [url]);
+
+  // Función para mandar la acción de cargar más sitios en la página de resultados (le suma 10 cada vez, empezando desde 10)
   const loadMoreData = () => {
     dispatch({ type: 'LOAD_MORE' });
   };
+
+  // Función para cambiar el valor de la URL
   const doFetch = (url) => {
     setUrl(url);
   };

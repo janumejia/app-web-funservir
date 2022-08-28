@@ -13,12 +13,12 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     rating: { type: Schema.Types.Mixed },
     ratingCount: { type: Number },
     contactNumber: { type: String },
-    amenities: {
+    amenities: [{
         type: {
             id: { type: Number },
             element: { type: Schema.Types.Mixed }
         }
-    },
+    }],
     image: {
         type: {
             url: { type: String },
@@ -39,12 +39,12 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
             country_short: { type: String }
         }
     },
-    gallery: {
+    gallery: [{
         type: {
             id: { type: Number },
             url: { type: String }
         }
-    }
+    }]
 })
 
 module.exports = model("Site", siteSchema) // Después mongo le pone la s (users)
