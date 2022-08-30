@@ -51,7 +51,7 @@ const Navbar = ({
             <AvatarWrapper>{profileMenu}</AvatarWrapper>
           ) : (
             authMenu && (
-              <AuthWrapper3 className="auth_menu">{authMenu}</AuthWrapper3> 
+              <AuthWrapper className="auth_menu">{authMenu}</AuthWrapper> 
             )
           )}
         </MenuArea>

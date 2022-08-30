@@ -170,7 +170,7 @@ export const MenuWrapper = styled.div`
       height: auto;
       margin-bottom: 0 !important;
       color: ${themeGet('text.0', '#2C2C2C')};
-      font-size: 15px;
+      font-size: 17px;
       line-height: 18px;
       font-weight: 400;
       transition: color 0.2s ease-in-out;
@@ -226,7 +226,7 @@ export const AuthWrapper = styled.div`
       height: auto;
       margin-bottom: 0 !important;
       color: ${themeGet('text.0', '#2C2C2C')};
-      font-size: 15px;
+      font-size: 17px;
       line-height: 18px;
       font-weight: 400;
       transition: color 0.2s ease-in-out;
@@ -240,9 +240,10 @@ export const AuthWrapper = styled.div`
         justify-content: center;
         min-width: 78px;
         min-height: 38px;
-        border-radius: 3px;
+        border-radius: 10px;
         color: ${themeGet('text.0', '#2C2C2C')};
         transition: color 0.2s ease-in-out;
+        
         &:hover {
           color: ${themeGet('primary.0', '#008489')};
         }
@@ -253,6 +254,9 @@ export const AuthWrapper = styled.div`
           color: ${themeGet('color.1', '#ffffff')};
           background-color: ${themeGet('primary.0', '#008489')};
           transition: opacity 0.2s ease;
+          margin-left: 19px;
+          ${'' /* border: 2px solid black; */}
+          padding: 10px;
 
           &:hover {
             opacity: 0.9;

@@ -23,39 +23,52 @@ const AuthMenu = ({ className, avatar }) => {
 
   // Lo de abajo también lo modificó Julián
   return (
-    <div className="right-side">
-      <div className="sign-in-button">
-        <Menu className={className}>
-          <Menu.Item key="0">
-            <NavLink to={LOGIN_PAGE}>Iniciar sesión</NavLink>
-          </Menu.Item>
-          <Menu.Item onClick={closeDropdown} key="1">
-            <NavLink to={REGISTRATION_PAGE}>Registro normal</NavLink>
-          </Menu.Item>
-          {/* <Menu.Item onClick={closeDropdown} key="2">
-          <NavLink to={REGISTRATION_SITE_OWNER_PAGE}>Dueño de sitio</NavLink>
-        </Menu.Item> */}
-        </Menu>
-      </div>
-      <div className="sign-up-button">
-        <div className="avatar-dropdown" ref={dropdownRef}>
-          <div className="dropdown-handler" onClick={handleDropdown}>
-            {avatar}
-          </div>
-          <Menu className={`dropdown-menu ${state ? 'active' : 'hide'}`}>
-            <Menu.Item onClick={closeDropdown} key="0">
-              <NavLink to={LOGIN_PAGE}>Registro normal</NavLink>
-            </Menu.Item>
-            {/* <Menu.Item onClick={closeDropdown} key="1">
-          <NavLink to={ADD_HOTEL_PAGE}>Add Hotel</NavLink>
-        </Menu.Item> */}
-            <Menu.Item onClick={closeDropdown} key="2">
-              <NavLink to={LOGIN_PAGE}>Dueño de sitio</NavLink>
-            </Menu.Item>
-          </Menu>
-        </div>
-      </div>
-    </div>
+    // <div className="right-side">
+    //   <div className="sign-in-button">
+    //     <Menu className={className}>
+    //       <Menu.Item key="0">
+    //         <NavLink to={LOGIN_PAGE}>Iniciar sesión</NavLink>
+    //       </Menu.Item>
+    //       <Menu.Item onClick={closeDropdown} key="1">
+    //         <NavLink to={REGISTRATION_PAGE}>Registro normal</NavLink>
+    //       </Menu.Item>
+    //       {/* <Menu.Item onClick={closeDropdown} key="2">
+    //       <NavLink to={REGISTRATION_SITE_OWNER_PAGE}>Dueño de sitio</NavLink>
+    //     </Menu.Item> */}
+    //     </Menu>
+    //   </div>
+    //   <div className="sign-up-button">
+    //     <div className="avatar-dropdown" ref={dropdownRef}>
+    //       <div className="dropdown-handler" onClick={handleDropdown}>
+    //         {avatar}
+    //       </div>
+    //       <Menu className={`dropdown-menu ${state ? 'active' : 'hide'}`}>
+    //         <Menu.Item onClick={closeDropdown} key="0">
+    //           <NavLink to={LOGIN_PAGE}>Registro normal</NavLink>
+    //         </Menu.Item>
+    //         {/* <Menu.Item onClick={closeDropdown} key="1">
+    //       <NavLink to={ADD_HOTEL_PAGE}>Add Hotel</NavLink>
+    //     </Menu.Item> */}
+    //         <Menu.Item onClick={closeDropdown} key="2">
+    //           <NavLink to={LOGIN_PAGE}>Dueño de sitio</NavLink>
+    //         </Menu.Item>
+    //       </Menu>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <Menu className={className}>
+      <Menu.Item key="0">
+        <NavLink to={LOGIN_PAGE}>Iniciar sesión</NavLink>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <NavLink to={REGISTRATION_PAGE}>Regístrate</NavLink>
+      </Menu.Item>
+      {/* <Menu.Item key="2">
+        <NavLink to={REGISTRATION_PAGE}>Dueño de sitio</NavLink>
+      </Menu.Item> */}
+
+    </Menu>
   );
 };
 

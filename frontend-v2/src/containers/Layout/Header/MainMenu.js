@@ -12,11 +12,11 @@ import {
 const MainMenu = ({ className }) => {
   return (
     <>
-     {/* <Menu className={className}>
+     <Menu className={className}>
       <Menu.Item key="0">
-        <NavLink to={HOME_PAGE}>Hotels</NavLink>
+        <NavLink to={HOME_PAGE}>Todos los sitios</NavLink>
       </Menu.Item>
-      <Menu.Item key="1">
+      {/* <Menu.Item key="1">
         <NavLink to={LISTING_POSTS_PAGE}>Listing</NavLink>
       </Menu.Item>
       <Menu.Item key="2">
@@ -24,8 +24,8 @@ const MainMenu = ({ className }) => {
       </Menu.Item>
       <Menu.Item key="3">
         <NavLink to={PRICING_PLAN_PAGE}>Pricing</NavLink>
-      </Menu.Item>
-    </Menu> */}
+      </Menu.Item> */}
+    </Menu>
     </>
   );
 };
