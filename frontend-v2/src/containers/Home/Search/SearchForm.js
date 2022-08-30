@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty'; // Verifica si un objeto, colección, mapa o set está vació. Retorna true si está vació.
 import { FaMapMarkerAlt, FaRegCalendar, FaUserFriends } from 'react-icons/fa';
 import { Button } from 'antd';
 import DateRangePickerBox from 'components/UI/DatePicker/ReactDates';
@@ -17,76 +17,90 @@ import {
   ItemWrapper,
 } from './Search.style';
 
-const calendarItem = {
-  separator: '-',
-  format: 'MM-DD-YYYY',
-  locale: 'en',
-};
+// const calendarItem = {
+//   separator: '-',
+//   format: 'MM-DD-YYYY',
+//   locale: 'en',
+// };
 
+// DESCRIPCIÓN:
+// Componente hija de SearchArea (Archivo Search.js), y es donde se configura la barra de búsqueda: Campo de búsqueda, botón de búsqueda, se incorpora el autocompletado de google maps, etc.
 export default function SearchForm() {
   let navigate = useNavigate();
-  const [searchDate, setSearchDate] = useState({
-    setStartDate: null,
-    setEndDate: null,
-  });
+  // const [searchDate, setSearchDate] = useState({
+  //   setStartDate: null,
+  //   setEndDate: null,
+  // });
 
   // place data
-  const [mapValue, setMapValue] = useState([]);
-  const updateValueFunc = (event) => {
+  const [mapValue, setMapValue] = useState([]); // Para ajusta el valor del campo de búsqueda
+  const updateValueFunc = (event) => { 
     const { searchedPlaceAPIData } = event;
-    if (!isEmpty(searchedPlaceAPIData)) {
+    if (!isEmpty(searchedPlaceAPIData)) { 
       setMapValue(searchedPlaceAPIData);
     }
   };
 
   // Room guest state
-  const [roomGuest, setRoomGuest] = useState({
-    room: 0,
-    guest: 0,
-  });
-  const handleIncrement = (type) => {
-    setRoomGuest({
-      ...roomGuest,
-      [type]: roomGuest[type] + 1,
-    });
-  };
-  const handleDecrement = (type) => {
-    if (roomGuest[type] <= 0) {
-      return false;
-    }
-    setRoomGuest({
-      ...roomGuest,
-      [type]: roomGuest[type] - 1,
-    });
-  };
-  const handleIncDecOnChange = (e, type) => {
-    let currentValue = e.target.value;
-    setRoomGuest({
-      ...roomGuest,
-      [type]: currentValue,
-    });
-  };
+  // const [roomGuest, setRoomGuest] = useState({
+  //   room: 0,
+  //   guest: 0,
+  // });
+  // const handleIncrement = (type) => {
+  //   setRoomGuest({
+  //     ...roomGuest,
+  //     [type]: roomGuest[type] + 1,
+  //   });
+  // };
+  // const handleDecrement = (type) => {
+  //   if (roomGuest[type] <= 0) {
+  //     return false;
+  //   }
+  //   setRoomGuest({
+  //     ...roomGuest,
+  //     [type]: roomGuest[type] - 1,
+  //   });
+  // };
+  // const handleIncDecOnChange = (e, type) => {
+  //   let currentValue = e.target.value;
+  //   setRoomGuest({
+  //     ...roomGuest,
+  //     [type]: currentValue,
+  //   });
+  // };
 
   // navigate to the search page
   const goToSearchPage = () => {
     let tempLocation = [];
+    console.log("mapValue:")
+    console.log(mapValue)
     const mapData = mapValue ? mapDataHelper(mapValue) : [];
+    console.log("mapData:**")
+    console.log(mapData)
     mapData &&
       mapData.map((singleMapData, i) => {
         return tempLocation.push({
+          name: singleMapData ? singleMapData.name : '',
           formattedAddress: singleMapData ? singleMapData.formattedAddress : '',
           lat: singleMapData ? singleMapData.lat.toFixed(3) : null,
           lng: singleMapData ? singleMapData.lng.toFixed(3) : null,
         });
       });
+    console.log("tempLocation:******")
+    console.log(tempLocation)
     const location = tempLocation ? tempLocation[0] : {};
+    console.log("////location/////")
+    console.log(location)
     const query = {
       // date_range: searchDate,
       // room: roomGuest.room,
       // guest: roomGuest.guest,
       location,
     };
-    const search = setStateToUrl(query);
+    console.log(query)
+    // const search = setStateToUrl(query);
+    const search = "search=" + mapValue[0].name;
+    console.log(mapValue[0].name)
     navigate({
       pathname: LISTING_POSTS_PAGE,
       search: `?${createSearchParams(search)}`,
@@ -97,7 +111,7 @@ export default function SearchForm() {
     <FormWrapper>
       <ComponentWrapper>
         <FaMapMarkerAlt className="map-marker" />
-        <MapAutoComplete updateValue={(value) => updateValueFunc(value)} />
+        <MapAutoComplete updateValue={(value) => updateValueFunc(value)} /> {/* Campo de búsqueda */}
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           version="1.1"

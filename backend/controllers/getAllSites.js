@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
-const Site = require("../model/site") // Traemos el esquema del usuario
+const Site = require("../model/site") // Traemos el esquema del sitio
 
-const getSite = async (req, res) => {
+const getAllSites = async (req, res) => {
 
     // const { patternToSearch } = req.body
 
@@ -14,4 +14,4 @@ const getSite = async (req, res) => {
 
 }
 
-module.exports = getSite
+module.exports = getAllSites

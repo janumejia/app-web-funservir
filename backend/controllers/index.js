@@ -1,11 +1,13 @@
 const register = require("./register")
 const login = require("./login")
 const getUserById = require("./getUserById")
-const getSite = require("./getSite")
+const getAllSites = require("./getAllSites")
+const searchSites = require("./searchSites")
 
 module.exports = {
     register,
     login,
     getUserById,
-    getSite
+    getAllSites,
+    searchSites
 }

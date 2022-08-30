@@ -41,6 +41,8 @@ const carouselOptions = {
   },
 };
 
+// DESCRIPCIÓN:
+// Componente para mostrar categorías de sitios en la parte inferior de la pantalla principal: Restaurantes, Hoteles, Museos, etc.
 const LocationGrid = () => {
   const { data } = useDataApi('/data/location.json');
 

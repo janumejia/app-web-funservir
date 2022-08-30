@@ -16,9 +16,6 @@ async function SuperFetch(
   };
   if (method === 'POST' || method === 'PUT') options = { ...options, body };
 
-  // authentication
-  // we will had custom headers here.
-
   return fetch(url, options) // ⬅️ 1) llamada a la API, el resultado es una Promise
     .then((res) => { 
       return Promise.resolve(res.json()); // ⬅️ 2) cuando la petición finalice, transformamos la respuesta a JSON (res.json() también es una Promise)

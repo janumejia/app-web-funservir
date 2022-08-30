@@ -32,14 +32,26 @@ const SearchInput = (props) => {
     // además, podemos llamar a searchBox.getPlaces() para que nos entregue un Objeto con info del sitio seleccionado usando las sugerencias de Google Maps
     const places = searchBox.getPlaces();
     console.log(places[0]);
-    setLocationInput({
-      searchedLocation: places && places[0] && places[0].formatted_address,
+
+    // setLocationInput({
+    //   searchedLocation: places && places[0].name && places[0].formatted_address,
+    //   searchedPlaceAPIData: places ? places : [],
+    // });
+    // getInputValue({
+    //   searchedLocation: places && places[0].name && places[0].formatted_address,
+    //   searchedPlaceAPIData: places ? places : [],
+    // });
+    setLocationInput({ // Para que al seleccionar un valor de las sugerencias de la API de google maps se ponga el valor en la barra de búsqueda
+      searchedLocation: places[0].name + ", " + places[0].formatted_address, // Aquí se pone el nuevo valor que va a tener nuestra barra de búsqueda.
       searchedPlaceAPIData: places ? places : [],
     });
     getInputValue({
-      searchedLocation: places && places[0] && places[0].formatted_address,
+      searchedLocation: places && places[0].name && places[0].formatted_address,
       searchedPlaceAPIData: places ? places : [],
     });
+    console.log("esto->")
+    console.log("esto->" + locationInput)
+    console.log("fin->")
   };
 
   const handleOnPressEnter = (event) => {
@@ -67,7 +79,7 @@ const SearchInput = (props) => {
             // defaultBounds={new window.maps.LatLngBounds(new window.google.maps.LatLng(5.210936, -74.469522), new window.google.maps.LatLng(40.712216, -74.22655))}
             type="text"
             defaultValue=""
-            value={locationInput.searchedLocation || ''}
+            value={locationInput.searchedLocation}
             placeholder="Ingresar barrio o localidad"
             size="large"
             onChange={handleOnChange}

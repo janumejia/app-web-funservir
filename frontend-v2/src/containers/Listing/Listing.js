@@ -13,23 +13,38 @@ import ListingMap from './ListingMap';
 import { SINGLE_POST_PAGE } from 'settings/constant';
 import ListingWrapper, { PostsWrapper, ShowMapCheckbox } from './Listing.style';
 
+// DESCRIPCIÓN:
+// Componente para la página de resultados de la búsqueda de sitios, o para mostrar todos los sitios de interés registrados.
 export default function Listing() {
-  let location = useLocation();
-  const { width } = useWindowSize();
-  const [showMap, setShowMap] = useState(false);
+  let location = useLocation(); // Devuelve la URL actual. Si se cambia la URL, useLocation también se actualizará. https://dev.to/raaynaldo/react-router-usehistory-uselocation-and-useparams-10cd
+  const { width } = useWindowSize(); // Devuelve un objeto que contiene el ancho y alto de la ventana del navegador.
+  const [showMap, setShowMap] = useState(false); // Para mostrar el mapa al lado derecho de la pantalla
 
-  let url = `${process.env.REACT_APP_HOST_BACK}/getSite`; // La URL para traer los sitios de interés
+  let url = `${process.env.REACT_APP_HOST_BACK}` || '0.0.0.0'; // La URL para pedir a la API todos los sitios de interés y poder mostrarlo (0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida)
+  url += '/sites';
 
-  const { data, loading, loadMoreData, total, limit } = useDataApi(url);
-  let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5];
   if (location.search) {
     url += location.search;
+    url = url.replace('?','/');
   }
+  console.log("oxoxoxoxoxooxoxoxoxoxoxoxo")
+  console.log(url)
+  console.log("oxoxoxoxoxooxoxoxoxoxoxoxo")
+  const { data, loading, loadMoreData, total, limit } = useDataApi(url);
+  
+  let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5]; // Para que aparezcan 5 columnas de resultados (sin mapa abierto)
+  
+  
+  console.log("-x-x-x-x-x-x")
+  console.log(location.search)
+  console.log("-x-x-x-x-x-x")
+
   if (showMap) {
-    columnWidth = [1 / 1, 1 / 2, 1 / 2, 1 / 2, 1 / 3];
+    columnWidth = [1 / 1, 1 / 2, 1 / 2, 1 / 2, 1 / 3]; // Cuando está activo el mapa solo aparecen 3 columnas de resultados
   }
-  const handleMapToggle = () => {
+  const handleMapToggle = () => { // Al oprimir el botón de "ver mapa": aparece/desaparece
     setShowMap((showMap) => !showMap);
+    console.log(data)
   };
 
   return (

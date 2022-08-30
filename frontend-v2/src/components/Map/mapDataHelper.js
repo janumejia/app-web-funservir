@@ -8,6 +8,7 @@ export function mapDataHelper(infoValue) {
         place_id,
         address_components,
         formatted_address,
+        name,
         geometry: { location },
       }) => {
         let id = '';
@@ -20,11 +21,13 @@ export function mapDataHelper(infoValue) {
         let zipcode = '';
         let country_long = '';
         let country_short = '';
+        let name_site = '';
 
         id = place_id;
         lat = location.lat();
         lng = location.lng();
         formattedAddress = formatted_address;
+        name_site = name;
         if (address_components) {
           for (let i = 0; i < address_components.length; i++) {
             if (address_components[i].types.length) {
@@ -60,6 +63,7 @@ export function mapDataHelper(infoValue) {
         tempMapObj.zipcode = zipcode;
         tempMapObj.country_short = country_short;
         tempMapObj.country_long = country_long;
+        tempMapObj.name = name_site;
         tempMapArray.push(tempMapObj);
         return tempMapArray;
       }
