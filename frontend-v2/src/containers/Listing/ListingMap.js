@@ -5,9 +5,10 @@ import useDataApi from 'library/hooks/useDataApi';
 import { FixedMap } from './Listing.style';
 
 const ListingMap = () => {
-  const { data, loading } = useDataApi('http://localhost:4000/getSite');
-  if (isEmpty(data) || loading) return <div>Loading</div>;
+  const { data, loading } = useDataApi('http://localhost:4000/sites');
+  if (isEmpty(data) || loading) return <div>Cargando</div>;
 
+  console.log(data);
   return (
     <FixedMap>
       <Map location={data} multiple={true} />

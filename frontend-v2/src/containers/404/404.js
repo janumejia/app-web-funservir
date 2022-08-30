@@ -10,8 +10,8 @@ const NotFoundPage = ({ staticContext = {} }) => {
     <NotFoundWrapper>
       <ContentWrapper>
         <Image src="/images/404@2x.png" alt="404" />
-        <Heading as="h2" content="Something Went Wrong" />
-        <TextLink link="/" content="Go Back" />
+        <Heading as="h2" content="No hemos encontrado esta página" />
+        <TextLink link="/" content="Volver" />
       </ContentWrapper>
     </NotFoundWrapper>
   );

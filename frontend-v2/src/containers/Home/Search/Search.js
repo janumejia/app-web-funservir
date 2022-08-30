@@ -9,16 +9,19 @@ import GlideCarousel, {
 import SearchForm from './SearchForm';
 import BannerWrapper, { SearchWrapper } from './Search.style';
 
+// DESCRIPCIÓN:
+// Componente que configura la parte principal de la pantalla principal: Carrusel de imágenes y usa la barra de búsqueda (componente hija llamada SearchForm)
 const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
   return (
     <BannerWrapper>
-      <GlideCarousel
+      <GlideCarousel // Carrusel de imágenes
         controls={true}
-        options={{ gap: 0, autoplay: 10000, animationDuration: 1000 }}
+        options={{ gap: 0, autoplay: 10000, animationDuration: 1000 }} // Tiempo en que es presentada cada imagen del carrusel de imágenes
         bullets={true}
         numberOfBullets={4}
       >
         <>
+         {/* Las imágenes del carrusel de imágenes */}
           <GlideSlide>
             <img src="/images/banner/1.jpg" alt="Banner 1" />
           </GlideSlide>

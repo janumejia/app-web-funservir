@@ -4,6 +4,8 @@ import MapWrapper from './MapWrapper';
 import HotelMapMarkerCluster from './ListingPageMap';
 import HotelMapMarkerSingle from './SinglePageMap';
 
+// DESCRIPCIÓN:
+// Componente para configurar el despliegue del mapa de google maps en la pantallas: Zoom del mismo, puntos en el mapa, etc.
 const Map = (props) => {
   const { multiple, location } = props;
   const handleClustererClick = (data) => {
@@ -14,15 +16,15 @@ const Map = (props) => {
   return (
     <>
       {multiple ? (
-        <MapWrapper
+        <MapWrapper // Mapa general
           id="map-multiple-location"
-          zoom={11}
-          center={{
+          zoom={11} // Tamaño del zoom del mapa de google maps en la página de resultados de sitios
+          center={{ // Ubicación por defecto del mapa cuando es cargado
             lat: 4.646321,
-            lng:  -74.118711
+            lng: -74.118711
           }}
         >
-          <MarkerClusterer
+          <MarkerClusterer // Es ese punto azul que engloba varios sitios en el mapa: https://developers.google.com/maps/documentation/javascript/marker-clustering#maps_marker_clustering-javascript
             gridSize={60}
             averageCenter
             enableRetinaIcons={true}
@@ -37,16 +39,16 @@ const Map = (props) => {
           </MarkerClusterer>
         </MapWrapper>
       ) : (
-        <MapWrapper
+        <MapWrapper // Mapa de un sitio especifico
           id="map-single-location"
           mapContainerStyle={{
             height: '400px',
             width: '100%',
           }}
-          zoom={8}
-          center={{
-            lat: 40.706877,
-            lng: -74.011265,
+          zoom={11} // Tamaño del zoom del mapa de google maps en la página del sitio abierto
+          center={{ // Ubicación por defecto del mapa cuando es cargado
+            lat: 4.646321,
+            lng: -74.118711,
           }}
         >
           <HotelMapMarkerSingle location={location} />

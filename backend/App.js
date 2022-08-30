@@ -24,7 +24,9 @@ app.post("/editUser", controllersAdmin.editUser)
 app.post("/addElement", controllersAdmin.addInclusiveElement)
 app.post("/addCategory", controllersAdmin.addCategory)
 app.get("/getCategories", controllersAdmin.getCategories)
-app.get("/getSite", controllers.getSite)
+
+app.get("/sites", controllers.getAllSites)
+app.get("/sites/search=:patternToSearch", controllers.searchSites)
 
 
 // Leer puerto por donde funcionará nuestro servidor
