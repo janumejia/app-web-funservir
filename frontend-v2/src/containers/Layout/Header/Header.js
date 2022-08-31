@@ -61,7 +61,7 @@ export default function Header() {
           <Navbar
             logo={
               <>
-                {headerType === 'transparent' && <LogoIcon />}
+                {/* {headerType === 'transparent' && <LogoIcon />} */}
                 <Logo
                   withLink
                   linkTo="/"
@@ -70,7 +70,7 @@ export default function Header() {
                 />
               </>
             }
-            navMenu={<MainMenu />}
+            navMenu={ location.pathname === '/' && <MainMenu />}
             authMenu={<AuthMenu avatar={<Logo src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' />} />}
             isLogin={loggedIn}
             avatar={<Logo src={avatarImg} />}
@@ -84,7 +84,7 @@ export default function Header() {
           <MobileNavbar className={headerType}>
             <LogoArea>
               <>
-                {headerType === 'transparent' && <LogoIcon />}
+                {/* {headerType === 'transparent' && <LogoIcon />} */}
                 <Logo
                   withLink
                   linkTo="/"
