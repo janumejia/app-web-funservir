@@ -38,7 +38,7 @@ const Navbar = ({
         {logo || searchVisibility ? (
           <LogoArea>
             {logo}
-            {!searchVisibility && location.pathname === '/'
+            {/*!searchVisibility &&*/ location.pathname === '/'
               ? null
               : searchComponent}
           </LogoArea>

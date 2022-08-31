@@ -16,14 +16,14 @@ const MobileMenu = ({ className }) => {
   return (
     <Menu className={className}>
       <Menu.Item key="0">
-        <NavLink to={HOME_PAGE}>Hotels</NavLink>
+        <NavLink to={HOME_PAGE}>Principal</NavLink>
       </Menu.Item>
       <Menu.Item key="1">
-        <NavLink to={LISTING_POSTS_PAGE}>Listing</NavLink>
+        <NavLink to={LISTING_POSTS_PAGE}>Ver sitios</NavLink>
       </Menu.Item>
-      <Menu.Item key="2">
+      {/* <Menu.Item key="2">
         <NavLink to={PRICING_PLAN_PAGE}>Pricing</NavLink>
-      </Menu.Item>
+      </Menu.Item> */}
       {loggedIn && (
         <Menu.Item key="3">
           <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Account Settings</NavLink>

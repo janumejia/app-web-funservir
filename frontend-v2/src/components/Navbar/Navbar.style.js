@@ -259,7 +259,7 @@ export const AuthWrapper = styled.div`
           padding: 10px;
 
           &:hover {
-            opacity: 0.9;
+            opacity: 0.8;
           }
         }
       }

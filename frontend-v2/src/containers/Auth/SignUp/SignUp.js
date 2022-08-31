@@ -30,7 +30,7 @@ const SignUp = () => {
           <Logo
             withLink
             linkTo="/"
-            src="/images/logo-alt.svg"
+            src="/images/logo-funservir.png"
             title="Funservir"
           />
           <Title>Registro de usuario</Title>

@@ -7,7 +7,7 @@ export default function Privacy() {
   return (
     <PageWrapper>
       <Container>
-        <Heading as="h2" content="Privacy Policy" />
+        <Heading as="h2" content="Políticas de privacidad" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -26,20 +26,20 @@ export default function Privacy() {
           pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
-        <Heading as="h4" content="This Policy describes:" />
+        <Heading as="h4" content="Las políticas de privacidad describen:" />
         <ol>
-          <li>1. How We Collect & Use Your Personal Data</li>
-          <li>2. Cookies & Similar Technologies</li>
-          <li>3. How We Disclose Personal Data</li>
-          <li>4. How to Access & Control Your Personal Data</li>
-          <li>5. How We Protect Your Personal Data</li>
-          <li>6. How We Process Children’s Personal Data</li>
-          <li>7. Third-Party Providers and Their Services</li>
-          <li>8. International Transfers of Your Personal Data</li>
-          <li>9. Updates to This Policy</li>
-          <li>10. How to Contact Us</li>
+          <li>1. Cómo recopilamos y usamos sus datos personales</li>
+          <li>2. Cookies y tecnologías similares</li>
+          <li>3. Cómo divulgamos los datos personales</li>
+          <li>4. Cómo acceder y controlar sus datos personales</li>
+          <li>5. Cómo protegemos sus datos personales</li>
+          <li>6. Cómo procesamos los datos personales de los niños</li>
+          <li>7. Terceros proveedores y sus servicios</li>
+          <li>8. Transferencias internacionales de sus datos personales</li>
+          <li>9. Actualizaciones a esta Política</li>
+          <li>10. Cómo contactarnos</li>
         </ol>
-        <Heading as="h2" content="1. How We Collect & Use Your Personal Data" />
+        <Heading as="h2" content="1. Cómo recopilamos y usamos sus datos personales" />
         <p>
           Scelerisque mauris pellentesque pulvinar pellentesque habitant. Vitae
           auctor eu augue ut lectus arcu. Cum sociis natoque penatibus et magnis

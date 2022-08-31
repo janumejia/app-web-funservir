@@ -14,19 +14,16 @@ const FooterMenu = () => {
   return (
     <Menu>
       <Menu.Item key="0">
-        <NavLink to={`${HOME_PAGE}`}>Hotels</NavLink>
+        <NavLink to={`${PRIVACY_PAGE}`}>Ver sitios</NavLink>
       </Menu.Item>
       <Menu.Item key="1">
-        <NavLink to={`${LISTING_POSTS_PAGE}`}>Listing</NavLink>
+        <NavLink to={`${PRIVACY_PAGE}`}>Quiénes somos</NavLink>
       </Menu.Item>
       <Menu.Item key="2">
-        <NavLink to={`${PRICING_PLAN_PAGE}`}>Pricing</NavLink>
+        <NavLink to={`${PRIVACY_PAGE}`}>Privacidad</NavLink>
       </Menu.Item>
       <Menu.Item key="3">
-        <NavLink to={`${PRIVACY_PAGE}`}>Privacy</NavLink>
-      </Menu.Item>
-      <Menu.Item key="4">
-        <NavLink to={`${AGENT_PROFILE_PAGE}`}>Agent</NavLink>
+        <NavLink to={`${PRIVACY_PAGE}`}>Contáctenos</NavLink>
       </Menu.Item>
     </Menu>
   );

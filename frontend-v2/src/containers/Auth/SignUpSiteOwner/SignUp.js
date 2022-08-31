@@ -20,10 +20,10 @@ const SignUp = () => {
         <Logo
           withLink
           linkTo="/"
-          src="/images/logo-alt.svg"
+          src="/images/logo-funservir.png"
           title="Funservir"
         />
-        <Title>Registro de dueño de sitio</Title>
+        <Title>Registro dueño de sitio</Title>
         <TitleInfo>Ingresa tus datos para registrarte</TitleInfo>
         <SignUpForm />
         {/* Descomentar para habilitar los botones de registrarse con Facebook, Github, Firebase o Google+ */}
