@@ -14,7 +14,7 @@ const MainMenu = ({ className }) => {
     <>
      <Menu className={className}>
       <Menu.Item key="0">
-        <NavLink to={HOME_PAGE}>Todos los sitios</NavLink>
+        <NavLink to={LISTING_POSTS_PAGE}>Todos los sitios</NavLink>
       </Menu.Item>
       {/* <Menu.Item key="1">
         <NavLink to={LISTING_POSTS_PAGE}>Listing</NavLink>

@@ -5,9 +5,13 @@ import HotelMapMarkerCluster from './ListingPageMap';
 import HotelMapMarkerSingle from './SinglePageMap';
 
 // DESCRIPCIÓN:
-// Componente para configurar el despliegue del mapa de google maps en la pantallas: Zoom del mismo, puntos en el mapa, etc.
+// Componente para configurar el despliegue del mapa de google maps en la pantalla: Zoom del mismo, puntos en el mapa, etc.
 const Map = (props) => {
   const { multiple, location } = props;
+  console.log("location:")
+  console.log(location)
+  console.log("multiple:")
+  console.log(multiple)
   const handleClustererClick = (data) => {
     const markerClusterer = data.getMarkers();
     console.log(`Current clicked markers length: ${markerClusterer.length}`);

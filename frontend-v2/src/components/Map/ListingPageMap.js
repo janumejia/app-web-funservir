@@ -4,6 +4,10 @@ import HotelInfoWindow from './MapInfoWindow';
 import MakerImage from './hotelMapMarker.png';
 
 const HotelMapMarkerCluster = ({ location, clusterer }) => {
+  console.log("location:")
+  console.log(location)
+  console.log("clusterer:")
+  console.log(clusterer)
   const [isOpen, setIsOpen] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0);
   let hotelData = [];
@@ -15,6 +19,8 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
 
   location &&
     location.forEach((item) => {
+      console.log("item:")
+      console.log(item)
       hotelData.push({
         id: item.id,
         lat: parseFloat(item.location.lat),
@@ -26,6 +32,9 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
         rating: item.rating,
         ratingCount: item.ratingCount,
       });
+      console.log("hotelData:")
+      console.log(hotelData)
+
     });
 
   return hotelData.map((singlePostLocation, index) => {
@@ -51,3 +60,4 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
 };
 
 export default HotelMapMarkerCluster;
+

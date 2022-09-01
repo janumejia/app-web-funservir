@@ -31,6 +31,9 @@ export default function Listing() {
   console.log(url)
   console.log("oxoxoxoxoxooxoxoxoxoxoxoxo")
   const { data, loading, loadMoreData, total, limit } = useDataApi(url);
+  console.log("prprrprrprpprprprpprprprppr")
+  console.log(data)
+  console.log("prprrprrprpprprprpprprprppr")
   
   let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5]; // Para que aparezcan 5 columnas de resultados (sin mapa abierto)
   
@@ -82,7 +85,7 @@ export default function Listing() {
           />
         </PostsWrapper>
 
-        {showMap && <ListingMap />}
+        {showMap && <ListingMap data={data} loading={loading} />}
       </Fragment>
     </ListingWrapper>
   );

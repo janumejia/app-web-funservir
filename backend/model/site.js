@@ -28,8 +28,8 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     location: {
         type: {
             id: { type: Number },
-            lat: { type: Schema.Types.Decimal128 },
-            lng: { type: Schema.Types.Decimal128 },
+            lat: { type: String },
+            lng: { type: String },
             formattedAddress: { type: String },
             zipcode: { type: String },
             city: { type: String },

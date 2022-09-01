@@ -143,6 +143,9 @@ const FilterDrawer = ({ history, location }) => {
     setToggle(false);
   };
 
+  // Agregada para que no aparezca el botón de filtro en la página de resultados de sitios
+  return <></>
+
   return (
     <FilterArea>
       <Button className={toggle ? 'active' : ''} onClick={handleToggleDrawer}>

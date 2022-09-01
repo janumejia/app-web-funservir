@@ -13,9 +13,9 @@ import {
 const FooterMenu = () => {
   return (
     <Menu>
-      <Menu.Item key="0">
+      {/* <Menu.Item key="0">
         <NavLink to={`${PRIVACY_PAGE}`}>Ver sitios</NavLink>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="1">
         <NavLink to={`${PRIVACY_PAGE}`}>Quiénes somos</NavLink>
       </Menu.Item>
