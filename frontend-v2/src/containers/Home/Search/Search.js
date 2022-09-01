@@ -41,7 +41,7 @@ const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
         <SearchWrapper>
           <Heading
             {...searchTitleStyle}
-            content="Busca tu sitios de interés inclusivo"
+            content="Busca sitios de interés inclusivo en Bogotá"
           />
           <Text
             {...searchDescriptionStyle}

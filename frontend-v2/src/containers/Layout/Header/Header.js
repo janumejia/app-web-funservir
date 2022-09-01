@@ -88,7 +88,7 @@ export default function Header() {
                 <Logo
                   withLink
                   linkTo="/"
-                  src="/images/logo-alt.svg"
+                  src="/images/logo-funservir.png"
                   title="Funservir"
                 />
               </>
