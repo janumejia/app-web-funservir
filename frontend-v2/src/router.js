@@ -222,6 +222,14 @@ export default function AppRoutes() {
           }
         />
         <Route
+          path={REGISTRATION_SITE_OWNER_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <SignUpSiteOwnerPage />
+            </React.Suspense>
+          }
+        />
+        <Route
           path={FORGET_PASSWORD_PAGE}
           element={
             <React.Suspense fallback={<Loader />}>
