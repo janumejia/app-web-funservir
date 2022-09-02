@@ -3,6 +3,8 @@ const editUser = require("./editUser")
 const addInclusiveElement = require("./addInclusiveElement")
 const addCategory = require("./addCategory")
 const getCategories = require("./getCategories")
+const allUsers = require("./allUsers")
+const addUsers = require("./addUser")
 
 module.exports = {
     adminLogin,
@@ -10,4 +12,6 @@ module.exports = {
     addInclusiveElement,
     addCategory,
     getCategories,
+    allUsers,
+    addUsers,
 }
