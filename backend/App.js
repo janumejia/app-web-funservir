@@ -24,12 +24,17 @@ app.post("/editUser", controllersAdmin.editUser)
 app.post("/addElement", controllersAdmin.addInclusiveElement)
 app.post("/addCategory", controllersAdmin.addCategory)
 app.get("/getCategories", controllersAdmin.getCategories)
+<<<<<<< HEAD
 app.get("/all_users", controllersAdmin.allUsers)
 app.post("/addUser", controllersAdmin.addUsers)
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)
 
 
+=======
+app.post("/addUser", controllersAdmin.addUser)
+app.get("/all_users", controllersAdmin.allUsers)
+>>>>>>> 864b8fb (otra vez el app.js)
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
 const port = process.env.PORT
