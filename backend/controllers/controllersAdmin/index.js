@@ -5,6 +5,7 @@ const addCategory = require("./addCategory")
 const getCategories = require("./getCategories")
 const allUsers = require("./allUsers")
 const addUsers = require("./addUser")
+const deleteUser = require("./deleteUser")
 
 module.exports = {
     adminLogin,
@@ -14,4 +15,5 @@ module.exports = {
     getCategories,
     allUsers,
     addUsers,
+    deleteUser,
 }
