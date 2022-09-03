@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, InputNumber, Popconfirm, Table, Typography, Button } from 'antd';
+import { Form, Input, InputNumber, Popconfirm, Table, Typography, Button, Space } from 'antd';
 
 /*for (let i = 0; i < 100; i++) {
     originData.push({
@@ -70,14 +70,12 @@ const ManageUsers = () => {
             .then((res) => {
                 setData(res.data);
             }).catch((error) => console.error(error));
-    }, [])
+    }, [data])
 
     const isEditing = (record) => record._id === editingKey;
+
     const edit = (record) => {
         form.setFieldsValue({
-            name: '',
-            age: '',
-            address: '',
             ...record,
         });
         setEditingKey(record._id);
@@ -92,9 +90,9 @@ const ManageUsers = () => {
             const row = await form.validateFields();
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
-            console.log(key,'test');
-            if (index > -1 && !(key===undefined)) {
-                
+            console.log(key, 'test');
+            if (index > -1 && !(key === undefined)) {
+
                 const item = newData[index];
                 newData.splice(index, 1, { ...item, ...row });
                 console.log(item);
@@ -110,6 +108,18 @@ const ManageUsers = () => {
         } catch (errInfo) {
             console.log('Validate Failed:', errInfo);
         }
+    };
+
+    const handleDelete = (key) => {
+        const newData = data.filter((item) => item._id !== key);
+        console.log(key)
+        axios.post('http://localhost:4000/deleteUser', {_id:key})
+        .then((res)=>{
+            setData(newData);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
     };
 
     const columns = [
@@ -175,21 +185,31 @@ const ManageUsers = () => {
                 return editable ? (
                     <span>
                         <Typography.Link
+                            keyboard
                             onClick={() => saveEdit(record._id)}
                             style={{
                                 marginRight: 8,
                             }}
                         >
-                            Save
+                            Guardar
                         </Typography.Link>
-                        <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                            <a href=" ">Cancel</a>
+                        <Popconfirm title="¿Estás seguro?" onConfirm={cancel}>
+                            <Typography.Link keyboard type="danger">
+                                Cancelar
+                            </Typography.Link>
                         </Popconfirm>
                     </span>
                 ) : (
-                    <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                        Edit
-                    </Typography.Link>
+                    <Space size="middle">
+                        <Typography.Link keyboard disabled={editingKey !== ''} onClick={() => edit(record)}>
+                            Editar
+                        </Typography.Link>
+                        <Popconfirm title="¿Estás seguro?" onConfirm={() => handleDelete(record._id)}>
+                            <Typography.Link keyboard type="danger">
+                                Eliminar
+                            </Typography.Link>
+                        </Popconfirm>
+                    </Space>
                 );
             },
         },
@@ -227,9 +247,10 @@ const ManageUsers = () => {
         };
         try {
             setData([...data, newUser]);
+
             axios.post('http://localhost:4000/addUser', newUser)
                 .then((res) => {
-                    setEditingKey('');
+                    edit(res.data.element._id);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -237,10 +258,10 @@ const ManageUsers = () => {
         } catch (errInfo) {
             console.log('Validate Failed:', errInfo);
         }
-        
+
     };
     return (
-        <>
+        <Form form={form} component={false}>
             <Button
                 onClick={handleAdd}
                 type="primary"
@@ -250,23 +271,22 @@ const ManageUsers = () => {
             >
                 Añadir Usuario
             </Button>
-            <Form form={form} component={false}>
-                <Table
-                    components={{
-                        body: {
-                            cell: EditableCell,
-                        },
-                    }}
-                    bordered
-                    dataSource={data}
-                    columns={mergedColumns}
-                    rowClassName="editable-row"
-                    pagination={{
-                        onChange: cancel,
-                    }}
-                />
-            </Form>
-        </>);
+            <Table
+                components={{
+                    body: {
+                        cell: EditableCell,
+                    },
+                }}
+                bordered
+                dataSource={data}
+                columns={mergedColumns}
+                rowClassName="editable-row"
+                pagination={{
+                    onChange: cancel,
+                }}
+            />
+        </Form>
+    );
 };
 
 export default ManageUsers;

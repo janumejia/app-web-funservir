@@ -28,7 +28,7 @@ app.get("/all_users", controllersAdmin.allUsers)
 app.post("/addUser", controllersAdmin.addUsers)
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)
-
+app.post("/deleteUser", controllersAdmin.deleteUser)
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida

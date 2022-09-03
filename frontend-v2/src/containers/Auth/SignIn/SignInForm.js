@@ -9,7 +9,7 @@ import { FORGET_PASSWORD_PAGE } from 'settings/constant';
 import { FieldWrapper, SwitchWrapper, Label } from '../Auth.style';
 
 export default function SignInForm() {
-  const { signIn, loggedIn } = useContext(AuthContext);
+  const { signIn, loggedIn, admin } = useContext(AuthContext);
   const {
     control,
     formState: { errors },
@@ -17,10 +17,13 @@ export default function SignInForm() {
   } = useForm();
   const onSubmit = (data) => {
     signIn(data);
+    console.log(admin);
   };
-  if (loggedIn) {
+  if (loggedIn && !admin) {
     return <Navigate to="/" replace={true} />;
   }
+
+  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

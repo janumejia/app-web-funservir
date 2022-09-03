@@ -5,11 +5,7 @@ import useOnClickOutside from 'library/hooks/useOnClickOutside';
 
 import { LOGIN_PAGE, REGISTRATION_PAGE, REGISTRATION_SITE_OWNER_PAGE } from 'settings/constant';
 
-<<<<<<< HEAD
 const AuthMenu = ({ className, avatar }) => {
-=======
-const AuthMenu = ({ className }) => {
->>>>>>> 71df6fe (portal admin V2 con add y modified)
   // Para aparecer y ocultar las opciones del botón de registrarse
   const [state, setState] = useState(false);
 
