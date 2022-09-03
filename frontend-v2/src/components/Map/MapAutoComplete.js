@@ -74,7 +74,7 @@ const SearchInput = (props) => {
         // El && en este caso es para decir que si isLoaded es true entonces ejecute lo que está después del && .Explicación: https://stackoverflow.com/questions/40682064/what-does-operator-indicate-with-this-props-children-react-cloneelemen
         // Docu: https://react-google-maps-api-docs.netlify.app/#standalonesearchbox
         // Atributo bounds agregado para ajustar los limites de búsqueda (en un rectángulo)
-        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
+        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged} >
           <Input
             // defaultBounds={new window.maps.LatLngBounds(new window.google.maps.LatLng(5.210936, -74.469522), new window.google.maps.LatLng(40.712216, -74.22655))}
             type="text"
