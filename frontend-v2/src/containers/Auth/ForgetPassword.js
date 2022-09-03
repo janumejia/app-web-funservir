@@ -29,23 +29,23 @@ export default function ForgetPassWord() {
         <Logo
           withLink
           linkTo="/"
-          src="/images/logo-alt.svg"
+          src="/images/logo-funservir.png"
           title="Funservir"
         />
-        <Title>Welcome Back</Title>
-        <TitleInfo>Enter your email to recover your account</TitleInfo>
+        <Title>Recuperar contraseña</Title>
+        <TitleInfo>Ingresa tu correo para recuperar la contraseña</TitleInfo>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl
-            label="Email"
+            label="Correo"
             htmlFor="email"
             error={
               errors.email && (
                 <>
                   {errors.email?.type === 'required' && (
-                    <span>This field is required!</span>
+                    <span>Este campo es requerido</span>
                   )}
                   {errors.email?.type === 'pattern' && (
-                    <span>Please enter a valid email address!</span>
+                    <span>Por favor ingresa tu email en un formato válido</span>
                   )}
                 </>
               )
@@ -77,7 +77,7 @@ export default function ForgetPassWord() {
             style={{ width: '100%' }}
           >
             <MdEmail />
-            Send email
+            Enviar correo
           </Button>
         </form>
       </FormWrapper>

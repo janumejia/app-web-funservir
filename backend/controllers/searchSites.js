@@ -31,8 +31,8 @@ const searchSites = async (req, res) => {
         {
             $or: [
                 { "title": { $in: regexArray } },
-                { "content": { $in: regexArray } },
-                { "propertyType": { $in: regexArray } },
+                // { "content": { $in: regexArray } },
+                // { "propertyType": { $in: regexArray } },
                 { "location.city": { $in: regexArray } },
                 { "location.formattedAddress": { $in: regexArray } }
             ]

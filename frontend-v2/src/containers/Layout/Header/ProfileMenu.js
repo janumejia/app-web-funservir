@@ -23,7 +23,7 @@ export default function ProfileMenu({ avatar }) {
   useOnClickOutside(dropdownRef, () => setState(false));
   function handleLogout() {
     logOut();
-    navigate('/', { replace: true });
+    // navigate('/', { replace: true });
   }
 
   return (

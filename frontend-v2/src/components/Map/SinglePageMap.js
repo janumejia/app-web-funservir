@@ -18,7 +18,7 @@ const SingleMapDisplay = ({ location }) => {
     lng: location?.location.lng,
     id: location?.id,
     title: location?.title,
-    thumbUrl: location?.image.thumb_url,
+    thumbUrl: location?.gallery[0],
     formattedAddress: location?.location.formattedAddress,
     price: location?.price,
     rating: location?.rating,
