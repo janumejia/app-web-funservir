@@ -28,7 +28,7 @@ const Description = ({
         </RatingMeta>
         <Text content={content} {...contentStyle} />
         <TextButton>
-          <Button>Read more about the hotel</Button>
+          <Button>Leer más acerca del sitio</Button>
         </TextButton>
       </DescriptionWrapper>
     </Element>

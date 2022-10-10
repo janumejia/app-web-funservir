@@ -1,6 +1,13 @@
+// DESCRIPCIÓN COMPONENTE:
+// Tratamiento de la información que es enviada al realizar la búsqueda de un sitio usando la barra de búsqueda:
+// Hay 2 formatos de entrada
+
 export function mapDataHelper(infoValue) {
   const tempMapObj = {};
   const tempMapArray = [];
+  
+  console.log("mapDataHelper(infoValue)")
+  console.log(infoValue)
 
   if (infoValue && infoValue.length !== 0) {
     infoValue.map(
@@ -11,7 +18,7 @@ export function mapDataHelper(infoValue) {
         name,
         geometry: { location },
       }) => {
-        let id = '';
+        // let id = '';
         let lat = '';
         let lng = '';
         let formattedAddress = '';
@@ -23,13 +30,14 @@ export function mapDataHelper(infoValue) {
         let country_short = '';
         let name_site = '';
 
-        id = place_id;
+        // id = place_id;
         lat = location.lat();
         lng = location.lng();
         formattedAddress = formatted_address;
         name_site = name;
         if (address_components) {
           for (let i = 0; i < address_components.length; i++) {
+            console.log(address_components[i].types[0])
             if (address_components[i].types.length) {
               switch (address_components[i].types[0]) {
                 case 'locality':
@@ -53,7 +61,7 @@ export function mapDataHelper(infoValue) {
           }
         }
 
-        tempMapObj.id = id;
+        // tempMapObj.id = id;
         tempMapObj.lat = lat;
         tempMapObj.lng = lng;
         tempMapObj.formattedAddress = formattedAddress;

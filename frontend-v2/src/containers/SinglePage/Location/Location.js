@@ -18,21 +18,18 @@ const Location = ({
   return (
     <Element name="location" className="location">
       <LocationWrapper>
-        <Heading as="h2" content="Location" {...titleStyle} />
+        <Heading as="h2" content="Ubicación" {...titleStyle} />
         <Text content={formattedAddress} {...locationMetaStyle} />
         <Text
-          content="Take an easy walk to the main historic sites of the city. The
-          neighborhood is perfect for an authentic taste of Roman life, with
-          shops, art galleries, restaurants, bars, and clubs all nearby and
-          ready to be discovered."
+          content="Queda a 5 minutos a pie desde la estación Usaquen. El barrio es tranquilo y perfecto para disfrutar del auténtico sabor de la vida romana, con tiendas, galerías de arte, restaurantes, bares y discotecas, todo cerca y listo para ser descubierto."
           {...contentStyle}
         />
         <Text
-          content="Distance from Leonardo da Vinci International Airport"
+          content="Distancia desde el aeropuerto el Dorado"
           {...contentStyle}
           {...boldContentStyle}
         />
-        <Text content="26 mins by car without traffic" {...contentStyle} />
+        <Text content="26 minutos en carro en promedio" {...contentStyle} />
 
         <Map location={location} multiple={false} />
       </LocationWrapper>

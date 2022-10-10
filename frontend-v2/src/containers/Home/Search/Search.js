@@ -16,7 +16,7 @@ const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
     <BannerWrapper>
       <GlideCarousel // Carrusel de imágenes
         controls={true}
-        options={{ gap: 0, autoplay: 10000, animationDuration: 1000 }} // Tiempo en que es presentada cada imagen del carrusel de imágenes
+        options={{ gap: 0, autoplay: 10000, animationDuration: 1000, keyboard: true }} // Tiempo en que es presentada cada imagen del carrusel de imágenes
         bullets={true}
         numberOfBullets={4}
       >

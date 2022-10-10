@@ -5,12 +5,16 @@ import ImageGalleryWrapper from './ImageGallery.style';
 
 const images = [
   {
-    original: '/images/post-image-1.jpg',
-    thumbnail: '/images/post-thumb-1.jpg',
+    original: 'https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21',
+    thumbnail: 'https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21 ',
   },
   {
-    original: '/images/post-image-2.jpg',
-    thumbnail: '/images/post-thumb-2.jpg',
+    original: 'https://casadecolombia.co/wp-content/uploads/2018/10/foto-casa-de-colombia-fundacion-2.jpg',
+    thumbnail: 'https://casadecolombia.co/wp-content/uploads/2018/10/foto-casa-de-colombia-fundacion-2.jpg',
+  },
+  {
+    original: 'https://dps2018.prosperidadsocial.gov.co/SiteCollectionImages/Noticias/2018-Abr-25-Alianzas%20por%20lo%20social.jpeg',
+    thumbnail: 'https://dps2018.prosperidadsocial.gov.co/SiteCollectionImages/Noticias/2018-Abr-25-Alianzas%20por%20lo%20social.jpeg',
   },
 ];
 

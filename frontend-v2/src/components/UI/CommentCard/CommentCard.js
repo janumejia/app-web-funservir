@@ -41,20 +41,20 @@ export default class App extends React.Component {
                       'dddd, MMMM Do YYYY, h:mm:ss a'
                     )}
                   >
-                    <span>Reviewd - {moment(postTime).fromNow()}</span>
+                    <span>Publicado hace un día</span>
                   </Popover>
                 </div>
               </div>
             </div>
-            <div className="rating-area">
+            {/* <div className="rating-area">
               <LikeDislike />
-            </div>
+            </div> */}
           </div>
           <div className="comment-body">
             <h4>{reviewTitle}</h4>
             <p>{content}</p>
           </div>
-          <div className="comment-rating">
+          {/* <div className="comment-rating">
             {reviewRating && reviewRating.length !== 0
               ? reviewRating.map((singleReviewRating, i) => {
                   return (
@@ -69,7 +69,7 @@ export default class App extends React.Component {
                   );
                 })
               : ''}
-          </div>
+          </div> */}
         </div>
       </div>
     );
