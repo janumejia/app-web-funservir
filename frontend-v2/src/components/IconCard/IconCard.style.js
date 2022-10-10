@@ -27,7 +27,7 @@ export const IconWrapper = styled.div`
 
 export const TitleArea = styled.div`
   color: ${themeGet('text.0', '#2C2C2C')};
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   margin-top: 10px;
 `;

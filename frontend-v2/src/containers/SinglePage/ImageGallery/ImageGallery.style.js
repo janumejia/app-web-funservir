@@ -33,7 +33,7 @@ const ImageGalleryWrapper = styled.div`
     color: ${themeGet('text.0', '#2C2C2C')};
 
     &:after {
-      content: 'photos';
+      content: 'Fotos';
       display: inline-block;
       margin-left: 0.25em;
     }

@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
+npmrequire('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const Site = require("../model/site") // Traemos el esquema del sitio
 
 const searchSites = async (req, res) => {

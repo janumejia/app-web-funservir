@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'components/UI/Heading/Heading';
 import TextLink from 'components/UI/TextLink/TextLink';
-import { FaWifi, FaCarAlt, FaSwimmer, FaAirFreshener } from 'react-icons/fa';
+import { FaWifi, FaCarAlt, FaWheelchair, FaBlind } from 'react-icons/fa';
 import IconCard from 'components/IconCard/IconCard';
 import AmenitiesWrapper, { AmenitiesArea } from './Amenities.style';
 import { TextButton } from '../SinglePageView.style';
@@ -12,16 +12,16 @@ const Amenities = ({ titleStyle, linkStyle }) => {
   return (
     <Element name="amenities" className="Amenities">
       <AmenitiesWrapper>
-        <Heading as="h2" content="Amenities" {...titleStyle} />
+        <Heading as="h2" content="Elementos inclusivos" {...titleStyle} />
         <AmenitiesArea>
-          <IconCard icon={<FaWifi />} title="Free wifi" />
-          <IconCard icon={<FaCarAlt />} title="Free parking" />
-          <IconCard icon={<FaSwimmer />} title="Free pool" />
-          <IconCard icon={<FaAirFreshener />} title="Air Freshener" />
+          <IconCard icon={<FaWifi />} title="Wifi" />
+          <IconCard icon={<FaCarAlt />} title="Parqueadero para personas con discapacidad" />
+          <IconCard icon={<FaWheelchair />} title="Accesible para personas en silla de ruedas" />
+          <IconCard icon={<FaBlind />} title="Accesible para invidente" />
         </AmenitiesArea>
-        <TextButton>
+        {/* <TextButton>
           <TextLink link="#1" content="Show all amenities" {...linkStyle} />
-        </TextButton>
+        </TextButton> */}
       </AmenitiesWrapper>
     </Element>
   );

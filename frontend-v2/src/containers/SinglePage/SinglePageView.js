@@ -48,7 +48,7 @@ const SinglePage = () => {
       <PostImage>
         <img
           className="absolute"
-          src="/images/single-post-bg.jpg"
+          src="https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21"
           alt="Listing details page banner"
         />
         <Button
@@ -56,7 +56,7 @@ const SinglePage = () => {
           onClick={() => setIsModalShowing(true)}
           className="image_gallery_button"
         >
-          View Photos
+          Ver fotos
         </Button>
         <Modal
           visible={isModalShowing}
@@ -92,7 +92,7 @@ const SinglePage = () => {
 
       <Container>
         <Row gutter={30} id="reviewSection" style={{ marginTop: 30 }}>
-          <Col xl={16}>
+          <Col xl={19}>
             <Description
               content={content}
               title={title}
@@ -103,7 +103,7 @@ const SinglePage = () => {
             <Amenities amenities={amenities} />
             <Location location={data[0]} />
           </Col>
-          <Col xl={8}>
+          {/* <Col xl={8}>
             {width > 1200 ? (
               <Sticky
                 innerZ={999}
@@ -121,7 +121,7 @@ const SinglePage = () => {
                 ratingCount={ratingCount}
               />
             )}
-          </Col>
+          </Col> */}
         </Row>
         <Row gutter={30}>
           <Col xl={16}>

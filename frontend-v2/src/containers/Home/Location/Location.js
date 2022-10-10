@@ -67,7 +67,7 @@ const LocationGrid = () => {
                   <GlideSlide key={index}>
                     <ImageCard
                       link="listing"
-                      imageSrc={post.locationImage.url}
+                      imageSrc={post.location.gallery[0]}
                       title={post.city}
                       meta={`${post.numberOfPost} Hotels`}
                     />

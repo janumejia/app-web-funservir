@@ -47,8 +47,14 @@ export default function Header() {
     setState(!state);
   };
   const headerType = location.pathname === '/' ? 'transparent' : 'default';
-  const avatarImg = user.avatar; // Traemos el link del avatar de usuario de nuestra variable global
-  const userName = user.name; // Traemos el nombre del usuario de nuestra variable global
+  
+  let avatarImg = '';
+  let userName = '';
+
+  if(user){
+    avatarImg = user.avatar; // Traemos el link del avatar de usuario de nuestra variable global
+    userName = user.name; // Traemos el nombre del usuario de nuestra variable global
+  }
 
   return (
     <HeaderWrapper>

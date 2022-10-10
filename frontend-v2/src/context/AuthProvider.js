@@ -7,7 +7,7 @@ export const AuthContext = React.createContext();
 
 const fakeUserData = {
   id: 1,
-  name: 'Jhon Doe',
+  name: 'Julián Andrés',
   avatar:
     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
   roles: ['USER', 'ADMIN'],
@@ -77,6 +77,7 @@ const AuthProvider = (props) => {
   const logOut = () => {
     setUser(null);
     setLoggedIn(false);
+    navigate('/', { replace: true });
   };
 
   return (

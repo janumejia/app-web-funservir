@@ -14,12 +14,12 @@ import GlideWrapper, {
 const GlideCarousel = ({
   className,
   children,
-  options,
-  controls,
+  options, // { gap: 0, autoplay: 10000, animationDuration: 1000, keyboard: true }
+  controls, // {true}
   prevButton,
   nextButton,
-  bullets,
-  numberOfBullets,
+  bullets, // {true}
+  numberOfBullets, // {4}
   carouselSelector,
 }) => {
   // Add all classs to an array.

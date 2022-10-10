@@ -3,7 +3,7 @@ import { FiExternalLink } from 'react-icons/fi';
 import TextLink from 'components/UI/TextLink/TextLink';
 import Rating from 'components/UI/Rating/Rating';
 import Favourite from 'components/UI/Favorite/Favorite';
-import Carousel from 'react-multi-carousel';
+import Carousel from 'react-multi-carousel'; // Documentación: https://www.npmjs.com/package/react-multi-carousel
 import 'react-multi-carousel/lib/styles.css';
 import GridCard from '../GridCard/GridCard';
 
@@ -47,13 +47,13 @@ const PostGrid = ({
   return (
     <GridCard
       isCarousel={true}
-      favorite={
-        <Favourite
-          onClick={(event) => {
-            console.log(event);
-          }}
-        />
-      }
+      // favorite={
+      //   <Favourite
+      //     onClick={(event) => {
+      //       console.log(event);
+      //     }}
+      //   />
+      // }
       location={location.formattedAddress}
       title={<TextLink link={`${link}/${slug}`} content={title} />}
       price={`$${price}/Night - Free Cancellation`}

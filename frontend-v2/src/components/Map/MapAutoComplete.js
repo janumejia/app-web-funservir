@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
 
-import { useLoadScript, StandaloneSearchBox } from '@react-google-maps/api'; // StandaloneSearchBox ya provee el autoComplete. Docu: https://react-google-maps-api-docs.netlify.app/#section-introduction
+import { useLoadScript, Autocomplete, StandaloneSearchBox } from '@react-google-maps/api'; // StandaloneSearchBox ya provee el autoComplete. Docu: https://react-google-maps-api-docs.netlify.app/#section-introduction
 
 // DESCRIPCIÓN:
 // Componente para mostrar posibles sitios mientras escribes en la barra de búsqueda, usando la API de Google Maps
 const SearchInput = (props) => {
-  const [searchBox, setSearchBox] = useState();
+  const [autocomplete, setAutocomplete] = useState();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    language: "es", // Idioma de las sugerencias de google maps
   });
   const { getInputValue } = props;
   const [locationInput, setLocationInput] = useState({ // locationInput va a contener el valor que hay en la barra de búsqueda en todo momento
@@ -25,33 +26,24 @@ const SearchInput = (props) => {
     });
   };
 
-  const onLoad = (ref) => setSearchBox(ref); // Se ejecuta cuando se oprime el botón buscar sitio
+  const onLoad = (ref) => {
+    // El ref es una instancia Autocomplete: https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete
+    setAutocomplete(ref); // Se ejecuta cuando se oprime el botón buscar sitio
+  }
 
-  const onPlacesChanged = () => { 
+  const onPlacesChanged = () => {
     // Cuando se oprime en una de las predicciones que arroja Google maps
-    // además, podemos llamar a searchBox.getPlaces() para que nos entregue un Objeto con info del sitio seleccionado usando las sugerencias de Google Maps
-    const places = searchBox.getPlaces();
-    console.log(places[0]);
+    // además, podemos llamar a searchBox.getPlace() para que nos entregue un Objeto con info del sitio seleccionado usando las sugerencias de Google Maps
+    const place = autocomplete.getPlace(); // Trae el objeto con el sitio seleccionado
 
-    // setLocationInput({
-    //   searchedLocation: places && places[0].name && places[0].formatted_address,
-    //   searchedPlaceAPIData: places ? places : [],
-    // });
-    // getInputValue({
-    //   searchedLocation: places && places[0].name && places[0].formatted_address,
-    //   searchedPlaceAPIData: places ? places : [],
-    // });
     setLocationInput({ // Para que al seleccionar un valor de las sugerencias de la API de google maps se ponga el valor en la barra de búsqueda
-      searchedLocation: places[0].name + ", " + places[0].formatted_address, // Aquí se pone el nuevo valor que va a tener nuestra barra de búsqueda.
-      searchedPlaceAPIData: places ? places : [],
+      searchedLocation: place.name + ", " + place.formatted_address, // Aquí se pone el nuevo valor que va a tener nuestra barra de búsqueda.
+      searchedPlaceAPIData: place ? place : [],
     });
     getInputValue({
-      searchedLocation: places && places[0].name && places[0].formatted_address,
-      searchedPlaceAPIData: places ? places : [],
+      searchedLocation: place && place.name && place.formatted_address,
+      searchedPlaceAPIData: place ? place : [],
     });
-    console.log("esto->")
-    console.log("esto->" + locationInput)
-    console.log("fin->")
   };
 
   const handleOnPressEnter = (event) => {
@@ -67,14 +59,28 @@ const SearchInput = (props) => {
     return <div>El mapa no puede ser cargado en este momento, lo sentimos.</div>;
   }
 
+  // Limites de Bogotá. Priorizará los resultados en esta ubicación.
+  const bounds = {
+    north: 4.841938,
+    south: 4.452522,
+    east: -73.979419,
+    west: -74.230731
+  };
+
+  var options = {
+    types: ['geocode'], // Ver lo tipos disponibles en la documentación: https://developers.google.com/maps/documentation/javascript/supported_types#table2
+    //componentRestrictions: { country: "CO" }, // Para limitar a solo Colombia (no es necesario porque ya está bounds)
+    strictBounds: true, // Para limitar solo a los limites indicados en bounds
+  };
+
   return (
     <div className="map_autocomplete">
-      {isLoaded && ( 
-         // console.log(places);
+      {isLoaded && (
+        // console.log(place);
         // El && en este caso es para decir que si isLoaded es true entonces ejecute lo que está después del && .Explicación: https://stackoverflow.com/questions/40682064/what-does-operator-indicate-with-this-props-children-react-cloneelemen
         // Docu: https://react-google-maps-api-docs.netlify.app/#standalonesearchbox
         // Atributo bounds agregado para ajustar los limites de búsqueda (en un rectángulo)
-        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
+        <Autocomplete onLoad={onLoad} onPlaceChanged={onPlacesChanged} bounds={bounds} options={options}>
           <Input
             // defaultBounds={new window.maps.LatLngBounds(new window.google.maps.LatLng(5.210936, -74.469522), new window.google.maps.LatLng(40.712216, -74.22655))}
             type="text"
@@ -85,7 +91,7 @@ const SearchInput = (props) => {
             onChange={handleOnChange}
             onPressEnter={handleOnPressEnter}
           />
-        </StandaloneSearchBox>
+        </Autocomplete>
       )}
     </div>
   );

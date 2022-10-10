@@ -26,12 +26,12 @@ const MobileMenu = ({ className }) => {
       </Menu.Item> */}
       {loggedIn && (
         <Menu.Item key="3">
-          <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Account Settings</NavLink>
+          <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Ajustes</NavLink>
         </Menu.Item>
       )}
       {loggedIn && (
         <Menu.Item key="4">
-          <button onClick={logOut}>Log Out</button>
+          <button onClick={logOut}>Cerrar sesión</button>
         </Menu.Item>
       )}
     </Menu>
