@@ -28,13 +28,16 @@ const SearchInput = (props) => {
 
   const onLoad = (ref) => {
     // El ref es una instancia Autocomplete: https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete
+    console.log("onload")
     setAutocomplete(ref); // Se ejecuta cuando se oprime el botón buscar sitio
   }
 
   const onPlacesChanged = () => {
     // Cuando se oprime en una de las predicciones que arroja Google maps
     // además, podemos llamar a searchBox.getPlace() para que nos entregue un Objeto con info del sitio seleccionado usando las sugerencias de Google Maps
+    console.log("onPlacesChanged")
     const place = autocomplete.getPlace(); // Trae el objeto con el sitio seleccionado
+    console.log(place);
 
     setLocationInput({ // Para que al seleccionar un valor de las sugerencias de la API de google maps se ponga el valor en la barra de búsqueda
       searchedLocation: place.name + ", " + place.formatted_address, // Aquí se pone el nuevo valor que va a tener nuestra barra de búsqueda.
@@ -68,7 +71,7 @@ const SearchInput = (props) => {
   };
 
   var options = {
-    types: ['geocode'], // Ver lo tipos disponibles en la documentación: https://developers.google.com/maps/documentation/javascript/supported_types#table2
+    types: ['neighborhood','locality','sublocality','sublocality_level_1','sublocality_level_2'], // Ver lo tipos disponibles en la documentación: https://developers.google.com/maps/documentation/javascript/supported_types#table2
     //componentRestrictions: { country: "CO" }, // Para limitar a solo Colombia (no es necesario porque ya está bounds)
     strictBounds: true, // Para limitar solo a los limites indicados en bounds
   };
