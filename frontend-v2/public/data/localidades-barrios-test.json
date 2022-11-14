@@ -1,0 +1,96 @@
+[
+    {
+        "name": "Usaquén",
+        "neighborhood": [
+            "Canaima",
+            "La Floresta de La Sabana",
+            "Torca"
+        ]
+    },
+    {
+        "name": "Usaquén",
+        "neighborhood": [
+            "Altos de Serrezuela",
+            "Balcones de Vista Hermosa",
+            "Balmoral Norte",
+            "Buenavista",
+            "Chaparral",
+            "El Codito",
+            "El Refugio de San Antonio",
+            "El Verbenal",
+            "Horizontes",
+            "La Estrellita",
+            "La Frontera",
+            "La Llanurita",
+            "Los Consuelos",
+            "Marantá",
+            "Maturín",
+            "Medellín",
+            "Mirador del Norte",
+            "Nuevo Horizonte",
+            "San Antonio Norte",
+            "Santandersito",
+            "Tibabita",
+            "Viña del Mar"
+        ]
+    },
+    {
+        "name": "Usaquén",
+        "neighborhood": [
+            "Bosque de San Antonio",
+            "Conjunto Camino del Palmar",
+            "El Pite",
+            "El Redil",
+            "La Cita",
+            "La Granja Norte",
+            "La Uribe",
+            "Los Naranjos",
+            "San Juan Bosco",
+            "Urbanización Los Laureles"
+        ]
+    },
+    {
+        "name": "Usaquén",
+        "neighborhood": [
+            "Ainsuca",
+            "Altablanca",
+            "Barrancas",
+            "California",
+            "Cerro Norte",
+            "Danubio",
+            "Don Bosco",
+            "La Perla Oriental",
+            "Las Areneras",
+            "Milán (Barrancas)",
+            "Pradera Norte",
+            "San Cristóbal Norte",
+            "San Cristóbal Norte parte alta",
+            "San Cristóbal Norte  parte baja",
+            "Santa Teresa",
+            "Soratama",
+            "Torcoroma",
+            "Villa Nydia",
+            "Villa Oliva"
+        ]
+    },
+    {
+        "name": "Usaquén",
+        "neighborhood": [
+            "El Toberín",
+            "Babilonia",
+            "Darandelos",
+            "Estrella del Norte",
+            "Guanoa",
+            "Jardín Norte",
+            "La Liberia",
+            "La Pradera Norte",
+            "Las Orquídeas",
+            "Pantanito",
+            "Santa  Mónica",
+            "Villa Magdala",
+            "Villas de Aranjuez",
+            "Villas del Mediterráneo",
+            "Zaragoza"
+        ]
+    }
+]

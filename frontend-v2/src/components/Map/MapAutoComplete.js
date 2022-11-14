@@ -71,7 +71,7 @@ const SearchInput = (props) => {
   };
 
   var options = {
-    types: ['neighborhood','locality','sublocality','sublocality_level_1','sublocality_level_2'], // Ver lo tipos disponibles en la documentación: https://developers.google.com/maps/documentation/javascript/supported_types#table2
+    types: ['neighborhood', 'locality', 'sublocality', 'sublocality_level_1', 'sublocality_level_2'], // Ver lo tipos disponibles en la documentación: https://developers.google.com/maps/documentation/javascript/supported_types#table2
     //componentRestrictions: { country: "CO" }, // Para limitar a solo Colombia (no es necesario porque ya está bounds)
     strictBounds: true, // Para limitar solo a los limites indicados en bounds
   };

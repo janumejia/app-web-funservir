@@ -5,6 +5,7 @@ import { FaMapMarkerAlt, FaRegCalendar, FaUserFriends, FaSearch } from 'react-ic
 import { Button } from 'antd';
 import DateRangePickerBox from 'components/UI/DatePicker/ReactDates';
 import MapAutoComplete from 'components/Map/MapAutoComplete'; // Corresponde al segundo campo de búsqueda (barrio o localidad)
+import MapAutoComplete2 from 'components/Map/MapAutoComplete-test';
 import { mapDataHelper } from 'components/Map/mapDataHelper';
 import ViewWithPopup from 'components/UI/ViewWithPopup/ViewWithPopup';
 import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
@@ -131,9 +132,10 @@ export default function SearchForm() {
       {/* </ComponentWrapper> */}
 
       {/* Segundo campo de búsqueda: Barrio o localidad */}
+
       <ComponentWrapper>
         <FaMapMarkerAlt className="map-marker" />
-        <MapAutoComplete updateValue={(value) => updateValueFunc(value)} /> {/* Campo de búsqueda */}
+        <MapAutoComplete2 updateValue={(value) => updateValueFunc(value)} /> {/* Campo de búsqueda */}
       </ComponentWrapper>
 
       {/* Parte del calendario */}
