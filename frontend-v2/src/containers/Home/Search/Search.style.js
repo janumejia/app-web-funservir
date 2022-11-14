@@ -245,7 +245,8 @@ export const ComponentWrapper = styled.div`
     width: 100%;
     position: relative;
 
-    &::after {
+    
+    ${'' /* &::after {
       content: '';
       width: 1px;
       height: 20px;
@@ -272,8 +273,10 @@ export const ComponentWrapper = styled.div`
         width: calc(100% - 30px);
         left: 15px;
       }
-    }
+    } */}
 
+
+  /* Única parte funcional */
     input {
       border: 0;
       font-size: 15px;
@@ -283,6 +286,7 @@ export const ComponentWrapper = styled.div`
       padding: 0 30px 0 40px;
       background: transparent;
       color: ${themeGet('text.0', '#2C2C2C')};
+      width: calc(100%);
 
       @media (max-width: 480px) {
         height: 47px;

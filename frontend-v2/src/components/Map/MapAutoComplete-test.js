@@ -29,6 +29,7 @@ const SearchInput = (props) => {
   const [value, setValue] = useState("");
   const [selectedNeighborhood, setSelectedNeighborhood] = useState({});
 
+  // Para ajustar los barrios que se mostrará en las sugerencias de la barra de búsqueda:
   const onSuggestionsFetchRequested = ({ value }) => {
     setNeighborhoods(filterNeighborhoods(value))
   }
@@ -54,7 +55,7 @@ const SearchInput = (props) => {
     } else {  // Solamente se ejecuta si el usuario ha introducido algo en la barra de búsqueda
       var count = 5; // Variable para limitar a solo 5 resultados en las sugerencias
       var filtrado = localitiesAndNeighborhoods.filter((element) => { // Método filter retorna un arreglo con los elementos que cumplan la condición. Documentación: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
-        var stringToSearch = element.neighborhood + element.locality;
+        var stringToSearch = element.neighborhood + element.locality + element.neighborhood; // 2 veces el barrio para que se le muestren las sugerencias sin importar si digita primero el barrio o la localidad.
 
         if (count > 0 && stringToSearch.toLowerCase() // Para encontrar los resultados del autocompletado
           .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remover acentos (lo mismo que está arriba pero simplificado)
@@ -74,13 +75,15 @@ const SearchInput = (props) => {
     setNeighborhoods([]);
   }
 
+  // En caso de clickear la sugerencia, esto es lo que se pone en la barra de búsqueda:
   const getSuggestionValue = (suggestion) => {
-    return `${suggestion.neighborhood} - ${suggestion.locality}`;
+    return `${suggestion.neighborhood}, ${suggestion.locality}`;
   }
 
+  // Aquí se configura como se mostraran las sugerencias
   const renderSuggestion = (suggestion) => (
-    <div className='sugerencia' onClick={() => selectNeighborhood(suggestion)}>
-      {`${suggestion.neighborhood} - ${suggestion.locality}`}
+    <div className='react-autosuggest__suggestions-list' onClick={() => selectNeighborhood(suggestion)}>
+      {`${suggestion.neighborhood}, ${suggestion.locality}`}
     </div>
   );
 
@@ -125,42 +128,6 @@ const SearchInput = (props) => {
       <button className='btn btn-primary' onClick={() => console.log(selectedNeighborhood)}>Checar Estado</button> */}
     </div>
   );
-
-  // const [value, setValue] = useState('');
-  // const [options, setOptions] = useState([]);
-  // const onSearch = (searchText) => {
-  //   setOptions(
-  //     !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)],
-  //   );
-  // };
-  // const onSelect = (data) => {
-  //   console.log('onSelect', data);
-  // };
-  // const onChange = (data) => {
-  //   setValue(data);
-  // };
-  // return (
-  //   <div className="map_autocomplete">
-  //     <AutoComplete
-  //       options={options}
-  //       onSelect={onSelect}
-  //       onSearch={onSearch}
-  //       style={{
-  //         width: 900
-  //       }}
-  //     >
-  //       <Input
-  //         // defaultBounds={new window.maps.LatLngBounds(new window.google.maps.LatLng(5.210936, -74.469522), new window.google.maps.LatLng(40.712216, -74.22655))}
-  //         type="text"
-  //         defaultValue=""
-  //         placeholder="Ingresar barrio o localidad"
-  //         size="large"
-  //       />
-  //     </AutoComplete>
-  //   </div>
-  // );
-
-
 };
 
 export default SearchInput;
