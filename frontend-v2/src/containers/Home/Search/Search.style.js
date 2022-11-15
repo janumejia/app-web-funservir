@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
+import Autosuggest from 'react-autosuggest';
 
 const BannerWrapper = styled.div`
   width: 100%;
@@ -165,6 +166,10 @@ export const FormWrapper = styled.div`
   }
 `;
 
+export const StyleAutosuggest = styled(Autosuggest)`
+
+`
+
 export const ComponentWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -213,14 +218,15 @@ export const ComponentWrapper = styled.div`
     display: block;
     position: absolute;
     top: 51px;
-    width: 280px;
+    width: 100%; /* Para el tamaño del autocompletado ocupe todo el ancho de la barra de búsqueda */
     border: 1px solid #aaa;
+    border-radius: 4px;
     background-color: #fff;
     font-family: Helvetica, sans-serif;
     font-weight: 300;
     font-size: 16px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+    ${'' /* border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px; */}
     z-index: 2;
   }
 
@@ -245,8 +251,8 @@ export const ComponentWrapper = styled.div`
     width: 100%;
     position: relative;
 
-    
-    ${'' /* &::after {
+
+    &::after {
       content: '';
       width: 1px;
       height: 20px;
@@ -273,7 +279,7 @@ export const ComponentWrapper = styled.div`
         width: calc(100% - 30px);
         left: 15px;
       }
-    } */}
+    }
 
 
   /* Única parte funcional */

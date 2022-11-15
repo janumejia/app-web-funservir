@@ -22,6 +22,18 @@ const localitiesAndNeighborhoods = [
   { locality: "Usaquén", neighborhood: "Zaragoza" }
 ]
 
+const options = [
+  {
+    value: 'Burns Bay Road',
+  },
+  {
+    value: 'Downing Street',
+  },
+  {
+    value: 'Wall Street',
+  },
+];
+
 // DESCRIPCIÓN:
 // Componente para mostrar posibles sitios mientras escribes en la barra de búsqueda, usando un arreglo de objetos que contiene todos los barrios de Bogotá
 const SearchInput = (props) => {
@@ -124,8 +136,16 @@ const SearchInput = (props) => {
         inputProps={inputProps}
         onSuggestionSelected={eventEnter}
       />
-      {/* <br />
-      <button className='btn btn-primary' onClick={() => console.log(selectedNeighborhood)}>Checar Estado</button> */}
+      {/* <AutoComplete
+        // style={{
+        //   width: 200,
+        // }}
+        options={options}
+        placeholder="try to type `b`"
+        filterOption={(inputValue, option) =>
+          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+        }
+      /> */}
     </div>
   );
 };
