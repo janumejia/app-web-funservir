@@ -6,6 +6,7 @@ const db = require("./database/db")
 const controllers = require("./controllers") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
 const verifyToken = require("./middlewares/verifyToken");
+const uploadMiddleware = require("./middlewares/handleStorage");
 
 const app = express();
 app.disable('x-powered-by');
@@ -21,14 +22,17 @@ app.post("/register", controllers.register)
 app.post("/loginUser", controllers.login)
 app.post("/adminLogin", controllersAdmin.adminLogin)
 app.post("/editUser", controllersAdmin.editUser)
-app.post("/addElement", controllersAdmin.addInclusiveElement)
 app.post("/addCategory", controllersAdmin.addCategory)
 app.get("/getCategories", controllersAdmin.getCategories)
 app.get("/all_users", controllersAdmin.allUsers)
 app.post("/addUser", controllersAdmin.addUsers)
+app.post("/deleteUser", controllersAdmin.deleteUser)
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)
-app.post("/deleteUser", controllersAdmin.deleteUser)
+app.get("/elements", controllersAdmin.getInclusiveElements)
+app.post("/deleteElement", controllersAdmin.deleteElement)
+app.post("/editElement", controllersAdmin.editElement)
+app.post("/addElement", uploadMiddleware.single("myFile"),controllersAdmin.addInclusiveElement)
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
@@ -38,16 +42,5 @@ app.listen(port, host, () =>{ // Sintaxis -> app.listen([port[, host[, backlog]]
     console.log(`Servidor funcionando en el puerto ${port} y host ${host}`)
     db() // Llamamos a la función db
 })
-
-// var storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads')
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.fieldname + '-' + Date.now())
-//     }
-// });
-
-// var upload = multer({ storage: storage });
 
 module.exports = app

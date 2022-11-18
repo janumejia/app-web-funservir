@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken")
 const AdminLogin = async (req, res) =>{
 
     const {email, password} = req.body;
-
     User.findOne({email}).then((user)=>{
         if(user && user.userType === 'A'){
             bcrypt.compare(password, user.password)
@@ -19,7 +18,7 @@ const AdminLogin = async (req, res) =>{
                     };
 
                     const token = jwt.sign(data, process.env.JWT_SECRET, {
-                        expiresIn: '1m'
+                        expiresIn: '10m'
                     });
                     
                     res.json({

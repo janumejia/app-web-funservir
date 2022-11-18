@@ -14,7 +14,6 @@ const login = async (req, res) => {
                 .then((isCorrect) => {
                     if (isCorrect) {
                         const { id, name, userType } = user
-                        console.log(user);
                         const data = {
                             id,
                             name,

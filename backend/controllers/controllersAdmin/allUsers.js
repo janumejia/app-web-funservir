@@ -1,8 +1,8 @@
-const Categories = require("../../model/user");
+const Users = require("../../model/user");
 
 const allUsers = async (req,res) => {
     
-    Categories.find({}).then((users)=>{
+    Users.find({}).then((users)=>{
         if(users){
             res.json(users)
         }else{

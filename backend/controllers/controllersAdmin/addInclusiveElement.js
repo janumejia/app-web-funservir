@@ -1,20 +1,28 @@
 const InclusiveElement = require("../../model/inclusiveElements");
-
-const addInclusiveElement = async (req, res) => {
-
-    const {name, desc} = req.body;
-    InclusiveElement.findOne({name}).then((element)=>{
+const fs = require('fs');
+const path = require('path');
+const addInclusiveElement = async (req, res, next) => {
+    const {body, file} = req
+    if (req.fileValidationError) {
+       return res.json({message: "Inserte una imagen valida"}); 
+    }
+    InclusiveElement.findOne({body}).then((element)=>{
         if(!element){
-            if(name && desc){
-                const newElement = new InclusiveElement({
-                    name,
-                    desc
-                })
-                newElement.save().then((element) => { // Si todo sale bien...
-                    res.json({ message: "Elemento creado correctamente", element})
-                })
-                .catch((error) => console.error(error))
+            const obj = {
+                name: body.name,
+                img: {
+                    data: fs.readFileSync(path.join(__dirname,'..','..','storage', file.filename)),
+                    contentType: 'image/png'
+                }
             }
+            InclusiveElement.create(obj, (err, item) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    res.json({ message: "Elemento creado correctamente", item})
+                }
+            });
         }else{
             res.json({ message: "Error"})
         }
