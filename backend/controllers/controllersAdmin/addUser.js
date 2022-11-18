@@ -2,15 +2,25 @@ const User = require("../../model/user")
 const bcrypt = require("bcryptjs")
 const addUser = async (req, res) => {
 
-    const { name, email, password, edad, sexo, direccion, discapacidad, tutor, fundacion, userType } = req.body;
+    const { name, lastName, email, password, age, gender, address, condition, isCaregiver, institution, userType } = req.body;
     User.findOne({ email }).then((element) => {
         if (!element) {
-            if (name && email && edad && sexo && password && direccion && (tutor===true || tutor===false) && fundacion && userType) {
+            if (name && lastName && email && age && gender && password && address && isCaregiver && userType) {
                 bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), (error, hashPassword) => { // Genera el hash de la contraseña ingresada
                     if (error) res.json({ error })
                     else {
                         const newUser = new User({
-                            name, email, password: hashPassword, edad, sexo, direccion, discapacidad, tutor, fundacion, userType
+                            name, 
+                            lastName,
+                            email, 
+                            password: hashPassword, 
+                            age, 
+                            gender, 
+                            address, 
+                            condition, 
+                            isCaregiver, 
+                            institution, 
+                            userType
                         })
                         newUser.save().then((element) => { // Si todo sale bien...
                             res.json({ message: "Usuario creado correctamente", element })

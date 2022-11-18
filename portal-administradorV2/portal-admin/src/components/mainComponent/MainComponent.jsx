@@ -1,28 +1,27 @@
-import {BrowserRouter, Routes, Route, Link, Outlet} from "react-router-dom"
+import {Routes, Route, Link} from "react-router-dom"
 import Users from "../users/Users"
-
+import InclusiveElements from "../inclusiveElements/InclusiveElements";
+import DropDownAdminuser from "../dropDownAdminUser/DropDownAdminUser";
 import React from "react";
 import "antd/dist/antd.min.css";
 import "./main.css";
+import jwt_decode from "jwt-decode";
 import {
-  NotificationOutlined,
+  CalendarOutlined,
   SmileOutlined,
-  AlertOutlined
+  AlertOutlined,
+  AppstoreOutlined
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb, Layout, Menu, Space } from "antd";
 
 const { Header, Content, Sider } = Layout;
-/*const items1 = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`
-}));*/
-const options = ["Elementos Inclusivos", "Usuarios", "Horarios"];
-const url = ["elements", "users", "schedule"];
-const items2 = [AlertOutlined, SmileOutlined, NotificationOutlined].map(
+
+const options = ["Elementos Inclusivos", "Usuarios", "Horarios", "Categorias"]; //Estos son los menus
+const url = ["elements", "users", "schedule", "categories"]; //Estas son las URL
+const items2 = [AlertOutlined, SmileOutlined, CalendarOutlined, AppstoreOutlined].map(
   (icon, index) => {
-    const key = String(index + 1);
     return {
-      key: `sub${key}`,
+      key: url[index],
       icon: React.createElement(icon),
       label: `${options[index]}`,
       children: new Array(1).fill(null).map((_, j) => {
@@ -36,34 +35,37 @@ const items2 = [AlertOutlined, SmileOutlined, NotificationOutlined].map(
   }
 );
 
-const MainComponent = () => (
-  <BrowserRouter> {/*Los links deben ir dentro del contexto del Router*/}
+
+
+const MainComponent = () => {
+  let href=window.location.href.split('/');
+  href=href[3]
+  const token = jwt_decode(localStorage.getItem('token'));
+  return(
+  <> {/*Los links deben ir dentro del contexto del Router*/}
+  
     <Layout
     style={{
       minHeight: '100vh',
     }}
   >
     <Header className="header">
-      <Link to="/"><div className="logo"><img src="/funservirLogo.jpg" alt="Funservir Logo"/></div></Link>
-      {/*<Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={["1"]}
-        items={items1}
-  />*/}
+      <Space>
+      <Link to="/dashboard"><div className="logo"><img src="/funservirLogo.jpg" alt="Funservir Logo"/></div></Link>
+      <DropDownAdminuser name={token.name}></DropDownAdminuser>
+      </Space>
     </Header>
     
     <Layout>
       <Sider width={200} className="site-layout-background">
         <Menu
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
           style={{
             height: "100%",
             borderRight: 0
           }}
           items={items2}
+          defaultOpenKeys={[href]} //Ultimar detalles para que quede seleccionado también
         />
       </Sider>
       <Layout
@@ -86,15 +88,15 @@ const MainComponent = () => (
           }}
         >
           <Routes>
-          <Route path="/" element={<Outlet/>}/>
           <Route path="/users" element={<Users/>}/>
+          <Route path="/elements" element={<InclusiveElements/>}/>
           </Routes>
         </Content>
       </Layout>
     </Layout>
   </Layout>
-  </BrowserRouter>
-  
-);
+  </>
+  )
+        };
 
 export default MainComponent;

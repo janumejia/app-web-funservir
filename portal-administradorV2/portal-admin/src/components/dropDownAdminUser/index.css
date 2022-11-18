@@ -1,0 +1,3 @@
+#usrBtn button:first-child{
+    pointer-events: none;
+  }

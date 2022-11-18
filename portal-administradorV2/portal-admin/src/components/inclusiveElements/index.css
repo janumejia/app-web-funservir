@@ -1,0 +1,13 @@
+.editable-row .ant-form-item-explain {
+    position: absolute;
+    top: 100%;
+    font-size: 12px;
+  }
+
+.ant-space {
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: auto auto;
+    align-content: flex-end;
+
+}

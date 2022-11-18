@@ -1,0 +1,19 @@
+  .login-form-forgot {
+    float: right;
+  }
+  .ant-col-rtl .login-form-forgot {
+    float: left;
+  }
+  .login-form-button {
+    width: 100%;
+  }
+
+  .ant-card-meta-title{
+    padding: 20px 30px;
+  }
+
+  .ant-card-meta-avatar{
+    justify-self: center;
+  }
+
+ 

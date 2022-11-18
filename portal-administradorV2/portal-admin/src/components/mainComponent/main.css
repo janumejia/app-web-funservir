@@ -15,10 +15,17 @@
 }
 .ant-row-rtl .logo {
   float: right;
-  margin: 16px 0 16px 24px;
+  margin: 20px 0 16px 24px;
 }
 
 .site-layout-background {
   background: #fff;
 }
 
+.ant-space {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: auto auto;
+  align-content: flex-end;
+
+}

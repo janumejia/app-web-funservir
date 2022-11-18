@@ -1,30 +1,57 @@
 require('dotenv').config({ path: '.env' })
 const User = require("../../model/user")
 const bcrypt = require("bcryptjs")
-const editUser = async (req, res) => { //En la primera versión se mandará el usuario a editar, cuando esté el front, esto puede que cambie.
+const editUser = async (req, res) => {
 
     const { _id, ...resto } = req.body;
     const query = { _id: _id };
-    bcrypt.hash(resto.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
-        if (error) res.json({ error })
-        else {
-            const update = {
-                name: resto.name,
-                email: resto.email,
-                password: hashPassword,
-                edad: resto.edad,
-                sexo: resto.sexo,
-                direccion: resto.direccion,
-                discapacidad: resto.discapacidad,
-                tutor: resto.tutor,
-                fundacion: resto.fundacion,
-                userType: resto.userType
+    let doc = await User.findOne(query);
+    if (doc.password !== resto.password) {
+        bcrypt.hash(resto.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
+            if (error) res.json({ error })
+            else {
+                /*const update = {
+                    name: resto.name,
+                    lastName: resto.lastName,
+                    email: resto.email,
+                    password: hashPassword,
+                    age: resto.age,
+                    gender: resto.gender,
+                    address: resto.address,
+                    condition: resto.condition,
+                    isCaregiver: resto.isCaregiver,
+                    institution: resto.institution,
+                    userType: resto.userType
+                }*/
+                //await User.findByIdAndUpdate(query, update);
+                doc.name = resto.name;
+                doc.lastName = resto.lastName;
+                doc.email = resto.email;
+                doc.password = hashPassword;
+                doc.age = resto.age;
+                doc.gender = resto.gender;
+                doc.address = resto.address;
+                doc.condition = resto.condition;
+                doc.isCaregiver = resto.isCaregiver;
+                doc.institution = resto.institution;
+                doc.userType = resto.userType;
+                await doc.save();
             }
-           await User.findByIdAndUpdate(query, update);
-        }
-    })
-    let ans = await User.findOne(query);
-    res.json(ans);
+        })
+    } else {
+        doc.name = resto.name;
+        doc.lastName = resto.lastName;
+        doc.email = resto.email;
+        doc.age = resto.age;
+        doc.gender = resto.gender;
+        doc.address = resto.address;
+        doc.condition = resto.condition;
+        doc.isCaregiver = resto.isCaregiver;
+        doc.institution = resto.institution;
+        doc.userType = resto.userType;
+        await doc.save();
+    }
+res.json(doc);
 }
 
 module.exports = editUser
