@@ -6,7 +6,6 @@ const db = require("./database/db")
 const controllers = require("./controllers") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
 const verifyToken = require("./middlewares/verifyToken");
-const uploadMiddleware = require("./middlewares/handleStorage");
 
 const app = express();
 app.disable('x-powered-by');
@@ -30,9 +29,9 @@ app.post("/deleteUser", controllersAdmin.deleteUser)
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)
 app.get("/elements", controllersAdmin.getInclusiveElements)
+app.post("/addElement", controllersAdmin.addInclusiveElement)
 app.post("/deleteElement", controllersAdmin.deleteElement)
 app.post("/editElement", controllersAdmin.editElement)
-app.post("/addElement", uploadMiddleware.single("myFile"),controllersAdmin.addInclusiveElement)
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida

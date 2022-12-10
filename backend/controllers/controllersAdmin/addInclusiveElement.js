@@ -1,32 +1,31 @@
+const cloudinary = require("../../middlewares/cloudinary");
 const InclusiveElement = require("../../model/inclusiveElements");
-const fs = require('fs');
-const path = require('path');
-const addInclusiveElement = async (req, res, next) => {
-    const {body, file} = req
-    if (req.fileValidationError) {
-       return res.json({message: "Inserte una imagen valida"}); 
-    }
-    InclusiveElement.findOne({body}).then((element)=>{
-        if(!element){
-            const obj = {
-                name: body.name,
-                img: {
-                    data: fs.readFileSync(path.join(__dirname,'..','..','storage', file.filename)),
-                    contentType: 'image/png'
-                }
+
+const addInclusiveElement = async (req, res) => {
+    const { name, image } = req.body;
+    try {
+        if (image) {
+            const uploadRes = await cloudinary.uploader.upload(image, {
+                upload_preset: "inclusive_elements"
+            })
+            
+            const element = await InclusiveElement.findOne({ name });
+            
+            if (!element && uploadRes) {
+                const inclusiveElement = new InclusiveElement({
+                    name,
+                    image: uploadRes
+                })
+                
+                await inclusiveElement.save().then(element=>{res.json(
+                    { message: "Usuario creado correctamente", element })})
+            }else{
+                throw new Error();
             }
-            InclusiveElement.create(obj, (err, item) => {
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    res.json({ message: "Elemento creado correctamente", item})
-                }
-            });
-        }else{
-            res.json({ message: "Error"})
         }
-    })
+    } catch (error) { 
+        res.status(500).send(error);
+    }
 }
 
 module.exports = addInclusiveElement

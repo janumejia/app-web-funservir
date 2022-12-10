@@ -1,15 +1,30 @@
 require('dotenv').config({ path: '.env' })
-const Elements = require("../../model/inclusiveElements.js");
-const editElement = async (req, res) => {
+const cloudinary = require("../../middlewares/cloudinary");
 
-    const { _id, ...resto } = req.body;
+const Elements = require("../../model/inclusiveElements.js");
+
+const editElement = async (req, res) => {
+    const { _id, imageUrl,...resto } = req.body;
     const query = { _id: _id };
-    const update = {
-        name: resto.name,
-        desc: resto.desc,
+    try {
+        if (imageUrl) {
+            const uploadRes = await cloudinary.uploader.upload(imageUrl, {
+                upload_preset: "inclusive_elements"
+            })
+            
+            if (uploadRes) {
+                const update = {
+                    name: resto.name,
+                    image: uploadRes,
+                }
+                await Elements.findByIdAndUpdate(query, update);
+            }
+        }
+    } catch (error) {
+        res.status(500).send(error);
     }
-    await Elements.findByIdAndUpdate(query, update);
-    let ans = await Elements.findOne(query);
+
+    let ans = await Elements.findOne(query); //Revisar si se puede borrar
     res.json(ans);
 }
 

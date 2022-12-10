@@ -1,13 +1,36 @@
 .editable-row .ant-form-item-explain {
-    position: absolute;
-    top: 100%;
-    font-size: 12px;
-  }
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
+}
 
 .ant-space {
-    display: grid;
-    justify-content: space-between;
-    grid-template-columns: auto auto;
-    align-content: flex-end;
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: auto auto;
+  align-content: flex-end;
 
+}
+
+#wrapperIElements {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  position: relative;
+  
+}
+
+#iElementsForm {
+  width: 60%;
+
+}
+
+#iconPreview {
+  border-style: solid;
+  border-width: 1px;
+  width: 100%; height: 100%;
+  align-self: center;
+  justify-self: center;
 }
