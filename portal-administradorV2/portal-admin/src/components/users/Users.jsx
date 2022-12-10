@@ -69,9 +69,9 @@ const selectedValues = [
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
-        return (/^[a-zA-Z0-9]+$/);
+        return (/^([A-Za-z1-9ñÑáéíóú ]){1,100}$/);
     } else if (dataIndex === 'email') {
-        return (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
+        return (/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/);
     } else if (dataIndex === 'age') {
         return (/^(?:\d*)$/)
     } else if (dataIndex === 'password') {
@@ -465,9 +465,6 @@ const ManageUsers = () => {
                     style={{
                         width: 300
                     }}
-                /*options={options}
-                onSelect={onSelect}
-                onSearch={handleSearch}*/
                 >
                     <Input.Search size='large'
                         placeholder="Buscar..."

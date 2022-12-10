@@ -2,11 +2,9 @@ const {model, Schema} = require("mongoose")
 
 const elementSchema = new Schema({
     name: {type: String, required: true, unique: true},
-    img:
-    {
-        data: Buffer,
-        contentType: String
-    }
+    image: {type: Object, required: true},
+}, {
+    timestamps: true
 })
 
 module.exports = model("InclusiveElements", elementSchema)

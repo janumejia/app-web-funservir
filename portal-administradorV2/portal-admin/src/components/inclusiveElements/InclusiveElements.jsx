@@ -2,43 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete } from 'antd';
-
-
-const EditableCell = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-}) => {
-    const inputNode = <Input />;
-    return (
-        <td {...restProps}>
-            {editing ? (
-                <Form.Item
-                    name={dataIndex}
-                    style={{
-                        margin: 0,
-                    }}
-                    rules={[
-                        {
-                            required: true,
-                            message: `Introduzca ${title}!`,
-                        },
-                    ]}
-                >
-                    {inputNode}
-                </Form.Item>
-            ) : (
-                children
-            )}
-        </td>
-    );
-};
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Modal, Upload} from 'antd';
+import UploadComponent from './UploadComponent';
 
 
 const ManageElements = () => {
@@ -47,6 +12,56 @@ const ManageElements = () => {
     const [data, setData] = useState("");
     const [editingKey, setEditingKey] = useState('');
     const [searchedText, setSearchedText] = useState("");
+    //Inicio de Manejo de imagenes
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState();
+    
+    //Tratamiento de imagenes
+    const getBase64 = (img) => {
+        const reader = new FileReader();
+        //reader.addEventListener('load', () => callback(reader.result));
+        if(img){
+            reader.readAsDataURL(img);
+            reader.onloadend = () =>{
+                setImageUrl(reader.result);
+                setLoading(false);
+            }
+        }else{
+            setImageUrl("");
+        }
+        
+    };
+
+    const beforeUpload = (file) => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            message.error('You can only upload JPG/PNG file!');
+        }
+
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('Image must smaller than 2MB!');
+        }
+        return (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
+    };
+
+    const handleChange = (info) => {
+
+        if(info.file.status==='uploading'){
+            setLoading(true);
+            return;
+        }
+        /*if (info.file.status === 'done') {
+            
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+            });
+        }*/
+        getBase64(info.file);
+    };
+//Fin de manejo de imagenes
 
     useEffect(() => {
         axios.get('http://localhost:4000/elements')
@@ -54,13 +69,44 @@ const ManageElements = () => {
                 setData(res.data);
             }).catch((error) => console.error(error));
     }, [])
-
+    
+    const EditableCell = ({
+        editing,
+        dataIndex,
+        title,
+        inputType,
+        record,
+        index,
+        children,
+        ...restProps
+    }) => {
+        const inputNode = (inputType==='object'?<UploadComponent loading={loading} beforeUpload={beforeUpload} handleChange={handleChange} imageUrl={imageUrl}/>:<Input />) ;
+        return (
+            <td {...restProps}>
+                {editing ? (
+                    <Form.Item
+                        name={dataIndex}
+                        style={{
+                            margin: 0,
+                        }}
+                    >
+                        {inputNode}
+                    </Form.Item>
+                ) : (
+                    
+                    (inputType==='object'?<img src={record.image.url} alt='img' style={{width:'10%',height:'auto'}}/>:children)
+                )}
+            </td>
+        );
+    };
     const isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
+
         form.setFieldsValue({
-            ...record,
+            ...record
         });
+
         setEditingKey(record._id);
     };
 
@@ -75,16 +121,17 @@ const ManageElements = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
-
-            if (key === "0" && row.name !== " " && row.desc !== " ") {
+            
+            if (key === "0" && row.name !== " " && imageUrl) {
                 const newElement = {
                     name: row.name,
-                    desc: row.desc
+                    image: imageUrl
                 }
                 axios.post('http://localhost:4000/addElement', newElement)
                     .then((res) => {
                         newData.splice(index, 1, res.data.element);
                         setData(newData);
+                        setImageUrl("");
                         setEditingKey('');
                         message.success('Se ha creado el Elemento Inclusivo exitosamente');
                     })
@@ -93,10 +140,11 @@ const ManageElements = () => {
                     });
             } else if (key !== "0") {
 
-                axios.post('http://localhost:4000/editElement', { ...item, ...row })
+                axios.post('http://localhost:4000/editElement', { ...item, ...row, imageUrl })
                     .then((res) => {
                         newData.splice(index, 1, res.data);
                         setData(newData);
+                        setImageUrl("");
                         setEditingKey('');
                         message.success('Se editó el Elemento Inclusivo exitosamente');
                     })
@@ -136,21 +184,22 @@ const ManageElements = () => {
             title: 'Nombre*',
             dataIndex: "name",
             key: "name",
-            width: '20%',
+            width: '50%',
             editable: true,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             filteredValue: [searchedText],
             onFilter: (value, record) => {
-                return String(record.name).toLocaleLowerCase().includes(value.toLocaleLowerCase()) 
-                || String(record.desc).toLocaleLowerCase().includes(value.toLocaleLowerCase());
+                return String(record.name).toLocaleLowerCase().includes(value.toLocaleLowerCase())
             }
         },
         {
-            title: 'Descripción*',
-            dataIndex: 'desc',
-            key: "desc",
-            width: '70%',
+            title: 'Icono*',
+            dataIndex: ['image','url'],
+            key: "image",
+            width: '40%',
             editable: true,
         },
+
         {
             title: 'Operación',
             dataIndex: 'operation',
@@ -159,16 +208,17 @@ const ManageElements = () => {
                 const editable = isEditing(record);
                 return editable ? (
                     <span>
-                        <Typography.Link
-                            keyboard
-                            onClick={() => saveEdit(record._id)}
-                            style={{
-                                marginRight: 8,
-                            }}
-                        >
-                            Guardar
-                        </Typography.Link>
-                        <Popconfirm title="¿Estás seguro?" cancelText="Cancelar" onConfirm={cancel}>
+                        <Popconfirm title="¿Estás seguro?" cancelText="Seguir Editando" onConfirm={() => saveEdit(record._id)}>
+                            <Typography.Link
+                                keyboard
+                                style={{
+                                    marginRight: 8,
+                                }}
+                            >
+                                Guardar
+                            </Typography.Link>
+                        </Popconfirm>
+                        <Popconfirm title="¿Estás seguro?" cancelText="Seguir Editando" onConfirm={cancel}>
                             <Typography.Link keyboard type="danger">
                                 Cancelar
                             </Typography.Link>
@@ -180,7 +230,7 @@ const ManageElements = () => {
                             Editar
                         </Typography.Link>
                         <Popconfirm title="¿Estás seguro?" cancelText="Cancelar" onConfirm={() => handleDelete(record._id)}>
-                            <Typography.Link keyboard type="danger">
+                            <Typography.Link keyboard disabled={editingKey !== ''} type="danger">
                                 Eliminar
                             </Typography.Link>
                         </Popconfirm>
@@ -189,6 +239,7 @@ const ManageElements = () => {
             },
         },
     ];
+
     const mergedColumns = columns.map((col) => {
         if (!col.editable) {
             return col;
@@ -198,7 +249,7 @@ const ManageElements = () => {
             ...col,
             onCell: (record) => ({
                 record,
-                inputType: 'text',
+                inputType: (col.key === 'image' ? 'object' : 'text'),
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
@@ -212,8 +263,8 @@ const ManageElements = () => {
         if (index === -1) {
             const newElement = {
                 _id: "0",
-                name: " ",
-                desc: " ",
+                name: "",
+                image: {},
             };
             setData([...data, newElement]);
             edit(newElement);
@@ -222,39 +273,43 @@ const ManageElements = () => {
         }
     };
 
+    
     return (
-        <Form form={form} component={false}>
-            <Space align="start" wrap={true}>
-            <Button
-                onClick={handleAdd}
-                type="primary"
-                style={{
-                    marginBottom: 16,
-                }}
-                size='large'
-            >
-                Añadir Elemento Inclusivo
-            </Button>
-                <AutoComplete
-                    dropdownMatchSelectWidth={252}
-                    style={{
-                        width: 300
-                    }}
-                /*options={options}
-                onSelect={onSelect}
-                onSearch={handleSearch}*/
-                >
-                    <Input.Search size='large' 
-                    placeholder="Buscar..." 
-                    enterButton
-                    onSearch={(value)=>{
-                        setSearchedText(value);
-                    }}
-                    />
-                </AutoComplete>
-                
+        <>
+            <Form form={form} component={false}>
+                <Space align="start" wrap={true}>
+                    <Button
+                        onClick={handleAdd}
+                        type="primary"
+                        style={{
+                            marginBottom: 16,
+                        }}
+                        size='large'
+                    >
+                        Añadir Elemento Inclusivo
+                    </Button>
+                    <AutoComplete
+                        dropdownMatchSelectWidth={252}
+                        style={{
+                            width: 300
+                        }}
+                    >
+                        <Input.Search size='large'
+                            placeholder="Buscar..."
+                            enterButton
+                            onSearch={(value) => {
+                                setSearchedText(value);
+                            }}
+                        />
+                    </AutoComplete>
+
                 </Space>
                 <Table
+                    locale={{
+                        triggerDesc: 'Ordenar descendiente',
+                        triggerAsc: 'Ordenar ascendiente',
+                        cancelSort: 'Cancelar ordenamiento'
+                    }}
                     rowKey={record => record._id}
                     components={{
                         body: {
@@ -267,9 +322,13 @@ const ManageElements = () => {
                     rowClassName="editable-row"
                     pagination={{
                         onChange: cancel,
+                        pageSize: 10
                     }}
+                    scroll={{ x: "max-content" }}
                 />
-        </Form>
+            </Form>
+
+        </>
     );
 };
 

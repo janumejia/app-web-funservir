@@ -4,8 +4,7 @@ const getInclusiveElements = async (req,res) => {
     
     Elements.find({}).then((elements)=>{
         if(elements){
-            res.json({imagesPage: elements });
-            console.log(elements);
+            res.json(elements);
         }else{
             res.json({ message: "Error"});
         }
