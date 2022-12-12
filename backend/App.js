@@ -32,7 +32,7 @@ app.get("/elements", controllersAdmin.getInclusiveElements)
 app.post("/addElement", controllersAdmin.addInclusiveElement)
 app.post("/deleteElement", controllersAdmin.deleteElement)
 app.post("/editElement", controllersAdmin.editElement)
-app.post("/addElement", uploadMiddleware.single("myFile"),controllersAdmin.addInclusiveElement)
+// app.post("/addElement", uploadMiddleware.single("myFile"),controllersAdmin.addInclusiveElement) // NO sé de donde salio.
 // Parametría Localidades:
 app.get("/getLocations", controllersAdmin.getLocations)
 app.post("/addLocations", controllersAdmin.addLocations)
