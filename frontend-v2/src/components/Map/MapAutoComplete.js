@@ -1,105 +1,131 @@
-import React, { useState } from 'react';
+import { AutoComplete } from 'antd';
 import { Input } from 'antd';
+import React, { useState } from 'react';
+import Autosuggest from 'react-autosuggest';
 
-import { useLoadScript, Autocomplete, StandaloneSearchBox } from '@react-google-maps/api'; // StandaloneSearchBox ya provee el autoComplete. Docu: https://react-google-maps-api-docs.netlify.app/#section-introduction
+// Formato del JSON de llegada del backend que contiene el barrio y la localidad
+const localitiesAndNeighborhoods = [
+  { locality: "Usaquén", neighborhood: "El Toberín" },
+  { locality: "Usaquén", neighborhood: "Babilonia" },
+  { locality: "Usaquén", neighborhood: "Darandelos" },
+  { locality: "Usaquén", neighborhood: "Estrella del Norte" },
+  { locality: "Usaquén", neighborhood: "Guanoa" },
+  { locality: "Usaquén", neighborhood: "Jardín Norte" },
+  { locality: "Usaquén", neighborhood: "La Liberia" },
+  { locality: "Usaquén", neighborhood: "La Pradera Norte" },
+  { locality: "Usaquén", neighborhood: "Las Orquídeas" },
+  { locality: "Usaquén", neighborhood: "Pantanito" },
+  { locality: "Usaquén", neighborhood: "Santa  Mónica" },
+  { locality: "Usaquén", neighborhood: "Villa Magdala" },
+  { locality: "Usaquén", neighborhood: "Villas de Aranjuez" },
+  { locality: "Usaquén", neighborhood: "Villas del Mediterráneo" },
+  { locality: "Usaquén", neighborhood: "Zaragoza" }
+]
 
 // DESCRIPCIÓN:
-// Componente para mostrar posibles sitios mientras escribes en la barra de búsqueda, usando la API de Google Maps
+// Componente para mostrar posibles sitios mientras escribes en la barra de búsqueda, usando un arreglo de objetos que contiene todos los barrios de Bogotá
 const SearchInput = (props) => {
-  const [autocomplete, setAutocomplete] = useState();
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    language: "es", // Idioma de las sugerencias de google maps
-  });
-  const { getInputValue } = props;
-  const [locationInput, setLocationInput] = useState({ // locationInput va a contener el valor que hay en la barra de búsqueda en todo momento
-    searchedLocation: '',
-    searchedPlaceAPIData: [],
-  });
-  const handleOnChange = (event) => {
-    if (event.which === '13') { // event.which devuelve el código ASCII de la tecla que activó el evento, y 13 significa que oprimió la tecla ENTER
-      event.preventDefault(); // preventDefault() es un evento sintético para evitar el comportamiento por defecto del HTML nativo. Ej: se invoca un preventDefault en el evento al enviar el formulario para evitar que el navegador se vuelva a cargar/actualizar https://www.robinwieruch.de/react-preventdefault/
-      event.stopPropagation();
-    }
-    setLocationInput({
-      searchedLocation: event.target.value, // event.target da el elemento que desencadenó el evento. Entonces, event.target.value recupera el valor de ese elemento (del campo de entrada). https://stackoverflow.com/questions/67014481/what-is-event-target-value-in-react-exactly
-    });
-  };
+  const [neighborhoods, setNeighborhoods] = useState(localitiesAndNeighborhoods); //
+  const [value, setValue] = useState("");
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState({});
 
-  const onLoad = (ref) => {
-    // El ref es una instancia Autocomplete: https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete
-    setAutocomplete(ref); // Se ejecuta cuando se oprime el botón buscar sitio
+  // Para ajustar los barrios que se mostrará en las sugerencias de la barra de búsqueda:
+  const onSuggestionsFetchRequested = ({ value }) => {
+    setNeighborhoods(filterNeighborhoods(value))
   }
 
-  const onPlacesChanged = () => {
-    // Cuando se oprime en una de las predicciones que arroja Google maps
-    // además, podemos llamar a searchBox.getPlace() para que nos entregue un Objeto con info del sitio seleccionado usando las sugerencias de Google Maps
-    const place = autocomplete.getPlace(); // Trae el objeto con el sitio seleccionado
+  // Método para retornar los resultados a mostrar en las sugerencias:
+  const filterNeighborhoods = (value) => {
+    // Para sanitizar la entrada del usuario
+    const inputValue = value.toLowerCase() // Cambia el texto a minúsculas
+      .replace(/[á,à,ä,â]/g, 'a') // ... y para reemplazar las vocales con acentos por simplemente la vocal
+      .replace(/[é,ë,è]/g, 'e')
+      .replace(/[í,ï,ì]/g, 'i')
+      .replace(/[ó,ö,ò]/g, 'o')
+      .replace(/[ü,ú,ù]/g, 'u')
+      .replace(/\s+/g, '') // Remover espacios
+      .replace(/[_]/g, '') // Remover guion bajo
+      .replace(/[^\w\s]/gi, ''); // ... y remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
 
-    setLocationInput({ // Para que al seleccionar un valor de las sugerencias de la API de google maps se ponga el valor en la barra de búsqueda
-      searchedLocation: place.name + ", " + place.formatted_address, // Aquí se pone el nuevo valor que va a tener nuestra barra de búsqueda.
-      searchedPlaceAPIData: place ? place : [],
-    });
-    getInputValue({
-      searchedLocation: place && place.name && place.formatted_address,
-      searchedPlaceAPIData: place ? place : [],
-    });
-  };
+    const inputLength = inputValue.length;
 
-  const handleOnPressEnter = (event) => {
-    if (event.which === '13') {
-      event.preventDefault();
-      event.stopPropagation();
+    if (inputLength === 0) {
+      return [];
+
+    } else {  // Solamente se ejecuta si el usuario ha introducido algo en la barra de búsqueda
+      var count = 5; // Variable para limitar a solo 5 resultados en las sugerencias
+      var filtrado = localitiesAndNeighborhoods.filter((element) => { // Método filter retorna un arreglo con los elementos que cumplan la condición. Documentación: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+        var stringToSearch = element.neighborhood + element.locality + element.neighborhood; // 2 veces el barrio para que se le muestren las sugerencias sin importar si digita primero el barrio o la localidad.
+
+        if (count > 0 && stringToSearch.toLowerCase() // Para encontrar los resultados del autocompletado
+          .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remover acentos (lo mismo que está arriba pero simplificado)
+          .replace(/\s+/g, '') // Remover espacios (solo por motivo de búsqueda, y no se refleja en los resultados)
+          .includes(inputValue)) {
+          count--;
+          return element;
+        }
+
+      })
+      return filtrado;
+
     }
-    setLocationInput({ searchedLocation: event.target.value });
-    getInputValue(locationInput);
-  };
-
-  if (loadError) {
-    return <div>El mapa no puede ser cargado en este momento, lo sentimos.</div>;
   }
 
-  // Limites de Bogotá. Priorizará los resultados en esta ubicación.
-  const bounds = {
-    north: 4.841938,
-    south: 4.452522,
-    east: -73.979419,
-    west: -74.230731
-  };
+  const onSuggestionsClearRequested = () => {
+    setNeighborhoods([]);
+  }
 
-  var options = {
-    types: ['geocode'], // Ver lo tipos disponibles en la documentación: https://developers.google.com/maps/documentation/javascript/supported_types#table2
-    //componentRestrictions: { country: "CO" }, // Para limitar a solo Colombia (no es necesario porque ya está bounds)
-    strictBounds: true, // Para limitar solo a los limites indicados en bounds
-  };
+  // En caso de clickear la sugerencia, esto es lo que se pone en la barra de búsqueda:
+  const getSuggestionValue = (suggestion) => {
+    return `${suggestion.neighborhood}, ${suggestion.locality}`;
+  }
+
+  // Aquí se configura como se mostraran las sugerencias
+  const renderSuggestion = (suggestion) => (
+    <div className='react-autosuggest__suggestions-list' onClick={() => selectNeighborhood(suggestion)}>
+      {`${suggestion.neighborhood}, ${suggestion.locality}`}
+    </div>
+  );
+
+  const selectNeighborhood = (neighborhood) => {
+    setSelectedNeighborhood(neighborhood);
+    console.log(neighborhood)
+  }
+
+  const onChange = (e, { newValue }) => {
+    setValue(newValue);
+  }
+
+  const inputProps = {
+    placeholder: "Ingrese barrio o localidad",
+    value,
+    onChange
+  }
+
+  const eventEnter = (e) => {
+    if (e.key == "Enter") {
+      var split = e.target.value.split('-');
+      var neighborhood = {
+        neighborhood: split[0].trim(),
+        locality: split[1].trim(),
+      };
+      selectedNeighborhood(neighborhood);
+    }
+  }
 
   return (
     <div className="map_autocomplete">
-      {isLoaded && (
-        // console.log(place);
-        // El && en este caso es para decir que si isLoaded es true entonces ejecute lo que está después del && .Explicación: https://stackoverflow.com/questions/40682064/what-does-operator-indicate-with-this-props-children-react-cloneelemen
-        // Docu: https://react-google-maps-api-docs.netlify.app/#standalonesearchbox
-        // Atributo bounds agregado para ajustar los limites de búsqueda (en un rectángulo)
-        <Autocomplete onLoad={onLoad} onPlaceChanged={onPlacesChanged} bounds={bounds} options={options}>
-          <Input
-            // defaultBounds={new window.maps.LatLngBounds(new window.google.maps.LatLng(5.210936, -74.469522), new window.google.maps.LatLng(40.712216, -74.22655))}
-            type="text"
-            defaultValue=""
-            value={locationInput.searchedLocation}
-            placeholder="Ingresar barrio o localidad"
-            size="large"
-            onChange={handleOnChange}
-            onPressEnter={handleOnPressEnter}
-          />
-        </Autocomplete>
-      )}
+      <Autosuggest
+        suggestions={neighborhoods}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+        onSuggestionSelected={eventEnter}
+      />
     </div>
   );
 };
 
-const MapAutoComplete = (props) => {
-  const { updateValue } = props;
-  return <SearchInput getInputValue={updateValue} />;
-};
-
-export default MapAutoComplete;
+export default SearchInput;

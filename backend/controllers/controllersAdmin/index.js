@@ -9,6 +9,10 @@ const deleteUser = require("./deleteUser")
 const getInclusiveElements = require("./getInclusiveElements")
 const deleteElement = require("./deleteElement")
 const editElement = require("./editElement")
+const addLocations = require("./addLocation")
+const getLocations = require("./getLocations")
+const editLocations = require("./editLocation")
+const deleteLocations = require("./deleteLocation")
 
 
 module.exports = {
@@ -23,4 +27,8 @@ module.exports = {
     getInclusiveElements,
     deleteElement,
     editElement,
+    addLocations,
+    getLocations,
+    editLocations,
+    deleteLocations,
 }

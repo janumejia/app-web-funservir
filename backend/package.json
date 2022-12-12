@@ -7,7 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node App.js",
+    "start": "nodemon App.js",
     "dev": "nodemon App.js"
   },
   "keywords": [],

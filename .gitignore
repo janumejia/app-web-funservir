@@ -28,3 +28,6 @@ yarn-error.log*
 #Variables de entorno
 .env
 public/env.js
+
+# Pruebas
+generar-json-de-barrios-y-localidades.*
