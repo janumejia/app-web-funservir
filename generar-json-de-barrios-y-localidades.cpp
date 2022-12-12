@@ -13,16 +13,15 @@ using namespace std;
 
 // A quick way to split strings separated via any character
 // delimiter.
-vector<string> adv_tokenizer(string s)
+void adv_tokenizer(string s)
 {
     stringstream ss(s);
     string word;
     vector<string> arregloDeBarrios;
     while (!ss.eof()) {
         getline(ss, word, ",");
-        arregloDeBarrios.push_back(word);
+        cout << word << endl;
     }
-
 }
 
 int main ()
