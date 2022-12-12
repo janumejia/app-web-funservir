@@ -1,6 +1,9 @@
 import {Routes, Route, Link} from "react-router-dom"
 import Users from "../users/Users"
 import InclusiveElements from "../inclusiveElements/InclusiveElements";
+import InclusiveSites from "../sites/inclusiveSites/InclusiveSites";
+import Locations from "../sites/locations/Locations";
+import Neighborhoods from "../sites/neighborhoods/Neighborhoods";
 import DropDownAdminuser from "../dropDownAdminUser/DropDownAdminUser";
 import React from "react";
 import "antd/dist/antd.min.css";
@@ -10,8 +13,9 @@ import {
   CalendarOutlined,
   SmileOutlined,
   AlertOutlined,
-  AppstoreOutlined
-} from "@ant-design/icons";
+  AppstoreOutlined,
+  CompassOutlined
+} from "@ant-design/icons"; // Sacados de: https://ant.design/components/icon
 import { Breadcrumb, Layout, Menu, Space } from "antd";
 
 const { Header, Content, Sider } = Layout;
@@ -28,14 +32,30 @@ const items2 = [AlertOutlined, SmileOutlined, CalendarOutlined, AppstoreOutlined
         const subKey = index * 4 + j + 1;
         return {          
           key: subKey,
-          label: (<Link to={url[index]}>{`Gestionar ${options[index]}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aqui
+          label: (<Link to={url[index]}>{`Gestionar ${options[index]}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aquí
         };
       })
     };
   }
 );
 
+// Para agregar la opción "Gestionar sitios" en el menu, que contiene 3 opciones: "Gestionar sitios inclusivos", "Gestionar localidades", "Gestionar barrios"
+const optionsManageSites = ["sitios inclusivos", "localidades", "barrios"]; // Opciones de item "Gestionar sitios" del menu
+const optionsUrl = ["users", "locations", "neighborhoods"];
+const itemKey = [100, 101, 102]; // Cada opción del submenu debe tener una key única, y no necesariamente en orden
+const submenuManageSites = {
+  key: "",
+  icon: React.createElement(CompassOutlined),
+  label: `Gestionar sitios`,
+  children: optionsManageSites.map( (option, index) => {
+    return {
+      key: itemKey[index],
+      label: (<Link to={optionsUrl[index]}>{`Gestionar ${option}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aquí
+    };
+  })
+};
 
+items2.push(submenuManageSites); // Agregamos el objeto anterior en la ultima posición del arreglo items2
 
 const MainComponent = () => {
   let href=window.location.href.split('/');
@@ -90,6 +110,8 @@ const MainComponent = () => {
           <Routes>
           <Route path="/users" element={<Users/>}/>
           <Route path="/elements" element={<InclusiveElements/>}/>
+          <Route path="/locations" element={<Locations/>}/>
+          <Route path="/neighborhoods" element={<Neighborhoods/>}/>
           </Routes>
         </Content>
       </Layout>
