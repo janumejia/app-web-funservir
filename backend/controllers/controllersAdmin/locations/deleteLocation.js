@@ -1,4 +1,4 @@
-const Location = require("../../model/locations")
+const Location = require("../../../model/locations")
 
 const deleteLocation = async(req, res) =>{
 

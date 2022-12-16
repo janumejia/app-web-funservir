@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '.env' })
-const Location = require("../../model/locations");
+const Location = require("../../../model/locations");
 
 // const delay = ms => new Promise(res => setTimeout(res, ms));
 
@@ -8,7 +8,7 @@ const editLocation = async (req, res) => {
     
     // Sanitizar entrada:
     const pattern_id = /^[0-9a-fA-F]{24}$/;
-    const patternName = /^([A-Za-z1-9ñÑáéíóú ]){1,100}$/;
+    const patternName = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
     
     const isValid_id = pattern_id.test(_id);
     const isValidName = patternName.test(name);
@@ -27,7 +27,7 @@ const editLocation = async (req, res) => {
 
     // Retorna Error si existe el nombre o si no existe el _id:
     if(doesThisNameExist) return res.json({ message: "Ya existe esta localidad" });
-    else if (!doesThis_idExist) return res.json({ message: "Error" });
+    else if (!doesThis_idExist) return res.json({ message: "No existe el _id" });
 
     // Edita el registro después de pasar los filtros
     const query = { _id: _id };

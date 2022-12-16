@@ -32,13 +32,20 @@ app.get("/elements", controllersAdmin.getInclusiveElements)
 app.post("/addElement", controllersAdmin.addInclusiveElement)
 app.post("/deleteElement", controllersAdmin.deleteElement)
 app.post("/editElement", controllersAdmin.editElement)
-// app.post("/addElement", uploadMiddleware.single("myFile"),controllersAdmin.addInclusiveElement) // NO sé de donde salio.
+
 // Parametría Localidades:
 app.get("/getLocations", controllersAdmin.getLocations)
 app.post("/addLocations", controllersAdmin.addLocations)
 app.post("/editLocations", controllersAdmin.editLocations)
 app.post("/deleteLocations", controllersAdmin.deleteLocations)
 
+// Parametría Localidades:
+app.get("/getNeighborhoods", controllersAdmin.getNeighborhoods)
+app.post("/addNeighborhoods", controllersAdmin.addNeighborhoods)
+app.post("/editNeighborhoods", controllersAdmin.editNeighborhoods)
+app.post("/deleteNeighborhoods", controllersAdmin.deleteNeighborhoods)
+
+/* Fin rutas de nuestra APP */
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida

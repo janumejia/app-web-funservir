@@ -116,7 +116,7 @@ const EditableCell = ({
                                 {
                                     required: true,
                                     message: `¡Introduzca un nombre válido!`,
-                                    pattern: /^([A-Za-z1-9ñÑáéíóú ]){1,100}$/,
+                                    pattern: /^([A-Za-z1-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
                                 },
                             ]}
                         >

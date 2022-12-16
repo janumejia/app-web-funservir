@@ -296,7 +296,7 @@ const ManageUsers = () => {
             }
         },
         {
-            title: 'Discapacidad',
+            title: 'Localidad asociada*',
             dataIndex: "condition",
             key: "condition",
             editable: true,
@@ -381,7 +381,7 @@ const ManageUsers = () => {
             setData([...data, newUser]);
             edit(newUser);
         } else {
-            message.error('Ya se encuentra creando un Usuario. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando un usuario. Finalice la creación o elimine el registro añadido');
         }
     };
     return (
@@ -395,7 +395,7 @@ const ManageUsers = () => {
                     }}
                     size='large'
                 >
-                    Añadir Usuario
+                    Añadir barrio
                 </Button>
                 <AutoComplete
                     dropdownMatchSelectWidth={252}
