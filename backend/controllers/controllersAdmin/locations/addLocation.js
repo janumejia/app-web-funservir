@@ -1,14 +1,14 @@
-const { off } = require("../../App");
-const Location = require("../../model/locations")
+const { off } = require("../../../App");
+const Location = require("../../../model/locations")
 const addLocation = async (req, res) => {
 
     const { name } = req.body;
     
     // Sanitización entrada nombre
-    const patternName = /^([A-Za-z1-9ñÑáéíóú ]){1,100}$/;
+    const patternName = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
     const isValidName = patternName.test(name);
-
-    if(isValidName == false) return res.json({ message: "Formato no válido" }); // Caso malo
+    
+    if(isValidName === false) return res.json({ message: "Formato no válido" }); // Caso malo
     else { // Caso bueno
         Location.findOne({ name }).then((element) => {
             if (!element) {

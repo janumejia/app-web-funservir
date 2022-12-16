@@ -9,10 +9,14 @@ const deleteUser = require("./deleteUser")
 const getInclusiveElements = require("./getInclusiveElements")
 const deleteElement = require("./deleteElement")
 const editElement = require("./editElement")
-const addLocations = require("./addLocation")
-const getLocations = require("./getLocations")
-const editLocations = require("./editLocation")
-const deleteLocations = require("./deleteLocation")
+const addLocations = require("./locations/addLocation")
+const getLocations = require("./locations/getLocations")
+const editLocations = require("./locations/editLocation")
+const deleteLocations = require("./locations/deleteLocation")
+const addNeighborhoods = require("./neighborhoods/addNeighborhoods")
+const getNeighborhoods = require("./neighborhoods/getNeighborhoods")
+const editNeighborhoods = require("./neighborhoods/editNeighborhoods")
+const deleteNeighborhoods = require("./neighborhoods/deleteNeighborhoods")
 
 
 module.exports = {
@@ -31,4 +35,8 @@ module.exports = {
     getLocations,
     editLocations,
     deleteLocations,
+    addNeighborhoods,
+    getNeighborhoods,
+    editNeighborhoods,
+    deleteNeighborhoods
 }
