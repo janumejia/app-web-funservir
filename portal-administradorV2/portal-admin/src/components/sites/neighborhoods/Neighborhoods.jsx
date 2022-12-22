@@ -6,41 +6,12 @@ import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, mess
 
 
 const { Option } = Select;
-const gender = [
-    <Option key="Masculino" value="M">M</Option>,
-    <Option key="Femenino" value="F">F</Option>,
-    <Option key="Otro" value="O">O</Option>
-];
 
-const disabilities = [
-    <Option key="Motriz" value=" Motriz ">Motriz</Option>,
-    <Option key="Visual" value=" Visual ">Visual</Option>,
-    <Option key="Auditiva" value=" Auditiva ">Auditiva</Option>,
-    <Option key="Sensorial" value=" Sensorial ">Sensorial</Option>,
-    <Option key="Comunicación" value=" Comunicación ">Comunicación</Option>,
-    <Option key="Mental" value=" Mental ">Mental</Option>,
-    <Option key="Multiples" value=" Multiples ">Múltiples</Option>,
-    <Option key="Otra" value=" Otra ">Otra(s)</Option>
-];
-const rol = [
-    <Option key="Regular" value="R">R</Option>,
-    <Option key="Propietario" value="P">P</Option>,
-    <Option key="Administrador" value="A">A</Option>,
-]
+let associatedLocalities = []; // Se llena abajo con una petición al backend para que traiga todas las localidades registradas. Y será un arreglo de objetos de tipo <Option>
 
-const isCaregiver = [
-    <Select.Option key="Sí" value="Sí">Sí</Select.Option>,
-    <Select.Option key="No" value="No">No</Select.Option>
-]
 const options = (title) => {
-    if (title === "Sexo*") {
-        return gender;
-    } else if (title === "Discapacidad") {
-        return disabilities;
-    } else if (title === "Rol*") {
-        return rol;
-    } else if (title === "Tutor*") {
-        return isCaregiver;
+    if (title === "Localidad asociada*") {
+        return associatedLocalities;
     }
 }
 
@@ -64,18 +35,17 @@ const selectedValues = [
         title: "Tutor*",
         key: "isCaregiver",
         values: ""
+    },
+    {
+        title: "Localidad asociada*",
+        key: "associatedLocality",
+        values: ""
     }
 ]
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
-        return (/^[a-zA-Z0-9]+$/);
-    } else if (dataIndex === 'email') {
-        return (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
-    } else if (dataIndex === 'age') {
-        return (/^(?:\d*)$/)
-    } else if (dataIndex === 'password') {
-        return (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/)
+        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
     }
 };
 
@@ -89,34 +59,96 @@ const EditableCell = ({
     children,
     ...restProps
 }) => {
-    const inputNode = dataIndex === "password" ? <Input.Password /> : <Input />;
+    // const inputNode = dataIndex === "password" ? <Input.Password /> : <Input />;
+    // return (
+    //     <td {...restProps}>
+    //         {editing ? (
+    //             <>
+    //                 {(title === "Sexo*" || title === "Localidad asociada*" || title === "Rol*" || title === "Tutor*") ? (
+    //                     <Select
+    //                         mode={(title === "Discapacidad") ? "multiple" : ""}
+    //                         allowClear={(title === "Discapacidad") ? true : false}
+    //                         style={{
+    //                             width: '100%',
+    //                         }}
+    //                         placeholder="Seleccione una opción"
+    //                         onChange={(val) => {
+    //                             const col = selectedValues.find(column => column.title === title);
+    //                             if (title === "Discapacidad") {
+    //                                 let newArray = [...val]
+    //                                 if (col.values.includes([...val])) {
+    //                                     newArray = newArray.filter(disa => disa !== [...val])
+    //                                 }
+    //                                 col["values"] = newArray;
+    //                             } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
+    //                                 col["values"] = val;
+
+    //                             }
+    //                         }}
+    //                     >
+    //                         {options(title)}
+    //                     </Select>
+    //                 ) : (
+    //                     <Form.Item
+    //                         name={dataIndex}
+    //                         style={{
+    //                             margin: 0,
+    //                         }}
+    //                         rules={[
+    //                             {
+    //                                 required: (title === 'Fundación') ? false : true,
+    //                                 message: `¡Introduzca un ${title} válido!`,
+    //                                 pattern: rules(dataIndex),
+    //                             },
+    //                         ]}
+    //                     >
+    //                         {inputNode}
+    //                     </Form.Item>
+    //                 )}
+    //             </>
+    //         ) : (
+    //             children
+    //         )}
+    //     </td>
+    // );
+
+    // console.log("dataIndex")
+    // console.log(dataIndex)
+
+    // console.log("index")
+    // console.log(index)
+
+    // console.log("...restProps")
+    // console.log(restProps)
+
+
     return (
         <td {...restProps}>
             {editing ? (
                 <>
-                    {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
+                    {(title === "Localidad asociada*") ? (
                         <Select
-                            mode={(title === "Discapacidad") ? "multiple" : ""}
-                            allowClear={(title === "Discapacidad") ? true : false}
+                            defaultValue=""
+                            mode=""
+                            allowClear={true}
                             style={{
                                 width: '100%',
                             }}
                             placeholder="Seleccione una opción"
                             onChange={(val) => {
-                                const col = selectedValues.find(column => column.title === title);
-                                if (title === "Discapacidad") {
-                                    let newArray = [...val]
-                                    if (col.values.includes([...val])) {
-                                        newArray = newArray.filter(disa => disa !== [...val])
-                                    }
-                                    col["values"] = newArray;
-                                } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
-                                    col["values"] = val;
+                                const col = selectedValues.find(column => column.title === "Localidad asociada*");
+                                console.log(selectedValues)
+                                // let newArray = [...val]
+                                // if (col.values.includes([...val])) {
+                                //     newArray = newArray.filter(disa => disa !== [...val])
+                                // }
+                                // col["values"] = newArray;
 
-                                }
+                                col["values"] = val;
+
                             }}
                         >
-                            {options(title)}
+                            {options("Localidad asociada*")}
                         </Select>
                     ) : (
                         <Form.Item
@@ -126,13 +158,13 @@ const EditableCell = ({
                             }}
                             rules={[
                                 {
-                                    required: (title === 'Fundación') ? false : true,
-                                    message: `¡Introduzca un ${title} válido!`,
+                                    required: true,
+                                    message: `¡Introduzca un barrio válido!`,
                                     pattern: rules(dataIndex),
                                 },
                             ]}
                         >
-                            {inputNode}
+                            <Input />
                         </Form.Item>
                     )}
                 </>
@@ -141,6 +173,7 @@ const EditableCell = ({
             )}
         </td>
     );
+
 };
 
 
@@ -148,13 +181,32 @@ const ManageUsers = () => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState("");
+    const [locations, setLocations] = useState([]); // Para las localidades
     const [editingKey, setEditingKey] = useState('');
     const [searchedText, setSearchedText] = useState("");
 
+    // Traemos todos los barrios
     useEffect(() => {
-        axios.get('http://localhost:4000/all_users')
+        axios.get('http://localhost:4000/getNeighborhoods')
             .then((res) => {
                 setData(res.data);
+            }).catch((error) => console.error(error));
+    }, [])
+
+    // También traemos las localidades disponibles
+    let arrayLocations = [];
+    let allLocations = [];
+    useEffect(() => {
+        axios.get('http://localhost:4000/getLocations')
+            .then((res) => {
+                allLocations = res.data;
+
+                for (let pos = 0; pos < allLocations.length; pos++) {
+                    arrayLocations[pos] = <Option key={allLocations[pos].name} value={allLocations[pos].name}>{allLocations[pos].name}</Option>
+                }
+
+                associatedLocalities = arrayLocations;
+
             }).catch((error) => console.error(error));
     }, [])
 
@@ -185,7 +237,8 @@ const ManageUsers = () => {
                 gender: "",
                 condition: [],
                 userType: "",
-                isCaregiver: ""
+                isCaregiver: "",
+                associatedLocality: ""
             };
             selectedValues.forEach(column => {
                 if (column.key === "gender") {
@@ -196,60 +249,65 @@ const ManageUsers = () => {
                     mVals["userType"] = column.values;
                 } else if (column.key === "isCaregiver") {
                     mVals["isCaregiver"] = column.values;
+                } else if (column.key === "associatedLocality") {
+                    mVals["associatedLocality"] = column.values;
                 }
             });
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
-
-                const newUser = {
+            if (key === "0" && row.name && mVals.associatedLocality) {
+                console.log("associatedLocality: " + mVals.associatedLocality)
+                const newNeighborhood = {
                     name: row.name,
-                    lastName: row.lastName,
-                    email: row.email,
-                    password: row.password,
-                    age: row.age,
-                    gender: mVals["gender"],
-                    address: row.address,
-                    condition: [...mVals.condition],
-                    isCaregiver: mVals["isCaregiver"],
-                    institution: row.institution,
-                    userType: mVals["userType"]
+                    associatedLocality: mVals.associatedLocality
                 }
 
-                axios.post('http://localhost:4000/addUser', newUser)
+                axios.post('http://localhost:4000/addNeighborhoods', newNeighborhood)
                     .then((res) => {
-                        newData.splice(index, 1, res.data.element);
-                        setData(newData);
-                        setEditingKey('');
-                        selectedValues.forEach(column => {
-                            if (column.key === "condition") {
-                                column.values = [];
-                            } else {
-                                column.values = "";
-                            }
-                        })
-                        message.success('Se ha creado el Usuario exitosamente');
+                        console.log(res)
+                        if (res.data.message === "Ya existe este barrio") message.error('Ya existe este barrio');
+                        else if (res.data.message === "Barrio creado correctamente") {
+                            newData.splice(index, 1, res.data.element);
+                            setData(newData);
+                            setEditingKey('');
+                            selectedValues.forEach(column => {
+                                if (column.key === "condition") {
+                                    column.values = [];
+                                } else {
+                                    column.values = "";
+                                }
+                            })
+                            message.success('Se ha creado el barrio exitosamente');
+                        } else {
+                            message.error('No se ha podido crear el barrio');
+                        }
                     })
                     .catch((error) => {
-                        message.error('No se ha podido crear el Usuario');
+                        message.error('No se ha podido crear el barrio');
                     });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            } else if (key !== "0" && row.name && mVals.associatedLocality) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row, ...mVals })
+                axios.post('http://localhost:4000/editNeighborhoods', { ...item, ...row, ...mVals })
                     .then((res) => {
-                        newData.splice(index, 1, res.data);
-                        setData(newData);
-                        setEditingKey('');
-                        selectedValues.forEach(column => {
-                            if (column.key === "condition") {
-                                column.values = [];
-                            } else {
-                                column.values = "";
-                            }
-                        })
-                        message.success('Se modificó el Usuario exitosamente');
+                        if (res.data.message === "Ya existe este barrio") message.error('Ya existe este barrio');
+                        else if (res.data.message === "Barrio actualizado correctamente") {
+                            console.log(res)
+                            newData.splice(index, 1, res.data);
+                            setData(newData);
+                            setEditingKey('');
+                            selectedValues.forEach(column => {
+                                if (column.key === "condition") {
+                                    column.values = [];
+                                } else {
+                                    column.values = "";
+                                }
+                            })
+                            message.success('Se modificó el barrio exitosamente');
+                        } else {
+                            message.error('No se ha podido modificar el barrio');
+                        }
                     })
                     .catch((error) => {
-                        message.error('No se ha podido modificar el Usuario');
+                        message.error('No se ha podido modificar el barrio');
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
@@ -263,19 +321,23 @@ const ManageUsers = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteUser', { _id: key })
+            axios.post('http://localhost:4000/deleteNeighborhoods', { _id: key })
                 .then((res) => {
-                    newData.splice(index, 1);
-                    setData(newData);
-                    message.success('Se ha eliminado el Usuario exitosamente');
+                    if (res.data.message === "Barrio borrado correctamente") {
+                        newData.splice(index, 1);
+                        setData(newData);
+                        message.success('Se ha eliminado el barrio exitosamente');
+                    } else {
+
+                    }
                 })
                 .catch((error) => {
-                    message.error('No se ha podido eliminar el Usuario');
+                    message.error('No se ha podido eliminar el barrio');
                 });
         } else {
             newData.splice(index, 1);
             setData(newData);
-            message.success('Se ha eliminado el Usuario exitosamente');
+            message.success('Se ha eliminado el barrio exitosamente');
         }
     };
 
@@ -297,8 +359,8 @@ const ManageUsers = () => {
         },
         {
             title: 'Localidad asociada*',
-            dataIndex: "condition",
-            key: "condition",
+            dataIndex: "associatedLocality",
+            key: "associatedLocality",
             editable: true,
             sorter: (a, b) => a.condition.length - b.condition.length
         },
