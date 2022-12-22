@@ -22,6 +22,10 @@ const disabilities = [
     <Option key="Multiples" value=" Multiples ">Múltiples</Option>,
     <Option key="Otra" value=" Otra ">Otra(s)</Option>
 ];
+
+console.log("disabilities:");
+console.log(disabilities);
+
 const rol = [
     <Option key="Regular" value="R">R</Option>,
     <Option key="Propietario" value="P">P</Option>,

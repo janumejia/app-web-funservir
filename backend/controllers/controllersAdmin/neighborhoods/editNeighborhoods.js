@@ -5,6 +5,8 @@ const Location = require("../../../model/locations")
 // const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const editNeighborhoods = async (req, res) => {
+    console.log("req.body:")
+    console.log(req.body)
     const { _id, name, associatedLocality } = req.body;
     
     // Sanitizar entrada:

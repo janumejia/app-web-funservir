@@ -35,7 +35,7 @@ const addNeighborhoods = async (req, res) => {
                             })
 
                     } else {
-                        res.json({ message: "No existe esta localidad asociada" })
+                        res.json({ message: "No existe esta localidad asociada " + associatedLocality })
                     }
                 })
             }

@@ -211,6 +211,7 @@ const ManageLocations = () => {
 
                 axios.post('http://localhost:4000/editLocations', { ...item, ...row, ...mVals })
                     .then((res) => {
+                        console.log(res)
                         if(res.data.message === "Ya existe esta localidad") message.error('Ya existe esta localidad');
                         else if (res.data.message === "Localidad actualizada correctamente") {
                             newData.splice(index, 1, res.data.ans);
