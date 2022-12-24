@@ -9,7 +9,8 @@ const editElement = async (req, res) => {
     try {
         if (imageUrl) {
             const uploadRes = await cloudinary.uploader.upload(imageUrl, {
-                upload_preset: "inclusive_elements"
+                upload_preset: "inclusive_elements",
+                public_id: resto.name
             })
             
             if (uploadRes) {

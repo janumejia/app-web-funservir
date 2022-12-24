@@ -95,6 +95,11 @@ const EditableCell = ({
             {editing ? (
                 <>
                     {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
+                        <Form.Item
+                        name={dataIndex}
+                            style={{
+                                margin: 0,
+                            }}>
                         <Select
                             mode={(title === "Discapacidad") ? "multiple" : ""}
                             allowClear={(title === "Discapacidad") ? true : false}
@@ -118,6 +123,7 @@ const EditableCell = ({
                         >
                             {options(title)}
                         </Select>
+                        </Form.Item>
                     ) : (
                         <Form.Item
                             name={dataIndex}

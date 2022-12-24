@@ -6,7 +6,8 @@ const addInclusiveElement = async (req, res) => {
     try {
         if (image) {
             const uploadRes = await cloudinary.uploader.upload(image, {
-                upload_preset: "inclusive_elements"
+                upload_preset: "inclusive_elements",
+                public_id: name
             })
             
             const element = await InclusiveElement.findOne({ name });
