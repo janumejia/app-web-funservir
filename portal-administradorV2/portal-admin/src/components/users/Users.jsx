@@ -44,7 +44,7 @@ const options = (title) => {
     }
 }
 
-const selectedValues = [
+/*const selectedValues = [
     {
         title: "Sexo*",
         key: "gender",
@@ -65,7 +65,7 @@ const selectedValues = [
         key: "isCaregiver",
         values: ""
     }
-]
+]*/
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
@@ -107,7 +107,7 @@ const EditableCell = ({
                                 width: '100%',
                             }}
                             placeholder="Seleccione una opción"
-                            onChange={(val) => {
+                            /*onChange={(val) => {
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
                                     let newArray = [...val]
@@ -119,7 +119,7 @@ const EditableCell = ({
                                     col["values"] = val;
 
                                 }
-                            }}
+                            }}*/
                         >
                             {options(title)}
                         </Select>
@@ -186,8 +186,9 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
+            console.log(row);
 
-            let mVals = {
+            /*let mVals = {
                 gender: "",
                 condition: [],
                 userType: "",
@@ -204,8 +205,9 @@ const ManageUsers = () => {
                     mVals["isCaregiver"] = column.values;
                 }
             });
+            console.log(mVals);*/
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            if (key === "0" && row.name && row.lastName && row.email && row.password && row.age && row.gender && row.address && row.isCaregiver && row.userType) {
 
                 const newUser = {
                     name: row.name,
@@ -213,12 +215,12 @@ const ManageUsers = () => {
                     email: row.email,
                     password: row.password,
                     age: row.age,
-                    gender: mVals["gender"],
+                    gender: row["gender"],
                     address: row.address,
-                    condition: [...mVals.condition],
-                    isCaregiver: mVals["isCaregiver"],
+                    condition: [...row.condition],
+                    isCaregiver: row["isCaregiver"],
                     institution: row.institution,
-                    userType: mVals["userType"]
+                    userType: row["userType"]
                 }
 
                 axios.post('http://localhost:4000/addUser', newUser)
@@ -226,32 +228,32 @@ const ManageUsers = () => {
                         newData.splice(index, 1, res.data.element);
                         setData(newData);
                         setEditingKey('');
-                        selectedValues.forEach(column => {
+                        /*selectedValues.forEach(column => {
                             if (column.key === "condition") {
                                 column.values = [];
                             } else {
                                 column.values = "";
                             }
-                        })
+                        })*/
                         message.success('Se ha creado el Usuario exitosamente');
                     })
                     .catch((error) => {
                         message.error('No se ha podido crear el Usuario');
                     });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.age && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row, ...mVals })
+                axios.post('http://localhost:4000/editUser', { ...item, ...row })
                     .then((res) => {
                         newData.splice(index, 1, res.data);
                         setData(newData);
                         setEditingKey('');
-                        selectedValues.forEach(column => {
+                        /*selectedValues.forEach(column => {
                             if (column.key === "condition") {
                                 column.values = [];
                             } else {
                                 column.values = "";
                             }
-                        })
+                        })*/
                         message.success('Se modificó el Usuario exitosamente');
                     })
                     .catch((error) => {

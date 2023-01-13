@@ -91,6 +91,7 @@ const ManageElements = () => {
         });
 
         setEditingKey(record._id);
+        setImageUrl(record.image.secure_url)
     };
 
     const cancel = () => {
@@ -123,7 +124,6 @@ const ManageElements = () => {
                         message.error('No se ha podido crear el Elemento Inclusivo');
                     });
             } else if (key !== "0") {
-
                 axios.post('http://localhost:4000/editElement', { ...item, ...row, imageUrl })
                     .then((res) => {
                         newData.splice(index, 1, res.data);
@@ -147,7 +147,7 @@ const ManageElements = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteElement', { _id: key })
+            axios.post('http://localhost:4000/deleteElement', { _id: key._id, name: key.name })
                 .then((res) => {
                     newData.splice(index, 1);
                     setData(newData);
@@ -213,7 +213,7 @@ const ManageElements = () => {
                         <Typography.Link keyboard disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Editar
                         </Typography.Link>
-                        <Popconfirm title="¿Estás seguro?" cancelText="Cancelar" onConfirm={() => handleDelete(record._id)}>
+                        <Popconfirm title="¿Estás seguro?" cancelText="Cancelar" onConfirm={() => handleDelete(record)}>
                             <Typography.Link keyboard disabled={editingKey !== ''} type="danger">
                                 Eliminar
                             </Typography.Link>

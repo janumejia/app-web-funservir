@@ -10,20 +10,6 @@ const editUser = async (req, res) => {
         bcrypt.hash(resto.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
             if (error) res.json({ error })
             else {
-                /*const update = {
-                    name: resto.name,
-                    lastName: resto.lastName,
-                    email: resto.email,
-                    password: hashPassword,
-                    age: resto.age,
-                    gender: resto.gender,
-                    address: resto.address,
-                    condition: resto.condition,
-                    isCaregiver: resto.isCaregiver,
-                    institution: resto.institution,
-                    userType: resto.userType
-                }*/
-                //await User.findByIdAndUpdate(query, update);
                 doc.name = resto.name;
                 doc.lastName = resto.lastName;
                 doc.email = resto.email;

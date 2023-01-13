@@ -19,7 +19,7 @@ const addInclusiveElement = async (req, res) => {
                 })
                 
                 await inclusiveElement.save().then(element=>{res.json(
-                    { message: "Usuario creado correctamente", element })})
+                    { message: "Elemento creado correctamente", element })})
             }else{
                 throw new Error();
             }
