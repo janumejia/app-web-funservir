@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
 
+// Para el idioma español y otra cosa de la componente DataPicker
+import { ConfigProvider } from 'antd';
+import esES from 'antd/es/date-picker/locale/es_ES';
+import moment from 'moment';
 
 const { Option } = Select;
 const gender = [
@@ -72,8 +76,6 @@ const rules = (dataIndex) => {
         return (/^([A-Za-z1-9ñÑáéíóú ]){1,100}$/);
     } else if (dataIndex === 'email') {
         return (/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/);
-    } else if (dataIndex === 'age') {
-        return (/^(?:\d*)$/)
     } else if (dataIndex === 'password') {
         return (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/)
     }
@@ -95,30 +97,36 @@ const EditableCell = ({
             {editing ? (
                 <>
                     {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
-                        <Select
-                            mode={(title === "Discapacidad") ? "multiple" : ""}
-                            allowClear={(title === "Discapacidad") ? true : false}
+                        <Form.Item
+                            name={dataIndex}
                             style={{
-                                width: '100%',
-                            }}
-                            placeholder="Seleccione una opción"
-                            onChange={(val) => {
-                                const col = selectedValues.find(column => column.title === title);
-                                if (title === "Discapacidad") {
-                                    let newArray = [...val]
-                                    if (col.values.includes([...val])) {
-                                        newArray = newArray.filter(disa => disa !== [...val])
-                                    }
-                                    col["values"] = newArray;
-                                } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
-                                    col["values"] = val;
+                                margin: 0,
+                            }}>
+                            <Select
+                                mode={(title === "Discapacidad") ? "multiple" : ""}
+                                allowClear={(title === "Discapacidad") ? true : false}
+                                style={{
+                                    width: '100%',
+                                }}
+                                placeholder="Seleccione una opción"
+                                onChange={(val) => {
+                                    const col = selectedValues.find(column => column.title === title);
+                                    if (title === "Discapacidad") {
+                                        let newArray = [...val]
+                                        if (col.values.includes([...val])) {
+                                            newArray = newArray.filter(disa => disa !== [...val])
+                                        }
+                                        col["values"] = newArray;
+                                    } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
+                                        col["values"] = val;
 
-                                }
-                            }}
-                        >
-                            {options(title)}
-                        </Select>
-                    ) : (
+                                    }
+                                }}
+                            >
+                                {options(title)}
+                            </Select>
+                        </Form.Item>
+                    ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
                             name={dataIndex}
                             style={{
@@ -134,7 +142,34 @@ const EditableCell = ({
                         >
                             {inputNode}
                         </Form.Item>
-                    )}
+                    ) : (
+                        <Form.Item
+                            name={dataIndex}
+                            style={{
+                                margin: 0,
+                            }}
+                            rules={[
+                                {
+                                    type: 'object',
+                                    required: true,
+                                    message: `¡Introduzca una fecha!`
+                                },
+                            ]}
+
+                        >
+                            <DatePicker
+                                locale={esES}
+                                showToday={false}
+                                format="YYYY-MM-DD"
+                                disabledDate={(current) => {
+                                    // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
+                                    // En este caso, solo permite fechas entre hace 200 años y hoy.
+                                    return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
+                                }}
+                                defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
+                            />
+                        </Form.Item>
+                    ))}
                 </>
             ) : (
                 children
@@ -154,7 +189,16 @@ const ManageUsers = () => {
     useEffect(() => {
         axios.get('http://localhost:4000/all_users')
             .then((res) => {
-                setData(res.data);
+                // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
+                // y se debe convertir a un formato más fácil de leer: 2022-10-10
+                for (let i = 0; i < res.data.length; i++) {
+                    if (res.data[i].dateOfBirth) {
+                        let dateOfBirthAux = moment(res.data[i].dateOfBirth).format("YYYY-MM-DD");
+                        res.data[i].dateOfBirth = dateOfBirthAux;
+                    }
+                }
+
+                setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
     }, [])
 
@@ -199,14 +243,14 @@ const ManageUsers = () => {
                 }
             });
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
 
                 const newUser = {
                     name: row.name,
                     lastName: row.lastName,
                     email: row.email,
                     password: row.password,
-                    age: row.age,
+                    dateOfBirth: row.dateOfBirth,
                     gender: mVals["gender"],
                     address: row.address,
                     condition: [...mVals.condition],
@@ -217,6 +261,12 @@ const ManageUsers = () => {
 
                 axios.post('http://localhost:4000/addUser', newUser)
                     .then((res) => {
+   
+                        // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                        let dateOfBirth = new Date(res.data.element.dateOfBirth);
+                        let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+                        res.data.element.dateOfBirth = dateOfBirth2;
+
                         newData.splice(index, 1, res.data.element);
                         setData(newData);
                         setEditingKey('');
@@ -227,15 +277,21 @@ const ManageUsers = () => {
                                 column.values = "";
                             }
                         })
-                        message.success('Se ha creado el Usuario exitosamente');
+                        message.success('Se ha creado el usuario exitosamente');
                     })
                     .catch((error) => {
-                        message.error('No se ha podido crear el Usuario');
+                        message.error('No se ha podido crear el usuario');
                     });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
 
                 axios.post('http://localhost:4000/editUser', { ...item, ...row, ...mVals })
                     .then((res) => {
+                        
+                        // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                        let dateOfBirth = new Date(res.data.element.dateOfBirth);
+                        let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+                        res.data.element.dateOfBirth = dateOfBirth2;
+                        
                         newData.splice(index, 1, res.data);
                         setData(newData);
                         setEditingKey('');
@@ -246,10 +302,10 @@ const ManageUsers = () => {
                                 column.values = "";
                             }
                         })
-                        message.success('Se modificó el Usuario exitosamente');
+                        message.success('Se modificó el usuario exitosamente');
                     })
                     .catch((error) => {
-                        message.error('No se ha podido modificar el Usuario');
+                        message.error('No se ha podido modificar el usuario');
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
@@ -270,7 +326,7 @@ const ManageUsers = () => {
                     message.success('Se ha eliminado el Usuario exitosamente');
                 })
                 .catch((error) => {
-                    message.error('No se ha podido eliminar el Usuario');
+                    message.error('No se ha podido eliminar el usuario');
                 });
         } else {
             newData.splice(index, 1);
@@ -317,11 +373,10 @@ const ManageUsers = () => {
             editable: true,
         },
         {
-            title: 'Edad*',
-            dataIndex: "age",
-            key: "age",
-            editable: true,
-            sorter: (a, b) => a.age - b.age
+            title: 'Fecha de nacimiento*',
+            dataIndex: "dateOfBirth",
+            key: "dateOfBirth",
+            editable: true
         },
         {
             title: 'Sexo*',
@@ -433,7 +488,7 @@ const ManageUsers = () => {
                 lastName: "",
                 email: "",
                 password: "",
-                age: "",
+                dateOfBirth: "",
                 gender: "",
                 address: "",
                 condition: [],
@@ -444,7 +499,7 @@ const ManageUsers = () => {
             setData([...data, newUser]);
             edit(newUser);
         } else {
-            message.error('Ya se encuentra creando un Usuario. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando un usuario. Finalice la creación o elimine el registro añadido');
         }
     };
     return (

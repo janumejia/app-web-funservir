@@ -289,7 +289,7 @@ const ManageUsers = () => {
                 axios.post('http://localhost:4000/editNeighborhoods', { ...item, ...row, ...mVals })
                     .then((res) => {
                         if (res.data.message === "Ya existe este barrio") message.error('Ya existe este barrio');
-                        else if (res.data.message === "Barrio actualizado correctamente") {
+                        else if (res.data.message === "Barrio actualizado correctamente" || res.data.message === "Los valores ingresados son iguales a los actuales") {
                             console.log(res)
                             newData.splice(index, 1, res.data);
                             setData(newData);
@@ -302,6 +302,8 @@ const ManageUsers = () => {
                                 }
                             })
                             message.success('Se modificó el barrio exitosamente');
+                        // } else if (res.data.message === "Los valores ingresados son iguales a los actuales") {
+                        //     message.warning('Los valores ingresados son iguales a los actuales');
                         } else {
                             message.error('No se ha podido modificar el barrio');
                         }
@@ -346,6 +348,7 @@ const ManageUsers = () => {
             title: 'Nombre*',
             dataIndex: "name",
             key: "name",
+            width: "45%",
             editable: true,
             sorter: (a, b) => a.name.localeCompare(b.name),
             filteredValue: [searchedText],
@@ -361,6 +364,7 @@ const ManageUsers = () => {
             title: 'Localidad asociada*',
             dataIndex: "associatedLocality",
             key: "associatedLocality",
+            width: "45%",
             editable: true,
             sorter: (a, b) => a.condition.length - b.condition.length
         },
@@ -368,7 +372,7 @@ const ManageUsers = () => {
             title: 'Operación',
             dataIndex: 'operation',
             key: "operation",
-            fixed: "right",
+            // fixed: "right",
             render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (

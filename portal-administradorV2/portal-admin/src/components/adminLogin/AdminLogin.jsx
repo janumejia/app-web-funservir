@@ -64,7 +64,7 @@ const AdminLogin = () => {
                             lg: 64,
                             xl: 80,
                             xxl: 100,
-                        }} src="https://joeschmoe.io/api/v1/random" />}
+                        }} src="https://raw.githubusercontent.com/Jauny/joeschmoe.io/0a268f6dacc319620d7df1e85ef08a417b9f6f24/assets/static/images/avatars/originals/males/jia.svg" />}
                         title="Inicio de Sesión del Administrador"
                         style={{
                             display: 'grid',

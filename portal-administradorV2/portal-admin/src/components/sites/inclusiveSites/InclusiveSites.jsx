@@ -110,6 +110,7 @@ const EditableCell = ({
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
                                     let newArray = [...val]
+                                    
                                     if (col.values.includes([...val])) {
                                         newArray = newArray.filter(disa => disa !== [...val])
                                     }
@@ -469,7 +470,7 @@ const ManageUsers = () => {
                     }}
                     size='large'
                 >
-                    Añadir Usuario
+                    Añadir sitio inclusivo
                 </Button>
                 <AutoComplete
                     dropdownMatchSelectWidth={252}

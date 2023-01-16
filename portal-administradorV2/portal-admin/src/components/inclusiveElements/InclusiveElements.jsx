@@ -19,47 +19,30 @@ const ManageElements = () => {
     //Tratamiento de imagenes
     const getBase64 = (img) => {
         const reader = new FileReader();
-        //reader.addEventListener('load', () => callback(reader.result));
+        
         if(img){
             reader.readAsDataURL(img);
             reader.onloadend = () =>{
                 setImageUrl(reader.result);
                 setLoading(false);
             }
-        }else{
-            setImageUrl("");
         }
         
     };
 
-    const beforeUpload = (file) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const handleChange = (info) => { 
+
+        const isJpgOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/png';
         if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
+            message.error('¡Solo puedes subir imagenes!');
+        }else{
+            getBase64(info.file); 
         }
 
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        /*const isLt2M = info.file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-        }
-        return (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
-    };
-
-    const handleChange = (info) => {
-
-        if(info.file.status==='uploading'){
-            setLoading(true);
-            return;
-        }
-        /*if (info.file.status === 'done') {
-            
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, (url) => {
-                setLoading(false);
-                setImageUrl(url);
-            });
+            message.error('La imagen debe ser menor a 2MB!');
         }*/
-        getBase64(info.file);
     };
 //Fin de manejo de imagenes
 
@@ -80,7 +63,7 @@ const ManageElements = () => {
         children,
         ...restProps
     }) => {
-        const inputNode = (inputType==='object'?<UploadComponent loading={loading} beforeUpload={beforeUpload} handleChange={handleChange} imageUrl={imageUrl}/>:<Input />) ;
+        const inputNode = (inputType==='object'?<UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl}/>:<Input />) ;
         return (
             <td {...restProps}>
                 {editing ? (
@@ -94,7 +77,7 @@ const ManageElements = () => {
                     </Form.Item>
                 ) : (
                     
-                    (inputType==='object'?<img src={record.image.url} alt='img' style={{width:'10%',height:'auto'}}/>:children)
+                    (inputType==='object'?<img src={record.image.url} alt='' style={{width:'9%',height:'auto'}}/>:children)
                 )}
             </td>
         );
@@ -112,6 +95,7 @@ const ManageElements = () => {
 
     const cancel = () => {
         setEditingKey('');
+        setImageUrl('');
     };
 
     const saveEdit = async (key) => {
