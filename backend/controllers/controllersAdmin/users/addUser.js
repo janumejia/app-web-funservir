@@ -1,4 +1,4 @@
-const User = require("../../model/user")
+const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const addUser = async (req, res) => {
 
@@ -10,7 +10,6 @@ const addUser = async (req, res) => {
                 bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), (error, hashPassword) => { // Genera el hash de la contraseña ingresada
                     if (error) res.json({ error })
                     else {
-                        // dateOfBirth.setUTCHours(0, 0, 0, 0); // Para poner en ceros las horas, minutos, segundos y milisegundos de la fecha.
                         const newUser = new User({
                             name, 
                             lastName,

@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '.env' })
-const User = require("../../model/user")
+const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const editUser = async (req, res) => {
 
@@ -14,7 +14,7 @@ const editUser = async (req, res) => {
                 doc.lastName = resto.lastName;
                 doc.email = resto.email;
                 doc.password = hashPassword;
-                doc.age = resto.age;
+                doc.dateOfBirth = resto.dateOfBirth;
                 doc.gender = resto.gender;
                 doc.address = resto.address;
                 doc.condition = resto.condition;
@@ -28,7 +28,7 @@ const editUser = async (req, res) => {
         doc.name = resto.name;
         doc.lastName = resto.lastName;
         doc.email = resto.email;
-        doc.age = resto.age;
+        doc.dateOfBirth = resto.dateOfBirth;
         doc.gender = resto.gender;
         doc.address = resto.address;
         doc.condition = resto.condition;

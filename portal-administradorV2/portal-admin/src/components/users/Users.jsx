@@ -9,6 +9,11 @@ import { ConfigProvider } from 'antd';
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
 
+// import dayjs from 'dayjs';
+// import 'dayjs/locale/es';
+// import esES from 'antd/es/locale/es_ES';
+// dayjs.locale('es');
+
 const { Option } = Select;
 const gender = [
     <Option key="Masculino" value="M">M</Option>,
@@ -205,12 +210,19 @@ const ManageUsers = () => {
     const isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
-
+        console.log("record:");
+        console.log(record);
+        record.dateOfBirth = moment(record.dateOfBirth);
         form.setFieldsValue({
             ...record
         });
+        console.log("form:")
+        console.log(form)
 
+
+        console.log("biennn");
         setEditingKey(record._id);
+        console.log("Reeeeebiennn");
     };
 
     const cancel = () => {
@@ -310,6 +322,8 @@ const ManageUsers = () => {
                         message.error('No se ha podido modificar el usuario');
                     });
             } else {
+                console.log("aqui:");
+                console.log(key + " " + row.name + " " + row.lastName + " " + row.email + " " + row.password + " " + row.dateOfBirth + " " + mVals.gender + " " + row.address + " " + mVals["isCaregiver"] + " " + mVals.userType)
                 message.warning('¡Debes completar todos los campos obligatorios!');
             }
         } catch (errInfo) {
