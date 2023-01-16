@@ -5,7 +5,7 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     lastName: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    age: {type: String, required: true},
+    dateOfBirth: {type: Date, required: true},
     gender: {type: String, required: true},
     address: {type: String, required: true},
     condition: {type: [String], required: false},
