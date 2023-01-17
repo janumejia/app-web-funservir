@@ -253,7 +253,7 @@ const ManageUsers = () => {
                     email: row.email,
                     password: row.password,
                     dateOfBirth: row.dateOfBirth,
-                    gender: mVals["gender"],
+                    gender: row["gender"],
                     address: row.address,
                     condition: [...row.condition],
                     isCaregiver: row["isCaregiver"],
