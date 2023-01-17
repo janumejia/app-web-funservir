@@ -5,7 +5,6 @@ import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
 
 // Para el idioma español y otra cosa de la componente DataPicker
-import { ConfigProvider } from 'antd';
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
 
@@ -210,19 +209,11 @@ const ManageUsers = () => {
     const isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
-        console.log("record:");
-        console.log(record);
-        record.dateOfBirth = moment(record.dateOfBirth);
+        record.dateOfBirth = moment(record.dateOfBirth); // Necesario para resolver el error de date.clone de moment
         form.setFieldsValue({
             ...record
         });
-        console.log("form:")
-        console.log(form)
-
-
-        console.log("biennn");
         setEditingKey(record._id);
-        console.log("Reeeeebiennn");
     };
 
     const cancel = () => {
@@ -257,7 +248,7 @@ const ManageUsers = () => {
             });
             console.log(mVals);*/
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
 
                 const newUser = {
                     name: row.name,
@@ -276,7 +267,7 @@ const ManageUsers = () => {
                 axios.post('http://localhost:4000/addUser', newUser)
                     .then((res) => {
    
-                        // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                        // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
                         let dateOfBirth = new Date(res.data.element.dateOfBirth);
                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                         res.data.element.dateOfBirth = dateOfBirth2;
@@ -296,17 +287,18 @@ const ManageUsers = () => {
                     .catch((error) => {
                         message.error('No se ha podido crear el usuario');
                     });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
                 axios.post('http://localhost:4000/editUser', { ...item, ...row })
                     .then((res) => {
-                        
-                        // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-                        let dateOfBirth = new Date(res.data.element.dateOfBirth);
+                        console.log("res***********");
+                        console.log(res);
+                        // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                        let dateOfBirth = new Date(res.data.doc.dateOfBirth);
                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-                        res.data.element.dateOfBirth = dateOfBirth2;
+                        res.data.doc.dateOfBirth = dateOfBirth2;
                         
-                        newData.splice(index, 1, res.data);
+                        newData.splice(index, 1, res.data.doc);
                         setData(newData);
                         setEditingKey('');
                         /*selectedValues.forEach(column => {
@@ -316,14 +308,13 @@ const ManageUsers = () => {
                                 column.values = "";
                             }
                         })*/
-                        message.success('Se modificó el Usuario exitosamente');
+                        message.success('Se modificó el usuario exitosamente');
                     })
                     .catch((error) => {
                         message.error('No se ha podido modificar el usuario');
+                        console.log(error);
                     });
             } else {
-                console.log("aqui:");
-                console.log(key + " " + row.name + " " + row.lastName + " " + row.email + " " + row.password + " " + row.dateOfBirth + " " + mVals.gender + " " + row.address + " " + mVals["isCaregiver"] + " " + mVals.userType)
                 message.warning('¡Debes completar todos los campos obligatorios!');
             }
         } catch (errInfo) {
@@ -504,7 +495,7 @@ const ManageUsers = () => {
                 lastName: "",
                 email: "",
                 password: "",
-                dateOfBirth: "",
+                dateOfBirth: new Date(),
                 gender: "",
                 address: "",
                 condition: [],

@@ -8,7 +8,7 @@ const editUser = async (req, res) => {
     let doc = await User.findOne(query);
     if (doc.password !== resto.password) {
         bcrypt.hash(resto.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
-            if (error) res.json({ error })
+            if (error) res.json({ message: "error" })
             else {
                 doc.name = resto.name;
                 doc.lastName = resto.lastName;
@@ -37,7 +37,7 @@ const editUser = async (req, res) => {
         doc.userType = resto.userType;
         await doc.save();
     }
-res.json(doc);
+    res.json({ message: "Usuario editado correctamente", doc });
 }
 
 module.exports = editUser
