@@ -48,7 +48,7 @@ const options = (title) => {
     }
 }
 
-const selectedValues = [
+/*const selectedValues = [
     {
         title: "Sexo*",
         key: "gender",
@@ -69,7 +69,7 @@ const selectedValues = [
         key: "isCaregiver",
         values: ""
     }
-]
+]*/
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
@@ -102,29 +102,29 @@ const EditableCell = ({
                             style={{
                                 margin: 0,
                             }}>
-                            <Select
-                                mode={(title === "Discapacidad") ? "multiple" : ""}
-                                allowClear={(title === "Discapacidad") ? true : false}
-                                style={{
-                                    width: '100%',
-                                }}
-                                placeholder="Seleccione una opción"
-                                onChange={(val) => {
-                                    const col = selectedValues.find(column => column.title === title);
-                                    if (title === "Discapacidad") {
-                                        let newArray = [...val]
-                                        if (col.values.includes([...val])) {
-                                            newArray = newArray.filter(disa => disa !== [...val])
-                                        }
-                                        col["values"] = newArray;
-                                    } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
-                                        col["values"] = val;
-
+                        <Select
+                            mode={(title === "Discapacidad") ? "multiple" : ""}
+                            allowClear={(title === "Discapacidad") ? true : false}
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Seleccione una opción"
+                            /*onChange={(val) => {
+                                const col = selectedValues.find(column => column.title === title);
+                                if (title === "Discapacidad") {
+                                    let newArray = [...val]
+                                    if (col.values.includes([...val])) {
+                                        newArray = newArray.filter(disa => disa !== [...val])
                                     }
-                                }}
-                            >
-                                {options(title)}
-                            </Select>
+                                    col["values"] = newArray;
+                                } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
+                                    col["values"] = val;
+
+                                }
+                            }}*/
+                        >
+                            {options(title)}
+                        </Select>
                         </Form.Item>
                     ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
@@ -224,8 +224,9 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
+            console.log(row);
 
-            let mVals = {
+            /*let mVals = {
                 gender: "",
                 condition: [],
                 userType: "",
@@ -242,6 +243,7 @@ const ManageUsers = () => {
                     mVals["isCaregiver"] = column.values;
                 }
             });
+            console.log(mVals);*/
 
             if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
 
@@ -253,10 +255,10 @@ const ManageUsers = () => {
                     dateOfBirth: row.dateOfBirth,
                     gender: mVals["gender"],
                     address: row.address,
-                    condition: [...mVals.condition],
-                    isCaregiver: mVals["isCaregiver"],
+                    condition: [...row.condition],
+                    isCaregiver: row["isCaregiver"],
                     institution: row.institution,
-                    userType: mVals["userType"]
+                    userType: row["userType"]
                 }
 
                 axios.post('http://localhost:4000/addUser', newUser)
@@ -270,21 +272,21 @@ const ManageUsers = () => {
                         newData.splice(index, 1, res.data.element);
                         setData(newData);
                         setEditingKey('');
-                        selectedValues.forEach(column => {
+                        /*selectedValues.forEach(column => {
                             if (column.key === "condition") {
                                 column.values = [];
                             } else {
                                 column.values = "";
                             }
-                        })
-                        message.success('Se ha creado el usuario exitosamente');
+                        })*/
+                        message.success('Se ha creado el Usuario exitosamente');
                     })
                     .catch((error) => {
                         message.error('No se ha podido crear el usuario');
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row, ...mVals })
+                axios.post('http://localhost:4000/editUser', { ...item, ...row })
                     .then((res) => {
                         
                         // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
@@ -295,14 +297,14 @@ const ManageUsers = () => {
                         newData.splice(index, 1, res.data);
                         setData(newData);
                         setEditingKey('');
-                        selectedValues.forEach(column => {
+                        /*selectedValues.forEach(column => {
                             if (column.key === "condition") {
                                 column.values = [];
                             } else {
                                 column.values = "";
                             }
-                        })
-                        message.success('Se modificó el usuario exitosamente');
+                        })*/
+                        message.success('Se modificó el Usuario exitosamente');
                     })
                     .catch((error) => {
                         message.error('No se ha podido modificar el usuario');
