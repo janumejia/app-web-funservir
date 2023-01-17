@@ -5,9 +5,13 @@ import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
 
 // Para el idioma español y otra cosa de la componente DataPicker
-import { ConfigProvider } from 'antd';
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
+
+// import dayjs from 'dayjs';
+// import 'dayjs/locale/es';
+// import esES from 'antd/es/locale/es_ES';
+// dayjs.locale('es');
 
 const { Option } = Select;
 const gender = [
@@ -48,7 +52,7 @@ const options = (title) => {
     }
 }
 
-const selectedValues = [
+/*const selectedValues = [
     {
         title: "Sexo*",
         key: "gender",
@@ -69,7 +73,7 @@ const selectedValues = [
         key: "isCaregiver",
         values: ""
     }
-]
+]*/
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
@@ -102,29 +106,29 @@ const EditableCell = ({
                             style={{
                                 margin: 0,
                             }}>
-                            <Select
-                                mode={(title === "Discapacidad") ? "multiple" : ""}
-                                allowClear={(title === "Discapacidad") ? true : false}
-                                style={{
-                                    width: '100%',
-                                }}
-                                placeholder="Seleccione una opción"
-                                onChange={(val) => {
-                                    const col = selectedValues.find(column => column.title === title);
-                                    if (title === "Discapacidad") {
-                                        let newArray = [...val]
-                                        if (col.values.includes([...val])) {
-                                            newArray = newArray.filter(disa => disa !== [...val])
-                                        }
-                                        col["values"] = newArray;
-                                    } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
-                                        col["values"] = val;
-
+                        <Select
+                            mode={(title === "Discapacidad") ? "multiple" : ""}
+                            allowClear={(title === "Discapacidad") ? true : false}
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Seleccione una opción"
+                            /*onChange={(val) => {
+                                const col = selectedValues.find(column => column.title === title);
+                                if (title === "Discapacidad") {
+                                    let newArray = [...val]
+                                    if (col.values.includes([...val])) {
+                                        newArray = newArray.filter(disa => disa !== [...val])
                                     }
-                                }}
-                            >
-                                {options(title)}
-                            </Select>
+                                    col["values"] = newArray;
+                                } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
+                                    col["values"] = val;
+
+                                }
+                            }}*/
+                        >
+                            {options(title)}
+                        </Select>
                         </Form.Item>
                     ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
@@ -205,11 +209,10 @@ const ManageUsers = () => {
     const isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
-
+        record.dateOfBirth = moment(record.dateOfBirth); // Necesario para resolver el error de date.clone de moment
         form.setFieldsValue({
             ...record
         });
-
         setEditingKey(record._id);
     };
 
@@ -224,8 +227,9 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
+            console.log(row);
 
-            let mVals = {
+            /*let mVals = {
                 gender: "",
                 condition: [],
                 userType: "",
@@ -242,8 +246,9 @@ const ManageUsers = () => {
                     mVals["isCaregiver"] = column.values;
                 }
             });
+            console.log(mVals);*/
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
 
                 const newUser = {
                     name: row.name,
@@ -251,18 +256,18 @@ const ManageUsers = () => {
                     email: row.email,
                     password: row.password,
                     dateOfBirth: row.dateOfBirth,
-                    gender: mVals["gender"],
+                    gender: row["gender"],
                     address: row.address,
-                    condition: [...mVals.condition],
-                    isCaregiver: mVals["isCaregiver"],
+                    condition: [...row.condition],
+                    isCaregiver: row["isCaregiver"],
                     institution: row.institution,
-                    userType: mVals["userType"]
+                    userType: row["userType"]
                 }
 
                 axios.post('http://localhost:4000/addUser', newUser)
                     .then((res) => {
    
-                        // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                        // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
                         let dateOfBirth = new Date(res.data.element.dateOfBirth);
                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                         res.data.element.dateOfBirth = dateOfBirth2;
@@ -270,42 +275,44 @@ const ManageUsers = () => {
                         newData.splice(index, 1, res.data.element);
                         setData(newData);
                         setEditingKey('');
-                        selectedValues.forEach(column => {
+                        /*selectedValues.forEach(column => {
                             if (column.key === "condition") {
                                 column.values = [];
                             } else {
                                 column.values = "";
                             }
-                        })
-                        message.success('Se ha creado el usuario exitosamente');
+                        })*/
+                        message.success('Se ha creado el Usuario exitosamente');
                     })
                     .catch((error) => {
                         message.error('No se ha podido crear el usuario');
                     });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row, ...mVals })
+                axios.post('http://localhost:4000/editUser', { ...item, ...row })
                     .then((res) => {
-                        
-                        // Estas 3 lineas son para pasar la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-                        let dateOfBirth = new Date(res.data.element.dateOfBirth);
+                        console.log("res***********");
+                        console.log(res);
+                        // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                        let dateOfBirth = new Date(res.data.doc.dateOfBirth);
                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-                        res.data.element.dateOfBirth = dateOfBirth2;
+                        res.data.doc.dateOfBirth = dateOfBirth2;
                         
-                        newData.splice(index, 1, res.data);
+                        newData.splice(index, 1, res.data.doc);
                         setData(newData);
                         setEditingKey('');
-                        selectedValues.forEach(column => {
+                        /*selectedValues.forEach(column => {
                             if (column.key === "condition") {
                                 column.values = [];
                             } else {
                                 column.values = "";
                             }
-                        })
+                        })*/
                         message.success('Se modificó el usuario exitosamente');
                     })
                     .catch((error) => {
                         message.error('No se ha podido modificar el usuario');
+                        console.log(error);
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
@@ -488,7 +495,7 @@ const ManageUsers = () => {
                 lastName: "",
                 email: "",
                 password: "",
-                dateOfBirth: "",
+                dateOfBirth: new Date(),
                 gender: "",
                 address: "",
                 condition: [],

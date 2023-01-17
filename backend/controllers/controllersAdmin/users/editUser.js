@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '.env' })
-const User = require("../../model/user")
+const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const editUser = async (req, res) => {
 
@@ -8,27 +8,13 @@ const editUser = async (req, res) => {
     let doc = await User.findOne(query);
     if (doc.password !== resto.password) {
         bcrypt.hash(resto.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
-            if (error) res.json({ error })
+            if (error) res.json({ message: "error" })
             else {
-                /*const update = {
-                    name: resto.name,
-                    lastName: resto.lastName,
-                    email: resto.email,
-                    password: hashPassword,
-                    age: resto.age,
-                    gender: resto.gender,
-                    address: resto.address,
-                    condition: resto.condition,
-                    isCaregiver: resto.isCaregiver,
-                    institution: resto.institution,
-                    userType: resto.userType
-                }*/
-                //await User.findByIdAndUpdate(query, update);
                 doc.name = resto.name;
                 doc.lastName = resto.lastName;
                 doc.email = resto.email;
                 doc.password = hashPassword;
-                doc.age = resto.age;
+                doc.dateOfBirth = resto.dateOfBirth;
                 doc.gender = resto.gender;
                 doc.address = resto.address;
                 doc.condition = resto.condition;
@@ -42,7 +28,7 @@ const editUser = async (req, res) => {
         doc.name = resto.name;
         doc.lastName = resto.lastName;
         doc.email = resto.email;
-        doc.age = resto.age;
+        doc.dateOfBirth = resto.dateOfBirth;
         doc.gender = resto.gender;
         doc.address = resto.address;
         doc.condition = resto.condition;
@@ -51,7 +37,7 @@ const editUser = async (req, res) => {
         doc.userType = resto.userType;
         await doc.save();
     }
-res.json(doc);
+    res.json({ message: "Usuario editado correctamente", doc });
 }
 
 module.exports = editUser
