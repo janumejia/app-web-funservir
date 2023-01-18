@@ -6,6 +6,11 @@ const editLocation = async (req, res) => {
     const { _id, name } = req.body;
     
     /* Sanitización entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
+    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    
+    // 2) Validar si cumple con los caracteres permitidos 
     const isValid_id = _idMongooseRegex.test(_id);
     const isValidName = nameLocationRegex.test(name);
 

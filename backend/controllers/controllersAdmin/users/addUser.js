@@ -1,7 +1,6 @@
 const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
-
 const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, userTypeRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const addUser = async (req, res) => {
@@ -9,7 +8,20 @@ const addUser = async (req, res) => {
     const { name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType } = req.body;
 
     /* Sanitización entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    if(typeof(lastName) !== 'string') return res.status(422).json({ message: "Tipo de dato de apellido no es válido" });
+    if(typeof(email) !== 'string') return res.status(422).json({ message: "Tipo de dato de correo no es válido" });
+    if(typeof(password) !== 'string') return res.status(422).json({ message: "Tipo de dato de contraseña no es válido" });
+    if(typeof(dateOfBirth) !== 'string') return res.status(422).json({ message: "Tipo de dato de fecha de nacimiento no es válido" });
+    if(typeof(gender) !== 'string') return res.status(422).json({ message: "Tipo de dato de genero no es válido" });
+    if(typeof(address) !== 'string') return res.status(422).json({ message: "Tipo de dato de dirección no es válido" });
+    if(typeof(condition) !== 'object') return res.status(422).json({ message: "Tipo de dato de discapacidades no es válido" }); // Este es el único de tipo object
+    if(typeof(isCaregiver) !== 'string') return res.status(422).json({ message: "Tipo de dato de ¿es tutor? no es válido" });
+    if(typeof(institution) !== 'string') return res.status(422).json({ message: "Tipo de dato de fundación no es válido" });
+    if(typeof(userType) !== 'string') return res.status(422).json({ message: "Tipo de dato de tipo de usuario no es válido" });
 
+    // 2) Validar si cumple con los caracteres permitidos
     const isValidName = nameUserRegex.test(name);
     const isValidLastName = lastNameUserRegex.test(lastName);
     const isValidEmail = emailRegex.test(email);
@@ -19,7 +31,6 @@ const addUser = async (req, res) => {
     const isValidAddress = addressRegex.test(address);
 
     const isValidCondition = () => {
-        if (typeof (condition) !== 'object') return false;
         let options = { Motriz: 0, Visual: 0, Auditiva: 0, Sensorial: 0, Comunicacion: 0, Mental: 0, Multiples: 0, Otra: 0 }; // Para llevar un conteo de las opciones enviadas y que no existan repetidas
         for (const key in condition) {
             if(typeof(condition[key]) !== 'string') return false;

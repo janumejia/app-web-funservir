@@ -6,6 +6,10 @@ const addCategory = async (req, res) => {
     const {name} = req.body;
 
     /* Sanitización entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    
+    // 2) Validar si cumple con los caracteres permitidos
     const isValidName = nameCategoryRegex.test(name);
 
     if(isValidName === false) return res.json({ message: "Formato de nombre no es válido" }); // Caso malo
