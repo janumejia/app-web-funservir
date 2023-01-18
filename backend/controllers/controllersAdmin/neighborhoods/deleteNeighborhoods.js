@@ -6,6 +6,10 @@ const deleteNeighborhoods = async(req, res) =>{
     const {_id} = req.body;
 
     /* Sanitizar entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
+
+    // 2) Validar si cumple con los caracteres permitidos 
     const isValid_id = _idMongooseRegex.test(_id);
 
     if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" }); // Caso malo

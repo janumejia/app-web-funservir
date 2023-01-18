@@ -1,4 +1,5 @@
 const Neighborhoods = require("../../../model/neighborhoods")
+const { _idMongooseRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const deleteNeighborhoods = async(req, res) =>{
 

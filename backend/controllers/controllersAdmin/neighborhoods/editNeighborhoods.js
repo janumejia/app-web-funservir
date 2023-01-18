@@ -7,6 +7,12 @@ const editNeighborhoods = async (req, res) => {
     const { _id, name, associatedLocality } = req.body;
     
     /* Sanitización entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
+    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    if(typeof(associatedLocality) !== 'string') return res.status(422).json({ message: "Tipo de dato de localidad asociada no es válido" });
+
+    // 2) Validar si cumple con los caracteres permitidos 
     const isValid_id = _idMongooseRegex.test(_id);
     const isValidName = nameNeighborhoodRegex.test(name);
     const isValidAssociatedLocality = nameAssociatedLocalityRegex.test(associatedLocality);

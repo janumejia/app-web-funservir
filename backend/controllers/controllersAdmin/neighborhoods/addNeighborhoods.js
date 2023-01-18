@@ -8,11 +8,16 @@ const addNeighborhoods = async (req, res) => {
     const { name, associatedLocality } = req.body;
 
     /* Sanitización entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    if(typeof(associatedLocality) !== 'string') return res.status(422).json({ message: "Tipo de dato de localidad asociada no es válido" });
+
+    // 2) Validar si cumple con los caracteres permitidos 
     const isValidName = nameNeighborhoodRegex.test(name);
     const isValidAssociatedLocality = nameAssociatedLocalityRegex.test(associatedLocality);
 
-    if (isValidName === false) return res.json({ message: "Formato de nombre no es válido" });
-    if (isValidAssociatedLocality === false) return res.json({ message: "Formato de localidad asociada no es válido" }); // Caso malo
+    if (isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" });
+    if (isValidAssociatedLocality === false) return res.status(422).json({ message: "Formato de localidad asociada no es válido" }); // Caso malo
     /* Fin sanitización entradas */
     
     else { // Caso bueno

@@ -6,8 +6,13 @@ const addInclusiveElement = async (req, res) => {
     const { name, image } = req.body;
     
     /* Sanitización entradas */
+    // 1) Validar el tipo de dato
+    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    // if(typeof(image) !== 'string') return res.status(422).json({ message: "Tipo de dato de imagen no es válido" });
+    
+    // 2) Validar si cumple con los caracteres permitidos
     const isValidName = nameInclusiveElementRegex.test(name);
-
+    
     // falta validar la imagen
     if(isValidName === false) return res.json({ message: "Formato de nombre no es válido" }); // Caso malo
     /* Fin sanitización entradas */
