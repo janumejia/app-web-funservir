@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '.env' })
-const cloudinary = require("../../middlewares/cloudinary");
+const cloudinary = require("../../../middlewares/cloudinary");
 
-const Elements = require("../../model/inclusiveElements.js");
+const Elements = require("../../../model/inclusiveElements.js");
 
 const editElement = async (req, res) => {
     const { _id, imageUrl, ...resto } = req.body;
