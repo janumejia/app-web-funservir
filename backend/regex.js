@@ -48,6 +48,6 @@ module.exports = {
     nameCategoryRegex: generalAlphabetic(1,100),
 
     /* Elementos inclusivos */
-    
+    nameInclusiveElementRegex: generalAlphabetic(1,100),
 
 };
