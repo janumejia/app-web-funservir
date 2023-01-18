@@ -6,7 +6,7 @@ const AdminLogin = async (req, res) =>{
 
     const {email, password} = req.body;
     User.findOne({email}).then((user)=>{
-        if(user && user.userType === 'A'){
+        if(user && (user.userType === 'A' || user.userType === 'Administrador')){ // En la anterior versión está con A sólito
             bcrypt.compare(password, user.password)
             .then((isCorrect)=>{
                 if(isCorrect){

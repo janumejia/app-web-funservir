@@ -15,29 +15,29 @@ import moment from 'moment';
 
 const { Option } = Select;
 const gender = [
-    <Option key="Masculino" value="M">M</Option>,
-    <Option key="Femenino" value="F">F</Option>,
-    <Option key="Otro" value="O">O</Option>
+    <Option key="Masculino" value="Masculino">Masculino</Option>,
+    <Option key="Femenino" value="Femenino">Femenino</Option>,
+    <Option key="Otro" value="Otro">Otro</Option>
 ];
 
 const disabilities = [
-    <Option key="Motriz" value=" Motriz ">Motriz</Option>,
-    <Option key="Visual" value=" Visual ">Visual</Option>,
-    <Option key="Auditiva" value=" Auditiva ">Auditiva</Option>,
-    <Option key="Sensorial" value=" Sensorial ">Sensorial</Option>,
-    <Option key="Comunicación" value=" Comunicación ">Comunicación</Option>,
-    <Option key="Mental" value=" Mental ">Mental</Option>,
-    <Option key="Multiples" value=" Multiples ">Múltiples</Option>,
-    <Option key="Otra" value=" Otra ">Otra(s)</Option>
+    <Option key="Motriz" value="Motriz">Motriz</Option>,
+    <Option key="Visual" value="Visual">Visual</Option>,
+    <Option key="Auditiva" value="Auditiva">Auditiva</Option>,
+    <Option key="Sensorial" value="Sensorial">Sensorial</Option>,
+    <Option key="Comunicación" value="Comunicacion">Comunicación</Option>,
+    <Option key="Mental" value="Mental">Mental</Option>,
+    <Option key="Multiples" value="Multiples">Múltiples</Option>,
+    <Option key="Otra" value="Otra">Otra(s)</Option>
 ];
 const rol = [
-    <Option key="Regular" value="R">R</Option>,
-    <Option key="Propietario" value="P">P</Option>,
-    <Option key="Administrador" value="A">A</Option>,
+    <Option key="Regular" value="Regular">Regular</Option>,
+    <Option key="Propietario" value="Propietario">Propietario</Option>,
+    <Option key="Administrador" value="Administrador">Administrador</Option>,
 ]
 
 const isCaregiver = [
-    <Select.Option key="Sí" value="Sí">Sí</Select.Option>,
+    <Select.Option key="Si" value="Si">Si</Select.Option>,
     <Select.Option key="No" value="No">No</Select.Option>
 ]
 const options = (title) => {
@@ -81,7 +81,7 @@ const rules = (dataIndex) => {
     } else if (dataIndex === 'email') {
         return (/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/);
     } else if (dataIndex === 'password') {
-        return (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/)
+        return (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,50}$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
     }
 };
 

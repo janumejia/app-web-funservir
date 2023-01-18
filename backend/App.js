@@ -8,12 +8,26 @@ const controllersAdmin = require("./controllers/controllersAdmin")
 const verifyToken = require("./middlewares/verifyToken");
 
 const app = express();
-app.disable('x-powered-by');
+app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP está desarrollada con Express JS
 
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
 en este caso responde las peticiones desde cualquier origen (inseguro) */
-app.use(cors()) 
+// app.use(cors())
 app.use(express.json()) // Nos permitirá ver el body que contiene las peticiones POST y PUT
+
+/* Para mostrar un mensaje de error personalizado al usuario, en vez del mensaje de error real (puede generar fuga de información), en caso que suceda un error en el backend */
+app.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Algo salio mal en el servidor. Estamos trabajando en ello');
+});
+
+/* Agregar encabezados de seguridad en la aplicación */
+app.use((req, res, next) => {
+    res.append('Access-Control-Allow-Origin', ['*']);
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 /* Rutas de nuestra APP */
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
@@ -51,7 +65,7 @@ app.post("/deleteNeighborhoods", controllersAdmin.deleteNeighborhoods)
 const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
 const port = process.env.PORT
 
-app.listen(port, host, () =>{ // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
+app.listen(port, host, () => { // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
     console.log(`Servidor funcionando en el puerto ${port} y host ${host}`)
     db() // Llamamos a la función db
 })

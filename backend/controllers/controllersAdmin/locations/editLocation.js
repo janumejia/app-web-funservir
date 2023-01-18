@@ -1,19 +1,17 @@
 require('dotenv').config({ path: '.env' })
 const Location = require("../../../model/locations");
-
-// const delay = ms => new Promise(res => setTimeout(res, ms));
+const { _idMongooseRegex, nameLocationRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const editLocation = async (req, res) => {
     const { _id, name } = req.body;
     
-    // Sanitizar entrada:
-    const pattern_id = /^[0-9a-fA-F]{24}$/;
-    const patternName = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
-    
-    const isValid_id = pattern_id.test(_id);
-    const isValidName = patternName.test(name);
+    /* Sanitización entradas */
+    const isValid_id = _idMongooseRegex.test(_id);
+    const isValidName = nameLocationRegex.test(name);
 
-    if(isValid_id == false || isValidName == false) return res.json({ message: "Formato no válido" }); // Caso malo
+    if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" });
+    if(isValidName == false) return res.json({ message: "Formato de nombre no es válido" }); // Caso malo
+    /* Fin sanitización entradas */
     
     let doesThisNameExist = false;
     await Location.findOne({ name }).then((element) => {

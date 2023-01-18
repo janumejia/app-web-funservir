@@ -1,16 +1,15 @@
 const Location = require("../../../model/locations")
+const { _idMongooseRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const deleteLocation = async(req, res) =>{
 
     const {_id} = req.body;
 
-    // Sanitizar entrada:
-    const pattern_id = /^[0-9a-fA-F]{24}$/;
+    /* Sanitización entradas */
+    const isValid_id = _idMongooseRegex.test(_id);
 
-    const isValid_id = pattern_id.test(_id);
-
-    if(isValid_id == false) return res.json({ message: "Formato no válido" }); // Caso malo
-
+    if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" }); // Caso malo
+    /* Fin sanitización entradas */
 
     await Location.deleteOne({_id:_id})
     .then((element)=>{
