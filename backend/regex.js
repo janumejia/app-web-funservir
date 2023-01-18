@@ -1,16 +1,9 @@
 // Definición de la estructura de las variables usando Regex:
 // Esto permitirá sanitizar las variables de las peticiones que se hacen a la API, y disminuir la presencia de errores o ataques efectivos en el backend
 
-const neighborhoods = require("./model/neighborhoods");
-
 /* Generales */
-function generalAlphanumeric(min, max) { // Letras y números
-    return new RegExp('^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){' + min + ',' + max + '}$');
-}
-
-function generalAlphabetic(min, max) { // Solo letras
-    return new RegExp("^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){" + min + "," + max + "}$");
-}
+const generalAlphanumeric = (min, max) => { return new RegExp('^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){' + min + ',' + max + '}$'); } // Letras y números
+const generalAlphabetic = (min, max) => { return new RegExp("^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){" + min + "," + max + "}$"); } // Solo letras
 /* Fin generales */
 
 module.exports = {
@@ -50,5 +43,11 @@ module.exports = {
     isCaregiverRegex: new RegExp(/^(Si|No)$/),
     institutionRegex: generalAlphabetic(0,100),
     userTypeRegex: new RegExp(/^(Regular|Propietario|Administrador)$/),
+
+    /* Categorías */
+    nameCategoryRegex: generalAlphabetic(1,100),
+
+    /* Elementos inclusivos */
+    
 
 };

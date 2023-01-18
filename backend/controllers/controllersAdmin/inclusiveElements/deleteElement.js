@@ -1,5 +1,5 @@
-const Elements = require("../../model/inclusiveElements.js");
-const cloudinary = require("../../middlewares/cloudinary");
+const Elements = require("../../../model/inclusiveElements.js");
+const cloudinary = require("../../../middlewares/cloudinary");
 
 const deleteElement = async(req, res) =>{
 

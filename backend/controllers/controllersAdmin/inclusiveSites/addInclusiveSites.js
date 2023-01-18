@@ -2,16 +2,7 @@ const { off } = require("../../../App");
 const Neighborhoods = require("../../../model/neighborhoods")
 const Location = require("../../../model/locations")
 const InclusiveSites = require("../../../model/inclusiveSites")
-const { 
-    titleRegex, 
-    descriptionRegex, 
-    categoryRegex, 
-    ratingRegex, 
-    inclusiveElementsRegex, 
-    coordinates, 
-    locationRegex, 
-    neighborhoodsRegex 
-} = require("../../../regex") // Importación de patrones de Regex
+const { titleRegex, descriptionRegex, categoryRegex, ratingRegex, inclusiveElementsRegex, coordinates, locationRegex, neighborhoodsRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addNeighborhoods = async (req, res) => {
     console.log("req.body");

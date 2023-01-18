@@ -1,4 +1,4 @@
-const Elements = require("../../model/inclusiveElements.js");
+const Elements = require("../../../model/inclusiveElements.js");
 
 const getInclusiveElements = async (req,res) => {
     
