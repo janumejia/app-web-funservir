@@ -1,16 +1,20 @@
 const { off } = require("../../../App");
 const Neighborhoods = require("../../../model/neighborhoods")
 const Location = require("../../../model/locations")
+const { nameNeighborhoodRegex, nameAssociatedLocalityRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
+
 const addNeighborhoods = async (req, res) => {
 
     const { name, associatedLocality } = req.body;
 
-    // Sanitización entrada nombre y localidad asociada
-    const patternNameAndAssociatedLocality = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
-    const isValidName = patternNameAndAssociatedLocality.test(name);
-    const isValidAssociatedLocality = patternNameAndAssociatedLocality.test(associatedLocality);
+    /* Sanitización entradas */
+    const isValidName = nameNeighborhoodRegex.test(name);
+    const isValidAssociatedLocality = nameAssociatedLocalityRegex.test(associatedLocality);
 
-    if (isValidName === false || isValidAssociatedLocality === false) return res.json({ message: "Formato no válido" }); // Caso malo
+    if (isValidName === false) return res.json({ message: "Formato de nombre no es válido" });
+    if (isValidAssociatedLocality === false) return res.json({ message: "Formato de localidad asociada no es válido" }); // Caso malo
+    /* Fin sanitización entradas */
+    
     else { // Caso bueno
         // Comprobamos primero que no exista ese barrio en la bd
         // let doesThisNeighborhoodExist = false;

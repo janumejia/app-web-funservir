@@ -1,14 +1,16 @@
 const { off } = require("../../../App");
 const Location = require("../../../model/locations")
-const addLocation = async (req, res) => {
+const { nameLocationRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
+const addLocation = async (req, res) => {
     const { name } = req.body;
-    
-    // Sanitización entrada nombre
-    const patternName = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
-    const isValidName = patternName.test(name);
-    
-    if(isValidName === false) return res.json({ message: "Formato no válido" }); // Caso malo
+    console.log(nameLocationRegex)
+    /* Sanitización entradas */
+    const isValidName = nameLocationRegex.test(name);
+
+    if(isValidName === false) return res.json({ message: "Formato de nombre no es válido" }); // Caso malo
+    /* Fin sanitización entradas */
+
     else { // Caso bueno
         Location.findOne({ name }).then((element) => {
             if (!element) {
@@ -17,7 +19,7 @@ const addLocation = async (req, res) => {
                         name
                     })
                     newLocation.save().then((element) => { // Si todo sale bien...
-                        res.json({ message: "Localidad creada correctamente", element })
+                        res.status(200).json({ message: "Localidad creada correctamente", element })
                     })
                     .catch((error) => console.error(error)) 
                     

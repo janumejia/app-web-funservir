@@ -1,23 +1,21 @@
 require('dotenv').config({ path: '.env' })
 const Neighborhoods = require("../../../model/neighborhoods");
 const Location = require("../../../model/locations")
-
-// const delay = ms => new Promise(res => setTimeout(res, ms));
+const { _idMongooseRegex, nameNeighborhoodRegex, nameAssociatedLocalityRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const editNeighborhoods = async (req, res) => {
     const { _id, name, associatedLocality } = req.body;
     
-    // Sanitizar entrada:
-    // Sanitización entrada nombre y localidad asociada
-    const pattern_id = /^[0-9a-fA-F]{24}$/;
-    const patternNameAndAssociatedLocality = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
+    /* Sanitización entradas */
+    const isValid_id = _idMongooseRegex.test(_id);
+    const isValidName = nameNeighborhoodRegex.test(name);
+    const isValidAssociatedLocality = nameAssociatedLocalityRegex.test(associatedLocality);
+    
+    if (isValidName === false) return res.json({ message: "Formato de nombre no es válido" });
+    if (isValidAssociatedLocality === false) return res.json({ message: "Formato de localidad asociada no es válido" });
+    if (isValid_id === false) return res.json({ message: "Formato de _id no es válido" }); // Caso malo
+    /* Fin sanitización entradas */
 
-    const isValid_id = pattern_id.test(_id);
-    const isValidName = patternNameAndAssociatedLocality.test(name);
-    const isValidAssociatedLocality = patternNameAndAssociatedLocality.test(associatedLocality);
-    
-    if(isValidName === false || isValidAssociatedLocality === false ||  isValid_id === false) return res.json({ message: "Formato no válido" }); // Caso malo
-    
     // Consulta con el _id ingresado:
     let doesThis_idExist = false;
     let isTheSameNameForThis_id = false;
