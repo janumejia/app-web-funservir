@@ -11,15 +11,15 @@ const deleteUser = async(req, res) =>{
     // 2) Validar si cumple con los caracteres permitidos 
     const isValid_id = _idMongooseRegex.test(_id);
 
-    if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" }); // Caso malo
+    if(isValid_id == false) return res.status(422).json({ message: "Formato de _id no es válido" }); // Caso malo
     /* Fin sanitización entradas */
 
     await User.deleteOne({_id:_id})
     .then((element)=>{
-        res.json({ message: "Usuario borrado correctamente", element});
+        res.status(200).json({ message: "Usuario borrado correctamente", element});
     })
     .catch((error)=>{
-        res.json({message: "No se encontro el usuario o no se pudo eliminar"});
+        res.status(400).json({message: "No se encontró el usuario o no se pudo eliminar"});
     })
 
 }

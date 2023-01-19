@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '.env' })
 const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
+const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, userTypeRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const editUser = async (req, res) => {
@@ -28,7 +29,7 @@ const editUser = async (req, res) => {
     const isValidLastName = lastNameUserRegex.test(lastName);
     const isValidEmail = emailRegex.test(email);
     const isValidPassword = passwordRegex.test(password);
-    const isValidDateOfBirth = moment(dateOfBirth, 'YYYY-MM-DDThh:mm:ss.SSSZ', true).isValid();
+    const isValidDateOfBirth = moment(dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
     const isValidGender = genderRegex.test(gender);
     const isValidAddress = addressRegex.test(address);
 
@@ -37,35 +38,35 @@ const editUser = async (req, res) => {
         for (const key in condition) {
             if(typeof(condition[key]) !== 'string') return false;
             switch (condition[key]) {
-                case 'Motriz':
+                case ' Motriz ':
                     if (options.Motriz > 0) return false;
                     options.Motriz++;
                     break;
-                case 'Visual':
+                case ' Visual ':
                     if (options.Visual > 0) return false;
                     options.Visual++;
                     break;
-                case 'Auditiva':
+                case ' Auditiva ':
                     if (options.Auditiva > 0) return false;
                     options.Auditiva++;
                     break;
-                case 'Sensorial':
+                case ' Sensorial ':
                     if (options.Sensorial > 0) return false;
                     options.Sensorial++;
                     break;
-                case 'Comunicacion':
+                case ' Comunicacion ':
                     if (options.Comunicacion > 0) return false;
                     options.Comunicacion++;
                     break;
-                case 'Mental':
+                case ' Mental ':
                     if (options.Mental > 0) return false;
                     options.Mental++;
                     break;
-                case 'Multiples':
+                case ' Multiples ':
                     if (options.Multiples > 0) return false;
                     options.Multiples++;
                     break;
-                case 'Otra':
+                case ' Otra ':
                     if (options.Otra > 0) return false;
                     options.Otra++;
                     break;
@@ -80,25 +81,25 @@ const editUser = async (req, res) => {
     const isValidInstitution = institutionRegex.test(institution);
     const isValidUserType = userTypeRegex.test(userType);
 
-    if (isValid_id == false) return res.json({ message: "Formato de _id no es válido" });
-    if (isValidName === false) return res.json({ message: "Formato de nombre no es válido" });
-    if (isValidLastName === false) return res.json({ message: "Formato de apellido no es válido" });
-    if (isValidEmail === false) return res.json({ message: "Formato de correo no es válido" });
-    if (isValidPassword === false) return res.json({ message: "Formato de contraseña no es válido" });
-    if (isValidDateOfBirth === false) return res.json({ message: "Formato de fecha de nacimiento no es válido" });
-    if (isValidGender === false) return res.json({ message: "Formato de genero no es válido" });
-    if (isValidAddress === false) return res.json({ message: "Formato de dirección no es válido" });
-    if (isValidCondition() === false) return res.json({ message: "Formato de discapacidad no es válido" });
-    if (isValidIsCaregiver === false) return res.json({ message: "Formato de ¿es tutor? no es válido" });
-    if (isValidInstitution === false) return res.json({ message: "Formato de institución no es válido" });
-    if (isValidUserType === false) return res.json({ message: "Formato de tipo de usuario no es válido" });
+    if (isValid_id == false) return res.status(422).json({ message: "Formato de _id no es válido" });
+    if (isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" });
+    if (isValidLastName === false) return res.status(422).json({ message: "Formato de apellido no es válido" });
+    if (isValidEmail === false) return res.status(422).json({ message: "Formato de correo no es válido" });
+    if (isValidPassword === false) return res.status(422).json({ message: "Formato de contraseña no es válido" });
+    if (isValidDateOfBirth === false) return res.status(422).json({ message: "Formato de fecha de nacimiento no es válido" });
+    if (isValidGender === false) return res.status(422).json({ message: "Formato de genero no es válido" });
+    if (isValidAddress === false) return res.status(422).json({ message: "Formato de dirección no es válido" });
+    if (isValidCondition() === false) return res.status(422).json({ message: "Formato de discapacidad no es válido" });
+    if (isValidIsCaregiver === false) return res.status(422).json({ message: "Formato de ¿es tutor? no es válido" });
+    if (isValidInstitution === false) return res.status(422).json({ message: "Formato de institución no es válido" });
+    if (isValidUserType === false) return res.status(422).json({ message: "Formato de tipo de usuario no es válido" });
     /* Fin sanitización entradas */
     
     const query = { _id: _id };
     let doc = await User.findOne(query);
     if (doc.password !== password) {
         bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
-            if (error) res.json({ message: "error" })
+            if (error) res.status(500).json({ message: "error" })
             else {
                 doc.name = name;
                 doc.lastName = lastName;
@@ -127,7 +128,7 @@ const editUser = async (req, res) => {
         doc.userType = userType;
         await doc.save();
     }
-    res.json({ message: "Usuario editado correctamente", doc });
+    res.status(200).json({ message: "Usuario editado correctamente", doc });
 }
 
 module.exports = editUser

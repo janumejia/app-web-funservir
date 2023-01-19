@@ -21,14 +21,14 @@ const gender = [
 ];
 
 const disabilities = [
-    <Option key="Motriz" value="Motriz">Motriz</Option>,
-    <Option key="Visual" value="Visual">Visual</Option>,
-    <Option key="Auditiva" value="Auditiva">Auditiva</Option>,
-    <Option key="Sensorial" value="Sensorial">Sensorial</Option>,
-    <Option key="Comunicación" value="Comunicacion">Comunicación</Option>,
-    <Option key="Mental" value="Mental">Mental</Option>,
-    <Option key="Multiples" value="Multiples">Múltiples</Option>,
-    <Option key="Otra" value="Otra">Otra(s)</Option>
+    <Option key="Motriz" value=" Motriz ">Motriz</Option>,
+    <Option key="Visual" value=" Visual ">Visual</Option>,
+    <Option key="Auditiva" value=" Auditiva ">Auditiva</Option>,
+    <Option key="Sensorial" value=" Sensorial ">Sensorial</Option>,
+    <Option key="Comunicación" value=" Comunicacion ">Comunicación</Option>,
+    <Option key="Mental" value=" Mental ">Mental</Option>,
+    <Option key="Multiples" value=" Multiples ">Múltiples</Option>,
+    <Option key="Otra" value=" Otra ">Otra(s)</Option>
 ];
 const rol = [
     <Option key="Regular" value="Regular">Regular</Option>,
@@ -77,11 +77,15 @@ const options = (title) => {
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
-        return (/^([A-Za-z1-9ñÑáéíóú ]){1,100}$/);
+        return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
+    } else if (dataIndex === 'lastName') {
+        return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
     } else if (dataIndex === 'email') {
         return (/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/);
     } else if (dataIndex === 'password') {
-        return (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,50}$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+        return (/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords . Además, la segunda parte del regex hace match con el hash generado por bcrypt: https://stackoverflow.com/a/64636008/19294516
+    } else if (dataIndex === 'institution') {
+        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){0,100}$/);
     }
 };
 
@@ -106,13 +110,13 @@ const EditableCell = ({
                             style={{
                                 margin: 0,
                             }}>
-                        <Select
-                            mode={(title === "Discapacidad") ? "multiple" : ""}
-                            allowClear={(title === "Discapacidad") ? true : false}
-                            style={{
-                                width: '100%',
-                            }}
-                            placeholder="Seleccione una opción"
+                            <Select
+                                mode={(title === "Discapacidad") ? "multiple" : ""}
+                                allowClear={(title === "Discapacidad") ? true : false}
+                                style={{
+                                    width: '100%',
+                                }}
+                                placeholder="Seleccione una opción"
                             /*onChange={(val) => {
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
@@ -126,9 +130,9 @@ const EditableCell = ({
 
                                 }
                             }}*/
-                        >
-                            {options(title)}
-                        </Select>
+                            >
+                                {options(title)}
+                            </Select>
                         </Form.Item>
                     ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
@@ -266,59 +270,61 @@ const ManageUsers = () => {
 
                 axios.post('http://localhost:4000/addUser', newUser)
                     .then((res) => {
-   
-                        // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-                        let dateOfBirth = new Date(res.data.element.dateOfBirth);
-                        let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-                        res.data.element.dateOfBirth = dateOfBirth2;
 
-                        newData.splice(index, 1, res.data.element);
-                        setData(newData);
-                        setEditingKey('');
-                        /*selectedValues.forEach(column => {
-                            if (column.key === "condition") {
-                                column.values = [];
-                            } else {
-                                column.values = "";
-                            }
-                        })*/
-                        message.success('Se ha creado el Usuario exitosamente');
+                        // Respuesta OK
+                        if (res.status === 200) {
+                            // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                            let dateOfBirth = new Date(res.data.element.dateOfBirth);
+                            let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+                            res.data.element.dateOfBirth = dateOfBirth2;
+
+                            newData.splice(index, 1, res.data.element);
+                            setData(newData);
+                            setEditingKey('');
+                            /*selectedValues.forEach(column => {
+                                if (column.key === "condition") {
+                                    column.values = [];
+                                } else {
+                                    column.values = "";
+                                }
+                            })*/
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido crear el usuario');
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
                 axios.post('http://localhost:4000/editUser', { ...item, ...row })
-                    .then((res) => {
-                        console.log("res***********");
-                        console.log(res);
-                        // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-                        let dateOfBirth = new Date(res.data.doc.dateOfBirth);
-                        let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-                        res.data.doc.dateOfBirth = dateOfBirth2;
-                        
-                        newData.splice(index, 1, res.data.doc);
-                        setData(newData);
-                        setEditingKey('');
-                        /*selectedValues.forEach(column => {
-                            if (column.key === "condition") {
-                                column.values = [];
-                            } else {
-                                column.values = "";
-                            }
-                        })*/
-                        message.success('Se modificó el usuario exitosamente');
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                        if (res.status === 200) {
+                            // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                            let dateOfBirth = new Date(res.data.doc.dateOfBirth);
+                            let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+                            res.data.doc.dateOfBirth = dateOfBirth2;
+
+                            newData.splice(index, 1, res.data.doc);
+                            setData(newData);
+                            setEditingKey('');
+
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido modificar el usuario');
-                        console.log(error);
+                    .catch((error) => {// Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
             }
         } catch (errInfo) {
-            console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
+            message.warning('¡Debes completar todos los campos en un formato válido!');
+            // console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
         }
     };
 
@@ -327,13 +333,18 @@ const ManageUsers = () => {
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
             axios.post('http://localhost:4000/deleteUser', { _id: key })
-                .then((res) => {
-                    newData.splice(index, 1);
-                    setData(newData);
-                    message.success('Se ha eliminado el Usuario exitosamente');
+                .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                    if (res.status === 200) {
+                        newData.splice(index, 1);
+                        setData(newData);
+                        message.success(res.data.message);
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
                 })
-                .catch((error) => {
-                    message.error('No se ha podido eliminar el usuario');
+                .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                 });
         } else {
             newData.splice(index, 1);
