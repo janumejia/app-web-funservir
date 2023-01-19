@@ -296,8 +296,9 @@ const ManageUsers = () => {
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
-                            console.log(res)
-                            newData.splice(index, 1, res.data);
+                            console.log("res.data:");
+                            console.log(res.data);
+                            newData.splice(index, 1, res.data.ans);
                             setData(newData);
                             setEditingKey('');
                             // selectedValues.forEach(column => {
@@ -437,22 +438,13 @@ const ManageUsers = () => {
     const handleAdd = () => {
         const index = data.findIndex((item) => "0" === item._id);
         if (index === -1) {
-            const newUser = {
+            const newN = {
                 _id: "0",
                 name: "",
-                lastName: "",
-                email: "",
-                password: "",
-                age: "",
-                gender: "",
-                address: "",
-                condition: [],
-                isCaregiver: "",
-                institution: "",
-                userType: ""
+                associatedLocality: [],
             };
-            setData([...data, newUser]);
-            edit(newUser);
+            setData([...data, newN]);
+            edit(newN);
         } else {
             message.error('Ya se encuentra creando un usuario. Finalice la creación o elimine el registro añadido');
         }
