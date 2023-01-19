@@ -18,7 +18,7 @@ app.use(express.json()) // Nos permitirá ver el body que contiene las peticione
 /* Para mostrar un mensaje de error personalizado al usuario, en vez del mensaje de error real (puede generar fuga de información), en caso que suceda un error en el backend */
 app.use(function (err, req, res, next) {
     console.error(err.stack);
-    res.status(500).send('Algo salio mal en el servidor. Estamos trabajando en ello');
+    res.status(500).json({message:'Algo salio mal en el servidor'});
 });
 
 /* Agregar encabezados de seguridad en la aplicación */

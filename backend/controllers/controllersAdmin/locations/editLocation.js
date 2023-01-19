@@ -14,8 +14,8 @@ const editLocation = async (req, res) => {
     const isValid_id = _idMongooseRegex.test(_id);
     const isValidName = nameLocationRegex.test(name);
 
-    if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" });
-    if(isValidName == false) return res.json({ message: "Formato de nombre no es válido" }); // Caso malo
+    if(isValid_id == false) return res.status(422).json({ message: "Formato de _id no es válido" });
+    if(isValidName == false) return res.status(422).json({ message: "Formato de nombre no es válido" }); // Caso malo
     /* Fin sanitización entradas */
     
     let doesThisNameExist = false;
@@ -29,8 +29,8 @@ const editLocation = async (req, res) => {
     })
 
     // Retorna Error si existe el nombre o si no existe el _id:
-    if(doesThisNameExist) return res.json({ message: "Ya existe esta localidad" });
-    else if (!doesThis_idExist) return res.json({ message: "No existe el _id" });
+    if(doesThisNameExist) return res.status(409).json({ message: "Ya existe esta localidad" });
+    else if (!doesThis_idExist) return res.status(404).json({ message: "No existe el _id" });
 
     // Edita el registro después de pasar los filtros
     const query = { _id: _id };
@@ -39,7 +39,7 @@ const editLocation = async (req, res) => {
     }
     await Location.findByIdAndUpdate(query, update);
     let ans = await Location.findOne(query);
-    res.json({message: "Localidad actualizada correctamente", ans});
+    res.status(200).json({message: "Localidad actualizada correctamente", ans});
 
 }
 

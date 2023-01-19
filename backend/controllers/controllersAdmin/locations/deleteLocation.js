@@ -12,18 +12,17 @@ const deleteLocation = async(req, res) =>{
     // 2) Validar si cumple con los caracteres permitidos 
     const isValid_id = _idMongooseRegex.test(_id);
 
-    if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" }); // Caso malo
+    if(isValid_id == false) return res.status(422).json({ message: "Formato de _id no es válido" }); // Caso malo
     /* Fin sanitización entradas */
 
     await Location.deleteOne({_id:_id})
     .then((element)=>{
-        if (element.deletedCount !== 0) res.json({ message: "Localidad borrada correctamente"});
-        else res.json({message: "No se encontró la localidad"});
+        if (element.deletedCount !== 0) res.status(200).json({ message: "Localidad borrada correctamente"});
+        else res.status(404).json({message: "No se encontró la localidad"});
     })
     .catch((error)=>{
-        res.json({message: "No se pudo eliminar"});
+        res.status(500).json({message: "No se pudo eliminar"});
     })
-
 }
 
 module.exports = deleteLocation

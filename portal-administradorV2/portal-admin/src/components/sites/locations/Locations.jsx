@@ -116,7 +116,7 @@ const EditableCell = ({
                                 {
                                     required: true,
                                     message: `¡Introduzca un nombre válido!`,
-                                    pattern: /^([A-Za-z1-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
+                                    pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
                                 },
                             ]}
                         >
@@ -186,9 +186,9 @@ const ManageLocations = () => {
                 }
 
                 axios.post('http://localhost:4000/addLocations', newLocation)
-                    .then((res) => {
-                        if(res.data.message === "Ya existe esta localidad" ) message.error('Ya existe esta localidad');
-                        else if (res.data.message === "Localidad creada correctamente") {
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                        if (res.status === 200) {
                             newData.splice(index, 1, res.data.element);
                             setData(newData);
                             setEditingKey('');
@@ -199,21 +199,21 @@ const ManageLocations = () => {
                                     column.values = "";
                                 }
                             })
-                            message.success('Se ha creado la localidad exitosamente');
-                        } else {
-                            message.error('No se ha podido crear la localidad');
-                        }
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido crear la localidad');
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
             } else if (key !== "0" && row.name) {
 
                 axios.post('http://localhost:4000/editLocations', { ...item, ...row, ...mVals })
-                    .then((res) => {
-                        console.log(res)
-                        if(res.data.message === "Ya existe esta localidad") message.error('Ya existe esta localidad');
-                        else if (res.data.message === "Localidad actualizada correctamente") {
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                        // Respuesta OK
+                        if (res.status === 200) {
                             newData.splice(index, 1, res.data.ans);
                             setData(newData);
                             setEditingKey('');
@@ -224,20 +224,21 @@ const ManageLocations = () => {
                                     column.values = "";
                                 }
                             })
-                            message.success('Se modificó la localidad exitosamente');
-                        } else {
-                            message.error('No se ha podido modificar la localidad');
-                        }
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido modificar la localidad');
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
             }
         } catch (errInfo) {
-            message.warning('¡Debes completar los campos en un formato válido!');
-            console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
+            message.warning('¡Debes completar todos los campos en un formato válido!');
+            // console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
         }
     };
 
@@ -246,18 +247,21 @@ const ManageLocations = () => {
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
             axios.post('http://localhost:4000/deleteLocations', { _id: key })
-                .then((res) => {
-                    if(res.data.message === "Localidad borrada correctamente") {
+                .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                    // Respuesta OK
+                    if (res.status === 200) {
                         newData.splice(index, 1);
                         setData(newData);
-                        message.success('Se ha eliminado la localidad exitosamente');
+                        message.success(res.data.message);
 
-                    } else {
-                        message.error('No se ha podido eliminar la localidad');
-                    }
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
                 })
-                .catch((error) => {
-                    message.error('No se ha podido eliminar la localidad');
+                .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+
                 });
         } else {
             newData.splice(index, 1);

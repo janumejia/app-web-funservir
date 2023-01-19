@@ -9,24 +9,24 @@ const addNeighborhoods = async (req, res) => {
 
     /* Sanitización entradas */
     // 1) Validar el tipo de dato
-    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    if(typeof(associatedLocality) !== 'string') return res.status(422).json({ message: "Tipo de dato de localidad asociada no es válido" });
+    if (typeof (name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    if (typeof (associatedLocality) !== 'string') return res.status(422).json({ message: "Tipo de dato de localidad asociada no es válido" });
 
-    // 2) Validar si cumple con los caracteres permitidos 
+    // 2) Validar si cumple con los caracteres permitidos
     const isValidName = nameNeighborhoodRegex.test(name);
     const isValidAssociatedLocality = nameAssociatedLocalityRegex.test(associatedLocality);
 
     if (isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" });
     if (isValidAssociatedLocality === false) return res.status(422).json({ message: "Formato de localidad asociada no es válido" }); // Caso malo
     /* Fin sanitización entradas */
-    
+
     else { // Caso bueno
         // Comprobamos primero que no exista ese barrio en la bd
         // let doesThisNeighborhoodExist = false;
         Neighborhoods.findOne({ name }).then((element) => {
             if (element) {
                 // doesThisNeighborhoodExist = true;
-                res.json({ message: "Ya existe este barrio" })
+                res.status(409).json({ message: "Ya existe este barrio" })
             } else {
                 // Y también comprobamos que la localidad asociada exista
                 Location.findOne({ 'name': associatedLocality }).then((element) => {
@@ -36,15 +36,15 @@ const addNeighborhoods = async (req, res) => {
                             associatedLocality
                         })
                         newNeighborhoods.save().then((element) => { // Si todo sale bien...
-                            res.json({ message: "Barrio creado correctamente", element })
+                            res.status(200).json({ message: "Barrio creado correctamente", element })
                         })
                             .catch((error) => {
                                 console.error(error)
-                                res.json({ message: "Error en creación de barrio" })
+                                res.status(500).json({ message: "Error en creación de barrio" })
                             })
 
                     } else {
-                        res.json({ message: "No existe esta localidad asociada " + associatedLocality })
+                        res.status(404).json({ message: "No existe esta localidad asociada " + associatedLocality })
                     }
                 })
             }

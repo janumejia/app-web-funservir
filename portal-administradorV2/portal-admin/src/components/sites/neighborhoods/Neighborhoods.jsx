@@ -15,33 +15,33 @@ const options = (title) => {
     }
 }
 
-const selectedValues = [
-    {
-        title: "Sexo*",
-        key: "gender",
-        values: ""
-    },
-    {
-        title: "Discapacidad",
-        key: "condition",
-        values: []
-    },
-    {
-        title: "Rol*",
-        key: "userType",
-        values: ""
-    },
-    {
-        title: "Tutor*",
-        key: "isCaregiver",
-        values: ""
-    },
-    {
-        title: "Localidad asociada*",
-        key: "associatedLocality",
-        values: ""
-    }
-]
+// const selectedValues = [
+//     {
+//         title: "Sexo*",
+//         key: "gender",
+//         values: ""
+//     },
+//     {
+//         title: "Discapacidad",
+//         key: "condition",
+//         values: []
+//     },
+//     {
+//         title: "Rol*",
+//         key: "userType",
+//         values: ""
+//     },
+//     {
+//         title: "Tutor*",
+//         key: "isCaregiver",
+//         values: ""
+//     },
+//     {
+//         title: "Localidad asociada*",
+//         key: "associatedLocality",
+//         values: ""
+//     }
+// ]
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
@@ -127,29 +127,35 @@ const EditableCell = ({
             {editing ? (
                 <>
                     {(title === "Localidad asociada*") ? (
-                        <Select
-                            defaultValue=""
-                            mode=""
-                            allowClear={true}
+                        <Form.Item
+                            name={dataIndex}
                             style={{
-                                width: '100%',
-                            }}
-                            placeholder="Seleccione una opción"
-                            onChange={(val) => {
-                                const col = selectedValues.find(column => column.title === "Localidad asociada*");
-                                console.log(selectedValues)
-                                // let newArray = [...val]
-                                // if (col.values.includes([...val])) {
-                                //     newArray = newArray.filter(disa => disa !== [...val])
-                                // }
-                                // col["values"] = newArray;
+                                margin: 0,
+                            }}>
+                            <Select
+                                // defaultValue=""
+                                // mode=""
+                                allowClear={true}
+                                style={{
+                                    width: '100%',
+                                }}
+                                placeholder="Seleccione una opción"
+                            // onChange={(val) => {
+                            //     const col = selectedValues.find(column => column.title === "Localidad asociada*");
+                            //     console.log(selectedValues)
+                            //     // let newArray = [...val]
+                            //     // if (col.values.includes([...val])) {
+                            //     //     newArray = newArray.filter(disa => disa !== [...val])
+                            //     // }
+                            //     // col["values"] = newArray;
 
-                                col["values"] = val;
+                            //     col["values"] = val;
 
-                            }}
-                        >
-                            {options("Localidad asociada*")}
-                        </Select>
+                            // }}
+                            >
+                                {options("Localidad asociada*")}
+                            </Select>
+                        </Form.Item>
                     ) : (
                         <Form.Item
                             name={dataIndex}
@@ -202,6 +208,7 @@ const ManageUsers = () => {
                 allLocations = res.data;
 
                 for (let pos = 0; pos < allLocations.length; pos++) {
+                    
                     arrayLocations[pos] = <Option key={allLocations[pos].name} value={allLocations[pos].name}>{allLocations[pos].name}</Option>
                 }
 
@@ -233,88 +240,86 @@ const ManageUsers = () => {
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
 
-            let mVals = {
-                gender: "",
-                condition: [],
-                userType: "",
-                isCaregiver: "",
-                associatedLocality: ""
-            };
-            selectedValues.forEach(column => {
-                if (column.key === "gender") {
-                    mVals["gender"] = column.values;
-                } else if (column.key === "condition") {
-                    column.values.forEach((arr) => mVals["condition"].push(arr));
-                } else if (column.key === "userType") {
-                    mVals["userType"] = column.values;
-                } else if (column.key === "isCaregiver") {
-                    mVals["isCaregiver"] = column.values;
-                } else if (column.key === "associatedLocality") {
-                    mVals["associatedLocality"] = column.values;
-                }
-            });
+            // let mVals = {
+            //     gender: "",
+            //     condition: [],
+            //     userType: "",
+            //     isCaregiver: "",
+            //     associatedLocality: ""
+            // };
+            // selectedValues.forEach(column => {
+            //     if (column.key === "gender") {
+            //         mVals["gender"] = column.values;
+            //     } else if (column.key === "condition") {
+            //         column.values.forEach((arr) => mVals["condition"].push(arr));
+            //     } else if (column.key === "userType") {
+            //         mVals["userType"] = column.values;
+            //     } else if (column.key === "isCaregiver") {
+            //         mVals["isCaregiver"] = column.values;
+            //     } else if (column.key === "associatedLocality") {
+            //         mVals["associatedLocality"] = column.values;
+            //     }
+            // });
 
-            if (key === "0" && row.name && mVals.associatedLocality) {
-                console.log("associatedLocality: " + mVals.associatedLocality)
+            if (key === "0" && row.name && row.associatedLocality) {
+                // console.log("associatedLocality: " + row.associatedLocality)
                 const newNeighborhood = {
                     name: row.name,
-                    associatedLocality: mVals.associatedLocality
+                    associatedLocality: row.associatedLocality
                 }
 
                 axios.post('http://localhost:4000/addNeighborhoods', newNeighborhood)
-                    .then((res) => {
-                        console.log(res)
-                        if (res.data.message === "Ya existe este barrio") message.error('Ya existe este barrio');
-                        else if (res.data.message === "Barrio creado correctamente") {
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                        if (res.status === 200) {
                             newData.splice(index, 1, res.data.element);
                             setData(newData);
                             setEditingKey('');
-                            selectedValues.forEach(column => {
-                                if (column.key === "condition") {
-                                    column.values = [];
-                                } else {
-                                    column.values = "";
-                                }
-                            })
-                            message.success('Se ha creado el barrio exitosamente');
-                        } else {
-                            message.error('No se ha podido crear el barrio');
-                        }
+                            // selectedValues.forEach(column => {
+                            //     if (column.key === "condition") {
+                            //         column.values = [];
+                            //     } else {
+                            //         column.values = "";
+                            //     }
+                            // })
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido crear el barrio');
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
-            } else if (key !== "0" && row.name && mVals.associatedLocality) {
+            } else if (key !== "0" && row.name && row.associatedLocality) {
 
-                axios.post('http://localhost:4000/editNeighborhoods', { ...item, ...row, ...mVals })
-                    .then((res) => {
-                        if (res.data.message === "Ya existe este barrio") message.error('Ya existe este barrio');
-                        else if (res.data.message === "Barrio actualizado correctamente" || res.data.message === "Los valores ingresados son iguales a los actuales") {
+                axios.post('http://localhost:4000/editNeighborhoods', { ...item, ...row })
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                        if (res.status === 200) {
                             console.log(res)
                             newData.splice(index, 1, res.data);
                             setData(newData);
                             setEditingKey('');
-                            selectedValues.forEach(column => {
-                                if (column.key === "condition") {
-                                    column.values = [];
-                                } else {
-                                    column.values = "";
-                                }
-                            })
-                            message.success('Se modificó el barrio exitosamente');
-                        // } else if (res.data.message === "Los valores ingresados son iguales a los actuales") {
-                        //     message.warning('Los valores ingresados son iguales a los actuales');
-                        } else {
-                            message.error('No se ha podido modificar el barrio');
-                        }
+                            // selectedValues.forEach(column => {
+                            //     if (column.key === "condition") {
+                            //         column.values = [];
+                            //     } else {
+                            //         column.values = "";
+                            //     }
+                            // })
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido modificar el barrio');
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
             }
         } catch (errInfo) {
+            message.warning('¡Debes completar todos los campos obligatorios!');
             console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
         }
     };
@@ -324,17 +329,19 @@ const ManageUsers = () => {
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
             axios.post('http://localhost:4000/deleteNeighborhoods', { _id: key })
-                .then((res) => {
-                    if (res.data.message === "Barrio borrado correctamente") {
+                .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                    // Respuesta OK
+                    if (res.status === 200) {
                         newData.splice(index, 1);
                         setData(newData);
-                        message.success('Se ha eliminado el barrio exitosamente');
-                    } else {
-
-                    }
+                        message.success(res.data.message);
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
                 })
-                .catch((error) => {
-                    message.error('No se ha podido eliminar el barrio');
+                .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                 });
         } else {
             newData.splice(index, 1);

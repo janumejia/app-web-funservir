@@ -4,12 +4,12 @@ const { nameLocationRegex } = require("../../../regex") // Traemos los regex nec
 
 const addLocation = async (req, res) => {
     const { name } = req.body;
-    
+
     /* Sanitización entradas */
     // 1) Validar el tipo de dato
     if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
 
-    // 2) Validar si cumple con los caracteres permitidos 
+    // 2) Validar si cumple con los caracteres permitidos
     const isValidName = nameLocationRegex.test(name);
 
     if(isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" }); // Código 422 significa -> 422: “Unprocessable Entity.” The client request contains semantic errors, and the server can’t process it. https://kinsta.com/blog/http-status-codes/
