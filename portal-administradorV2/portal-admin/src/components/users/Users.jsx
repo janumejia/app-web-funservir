@@ -306,7 +306,8 @@ const ManageUsers = () => {
                             let dateOfBirth = new Date(res.data.doc.dateOfBirth);
                             let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                             res.data.doc.dateOfBirth = dateOfBirth2;
-
+                            
+                            console.log("res.data: ", res.data)
                             newData.splice(index, 1, res.data.doc);
                             setData(newData);
                             setEditingKey('');
