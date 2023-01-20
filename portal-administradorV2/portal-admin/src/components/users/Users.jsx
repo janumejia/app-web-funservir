@@ -231,7 +231,6 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
-            console.log(row);
 
             /*let mVals = {
                 gender: "",
