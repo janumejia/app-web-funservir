@@ -110,13 +110,13 @@ const EditableCell = ({
                             style={{
                                 margin: 0,
                             }}>
-                            <Select
-                                mode={(title === "Discapacidad") ? "multiple" : ""}
-                                allowClear={(title === "Discapacidad") ? true : false}
-                                style={{
-                                    width: '100%',
-                                }}
-                                placeholder="Seleccione una opción"
+                        <Select
+                            mode={(title === "Discapacidad") ? "multiple" : ""}
+                            allowClear={(title === "Discapacidad") ? true : false}
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Seleccione una opción"
                             /*onChange={(val) => {
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
@@ -130,9 +130,9 @@ const EditableCell = ({
 
                                 }
                             }}*/
-                            >
-                                {options(title)}
-                            </Select>
+                        >
+                            {options(title)}
+                        </Select>
                         </Form.Item>
                     ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
