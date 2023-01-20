@@ -266,7 +266,7 @@ const ManageLocations = () => {
         } else {
             newData.splice(index, 1);
             setData(newData);
-            message.success('Se ha eliminado el Usuario exitosamente');
+            message.success('Se ha eliminado la categoría exitosamente');
         }
     };
 
@@ -366,7 +366,7 @@ const ManageLocations = () => {
             setData([...data, newUser]);
             edit(newUser);
         } else {
-            message.error('Ya se encuentra creando un Usuario. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando una categoría. Finalice la creación o elimine el registro añadido');
         }
     };
     return (

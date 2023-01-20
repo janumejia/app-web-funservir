@@ -1,33 +1,34 @@
 const { model, Schema } = require("mongoose")
 
 const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:https://mongoosejs.com/docs/schematypes.html#schematype-options
-    agentId: { type: Number },
-    title: { type: String },
-    slug: { type: String },
-    content: { type: String },
-    status: { type: String },
-    price: { type: String },
-    isNegotiable: { type: Boolean },
-    propertyType: { type: String },
-    condition: { type: String },
+    // agentId: { type: Number },
+    name: { type: String },
+    // slug: { type: String },
+    description: { type: String },
+    category: { type: String },
+    // status: { type: String },
+    // price: { type: String },
+    // isNegotiable: { type: Boolean },
+    // propertyType: { type: String },
+    // condition: { type: String },
     rating: { type: Schema.Types.Mixed },
     ratingCount: { type: Number },
     contactNumber: { type: String },
-    amenities: [{
+    inclusiveElements: [{
         type: {
-            id: { type: Number },
-            element: { type: Schema.Types.Mixed }
+            elementName: { type: Schema.Types.Mixed },
+
         }
     }],
-    image: {
-        type: {
-            url: { type: String },
-            thumb_url: { type: String }
-        }
-    },
+    // image: {
+    //     type: {
+    //         url: { type: String },
+    //         thumb_url: { type: String }
+    //     }
+    // },
     location: {
         type: {
-            id: { type: Number },
+            // id: { type: Number },
             lat: { type: String },
             lng: { type: String },
             formattedAddress: { type: String },
@@ -39,9 +40,11 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
             country_short: { type: String }
         }
     },
+    locality: { type: String },
+    neighborhood: { type: String },
     gallery: [{
         type: {
-            id: { type: Number },
+            // id: { type: Number },
             url: { type: String }
         }
     }]

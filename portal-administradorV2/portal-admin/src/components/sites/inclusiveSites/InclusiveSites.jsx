@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
 
+// Para el idioma español y otra cosa de la componente DataPicker
+import esES from 'antd/es/date-picker/locale/es_ES';
+import moment from 'moment';
+
+// import dayjs from 'dayjs';
+// import 'dayjs/locale/es';
+// import esES from 'antd/es/locale/es_ES';
+// dayjs.locale('es');
 
 const { Option } = Select;
 const gender = [
-    <Option key="Masculino" value="M">M</Option>,
-    <Option key="Femenino" value="F">F</Option>,
-    <Option key="Otro" value="O">O</Option>
+    <Option key="Masculino" value="Masculino">Masculino</Option>,
+    <Option key="Femenino" value="Femenino">Femenino</Option>,
+    <Option key="Otro" value="Otro">Otro</Option>
 ];
 
 const disabilities = [
@@ -17,23 +25,19 @@ const disabilities = [
     <Option key="Visual" value=" Visual ">Visual</Option>,
     <Option key="Auditiva" value=" Auditiva ">Auditiva</Option>,
     <Option key="Sensorial" value=" Sensorial ">Sensorial</Option>,
-    <Option key="Comunicación" value=" Comunicación ">Comunicación</Option>,
+    <Option key="Comunicación" value=" Comunicacion ">Comunicación</Option>,
     <Option key="Mental" value=" Mental ">Mental</Option>,
     <Option key="Multiples" value=" Multiples ">Múltiples</Option>,
     <Option key="Otra" value=" Otra ">Otra(s)</Option>
 ];
-
-console.log("disabilities:");
-console.log(disabilities);
-
 const rol = [
-    <Option key="Regular" value="R">R</Option>,
-    <Option key="Propietario" value="P">P</Option>,
-    <Option key="Administrador" value="A">A</Option>,
+    <Option key="Regular" value="Regular">Regular</Option>,
+    <Option key="Propietario" value="Propietario">Propietario</Option>,
+    <Option key="Administrador" value="Administrador">Administrador</Option>,
 ]
 
 const isCaregiver = [
-    <Select.Option key="Sí" value="Sí">Sí</Select.Option>,
+    <Select.Option key="Si" value="Si">Si</Select.Option>,
     <Select.Option key="No" value="No">No</Select.Option>
 ]
 const options = (title) => {
@@ -48,7 +52,7 @@ const options = (title) => {
     }
 }
 
-const selectedValues = [
+/*const selectedValues = [
     {
         title: "Sexo*",
         key: "gender",
@@ -69,17 +73,19 @@ const selectedValues = [
         key: "isCaregiver",
         values: ""
     }
-]
+]*/
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
-        return (/^[a-zA-Z0-9]+$/);
+        return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
+    } else if (dataIndex === 'lastName') {
+        return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
     } else if (dataIndex === 'email') {
-        return (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
-    } else if (dataIndex === 'age') {
-        return (/^(?:\d*)$/)
+        return (/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/);
     } else if (dataIndex === 'password') {
-        return (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/)
+        return (/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords . Además, la segunda parte del regex hace match con el hash generado por bcrypt: https://stackoverflow.com/a/64636008/19294516
+    } else if (dataIndex === 'institution') {
+        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){0,100}$/);
     }
 };
 
@@ -99,18 +105,22 @@ const EditableCell = ({
             {editing ? (
                 <>
                     {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
-                        <Select
-                            mode={(title === "Discapacidad") ? "multiple" : ""}
-                            allowClear={(title === "Discapacidad") ? true : false}
+                        <Form.Item
+                            name={dataIndex}
                             style={{
-                                width: '100%',
-                            }}
-                            placeholder="Seleccione una opción"
-                            onChange={(val) => {
+                                margin: 0,
+                            }}>
+                            <Select
+                                mode={(title === "Discapacidad") ? "multiple" : ""}
+                                allowClear={(title === "Discapacidad") ? true : false}
+                                style={{
+                                    width: '100%',
+                                }}
+                                placeholder="Seleccione una opción"
+                            /*onChange={(val) => {
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
                                     let newArray = [...val]
-                                    
                                     if (col.values.includes([...val])) {
                                         newArray = newArray.filter(disa => disa !== [...val])
                                     }
@@ -119,11 +129,12 @@ const EditableCell = ({
                                     col["values"] = val;
 
                                 }
-                            }}
-                        >
-                            {options(title)}
-                        </Select>
-                    ) : (
+                            }}*/
+                            >
+                                {options(title)}
+                            </Select>
+                        </Form.Item>
+                    ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
                             name={dataIndex}
                             style={{
@@ -139,7 +150,34 @@ const EditableCell = ({
                         >
                             {inputNode}
                         </Form.Item>
-                    )}
+                    ) : (
+                        <Form.Item
+                            name={dataIndex}
+                            style={{
+                                margin: 0,
+                            }}
+                            rules={[
+                                {
+                                    type: 'object',
+                                    required: true,
+                                    message: `¡Introduzca una fecha!`
+                                },
+                            ]}
+
+                        >
+                            <DatePicker
+                                locale={esES}
+                                showToday={false}
+                                format="YYYY-MM-DD"
+                                disabledDate={(current) => {
+                                    // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
+                                    // En este caso, solo permite fechas entre hace 200 años y hoy.
+                                    return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
+                                }}
+                                defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
+                            />
+                        </Form.Item>
+                    ))}
                 </>
             ) : (
                 children
@@ -149,7 +187,7 @@ const EditableCell = ({
 };
 
 
-const ManageUsers = () => {
+const ManageInclusiveSites = () => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState("");
@@ -159,18 +197,26 @@ const ManageUsers = () => {
     useEffect(() => {
         axios.get('http://localhost:4000/all_users')
             .then((res) => {
-                setData(res.data);
+                // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
+                // y se debe convertir a un formato más fácil de leer: 2022-10-10
+                for (let i = 0; i < res.data.length; i++) {
+                    if (res.data[i].dateOfBirth) {
+                        let dateOfBirthAux = moment(res.data[i].dateOfBirth).format("YYYY-MM-DD");
+                        res.data[i].dateOfBirth = dateOfBirthAux;
+                    }
+                }
+
+                setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
     }, [])
 
     const isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
-
+        record.dateOfBirth = moment(record.dateOfBirth); // Necesario para resolver el error de date.clone de moment
         form.setFieldsValue({
             ...record
         });
-
         setEditingKey(record._id);
     };
 
@@ -185,8 +231,9 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
+            console.log(row);
 
-            let mVals = {
+            /*let mVals = {
                 gender: "",
                 condition: [],
                 userType: "",
@@ -203,64 +250,82 @@ const ManageUsers = () => {
                     mVals["isCaregiver"] = column.values;
                 }
             });
+            console.log(mVals);*/
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
+            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
 
                 const newUser = {
                     name: row.name,
                     lastName: row.lastName,
                     email: row.email,
                     password: row.password,
-                    age: row.age,
-                    gender: mVals["gender"],
+                    dateOfBirth: row.dateOfBirth,
+                    gender: row["gender"],
                     address: row.address,
-                    condition: [...mVals.condition],
-                    isCaregiver: mVals["isCaregiver"],
+                    condition: [...row.condition],
+                    isCaregiver: row["isCaregiver"],
                     institution: row.institution,
-                    userType: mVals["userType"]
+                    userType: row["userType"]
                 }
 
                 axios.post('http://localhost:4000/addUser', newUser)
                     .then((res) => {
-                        newData.splice(index, 1, res.data.element);
-                        setData(newData);
-                        setEditingKey('');
-                        selectedValues.forEach(column => {
-                            if (column.key === "condition") {
-                                column.values = [];
-                            } else {
-                                column.values = "";
-                            }
-                        })
-                        message.success('Se ha creado el Usuario exitosamente');
-                    })
-                    .catch((error) => {
-                        message.error('No se ha podido crear el Usuario');
-                    });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.age && mVals.gender && row.address && mVals["isCaregiver"] && mVals.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row, ...mVals })
-                    .then((res) => {
-                        newData.splice(index, 1, res.data);
-                        setData(newData);
-                        setEditingKey('');
-                        selectedValues.forEach(column => {
-                            if (column.key === "condition") {
-                                column.values = [];
-                            } else {
-                                column.values = "";
-                            }
-                        })
-                        message.success('Se modificó el Usuario exitosamente');
+                        // Respuesta OK
+                        if (res.status === 200) {
+                            // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                            let dateOfBirth = new Date(res.data.element.dateOfBirth);
+                            let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+                            res.data.element.dateOfBirth = dateOfBirth2;
+
+                            newData.splice(index, 1, res.data.element);
+                            setData(newData);
+                            setEditingKey('');
+                            /*selectedValues.forEach(column => {
+                                if (column.key === "condition") {
+                                    column.values = [];
+                                } else {
+                                    column.values = "";
+                                }
+                            })*/
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
-                    .catch((error) => {
-                        message.error('No se ha podido modificar el Usuario');
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+                    });
+            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
+
+                axios.post('http://localhost:4000/editUser', { ...item, ...row })
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                        if (res.status === 200) {
+                            // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+                            let dateOfBirth = new Date(res.data.doc.dateOfBirth);
+                            let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+                            res.data.doc.dateOfBirth = dateOfBirth2;
+                            
+                            console.log("res.data: ", res.data)
+                            newData.splice(index, 1, res.data.doc);
+                            setData(newData);
+                            setEditingKey('');
+
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+                    })
+                    .catch((error) => {// Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios!');
             }
         } catch (errInfo) {
-            console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
+            message.warning('¡Debes completar todos los campos en un formato válido!');
+            // console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
         }
     };
 
@@ -269,13 +334,18 @@ const ManageUsers = () => {
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
             axios.post('http://localhost:4000/deleteUser', { _id: key })
-                .then((res) => {
-                    newData.splice(index, 1);
-                    setData(newData);
-                    message.success('Se ha eliminado el Usuario exitosamente');
+                .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+
+                    if (res.status === 200) {
+                        newData.splice(index, 1);
+                        setData(newData);
+                        message.success(res.data.message);
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
                 })
-                .catch((error) => {
-                    message.error('No se ha podido eliminar el Usuario');
+                .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                 });
         } else {
             newData.splice(index, 1);
@@ -322,11 +392,10 @@ const ManageUsers = () => {
             editable: true,
         },
         {
-            title: 'Edad*',
-            dataIndex: "age",
-            key: "age",
-            editable: true,
-            sorter: (a, b) => a.age - b.age
+            title: 'Fecha de nacimiento*',
+            dataIndex: "dateOfBirth",
+            key: "dateOfBirth",
+            editable: true
         },
         {
             title: 'Sexo*',
@@ -365,13 +434,6 @@ const ManageUsers = () => {
         },
         {
             title: 'Rol*',
-            dataIndex: "userType",
-            key: "userType",
-            editable: true,
-            sorter: (a, b) => a.userType.localeCompare(b.userType)
-        },
-        {
-            title: 'Foto usuario',
             dataIndex: "userType",
             key: "userType",
             editable: true,
@@ -445,7 +507,7 @@ const ManageUsers = () => {
                 lastName: "",
                 email: "",
                 password: "",
-                age: "",
+                dateOfBirth: new Date(),
                 gender: "",
                 address: "",
                 condition: [],
@@ -456,7 +518,7 @@ const ManageUsers = () => {
             setData([...data, newUser]);
             edit(newUser);
         } else {
-            message.error('Ya se encuentra creando un Usuario. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando un usuario. Finalice la creación o elimine el registro añadido');
         }
     };
     return (
@@ -470,16 +532,13 @@ const ManageUsers = () => {
                     }}
                     size='large'
                 >
-                    Añadir sitio inclusivo
+                    Añadir Usuario
                 </Button>
                 <AutoComplete
                     dropdownMatchSelectWidth={252}
                     style={{
                         width: 300
                     }}
-                /*options={options}
-                onSelect={onSelect}
-                onSearch={handleSearch}*/
                 >
                     <Input.Search size='large'
                         placeholder="Buscar..."
@@ -517,4 +576,4 @@ const ManageUsers = () => {
     );
 };
 
-export default ManageUsers;
+export default ManageInclusiveSites;
