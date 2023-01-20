@@ -2,7 +2,7 @@
 // Esto permitirá sanitizar las variables de las peticiones que se hacen a la API, y disminuir la presencia de errores o ataques efectivos en el backend
 
 /* Generales */
-const generalAlphanumeric = (min, max) => { return new RegExp('^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){' + min + ',' + max + '}$'); } // Letras y números
+const generalAlphanumeric = (min, max) => { return new RegExp("^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){" + min + "," + max + "}$"); } // Letras y números
 const generalAlphabetic = (min, max) => { return new RegExp("^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){" + min + "," + max + "}$"); } // Solo letras
 /* Fin generales */
 
@@ -12,17 +12,19 @@ module.exports = {
     _idMongooseRegex: new RegExp("^[0-9a-fA-F]{24}$"),
 
     /* Sitios inclusivos */
-    titleRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/),
+    nameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/),
     descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,2000}$/),
     categoryRegex: generalAlphanumeric(1,100),
     ratingRegex: new RegExp(/^([1-5].[0-9])$/),
+    ratingCount: new RegExp(/^\d{1,10}$/),
+    // contactNumber: pendiente
     inclusiveElementsRegex: generalAlphanumeric(1,100),
-    coordinates: {
-        latitudeRegex: new RegExp(/^[-]{0,1}\d{1,2}\.\d{0,6}$/),
-        longitudeRegex: new RegExp(/^[-]{0,1}\d{1,3}\.\d{0,6}$/), // Ojo, este regex es diferente al anterior
-    },
-    locationRegex: generalAlphanumeric(1,100),
-    neighborhoodsRegex: generalAlphanumeric(1,100),
+    // coordinates: {
+    //     latitudeRegex: new RegExp(/^[-]{0,1}\d{1,2}\.\d{0,6}$/),
+    //     longitudeRegex: new RegExp(/^[-]{0,1}\d{1,3}\.\d{0,6}$/), // Ojo, este regex es diferente al anterior
+    // },
+    localityRegex: generalAlphanumeric(1,100),
+    neighborhoodRegex: generalAlphanumeric(1,100),
 
     /* Localidades */
     nameLocationRegex: generalAlphanumeric(1,100),

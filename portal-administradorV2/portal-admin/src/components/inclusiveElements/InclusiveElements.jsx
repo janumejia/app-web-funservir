@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Modal, Upload} from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Modal, Upload } from 'antd';
 import UploadComponent from './UploadComponent';
 
+const rules = (dataIndex) => {
+    if (dataIndex === 'name') {
+        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
+    }
+};
 
 const ManageElements = () => {
 
@@ -15,28 +20,28 @@ const ManageElements = () => {
     //Inicio de Manejo de imagenes
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
-    
+
     //Tratamiento de imagenes
     const getBase64 = (img) => {
         const reader = new FileReader();
-        
-        if(img){
+
+        if (img) {
             reader.readAsDataURL(img);
-            reader.onloadend = () =>{
+            reader.onloadend = () => {
                 setImageUrl(reader.result);
                 setLoading(false);
             }
         }
-        
+
     };
 
-    const handleChange = (info) => { 
+    const handleChange = (info) => {
 
         const isJpgOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/png';
         if (!isJpgOrPng) {
             message.error('¡Solo puedes subir imagenes!');
-        }else{
-            getBase64(info.file); 
+        } else {
+            getBase64(info.file);
         }
 
         /*const isLt2M = info.file.size / 1024 / 1024 < 2;
@@ -44,7 +49,7 @@ const ManageElements = () => {
             message.error('La imagen debe ser menor a 2MB!');
         }*/
     };
-//Fin de manejo de imagenes
+    //Fin de manejo de imagenes
 
     useEffect(() => {
         axios.get('http://localhost:4000/elements')
@@ -52,7 +57,7 @@ const ManageElements = () => {
                 setData(res.data);
             }).catch((error) => console.error(error));
     }, [])
-    
+
     const EditableCell = ({
         editing,
         dataIndex,
@@ -63,7 +68,7 @@ const ManageElements = () => {
         children,
         ...restProps
     }) => {
-        const inputNode = (inputType==='object'?<UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl}/>:<Input />) ;
+        const inputNode = (inputType === 'object' ? <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} /> : <Input />);
         return (
             <td {...restProps}>
                 {editing ? (
@@ -72,12 +77,19 @@ const ManageElements = () => {
                         style={{
                             margin: 0,
                         }}
+                        rules={[
+                            {
+                                required: true,
+                                message: `¡Introduzca un ${title} válido!`,
+                                pattern: rules(dataIndex),
+                            },
+                        ]}
                     >
                         {inputNode}
                     </Form.Item>
                 ) : (
-                    
-                    (inputType==='object'?<img src={record.image.url} alt='' style={{width:'9%',height:'auto'}}/>:children)
+
+                    (inputType === 'object' ? <img src={record.image.url} alt='' style={{ width: '9%', height: 'auto' }} /> : children)
                 )}
             </td>
         );
@@ -106,7 +118,7 @@ const ManageElements = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
-            
+
             if (key === "0" && row.name !== " " && imageUrl) {
                 const newElement = {
                     name: row.name,
@@ -178,7 +190,7 @@ const ManageElements = () => {
         },
         {
             title: 'Icono*',
-            dataIndex: ['image','url'],
+            dataIndex: ['image', 'url'],
             key: "image",
             width: '40%',
             editable: true,
@@ -257,7 +269,7 @@ const ManageElements = () => {
         }
     };
 
-    
+
     return (
         <>
             <Form form={form} component={false}>
