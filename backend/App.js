@@ -15,11 +15,12 @@ en este caso responde las peticiones desde cualquier origen (inseguro) */
 // app.use(cors())
 app.use(express.json()) // Nos permitirá ver el body que contiene las peticiones POST y PUT
 
-/* Para mostrar un mensaje de error personalizado al usuario, en vez del mensaje de error real (puede generar fuga de información), en caso que suceda un error en el backend */
+/* Para mostrar un mensaje de error personalizado al usuario cuando envía un JSON malformado, en vez del mensaje de error real (puede generar fuga de información), en caso que suceda un error en el backend */
 app.use(function (err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).json({message:'Algo salio mal en el servidor'});
+    // console.error(err.stack);
+    res.status(500).json({ message: 'Petición no puede ser procesada' });
 });
+
 
 /* Agregar encabezados de seguridad en la aplicación */
 app.use((req, res, next) => {
@@ -53,11 +54,19 @@ app.post("/addLocations", controllersAdmin.addLocations)
 app.post("/editLocations", controllersAdmin.editLocations)
 app.post("/deleteLocations", controllersAdmin.deleteLocations)
 
-// Parametría Localidades:
+// Parametría barrios:
 app.get("/getNeighborhoods", controllersAdmin.getNeighborhoods)
 app.post("/addNeighborhoods", controllersAdmin.addNeighborhoods)
 app.post("/editNeighborhoods", controllersAdmin.editNeighborhoods)
 app.post("/deleteNeighborhoods", controllersAdmin.deleteNeighborhoods)
+
+// Parametria sitios inclusivos
+app.post("/addInclusiveSites", controllersAdmin.addInclusiveSites)
+
+// custom 404
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Upss, ruta no encontrada' });
+})
 
 /* Fin rutas de nuestra APP */
 

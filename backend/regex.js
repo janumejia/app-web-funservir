@@ -16,8 +16,8 @@ module.exports = {
     descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,2000}$/),
     categoryRegex: generalAlphanumeric(1,100),
     ratingRegex: new RegExp(/^([1-5].[0-9])$/),
-    ratingCount: new RegExp(/^\d{1,10}$/),
-    // contactNumber: pendiente
+    ratingCountRegex: new RegExp(/^\d{1,10}$/),
+    contactNumberRegex: new RegExp(/^\d{10}$/), // Deben ser +57
     inclusiveElementsRegex: generalAlphanumeric(1,100),
     // coordinates: {
     //     latitudeRegex: new RegExp(/^[-]{0,1}\d{1,2}\.\d{0,6}$/),

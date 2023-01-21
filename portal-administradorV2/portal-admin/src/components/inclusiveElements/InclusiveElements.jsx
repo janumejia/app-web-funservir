@@ -148,10 +148,11 @@ const ManageElements = () => {
                         message.error('No se ha podido modificar el Elemento Inclusivo');
                     });
             } else {
-                message.warning('¡Debes completar todos los campos obligatorios!');
+                message.warning('¡Debes completar todos los campos obligatorios en un formato valido!');
             }
         } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
+            message.warning('¡Debes completar todos los campos obligatorios en un formato valido!');
+            // console.log('Validate Failed:', errInfo);
         }
     };
 
