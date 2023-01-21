@@ -2,7 +2,7 @@ const { model, Schema } = require("mongoose")
 
 const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:https://mongoosejs.com/docs/schematypes.html#schematype-options
     // agentId: { type: Number },
-    name: { type: String },
+    name: { type: String, unique: true},
     // slug: { type: String },
     description: { type: String },
     category: { type: String },
