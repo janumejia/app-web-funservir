@@ -195,7 +195,7 @@ const ManageInclusiveSites = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:4000/all_users')
+        axios.get('http://localhost:4000/getInclusiveSites')
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
                 // y se debe convertir a un formato más fácil de leer: 2022-10-10
@@ -371,73 +371,60 @@ const ManageInclusiveSites = () => {
             }
         },
         {
-            title: 'Apellido*',
-            dataIndex: "lastName",
-            key: "lastName",
+            title: 'Descripción*',
+            dataIndex: "description",
+            key: "description",
             editable: true,
-            sorter: (a, b) => a.lastName.localeCompare(b.lastName)
+            sorter: (a, b) => a.description.localeCompare(b.description)
         },
         {
-            title: 'Email*',
-            dataIndex: "email",
-            key: "email",
+            title: 'Categoría*',
+            dataIndex: "category",
+            key: "category",
             editable: true,
-            sorter: (a, b) => a.email.localeCompare(b.email)
+            sorter: (a, b) => a.category.localeCompare(b.category)
         },
         {
-            title: 'Contraseña*',
-            dataIndex: "password",
-            ellipsis: true,
-            key: "password",
+            title: 'Número de contacto*',
+            dataIndex: "contactNumber",
+            key: "contactNumber",
             editable: true,
+            sorter: (a, b) => a.contactNumber.localeCompare(b.contactNumber)
         },
         {
-            title: 'Fecha de nacimiento*',
-            dataIndex: "dateOfBirth",
-            key: "dateOfBirth",
-            editable: true
+            title: 'Elementos inclusivos',
+            dataIndex: "inclusiveElements",
+            key: "inclusiveElements",
+            editable: true,
+            sorter: (a, b) => a.inclusiveElements.length - b.inclusiveElements.length
         },
         {
-            title: 'Sexo*',
-            dataIndex: "gender",
-            key: "gender",
+            title: 'Ubicación*',
+            dataIndex: "location",
+            key: "location",
             editable: true,
-            sorter: (a, b) => a.gender.localeCompare(b.gender)
+            sorter: (a, b) => a.location.localeCompare(b.location)
         },
         {
-            title: 'Dirección*',
-            dataIndex: "address",
-            key: "address",
+            title: 'Localidad*',
+            dataIndex: "locality",
+            key: "locality",
             editable: true,
-            sorter: (a, b) => a.address.localeCompare(b.address)
+            sorter: (a, b) => a.locality.localeCompare(b.locality)
         },
         {
-            title: 'Discapacidad',
-            dataIndex: "condition",
-            key: "condition",
+            title: 'Barrio*',
+            dataIndex: "neighborhood",
+            key: "neighborhood",
             editable: true,
-            sorter: (a, b) => a.condition.length - b.condition.length
+            sorter: (a, b) => a.neighborhood.localeCompare(b.neighborhood)
         },
         {
-            title: 'Tutor*',
-            dataIndex: "isCaregiver",
-            key: "isCaregiver",
+            title: 'Galería*',
+            dataIndex: "gallery",
+            key: "gallery",
             editable: true,
-            sorter: (a, b) => a.isCaregiver.localeCompare(b.isCaregiver)
-        },
-        {
-            title: 'Fundación',
-            dataIndex: "institution",
-            key: "institution",
-            editable: true,
-            sorter: (a, b) => a.institution.localeCompare(b.institution)
-        },
-        {
-            title: 'Rol*',
-            dataIndex: "userType",
-            key: "userType",
-            editable: true,
-            sorter: (a, b) => a.userType.localeCompare(b.userType)
+            sorter: (a, b) => a.gallery.localeCompare(b.gallery)
         },
         {
             title: 'Operación',
@@ -532,7 +519,7 @@ const ManageInclusiveSites = () => {
                     }}
                     size='large'
                 >
-                    Añadir Usuario
+                    Añadir sitio de interés
                 </Button>
                 <AutoComplete
                     dropdownMatchSelectWidth={252}
