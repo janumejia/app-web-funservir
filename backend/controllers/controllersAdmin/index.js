@@ -18,6 +18,9 @@ const getNeighborhoods = require("./neighborhoods/getNeighborhoods")
 const editNeighborhoods = require("./neighborhoods/editNeighborhoods")
 const deleteNeighborhoods = require("./neighborhoods/deleteNeighborhoods")
 const addInclusiveSites = require("./inclusiveSites/addInclusiveSites")
+const editInclusiveSites = require("./inclusiveSites/editInclusiveSites")
+const getInclusiveSites = require("./inclusiveSites/getInclusiveSites")
+const deleteInclusiveSites = require("./inclusiveSites/deleteInclusiveSites")
 
 module.exports = {
     adminLogin,
@@ -40,4 +43,7 @@ module.exports = {
     editNeighborhoods,
     deleteNeighborhoods,
     addInclusiveSites,
+    getInclusiveSites,
+    editInclusiveSites,
+    deleteInclusiveSites,
 }

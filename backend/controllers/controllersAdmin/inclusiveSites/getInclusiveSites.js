@@ -1,14 +1,14 @@
-const Neighborhoods = require("../../../model/neighborhoods");
+const InclusiveSites = require("../../../model/site")
 
-const getNeighborhoods = async (req, res) => {
+const getInclusiveSites = async (req, res) => {
     
-    Neighborhoods.find({}).then((elements)=>{
+    InclusiveSites.find({}).then((elements)=>{
         if(elements){
-            res.json(elements)
+            res.status(200).json(elements)
         }else{
-            res.json({ message: "Error"})
+            res.status(500).json({ message: "Error"})
         }
     })
 }
 
-module.exports = getNeighborhoods
+module.exports = getInclusiveSites
