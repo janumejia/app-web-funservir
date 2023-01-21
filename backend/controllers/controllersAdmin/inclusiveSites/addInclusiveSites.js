@@ -1,7 +1,4 @@
-// const { off } = require("../../../App");
 const Neighborhoods = require("../../../model/neighborhoods")
-// const Location = require("../../../model/locations")
-// const InclusiveSites = require("../../../model/inclusiveSites")
 const InclusiveSites = require("../../../model/site")
 const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex } = require("../../../regex") // Importación de patrones de Regex
 
@@ -28,14 +25,10 @@ const addInclusiveSites = async (req, res) => {
     }
     // /* Fin sanitización entradas */
 
-    // Comprobamos primero que no exista ese barrio en la bd
-    // let doesThisNeighborhoodExist = false;
     InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
         if (element) {
-            // doesThisNeighborhoodExist = true;
             res.status(409).json({ message: "Ya existe este sitio inclusivo" })
         } else {
-            // Y también comprobamos que la localidad asociada exista
             Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then((element) => {
                 if (element) {
                     const newInclusiveSites = new InclusiveSites({

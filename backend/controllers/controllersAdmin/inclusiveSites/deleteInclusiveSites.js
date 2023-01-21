@@ -1,27 +1,32 @@
-const Neighborhoods = require("../../../model/neighborhoods")
+const InclusiveSites = require("../../../model/site")
 const { _idMongooseRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
-const deleteNeighborhoods = async(req, res) =>{
+const deleteInclusiveSites = async (req, res) => {
 
-    const {_id} = req.body;
+    // Entradas: _id
+    const { ...inputs } = req.body;
 
-    // Sanitizar entrada:
-    const pattern_id = /^[0-9a-fA-F]{24}$/;
+    // Definición de las variables que esperamos
+    const dataArray = [
+        { input: '_id', dataType: 'string', regex: _idMongooseRegex },
+    ]
 
-    const isValid_id = pattern_id.test(_id);
+    /* Sanitización entradas */
+    // Validar el tipo de dato y si cumple con los caracteres permitidos
+    for (var i = 0; i < dataArray.length; i++) {
+        if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
+        if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
+    }
+    /* Fin sanitización entradas */
 
-    if(isValid_id == false) return res.json({ message: "Formato no válido" }); // Caso malo
-
-
-    await Neighborhoods.deleteOne({_id:_id})
-    .then((element)=>{
-        if (element.deletedCount !== 0) res.json({ message: "Barrio borrado correctamente"});
-        else res.json({message: "No se encontró el barrio o no se pudo eliminar"});
-    })
-    .catch((error)=>{
-        res.json({message: "No se encontró el barrio o no se pudo eliminar"});
-    })
-
+    await InclusiveSites.deleteOne({ _id: inputs._id })
+        .then((element) => {
+            if (element.deletedCount !== 0) res.status(200).json({ message: "Barrio borrado correctamente" });
+            else res.status(400).json({ message: "No se encontró el barrio" });
+        })
+        .catch((error) => {
+            res.status(500).json({ message: "No se pudo eliminar" });
+        })
 }
 
-module.exports = deleteNeighborhoods
+module.exports = deleteInclusiveSites

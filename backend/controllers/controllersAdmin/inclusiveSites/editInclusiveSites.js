@@ -1,65 +1,66 @@
-require('dotenv').config({ path: '.env' })
-const Neighborhoods = require("../../../model/neighborhoods");
-const Location = require("../../../model/locations")
+const InclusiveSites = require("../../../model/site")
+const Neighborhoods = require("../../../model/neighborhoods")
+const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex } = require("../../../regex") // Importación de patrones de Regex
 
-// const delay = ms => new Promise(res => setTimeout(res, ms));
+const editInclusiveSites = async (req, res) => {
 
-const editNeighborhoods = async (req, res) => {
-    const { _id, name, associatedLocality } = req.body;
-    
-    // Sanitizar entrada:
-    // Sanitización entrada nombre y localidad asociada
-    const pattern_id = /^[0-9a-fA-F]{24}$/;
-    const patternNameAndAssociatedLocality = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/;
+    // Entradas: _id, name, description, category, contactNumber, locality, neighborhood
+    const { ...inputs } = req.body;
 
-    const isValid_id = pattern_id.test(_id);
-    const isValidName = patternNameAndAssociatedLocality.test(name);
-    const isValidAssociatedLocality = patternNameAndAssociatedLocality.test(associatedLocality);
-    
-    if(isValidName === false || isValidAssociatedLocality === false ||  isValid_id === false) return res.json({ message: "Formato no válido" }); // Caso malo
-    
-    // Consulta con el _id ingresado:
-    let doesThis_idExist = false;
-    let isTheSameNameForThis_id = false;
-    let isTheSameAssociatedLocalityForThis_id = false;
-    await Neighborhoods.findOne({ _id }).then((element) => {
-        if (element){
-            doesThis_idExist = true;
+    // Definición de las variables que esperamos
+    const dataArray = [
+        { input: '_id', dataType: 'string', regex: _idMongooseRegex },
+        { input: 'name', dataType: 'string', regex: nameRegex },
+        { input: 'description', dataType: 'string', regex: descriptionRegex },
+        { input: 'category', dataType: 'string', regex: categoryRegex },
+        { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        { input: 'locality', dataType: 'string', regex: localityRegex },
+        { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
+    ]
 
-            // Comprobamos si los campos de nombre y localidad asociada ingresados por el usuario son iguales a los que tiene actualmente
-            if(element.name === name) isTheSameNameForThis_id = true;
-            if(element.associatedLocality === associatedLocality) isTheSameAssociatedLocalityForThis_id = true;
+    /* Sanitización entradas */
+    // Validar el tipo de dato y si cumple con los caracteres permitidos
+    for (var i = 0; i < dataArray.length; i++) {
+        if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
+        if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
+    }
+    // /* Fin sanitización entradas */
+
+    InclusiveSites.findOne({ '_id': inputs._id }).then((element) => {
+        if (!element) {
+            res.status(404).json({ message: "No existe un sitio inclusivo con ese _id" })
+        } else {
+
+            // Comprobamos que el nombre a modificar no exista
+            InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
+                if (element && element._id.toString() !== inputs._id ) res.status(409).json({ message: "Ya existe otro sitio inclusivo con ese nombre" })
+                else {
+                    Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then((element) => {
+                        if (element) {
+                            const query = { _id: inputs._id };
+                            const update = {
+                                name: inputs.name,
+                                description: inputs.description,
+                                category: inputs.category,
+                                contactNumber: inputs.contactNumber,
+                                locality: inputs.locality,
+                                neighborhood: inputs.neighborhood    
+                            }
+                            InclusiveSites.findByIdAndUpdate(query, update).then((element) => {
+                                res.status(200).json({ message: "Sitio inclusivo actualizado correctamente" });
+                            }).catch((error) => {
+                                console.error(error)
+                                res.status(500).json({ message: "Error en creación de sitios inclusivo" })
+                            })
+                        } else {
+                            res.status(404).json({ message: "No existe el barrio o localidad ingresada" })
+                        }
+                    })
+                }
+            })
+
         }
     })
-
-    if(isTheSameNameForThis_id && isTheSameAssociatedLocalityForThis_id ) return res.json({ message: "Los valores ingresados son iguales a los actuales" });
-    
-    let doesThisNameExist = false;
-    await Neighborhoods.findOne({ name }).then((element) => {
-        if (element) doesThisNameExist = true;
-    })
-
-    let doesThisAssociatedLocalityExist = false;
-    await Location.findOne({ 'name': associatedLocality }).then((element) => {
-        if (element) doesThisAssociatedLocalityExist = true;
-    })    
-
-
-    // Retorna si existe el nombre, si no existe la localidad o si no existe el _id:
-    if (!doesThis_idExist) return res.json({ message: "No existe el _id" });
-    else if (doesThisNameExist && !isTheSameNameForThis_id) return res.json({ message: "Ya existe este barrio" });
-    else if(!doesThisAssociatedLocalityExist) return res.json({ message: "No existe la localidad asociada" });
-
-    // Edita el registro después de pasar los filtros
-    const query = { _id: _id };
-    const update = {
-        name: name,
-        associatedLocality: associatedLocality
-    }
-    await Neighborhoods.findByIdAndUpdate(query, update);
-    let ans = await Neighborhoods.findOne(query);
-    res.json({message: "Barrio actualizado correctamente", ans});
-
 }
 
-module.exports = editNeighborhoods
+module.exports = editInclusiveSites
