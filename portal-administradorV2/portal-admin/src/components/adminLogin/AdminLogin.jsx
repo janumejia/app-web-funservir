@@ -8,9 +8,12 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
 // import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core";
 import Icon from "./icon";
+// import Cookies from 'js-cookie'
+// import { Cookies } from 'react-cookie'; // Para ajustar el token de sesión en una cookie
 // const dotenv = require('dotenv'); // Para traer las variables de entorno
 const { Header, Content } = Layout;
 const { Meta } = Card;
+
 
 
 const AdminLogin = () => {
@@ -28,10 +31,11 @@ const AdminLogin = () => {
                 .post("http://localhost:4000/adminLogin", Usuario)
                 .then((res) => {
                     const { data } = res;
+                    // Cookies.set('token', data?.user.token); // Pero no se le puede agregar http only (no permite la ejecución de js)
 
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
-                            console.log("ok")
+                            // console.log("ok")
                             localStorage.setItem("token", data?.user.token);
                             // setJwt(data.token);
                             navigate(`/dashboard`);

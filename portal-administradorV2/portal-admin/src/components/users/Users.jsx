@@ -195,7 +195,7 @@ const ManageUsers = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:4000/all_users')
+        axios.get('http://localhost:4000/all_users', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
                 // y se debe convertir a un formato más fácil de leer: 2022-10-10
@@ -305,7 +305,7 @@ const ManageUsers = () => {
                             let dateOfBirth = new Date(res.data.doc.dateOfBirth);
                             let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                             res.data.doc.dateOfBirth = dateOfBirth2;
-                            
+
                             console.log("res.data: ", res.data)
                             newData.splice(index, 1, res.data.doc);
                             setData(newData);
