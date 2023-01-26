@@ -40,59 +40,6 @@ const ManageInclusiveSites = () => {
             }).catch((error) => console.error(error));
     }, [])
 
-<<<<<<< HEAD
-=======
-    // Traemos las categorías para mostrarlas en las opciones de categorías
-    let allCategories = []
-    let arrayCategories = []
-    useEffect(() => {
-        axios.get('/getCategories')
-            .then((res) => {
-                allCategories = res.data;
-
-                for (let pos = 0; pos < allCategories.length; pos++) {
-                    arrayCategories[pos] = <Option key={allCategories[pos].name} value={allCategories[pos].name}>{allCategories[pos].name}</Option>
-                }
-
-                categories = arrayCategories;
-            }).catch((error) => console.error(error));
-    }, [])
-
-    // También traemos las barrios y localidades disponibles (las localidades las traemos de los barrios)
-    let allNeighborhoods = [];
-    let arrayNeighborhoods = [];
-    useEffect(() => {
-        axios.get('/getNeighborhoods')
-            .then((res) => {
-                allNeighborhoods = res.data;
-
-                for (let pos = 0; pos < allNeighborhoods.length; pos++) {
-                    arrayNeighborhoods[pos] = <Option key={allNeighborhoods[pos].name} value={allNeighborhoods[pos].name}>{allNeighborhoods[pos].name}</Option>
-                }
-
-                neighborhoods = arrayNeighborhoods;
-
-            }).catch((error) => console.error(error));
-    }, [])
-
-    // También traemos las barrios y localidades disponibles (las localidades las traemos de los barrios)
-    let allLocalities = [];
-    let arrayLocalities = [];
-    useEffect(() => {
-        axios.get('/getLocations')
-            .then((res) => {
-                allLocalities = res.data;
-
-                for (let pos = 0; pos < allLocalities.length; pos++) {
-                    arrayLocalities[pos] = <Option key={allLocalities[pos].name} value={allLocalities[pos].name}>{allLocalities[pos].name}</Option>
-                }
-
-                localities = arrayLocalities;
-
-            }).catch((error) => console.error(error));
-    }, [])
-
->>>>>>> cb02b80 (verificacion en el front que el token de sesion exista, y que el tipo de usuario sea administrador)
     const isEditing = (record) => record._id === editingKey;
     let editedObject = {};
     const edit = (record) => {
