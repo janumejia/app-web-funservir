@@ -13,7 +13,7 @@ const addInclusiveSites = async (req, res) => {
         {input: 'description', dataType: 'string', regex: descriptionRegex },
         {input: 'category', dataType: 'string', regex: categoryRegex },
         {input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
-        {input: 'inclusiveElements', dataType: 'object'},
+        {input: 'inclusiveElements', dataType: 'object', isArray: true},
         {input: 'location', dataType: 'object'},
         {input: 'locality', dataType: 'string', regex: localityRegex },
         {input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
@@ -22,10 +22,10 @@ const addInclusiveSites = async (req, res) => {
 
     /* Sanitización entradas */
     // Validar el tipo de dato y si cumple con los caracteres permitidos
-    /*for(var i = 0; i < dataArray.length; i++){
-        if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
-        if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
-    }*/
+    // for(var i = 0; i < dataArray.length; i++){
+    //     if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
+    //     if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
+    // }
     // /* Fin sanitización entradas */
 
     InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {

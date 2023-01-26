@@ -34,7 +34,7 @@ const ManageInclusiveSites = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        axios.get('/getInclusiveSites')
+        axios.get('/getInclusiveSites', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
@@ -77,7 +77,7 @@ const ManageInclusiveSites = () => {
                     userType: row["userType"]
                 }
 
-                axios.post('/addUser', newUser)
+                axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => {
 
                         // Respuesta OK
@@ -100,7 +100,7 @@ const ManageInclusiveSites = () => {
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('/editUser', { ...item, ...row })
+                axios.post('/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -134,7 +134,7 @@ const ManageInclusiveSites = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('/deleteUser', { _id: key })
+            axios.post('/deleteUser', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     if (res.status === 200) {

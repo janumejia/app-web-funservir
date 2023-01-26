@@ -141,7 +141,7 @@ const ManageLocations = () => {
 
     // Solicitar registros de localidades al servidor
     useEffect(() => {
-        axios.get('/getLocations')
+        axios.get('/getLocations', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setData(res.data);
             }).catch((error) => {
@@ -185,7 +185,7 @@ const ManageLocations = () => {
                     name: row.name,
                 }
 
-                axios.post('/addLocations', newLocation)
+                axios.post('/addLocations', newLocation, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -209,7 +209,7 @@ const ManageLocations = () => {
                     });
             } else if (key !== "0" && row.name) {
 
-                axios.post('/editLocations', { ...item, ...row, ...mVals })
+                axios.post('/editLocations', { ...item, ...row, ...mVals }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         // Respuesta OK
@@ -246,7 +246,7 @@ const ManageLocations = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('/deleteLocations', { _id: key })
+            axios.post('/deleteLocations', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     // Respuesta OK

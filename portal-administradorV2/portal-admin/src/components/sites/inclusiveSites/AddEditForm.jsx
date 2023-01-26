@@ -1,9 +1,11 @@
 import { Button, Form, Input, message, Space } from 'antd';
+import MapOfGoogleMaps from './MapOfGoogleMaps';
 
 const AddEditInclusiveSite = (props) => {
     const [form] = Form.useForm();
     //Mirar esa propiedad "warningOnly"
-    
+
+
 
     return (
         <Form
@@ -97,7 +99,8 @@ const AddEditInclusiveSite = (props) => {
                     },
                 ]}
             >
-                <Input placeholder="Ingrese las coordenadas del sitio separadas por coma ',' " />
+                <MapOfGoogleMaps />
+                {/* <Input placeholder="Ingrese las coordenadas del sitio separadas por coma ',' " /> */}
             </Form.Item>
             <Form.Item
                 name="locality"

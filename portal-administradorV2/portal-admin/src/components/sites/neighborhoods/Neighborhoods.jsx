@@ -193,7 +193,7 @@ const ManageUsers = () => {
 
     // Traemos todos los barrios
     useEffect(() => {
-        axios.get('/getNeighborhoods')
+        axios.get('/getNeighborhoods', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setData(res.data);
             }).catch((error) => console.error(error));
@@ -203,7 +203,7 @@ const ManageUsers = () => {
     let arrayLocations = [];
     let allLocations = [];
     useEffect(() => {
-        axios.get('/getLocations')
+        axios.get('/getLocations', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 allLocations = res.data;
 
@@ -268,7 +268,7 @@ const ManageUsers = () => {
                     associatedLocality: row.associatedLocality
                 }
 
-                axios.post('/addNeighborhoods', newNeighborhood)
+                axios.post('/addNeighborhoods', newNeighborhood, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -292,7 +292,7 @@ const ManageUsers = () => {
                     });
             } else if (key !== "0" && row.name && row.associatedLocality) {
 
-                axios.post('/editNeighborhoods', { ...item, ...row })
+                axios.post('/editNeighborhoods', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -329,7 +329,7 @@ const ManageUsers = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('/deleteNeighborhoods', { _id: key })
+            axios.post('/deleteNeighborhoods', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     // Respuesta OK

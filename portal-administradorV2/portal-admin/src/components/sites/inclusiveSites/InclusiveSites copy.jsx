@@ -195,7 +195,7 @@ const ManageInclusiveSites = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:4000/all_users')
+        axios.get('http://localhost:4000/all_users', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
                 // y se debe convertir a un formato más fácil de leer: 2022-10-10
@@ -268,7 +268,7 @@ const ManageInclusiveSites = () => {
                     userType: row["userType"]
                 }
 
-                axios.post('http://localhost:4000/addUser', newUser)
+                axios.post('http://localhost:4000/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => {
 
                         // Respuesta OK
@@ -298,7 +298,7 @@ const ManageInclusiveSites = () => {
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row })
+                axios.post('http://localhost:4000/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -333,7 +333,7 @@ const ManageInclusiveSites = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteUser', { _id: key })
+            axios.post('http://localhost:4000/deleteUser', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     if (res.status === 200) {
