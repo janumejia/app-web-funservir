@@ -195,7 +195,7 @@ const ManageUsers = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
+        axios.get('/all_users')
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
                 // y se debe convertir a un formato más fácil de leer: 2022-10-10

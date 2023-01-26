@@ -8,7 +8,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
 // import AuthContext from "../../context/AuthProvider";
 import useAuth from '../../hooks/useAuth';
-
+import jwt_decode from 'jwt-decode'
 
 
 // import Cookies from 'js-cookie'
@@ -44,11 +44,8 @@ const AdminLogin = () => {
                         setTimeout(() => {
                             // console.log("ok")
                             localStorage.setItem("token", data?.user.token);
-
-
-
-                            
-                            setAuth( data?.user.token ); // Lo asignamos a la variable global Auth, usando Context
+                            let decodedToken = jwt_decode(data?.user.token);
+                            setAuth( decodedToken ); // Lo asignamos a la variable global Auth, usando Context
                             // setJwt(data.token);
                             navigate(`/dashboard`, { replace: true }); // replace para reemplazar la anterior página del historial con esta
                         }, 1500);

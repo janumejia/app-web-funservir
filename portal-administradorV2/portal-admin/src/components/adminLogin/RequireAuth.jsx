@@ -7,7 +7,7 @@ const RequireAuth = () => {
 
     // Retornamos un booleano indicando si el usuarios se encuentra logueado o no
     return (
-        auth?.data?.userType === "Administrador"
+        auth?.userType === "Administrador"
             ? <Outlet />
             : <Navigate to="/" state={{ from:location }} replace />
     );
