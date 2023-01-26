@@ -10,17 +10,23 @@ const AdminLogin = async (req, res) =>{
             bcrypt.compare(password, user.password)
             .then((isCorrect)=>{
                 if(isCorrect){
-                    const {id, name} = user
+                    const {id, name, userType} = user
 
                     const data = {
                         id,
-                        name
+                        name,
+                        userType,
                     };
 
                     const token = jwt.sign(data, process.env.JWT_SECRET, {
-                        expiresIn: '10m'
+                        expiresIn: '10h'
                     });
                     
+                    res.cookie('token', token, { 
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV !== "development",
+                    });
+
                     res.json({
                         message: "Usuario autenticado correctamente",
                         user:{token}

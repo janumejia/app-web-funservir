@@ -3,6 +3,12 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './adminL.css';
+// import { GoogleLogin } from "react-google-login" // Autenticación con Google (dependencia ya no es mantenida)
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+// import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core";
+import Icon from "./icon";
+// const dotenv = require('dotenv'); // Para traer las variables de entorno
 const { Header, Content } = Layout;
 const { Meta } = Card;
 
@@ -17,14 +23,17 @@ const AdminLogin = () => {
                 email: e.email,
                 password: e.password
             };
+            console.log("Usuario ", Usuario)
             await axios
                 .post("http://localhost:4000/adminLogin", Usuario)
                 .then((res) => {
                     const { data } = res;
-                    
+
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
+                            console.log("ok")
                             localStorage.setItem("token", data?.user.token);
+                            // setJwt(data.token);
                             navigate(`/dashboard`);
                         }, 1500);
                     } else {
@@ -33,12 +42,34 @@ const AdminLogin = () => {
                 })
                 .catch((error) => {
                     console.error(error);
-                    
+
                 });
         } else { // No están todos los campos llenos
             message.error('No están todos los campos llenos');
         }
     };
+
+    const googleSuccess = async (resAuth) => {
+        console.log(resAuth);
+        await axios
+            .post("http://localhost:4000/adminLoginWithGoogle", resAuth)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    const googleFailure = (error) => {
+        console.log("Inicio de sesión con Google no fue exitoso. Inténtalo más tarde");
+        console.log(error)
+    }
+
+    const login = useGoogleLogin({
+        onSuccess: codeResponse => console.log(codeResponse),
+        flow: 'auth-code',
+    });
 
 
     return (
@@ -122,6 +153,21 @@ const AdminLogin = () => {
                             </Button>
                         </Form.Item>
                     </Form>
+                    <GoogleLogin
+                        onSuccess={googleSuccess}
+                        onError={googleFailure}
+                        shape="rectangular"
+                        // theme="filled_blue"
+                    />
+                    <Button
+                        // className={classes.googleButton}
+                        color="primary"
+                        // fullWidth
+                        onClick={() => login()}
+                        // startIcon={<Icon />}
+                        variant="contained">
+                        Iniciar sesión con Google 🚀
+                    </Button>
                 </Card>
             </Content>
         </Layout>
