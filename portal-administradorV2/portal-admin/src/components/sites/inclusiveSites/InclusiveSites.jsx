@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from '../../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
 import AddEditInclusiveSite from './AddEditForm';
@@ -34,12 +34,65 @@ const ManageInclusiveSites = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:4000/getInclusiveSites')
+        axios.get('/getInclusiveSites')
             .then((res) => {
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
     }, [])
 
+<<<<<<< HEAD
+=======
+    // Traemos las categorías para mostrarlas en las opciones de categorías
+    let allCategories = []
+    let arrayCategories = []
+    useEffect(() => {
+        axios.get('/getCategories')
+            .then((res) => {
+                allCategories = res.data;
+
+                for (let pos = 0; pos < allCategories.length; pos++) {
+                    arrayCategories[pos] = <Option key={allCategories[pos].name} value={allCategories[pos].name}>{allCategories[pos].name}</Option>
+                }
+
+                categories = arrayCategories;
+            }).catch((error) => console.error(error));
+    }, [])
+
+    // También traemos las barrios y localidades disponibles (las localidades las traemos de los barrios)
+    let allNeighborhoods = [];
+    let arrayNeighborhoods = [];
+    useEffect(() => {
+        axios.get('/getNeighborhoods')
+            .then((res) => {
+                allNeighborhoods = res.data;
+
+                for (let pos = 0; pos < allNeighborhoods.length; pos++) {
+                    arrayNeighborhoods[pos] = <Option key={allNeighborhoods[pos].name} value={allNeighborhoods[pos].name}>{allNeighborhoods[pos].name}</Option>
+                }
+
+                neighborhoods = arrayNeighborhoods;
+
+            }).catch((error) => console.error(error));
+    }, [])
+
+    // También traemos las barrios y localidades disponibles (las localidades las traemos de los barrios)
+    let allLocalities = [];
+    let arrayLocalities = [];
+    useEffect(() => {
+        axios.get('/getLocations')
+            .then((res) => {
+                allLocalities = res.data;
+
+                for (let pos = 0; pos < allLocalities.length; pos++) {
+                    arrayLocalities[pos] = <Option key={allLocalities[pos].name} value={allLocalities[pos].name}>{allLocalities[pos].name}</Option>
+                }
+
+                localities = arrayLocalities;
+
+            }).catch((error) => console.error(error));
+    }, [])
+
+>>>>>>> cb02b80 (verificacion en el front que el token de sesion exista, y que el tipo de usuario sea administrador)
     const isEditing = (record) => record._id === editingKey;
     let editedObject = {};
     const edit = (record) => {
@@ -77,7 +130,7 @@ const ManageInclusiveSites = () => {
                     userType: row["userType"]
                 }
 
-                axios.post('http://localhost:4000/addUser', newUser)
+                axios.post('/addUser', newUser)
                     .then((res) => {
 
                         // Respuesta OK
@@ -100,7 +153,7 @@ const ManageInclusiveSites = () => {
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row })
+                axios.post('/editUser', { ...item, ...row })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -134,7 +187,7 @@ const ManageInclusiveSites = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteUser', { _id: key })
+            axios.post('/deleteUser', { _id: key })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     if (res.status === 200) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from '../../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete } from 'antd';
@@ -141,7 +141,7 @@ const ManageLocations = () => {
 
     // Solicitar registros de localidades al servidor
     useEffect(() => {
-        axios.get('http://localhost:4000/getLocations')
+        axios.get('/getLocations')
             .then((res) => {
                 setData(res.data);
             }).catch((error) => {
@@ -185,7 +185,7 @@ const ManageLocations = () => {
                     name: row.name,
                 }
 
-                axios.post('http://localhost:4000/addLocations', newLocation)
+                axios.post('/addLocations', newLocation)
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -209,7 +209,7 @@ const ManageLocations = () => {
                     });
             } else if (key !== "0" && row.name) {
 
-                axios.post('http://localhost:4000/editLocations', { ...item, ...row, ...mVals })
+                axios.post('/editLocations', { ...item, ...row, ...mVals })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         // Respuesta OK
@@ -246,7 +246,7 @@ const ManageLocations = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteLocations', { _id: key })
+            axios.post('/deleteLocations', { _id: key })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     // Respuesta OK

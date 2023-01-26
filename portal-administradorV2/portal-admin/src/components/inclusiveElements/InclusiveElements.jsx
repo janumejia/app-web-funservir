@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner http://localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Modal, Upload } from 'antd';
@@ -52,7 +52,7 @@ const ManageElements = () => {
     //Fin de manejo de imagenes
 
     useEffect(() => {
-        axios.get('http://localhost:4000/elements')
+        axios.get('/elements')
             .then((res) => {
                 setData(res.data);
             }).catch((error) => console.error(error));
@@ -124,7 +124,7 @@ const ManageElements = () => {
                     name: row.name,
                     image: imageUrl
                 }
-                axios.post('http://localhost:4000/addElement', newElement)
+                axios.post('/addElement', newElement)
                     .then((res) => {
                         newData.splice(index, 1, res.data.element);
                         setData(newData);
@@ -136,7 +136,7 @@ const ManageElements = () => {
                         message.error('No se ha podido crear el Elemento Inclusivo');
                     });
             } else if (key !== "0") {
-                axios.post('http://localhost:4000/editElement', { ...item, ...row, imageUrl })
+                axios.post('/editElement', { ...item, ...row, imageUrl })
                     .then((res) => {
                         newData.splice(index, 1, res.data);
                         setData(newData);
@@ -160,7 +160,7 @@ const ManageElements = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteElement', { _id: key._id, name: key.name })
+            axios.post('/deleteElement', { _id: key._id, name: key.name })
                 .then((res) => {
                     newData.splice(index, 1);
                     setData(newData);

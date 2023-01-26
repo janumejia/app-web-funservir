@@ -1,13 +1,16 @@
+import { useRef, useState, useEffect } from 'react';
 import { Layout, Form, Input, Button, Checkbox, Avatar, Card, message } from "antd";
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import './adminL.css';
-// import { GoogleLogin } from "react-google-login" // Autenticación con Google (dependencia ya no es mantenida)
+import axios from '../../api/axios';
 import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
-// import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core";
-import Icon from "./icon";
+// import AuthContext from "../../context/AuthProvider";
+import useAuth from '../../hooks/useAuth';
+
+
+
 // import Cookies from 'js-cookie'
 // import { Cookies } from 'react-cookie'; // Para ajustar el token de sesión en una cookie
 // const dotenv = require('dotenv'); // Para traer las variables de entorno
@@ -18,7 +21,11 @@ const { Meta } = Card;
 
 const AdminLogin = () => {
 
+    const { setAuth } = useAuth();
+
     const navigate = useNavigate();
+    const location = useLocation();
+    // const from = location.state?.from?.pathname || "/";
 
     const onSubmit = async (e) => {
         if (e.password !== "" && e.email !== "") {
@@ -28,17 +35,22 @@ const AdminLogin = () => {
             };
             console.log("Usuario ", Usuario)
             await axios
-                .post("http://localhost:4000/adminLogin", Usuario)
+                .post("/adminLogin", Usuario)
                 .then((res) => {
                     const { data } = res;
                     // Cookies.set('token', data?.user.token); // Pero no se le puede agregar http only (no permite la ejecución de js)
-
+                    
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
                             // console.log("ok")
                             localStorage.setItem("token", data?.user.token);
+
+
+
+                            
+                            setAuth( data?.user.token ); // Lo asignamos a la variable global Auth, usando Context
                             // setJwt(data.token);
-                            navigate(`/dashboard`);
+                            navigate(`/dashboard`, { replace: true }); // replace para reemplazar la anterior página del historial con esta
                         }, 1500);
                     } else {
                         message.error('Credenciales erroneas');
@@ -46,7 +58,7 @@ const AdminLogin = () => {
                 })
                 .catch((error) => {
                     console.error(error);
-
+                    message.error('Error en la autenticación');
                 });
         } else { // No están todos los campos llenos
             message.error('No están todos los campos llenos');
@@ -56,7 +68,7 @@ const AdminLogin = () => {
     const googleSuccess = async (resAuth) => {
         console.log(resAuth);
         await axios
-            .post("http://localhost:4000/adminLoginWithGoogle", resAuth)
+            .post("/adminLoginWithGoogle", resAuth)
             .then((res) => {
                 console.log(res);
             })
