@@ -41,7 +41,7 @@ const items2 = [AlertOutlined, SmileOutlined, CalendarOutlined, AppstoreOutlined
 
 // Para agregar la opción "Gestionar sitios" en el menu, que contiene 3 opciones: "Gestionar sitios inclusivos", "Gestionar localidades", "Gestionar barrios"
 const optionsManageSites = ["sitios inclusivos", "localidades", "barrios"]; // Opciones de item "Gestionar sitios" del menu
-const optionsUrl = ["sites", "locations", "neighborhoods"];
+const optionsUrl = ["inclusiveSites", "locations", "neighborhoods"];
 const itemKey = [100, 101, 102]; // Cada opción del submenu debe tener una key única, y no necesariamente en orden
 const submenuManageSites = {
   key: "",
@@ -111,6 +111,7 @@ const MainComponent = () => {
           <Route path="/users" element={<Users/>}/>
           <Route path="/sites" element={<InclusiveSites/>}/>
           <Route path="/elements" element={<InclusiveElements/>}/>
+          <Route path="/inclusiveSites" element={<InclusiveSites/>}/>
           <Route path="/locations" element={<Locations/>}/>
           <Route path="/neighborhoods" element={<Neighborhoods/>}/>
           </Routes>
