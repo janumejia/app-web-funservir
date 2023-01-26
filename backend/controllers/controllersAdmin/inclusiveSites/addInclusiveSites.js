@@ -1,6 +1,6 @@
 const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
-const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex } = require("../../../regex") // Importación de patrones de Regex
+const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex,  inclusiveElementsRegex} = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -13,16 +13,19 @@ const addInclusiveSites = async (req, res) => {
         {input: 'description', dataType: 'string', regex: descriptionRegex },
         {input: 'category', dataType: 'string', regex: categoryRegex },
         {input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        {input: 'inclusiveElements', dataType: 'object'},
+        {input: 'location', dataType: 'object'},
         {input: 'locality', dataType: 'string', regex: localityRegex },
         {input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
+        {input: 'gallery', dataType: 'object'},
     ]
 
     /* Sanitización entradas */
     // Validar el tipo de dato y si cumple con los caracteres permitidos
-    for(var i = 0; i < dataArray.length; i++){
+    /*for(var i = 0; i < dataArray.length; i++){
         if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
         if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
-    }
+    }*/
     // /* Fin sanitización entradas */
 
     InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
@@ -36,8 +39,11 @@ const addInclusiveSites = async (req, res) => {
                         description: inputs.description,
                         category: inputs.category,
                         contactNumber: inputs.contactNumber,
+                        inclusiveElements: inputs.inclusiveElements,
+                        location: inputs.location,
                         locality: inputs.locality,
-                        neighborhood: inputs.neighborhood
+                        neighborhood: inputs.neighborhood,
+                        gallery: inputs.gallery
                     })
                     newInclusiveSites.save().then((element) => { // Si todo sale bien...
                         res.status(200).json({ message: "Sitio inclusivo creado correctamente", element })

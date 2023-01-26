@@ -36,15 +36,6 @@ const ManageInclusiveSites = () => {
     useEffect(() => {
         axios.get('http://localhost:4000/getInclusiveSites')
             .then((res) => {
-                // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
-                // y se debe convertir a un formato más fácil de leer: 2022-10-10
-                for (let i = 0; i < res.data.length; i++) {
-                    if (res.data[i].dateOfBirth) {
-                        let dateOfBirthAux = moment(res.data[i].dateOfBirth).format("YYYY-MM-DD");
-                        res.data[i].dateOfBirth = dateOfBirthAux;
-                    }
-                }
-
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
     }, [])
@@ -184,80 +175,48 @@ const ManageInclusiveSites = () => {
             title: 'Descripción*',
             dataIndex: "description",
             key: "description",
-            title: 'Descripción*',
-            dataIndex: "description",
-            key: "description",
             editable: true,
-            sorter: (a, b) => a.description.localeCompare(b.description)
+            sorter: (a, b) => a.lastName.localeCompare(b.lastName)
         },
         {
-            title: 'Categoría*',
-            dataIndex: "category",
-            key: "category",
             title: 'Categoria*',
             dataIndex: "category",
             key: "category",
             editable: true,
-            sorter: (a, b) => a.category.localeCompare(b.category)
+            sorter: (a, b) => a.email.localeCompare(b.email)
         },
         {
-            title: 'Número de contacto*',
-            dataIndex: "contactNumber",
-            key: "contactNumber",
             title: 'Número de contacto*',
             dataIndex: "contactNumber",
             ellipsis: true,
             key: "contactNumber",
             editable: true,
-            sorter: (a, b) => a.contactNumber.localeCompare(b.contactNumber)
         },
         {
-            title: 'Elementos inclusivos',
-            dataIndex: "inclusiveElements",
-            key: "inclusiveElements",
-            editable: true,
-            sorter: (a, b) => a.inclusiveElements.length - b.inclusiveElements.length
-        },
-        {
-            title: 'Ubicación*',
-            dataIndex: "location",
-            key: "location",
             title: 'Elementos inclusivos*',
             dataIndex: "inclusiveElements",
             key: "inclusiveElements",
             editable: true,
-            sorter: (a, b) => a.location.localeCompare(b.location)
+            sorter: (a, b) => a.address.localeCompare(b.address)
         },
         {
-            title: 'Localidad*',
-            dataIndex: "locality",
-            key: "locality",
             title: 'Ubicación',
-            dataIndex: "location",
+            dataIndex: ["location","lat"],
             key: "location",
             editable: true,
-            sorter: (a, b) => a.locality.localeCompare(b.locality)
+            sorter: (a, b) => a.condition.length - b.condition.length
         },
         {
-            title: 'Barrio*',
-            dataIndex: "neighborhood",
-            key: "neighborhood",
-            editable: true,
-            sorter: (a, b) => a.neighborhood.localeCompare(b.neighborhood)
             title: 'Localidad*',
             dataIndex: "locality",
             key: "locality",
             editable: true
         },
         {
-            title: 'Galería*',
-            dataIndex: "gallery",
-            key: "gallery",
             title: 'Barrio*',
             dataIndex: "neighborhood",
             key: "neighborhood",
             editable: true,
-            sorter: (a, b) => a.gallery.localeCompare(b.gallery)
             sorter: (a, b) => a.gender.localeCompare(b.gender)
         },
         {
