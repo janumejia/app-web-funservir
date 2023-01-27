@@ -1,6 +1,7 @@
 import { Button, Form, Input, message, Space } from 'antd';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "axios";
+import { useState } from 'react';
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -117,7 +118,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     },
                 ]}
             >
-                <MapOfGoogleMaps />
+                <MapOfGoogleMaps site={site.location}/>
                 {/* <Input placeholder="Ingrese las coordenadas del sitio separadas por coma ',' " /> */}
             </Form.Item>
             <Form.Item

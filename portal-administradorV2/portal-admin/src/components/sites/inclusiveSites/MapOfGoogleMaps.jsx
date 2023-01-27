@@ -1,26 +1,25 @@
 import './index.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMemo } from "react";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, useLoadScript,  MarkerF} from "@react-google-maps/api";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete"
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox"
 import "@reach/combobox/styles.css";
 
-const MapOfGoogleMaps = () => {
+
+const MapOfGoogleMaps = ({site, setLatLng}) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
         libraries: ["places"],
     });
 
     if (!isLoaded) return <div>...</div>
-    return <Map />
+    return <Map setLatLng={setLatLng} inclusiveSite= {site}/>
 }
 
-const Map = () => {
+const Map = ({setLatLng, inclusiveSite}) => {
     const center = useMemo(() => ({ lat: 4.641440, lng: -74.097518 }), []);
-    const [selected, setSelected] = useState(null);
-
-    console.log(selected)
+    const [selected, setSelected] = useState({"lat": parseFloat(inclusiveSite.lat), "lng": parseFloat(inclusiveSite.lng)});
     return (
         <>
             <div className='places-container'>
@@ -32,10 +31,10 @@ const Map = () => {
                 center={center}
                 mapContainerClassName="map-container"
             >
-                {selected && <Marker position={selected} />}
+                {selected && <MarkerF position={selected} />}
             </GoogleMap>
             <div>
-                Latitud: {selected.lat}, logitud: {selected.lng}
+                Latitud: {selected.lat}, Longitud: {selected.lng}
             </div>
         </>
     )

@@ -39,7 +39,7 @@ const AdminLogin = () => {
                 .then((res) => {
                     const { data } = res;
                     // Cookies.set('token', data?.user.token); // Pero no se le puede agregar http only (no permite la ejecución de js)
-
+                    
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
                             // console.log("ok")

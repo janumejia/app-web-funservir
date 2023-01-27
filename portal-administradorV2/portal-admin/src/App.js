@@ -11,9 +11,9 @@ function App() {
       <Route path="/" element={<AdminLogin />} />
 
       {/* Rutas protegidas */}
-      <Route element={<RequireAuth />}>
+     {/* <Route element={<RequireAuth />}> */}
         <Route path="/dashboard/*" element={<MainComponent />} />
-      </Route>
+      {/* </Route> */}
       {/* Debemos crear una componente para las rutas desconocidas: 404 */}
     </Routes>
   );
