@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from '../../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete } from 'antd';
@@ -193,7 +193,7 @@ const ManageUsers = () => {
 
     // Traemos todos los barrios
     useEffect(() => {
-        axios.get('http://localhost:4000/getNeighborhoods')
+        axios.get('/getNeighborhoods', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setData(res.data);
             }).catch((error) => console.error(error));
@@ -203,7 +203,7 @@ const ManageUsers = () => {
     let arrayLocations = [];
     let allLocations = [];
     useEffect(() => {
-        axios.get('http://localhost:4000/getLocations')
+        axios.get('/getLocations', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 allLocations = res.data;
 
@@ -268,7 +268,7 @@ const ManageUsers = () => {
                     associatedLocality: row.associatedLocality
                 }
 
-                axios.post('http://localhost:4000/addNeighborhoods', newNeighborhood)
+                axios.post('/addNeighborhoods', newNeighborhood, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -292,7 +292,7 @@ const ManageUsers = () => {
                     });
             } else if (key !== "0" && row.name && row.associatedLocality) {
 
-                axios.post('http://localhost:4000/editNeighborhoods', { ...item, ...row })
+                axios.post('/editNeighborhoods', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -329,7 +329,7 @@ const ManageUsers = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteNeighborhoods', { _id: key })
+            axios.post('/deleteNeighborhoods', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     // Respuesta OK

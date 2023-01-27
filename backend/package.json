@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon App.js",
-    "dev": "nodemon App.js"
+    "dev": "nodemon App.js",
+    "debug": "nodemon --inspect App.js"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +17,11 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.32.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
     "mongoose": "^6.5.3",

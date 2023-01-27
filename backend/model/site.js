@@ -14,12 +14,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     rating: { type: Schema.Types.Mixed },
     ratingCount: { type: Number },
     contactNumber: { type: String },
-    inclusiveElements: [{
-        type: {
-            elementName: { type: Schema.Types.Mixed },
-
-        }
-    }],
+    inclusiveElements: [String],
     // image: {
     //     type: {
     //         url: { type: String },
@@ -27,7 +22,6 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     //     }
     // },
     location: {
-        type: {
             // id: { type: Number },
             lat: { type: String },
             lng: { type: String },
@@ -38,16 +32,10 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
             state_short: { type: String },
             country_long: { type: String },
             country_short: { type: String }
-        }
     },
     locality: { type: String },
     neighborhood: { type: String },
-    gallery: [{
-        type: {
-            // id: { type: Number },
-            url: { type: String }
-        }
-    }]
+    gallery: [String]
 })
 
 module.exports = model("Site", siteSchema) // Después mongo le pone la s (users)

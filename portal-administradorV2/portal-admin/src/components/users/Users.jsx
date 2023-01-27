@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
@@ -110,13 +110,13 @@ const EditableCell = ({
                             style={{
                                 margin: 0,
                             }}>
-                            <Select
-                                mode={(title === "Discapacidad") ? "multiple" : ""}
-                                allowClear={(title === "Discapacidad") ? true : false}
-                                style={{
-                                    width: '100%',
-                                }}
-                                placeholder="Seleccione una opción"
+                        <Select
+                            mode={(title === "Discapacidad") ? "multiple" : ""}
+                            allowClear={(title === "Discapacidad") ? true : false}
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Seleccione una opción"
                             /*onChange={(val) => {
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
@@ -130,9 +130,9 @@ const EditableCell = ({
 
                                 }
                             }}*/
-                            >
-                                {options(title)}
-                            </Select>
+                        >
+                            {options(title)}
+                        </Select>
                         </Form.Item>
                     ) : ((title !== "Fecha de nacimiento*") ? (
                         <Form.Item
@@ -193,12 +193,14 @@ const ManageUsers = () => {
     const [data, setData] = useState("");
     const [editingKey, setEditingKey] = useState('');
     const [searchedText, setSearchedText] = useState("");
-
+    
+    console.log("localstorage token: ", localStorage.getItem("token"));
     useEffect(() => {
-        axios.get('http://localhost:4000/all_users')
+        axios.get('/all_users', {headers: { 'token': localStorage.getItem("token") }})
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
                 // y se debe convertir a un formato más fácil de leer: 2022-10-10
+                
                 for (let i = 0; i < res.data.length; i++) {
                     if (res.data[i].dateOfBirth) {
                         let dateOfBirthAux = moment(res.data[i].dateOfBirth).format("YYYY-MM-DD");
@@ -231,7 +233,6 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
-            console.log(row);
 
             /*let mVals = {
                 gender: "",
@@ -268,7 +269,7 @@ const ManageUsers = () => {
                     userType: row["userType"]
                 }
 
-                axios.post('http://localhost:4000/addUser', newUser)
+                axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => {
 
                         // Respuesta OK
@@ -298,7 +299,7 @@ const ManageUsers = () => {
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('http://localhost:4000/editUser', { ...item, ...row })
+                axios.post('/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -306,7 +307,7 @@ const ManageUsers = () => {
                             let dateOfBirth = new Date(res.data.doc.dateOfBirth);
                             let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                             res.data.doc.dateOfBirth = dateOfBirth2;
-                            
+
                             console.log("res.data: ", res.data)
                             newData.splice(index, 1, res.data.doc);
                             setData(newData);
@@ -333,7 +334,7 @@ const ManageUsers = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('http://localhost:4000/deleteUser', { _id: key })
+            axios.post('/deleteUser', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     if (res.status === 200) {

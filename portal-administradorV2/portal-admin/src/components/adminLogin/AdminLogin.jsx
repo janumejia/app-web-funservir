@@ -1,15 +1,31 @@
+import { useRef, useState, useEffect } from 'react';
 import { Layout, Form, Input, Button, Checkbox, Avatar, Card, message } from "antd";
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import './adminL.css';
+import axios from '../../api/axios';
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+// import AuthContext from "../../context/AuthProvider";
+import useAuth from '../../hooks/useAuth';
+import jwt_decode from 'jwt-decode'
+
+
+// import Cookies from 'js-cookie'
+// import { Cookies } from 'react-cookie'; // Para ajustar el token de sesión en una cookie
+// const dotenv = require('dotenv'); // Para traer las variables de entorno
 const { Header, Content } = Layout;
 const { Meta } = Card;
 
 
+
 const AdminLogin = () => {
 
+    const { setAuth } = useAuth();
+
     const navigate = useNavigate();
+    const location = useLocation();
+    // const from = location.state?.from?.pathname || "/";
 
     const onSubmit = async (e) => {
         if (e.password !== "" && e.email !== "") {
@@ -17,15 +33,21 @@ const AdminLogin = () => {
                 email: e.email,
                 password: e.password
             };
+            console.log("Usuario ", Usuario)
             await axios
-                .post("http://localhost:4000/adminLogin", Usuario)
+                .post("/adminLogin", Usuario)
                 .then((res) => {
                     const { data } = res;
+                    // Cookies.set('token', data?.user.token); // Pero no se le puede agregar http only (no permite la ejecución de js)
                     
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
+                            // console.log("ok")
                             localStorage.setItem("token", data?.user.token);
-                            navigate(`/dashboard`);
+                            let decodedToken = jwt_decode(data?.user.token);
+                            setAuth(decodedToken); // Lo asignamos a la variable global Auth, usando Context
+                            // setJwt(data.token);
+                            navigate(`/dashboard`, { replace: true }); // replace para reemplazar la anterior página del historial con esta
                         }, 1500);
                     } else {
                         message.error('Credenciales erroneas');
@@ -33,12 +55,34 @@ const AdminLogin = () => {
                 })
                 .catch((error) => {
                     console.error(error);
-                    
+                    message.error('Error en la autenticación');
                 });
         } else { // No están todos los campos llenos
             message.error('No están todos los campos llenos');
         }
     };
+
+    const googleSuccess = async (resAuth) => {
+        console.log(resAuth);
+        await axios
+            .post("/adminLoginWithGoogle", resAuth)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    const googleFailure = (error) => {
+        console.log("Inicio de sesión con Google no fue exitoso. Inténtalo más tarde");
+        console.log(error)
+    }
+
+    const login = useGoogleLogin({
+        onSuccess: codeResponse => console.log(codeResponse),
+        flow: 'auth-code',
+    });
 
 
     return (
@@ -122,6 +166,24 @@ const AdminLogin = () => {
                             </Button>
                         </Form.Item>
                     </Form>
+                    <div className="googleloginbutton">
+                        <GoogleLogin
+                            onSuccess={googleSuccess}
+                            onError={googleFailure}
+                            shape="rectangular"
+                            width={301}
+                        // theme="filled_blue"
+                        />
+                    </div>
+                    {/* <Button
+                        // className={classes.googleButton}
+                        color="primary"
+                        // fullWidth
+                        onClick={() => login()}
+                        // startIcon={<Icon />}
+                        variant="contained">
+                        Iniciar sesión con Google 🚀
+                    </Button> */}
                 </Card>
             </Content>
         </Layout>

@@ -16,4 +16,9 @@
     justify-self: center;
   }
 
+  .googleloginbutton {
+    display: flex;
+    justify-content: center;
+  }
+
  
