@@ -25,7 +25,7 @@ const rules = (dataIndex) => {
     }
 };
 
-
+let editedObject = {};
 const ManageInclusiveSites = () => {
 
     const [form] = Form.useForm();
@@ -40,13 +40,11 @@ const ManageInclusiveSites = () => {
             }).catch((error) => console.error(error));
     }, [])
 
-    const isEditing = (record) => record._id === editingKey;
-    let editedObject = {};
+    let isEditing = (record) => record._id === editingKey;
+    
     const edit = (record) => {
-        //Poner la redirección a la página de edición
+        editedObject = {...record};
         setEditingKey(record._id);
-        editedObject = {...record}
-        console.log(editedObject);
     };
 
     const cancel = () => {
@@ -109,7 +107,6 @@ const ManageInclusiveSites = () => {
                             let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                             res.data.doc.dateOfBirth = dateOfBirth2;
 
-                            console.log("res.data: ", res.data)
                             newData.splice(index, 1, res.data.doc);
                             setData(newData);
                             setEditingKey('');
@@ -201,9 +198,10 @@ const ManageInclusiveSites = () => {
         },
         {
             title: 'Ubicación',
-            dataIndex: ["location","lat"],
+            dataIndex: "location",
             key: "location",
             editable: true,
+            render: (item) => {return Object.values(item)[0]+","+Object.values(item)[1]},
             sorter: (a, b) => a.condition.length - b.condition.length
         },
         {
@@ -254,13 +252,30 @@ const ManageInclusiveSites = () => {
 
 
     const handleAdd = () => {
-        //Llevar a la nueva página de añadir
+        const index = data.findIndex((item) => "0" === item._id);
+        if (index === -1) {
+            const newUser = {
+                _id: "0",
+                name: "",
+                description: "",
+                category: "",
+                contactNumber: "",
+                inclusiveElements: [],
+                location: {"lat":"","lng":""},
+                locality: "",
+                neighborhood: "",
+                gallery: [],
+            };
+            edit(newUser);
+        } else {
+            message.error('Ya se encuentra creando un usuario. Finalice la creación o elimine el registro añadido');
+        }
     };
 
     return editingKey ?
         (
             <>
-            <AddEditInclusiveSite />
+            <AddEditInclusiveSite site={editedObject}/>
                 <Space>
                     <Button type="primary" onClick={cancel}>
                         Regresar

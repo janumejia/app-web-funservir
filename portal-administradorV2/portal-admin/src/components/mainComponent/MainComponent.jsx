@@ -67,7 +67,7 @@ const MainComponent = () => {
   const token = jwt_decode(localStorage.getItem('token'));
   return(
   <> {/*Los links deben ir dentro del contexto del Router*/}
-  
+
     <Layout
     style={{
       minHeight: '100vh',

@@ -33,7 +33,7 @@ const editInclusiveSites = async (req, res) => {
 
             // Comprobamos que el nombre a modificar no exista
             InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
-                if (element && element._id.toString() !== inputs._id ) res.status(409).json({ message: "Ya existe otro sitio inclusivo con ese nombre" })
+                if (element && element._id.toString() !== inputs._id) res.status(409).json({ message: "Ya existe otro sitio inclusivo con ese nombre" })
                 else {
                     Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then((element) => {
                         if (element) {
@@ -43,8 +43,11 @@ const editInclusiveSites = async (req, res) => {
                                 description: inputs.description,
                                 category: inputs.category,
                                 contactNumber: inputs.contactNumber,
+                                inclusiveElements: inputs.inclusiveElements,
+                                location: inputs.location,
                                 locality: inputs.locality,
-                                neighborhood: inputs.neighborhood    
+                                neighborhood: inputs.neighborhood,
+                                gallery: inputs.gallery
                             }
                             InclusiveSites.findByIdAndUpdate(query, update).then((element) => {
                                 res.status(200).json({ message: "Sitio inclusivo actualizado correctamente" });

@@ -233,25 +233,6 @@ const ManageInclusiveSites = () => {
             const item = newData[index];
             console.log(row);
 
-            /*let mVals = {
-                gender: "",
-                condition: [],
-                userType: "",
-                isCaregiver: ""
-            };
-            selectedValues.forEach(column => {
-                if (column.key === "gender") {
-                    mVals["gender"] = column.values;
-                } else if (column.key === "condition") {
-                    column.values.forEach((arr) => mVals["condition"].push(arr));
-                } else if (column.key === "userType") {
-                    mVals["userType"] = column.values;
-                } else if (column.key === "isCaregiver") {
-                    mVals["isCaregiver"] = column.values;
-                }
-            });
-            console.log(mVals);*/
-
             if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
 
                 const newUser = {
