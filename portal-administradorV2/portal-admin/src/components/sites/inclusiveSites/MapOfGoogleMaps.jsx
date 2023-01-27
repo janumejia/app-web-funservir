@@ -34,9 +34,9 @@ const Map = () => {
             >
                 {selected && <Marker position={selected} />}
             </GoogleMap>
-            {/* <div>
-                {selected}
-            </div> */}
+            <div>
+                Latitud: {selected.lat}, logitud: {selected.lng}
+            </div>
         </>
     )
 }

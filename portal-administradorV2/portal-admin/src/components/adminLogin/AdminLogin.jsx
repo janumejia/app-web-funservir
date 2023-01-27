@@ -39,13 +39,13 @@ const AdminLogin = () => {
                 .then((res) => {
                     const { data } = res;
                     // Cookies.set('token', data?.user.token); // Pero no se le puede agregar http only (no permite la ejecución de js)
-                    
+
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
                             // console.log("ok")
                             localStorage.setItem("token", data?.user.token);
                             let decodedToken = jwt_decode(data?.user.token);
-                            setAuth( decodedToken ); // Lo asignamos a la variable global Auth, usando Context
+                            setAuth(decodedToken); // Lo asignamos a la variable global Auth, usando Context
                             // setJwt(data.token);
                             navigate(`/dashboard`, { replace: true }); // replace para reemplazar la anterior página del historial con esta
                         }, 1500);
@@ -166,13 +166,16 @@ const AdminLogin = () => {
                             </Button>
                         </Form.Item>
                     </Form>
-                    <GoogleLogin
-                        onSuccess={googleSuccess}
-                        onError={googleFailure}
-                        shape="rectangular"
+                    <div className="googleloginbutton">
+                        <GoogleLogin
+                            onSuccess={googleSuccess}
+                            onError={googleFailure}
+                            shape="rectangular"
+                            width={301}
                         // theme="filled_blue"
-                    />
-                    <Button
+                        />
+                    </div>
+                    {/* <Button
                         // className={classes.googleButton}
                         color="primary"
                         // fullWidth
@@ -180,7 +183,7 @@ const AdminLogin = () => {
                         // startIcon={<Icon />}
                         variant="contained">
                         Iniciar sesión con Google 🚀
-                    </Button>
+                    </Button> */}
                 </Card>
             </Content>
         </Layout>
