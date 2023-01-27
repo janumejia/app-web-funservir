@@ -33,7 +33,7 @@ const AdminLogin = () => {
                 email: e.email,
                 password: e.password
             };
-            console.log("Usuario ", Usuario)
+            // console.log("Usuario ", Usuario)
             await axios
                 .post("/adminLogin", Usuario)
                 .then((res) => {

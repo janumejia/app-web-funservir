@@ -7,16 +7,19 @@ const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
     //Mirar esa propiedad "warningOnly"
 
-
+    const [latlng, setLatLng] =  useState(site.location);
 
     const action = async () => {
         try {
+            // site.location = latlng;
+            // console.log(site.location)
+
             const row = await form.validateFields();
             if (site._id === 0) {
 
-                axios.post('http://localhost:4000/addInclusiveSites', { ...row })
+                axios.post('http://localhost:4000/addInclusiveSites', { ...row }, { headers: { 'token': localStorage.getItem("token") } })
             } else if (site._id !== "0") {
-                axios.post('http://localhost:4000/editInclusiveSites', {...site, ...row,}) 
+                axios.post('http://localhost:4000/editInclusiveSites', {...site, ...row, "location": latlng}, { headers: { 'token': localStorage.getItem("token") } }) 
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos en un formato válido!');
@@ -32,7 +35,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 "category": site.category,
                 "contactNumber": site.contactNumber,
                 "inclusiveElements": site.inclusiveElements,
-                "location": (site.location.lat) ? site.location.lat + "," + site.location.lng : "",
+                "location": (site.location) ? site.location.lat + "," + site.location.lng : "",
                 "locality": site.locality,
                 "neighborhood": site.neighborhood,
                 "gallery": site.gallery
@@ -118,8 +121,8 @@ const AddEditInclusiveSite = ({ site }) => {
                     },
                 ]}
             >
-                <MapOfGoogleMaps site={site.location}/>
-                {/* <Input placeholder="Ingrese las coordenadas del sitio separadas por coma ',' " /> */}
+                <MapOfGoogleMaps latlng={latlng} setLatLng={setLatLng}/>
+                <Input size="large" disabled={true} bordered={false}  placeholder="Vació" value={JSON.stringify(latlng)} />
             </Form.Item>
             <Form.Item
                 name="locality"

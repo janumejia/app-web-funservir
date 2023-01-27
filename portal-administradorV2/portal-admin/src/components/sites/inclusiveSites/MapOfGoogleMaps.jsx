@@ -7,19 +7,24 @@ import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption 
 import "@reach/combobox/styles.css";
 
 
-const MapOfGoogleMaps = ({site, setLatLng}) => {
+const MapOfGoogleMaps = ({ latlng, setLatLng }) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
         libraries: ["places"],
     });
 
     if (!isLoaded) return <div>...</div>
-    return <Map setLatLng={setLatLng} inclusiveSite= {site}/>
+    return <Map latlng={latlng} setLatLng={setLatLng} />
 }
 
-const Map = ({setLatLng, inclusiveSite}) => {
+const Map = ({ latlng, setLatLng}) => {
     const center = useMemo(() => ({ lat: 4.641440, lng: -74.097518 }), []);
-    const [selected, setSelected] = useState({"lat": parseFloat(inclusiveSite.lat), "lng": parseFloat(inclusiveSite.lng)});
+    const [selected, setSelected] = useState({"lat": parseFloat(latlng.lat), "lng": parseFloat(latlng.lng)});
+    
+    useEffect(() => {
+        setLatLng(selected);
+    }, [selected]);
+
     return (
         <>
             <div className='places-container'>
@@ -33,9 +38,9 @@ const Map = ({setLatLng, inclusiveSite}) => {
             >
                 {selected && <MarkerF position={selected} />}
             </GoogleMap>
-            <div>
+            {/* <div>
                 Latitud: {selected.lat}, Longitud: {selected.lng}
-            </div>
+            </div> */}
         </>
     )
 }
@@ -61,7 +66,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
     return (
         <Combobox onSelect={handleSelect}>
             <ComboboxInput value={value} onChange={e => setValue(e.target.value)} disabled={!ready} className="combobox-input"
-                placeholder="Buscar lugar o dirección" />
+                placeholder="Ingresar lugar o dirección" />
             <ComboboxPopover>
                 <ComboboxList>
                     {status === "OK" && data.map(({ place_id, description }) => <ComboboxOption key={place_id} value={description} />)}
