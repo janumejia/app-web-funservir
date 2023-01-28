@@ -11,6 +11,9 @@ const AddEditInclusiveSite = ({ site }) => {
 
     const action = async () => {
         try {
+            // site.location = latlng;
+            // console.log(site.location)
+
             const row = await form.validateFields();
             if (site._id === "0") {
                 axios.post('http://localhost:4000/addInclusiveSites', { ...row , "location": latlng}, { headers: { 'token': localStorage.getItem("token") } })
