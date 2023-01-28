@@ -6,7 +6,6 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocom
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox"
 import "@reach/combobox/styles.css";
 
-
 const MapOfGoogleMaps = ({ latlng, setLatLng }) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
@@ -65,8 +64,13 @@ const PlacesAutocomplete = ({ setSelected }) => {
 
     return (
         <Combobox onSelect={handleSelect}>
-            <ComboboxInput value={value} onChange={e => setValue(e.target.value)} disabled={!ready} className="combobox-input"
-                placeholder="Ingresar lugar o dirección" />
+            <ComboboxInput 
+                value={value}
+                onChange={e => setValue(e.target.value)}
+                disabled={!ready}
+                className="combobox-input"
+                placeholder="Ingresar lugar o dirección"
+                />
             <ComboboxPopover>
                 <ComboboxList>
                     {status === "OK" && data.map(({ place_id, description }) => <ComboboxOption key={place_id} value={description} />)}
