@@ -145,7 +145,8 @@ const ManageInclusiveSites = () => {
             message.success('Se ha eliminado el Usuario exitosamente');
         }
     };
-    const [contador, setContador] = useState(0);
+
+
     const columns = [
         {
             title: 'Nombre*',
@@ -213,33 +214,22 @@ const ManageInclusiveSites = () => {
         },
         {
             title: 'Galeria*',
-            dataIndex: "gallery",
+            dataIndex: 'gallery',
             key: "gallery",
             editable: true,
             render: (gallery) => {
-                // const imgs = data.map((doc,index)=>doc.gallery.map((obj, j) => {
-                //     return {
-                //         uid: index * 4 + j + 1,
-                //         key: index * 4 + j + 1,
-                //         name: `img${index * 4 + j + 1}`,
-                //         url: obj.secure_url
-                //     }
-                // }))
-                // console.log(" record: ", record);
-                // console.log(" record.gallery: ", record.gallery);
-                // console.log(" record['gallery']: ", record['gallery']);
                 const imgs = gallery.map((element) => {
-                    const urlSplitted = element.image.secure_url.split("/");
+                    const urlSplitted = element.public_id.split("/");
                     const objToReturn = {
-                                uid: element._id,
-                                key: element._id,
+                                uid: element.asset_id,
+                                key: element.asset_id,
                                 name: urlSplitted[urlSplitted.length - 1],
-                                url: element.image.secure_url,
+                                url: element.secure_url,
                             }
                     return objToReturn;   
                 })
                 
-                return <GalleryVisualizationMode urlArray={imgs} myKey={gallery._id}/>
+                return <GalleryVisualizationMode urlArray={imgs}/>
             },
             sorter: (a, b) => a.gender.localeCompare(b.gender)
         },
