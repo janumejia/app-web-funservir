@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Space, Select } from 'antd';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
 import { useEffect, useState } from 'react';
-
+import UploadImage from './UploadImage';
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -12,9 +12,6 @@ const AddEditInclusiveSite = ({ site }) => {
 
     const action = async () => {
         try {
-            // site.location = latlng;
-            // console.log(site.location)
-
             const row = await form.validateFields();
             console.log("row ", row)
             if (site._id === "0") {
@@ -46,6 +43,7 @@ const AddEditInclusiveSite = ({ site }) => {
             message.warning('¡Debes completar todos los campos en un formato válido!');
         }
     }
+
     // Para ajustar las opciones disponibles
     const [availableElements, setAvailableElements] = useState([]);
     const [availableLocalities, setAvailableLocalities] = useState([]);
@@ -232,6 +230,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 name="gallery"
                 label="Galeria"
             >
+                <UploadImage />
                 <Input gallery="gallery" placeholder="Imagenes del sitio" />
             </Form.Item>
             <Space style={{ margin: "20px" }}>
