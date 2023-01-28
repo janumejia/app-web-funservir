@@ -293,7 +293,7 @@ const ManageInclusiveSites = () => {
                         }}
                         size='large'
                     >
-                        Añadir Usuario
+                        Añadir sitio inclusivo
                     </Button>
                     <AutoComplete
                         dropdownMatchSelectWidth={252}
