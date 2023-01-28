@@ -13,16 +13,14 @@ const props = {
     },
 };
 
-const GalleryVisualizationMode = ({ urlArray, myKey}) => {
-    
+const GalleryVisualizationMode = ({ urlArray, myKey }) => {
+  
     return (
-        <div key={myKey} >
         <Upload
             {...props}
-            defaultFileList = {[...urlArray]}
         >
-        </Upload>
-        </div>
+        </Upload >
+
     )
 }
 

@@ -145,7 +145,8 @@ const ManageInclusiveSites = () => {
             message.success('Se ha eliminado el Usuario exitosamente');
         }
     };
-    const [contador, setContador] = useState(0);
+
+
     const columns = [
         {
             title: 'Nombre*',
@@ -213,7 +214,7 @@ const ManageInclusiveSites = () => {
         },
         {
             title: 'Galeria*',
-            dataIndex: "gallery",
+            // dataIndex: 'gallery',
             key: "gallery",
             editable: true,
             render: (gallery) => {
