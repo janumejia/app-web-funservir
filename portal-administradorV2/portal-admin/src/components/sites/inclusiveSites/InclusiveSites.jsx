@@ -217,17 +217,6 @@ const ManageInclusiveSites = () => {
             key: "gallery",
             editable: true,
             render: (gallery) => {
-                // const imgs = data.map((doc,index)=>doc.gallery.map((obj, j) => {
-                //     return {
-                //         uid: index * 4 + j + 1,
-                //         key: index * 4 + j + 1,
-                //         name: `img${index * 4 + j + 1}`,
-                //         url: obj.secure_url
-                //     }
-                // }))
-                // console.log(" record: ", record);
-                // console.log(" record.gallery: ", record.gallery);
-                // console.log(" record['gallery']: ", record['gallery']);
                 const imgs = gallery.map((element) => {
                     const urlSplitted = element.image.secure_url.split("/");
                     const objToReturn = {
