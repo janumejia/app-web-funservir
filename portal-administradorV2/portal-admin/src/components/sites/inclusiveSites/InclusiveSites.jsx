@@ -214,22 +214,22 @@ const ManageInclusiveSites = () => {
         },
         {
             title: 'Galeria*',
-            // dataIndex: 'gallery',
+            dataIndex: 'gallery',
             key: "gallery",
             editable: true,
             render: (gallery) => {
                 const imgs = gallery.map((element) => {
-                    const urlSplitted = element.image.secure_url.split("/");
+                    const urlSplitted = element.public_id.split("/");
                     const objToReturn = {
-                                uid: element._id,
-                                key: element._id,
+                                uid: element.asset_id,
+                                key: element.asset_id,
                                 name: urlSplitted[urlSplitted.length - 1],
-                                url: element.image.secure_url,
+                                url: element.secure_url,
                             }
                     return objToReturn;   
                 })
                 
-                return <GalleryVisualizationMode urlArray={imgs} myKey={gallery._id}/>
+                return <GalleryVisualizationMode urlArray={imgs}/>
             },
             sorter: (a, b) => a.gender.localeCompare(b.gender)
         },

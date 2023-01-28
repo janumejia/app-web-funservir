@@ -51,11 +51,11 @@ const UploadImage = () => {
     );
 
     // Para evitar que la componente Upload suba la imagen inmediatamente a alguna URL. Solución encontrada en: https://stackoverflow.com/a/51519603/19294516
-    const dummyRequest = ({ file, onSuccess }) => {
-        setTimeout(() => {
-            onSuccess("ok");
-        }, 0);
-    };
+    // const dummyRequest = ({ file, onSuccess }) => {
+    //     setTimeout(() => {
+    //         onSuccess("ok");
+    //     }, 0);
+    // };
 
     return (
         <>
@@ -63,7 +63,7 @@ const UploadImage = () => {
                 // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                 listType="picture-card"
                 fileList={fileList}
-                customRequest={dummyRequest}
+                beforeUpload={(file) => false}
                 onPreview={handlePreview}
                 onChange={handleChange}
             >

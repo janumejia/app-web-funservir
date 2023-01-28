@@ -18,6 +18,7 @@ const GalleryVisualizationMode = ({ urlArray, myKey }) => {
     return (
         <Upload
             {...props}
+            defaultFileList={[...urlArray]}
         >
         </Upload >
 
