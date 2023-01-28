@@ -201,8 +201,8 @@ const ManageInclusiveSites = () => {
             dataIndex: "location",
             key: "location",
             editable: true,
-            render: (item) => {return Object.values(item)[0]+","+Object.values(item)[1]},
-            sorter: (a, b) => a.condition.length - b.condition.length
+            // render: (item) => {return Object.values(item)[0]+","+Object.values(item)[1]},
+            // sorter: (a, b) => a.condition.length - b.condition.length
         },
         {
             title: 'Localidad*',
@@ -293,7 +293,7 @@ const ManageInclusiveSites = () => {
                         }}
                         size='large'
                     >
-                        Añadir Usuario
+                        Añadir sitio inclusivo
                     </Button>
                     <AutoComplete
                         dropdownMatchSelectWidth={252}
