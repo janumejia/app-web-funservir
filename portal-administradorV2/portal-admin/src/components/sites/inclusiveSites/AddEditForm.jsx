@@ -7,9 +7,15 @@ import { useEffect, useState } from 'react';
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
     //Mirar esa propiedad "warningOnly"
+<<<<<<< HEAD
 
     const [latlng, setLatLng] = useState(site.location);
 
+=======
+    
+    const [latlng, setLatLng] = useState(site.location);
+    
+>>>>>>> db490ee (agregado el selector de elemento, localidades y barrios en el formulario de sitios inclusivos)
     const action = async () => {
         try {
             // site.location = latlng;
@@ -19,6 +25,7 @@ const AddEditInclusiveSite = ({ site }) => {
             console.log("row ", row)
             if (site._id === "0") {
                 axios.post('/addInclusiveSites', { ...row, "location": latlng }, { headers: { 'token': localStorage.getItem("token") } })
+<<<<<<< HEAD
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
                         if (res.status === 200) {
                             message.success(res.data.message);
@@ -41,20 +48,34 @@ const AddEditInclusiveSite = ({ site }) => {
                         else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
                         else message.warning(error.response.status + " - Respuesta del servidor desconocida");
                     });
+=======
+            } else if (site._id !== "0") {
+                axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng }, { headers: { 'token': localStorage.getItem("token") } })
+>>>>>>> db490ee (agregado el selector de elemento, localidades y barrios en el formulario de sitios inclusivos)
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos en un formato válido!');
         }
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> db490ee (agregado el selector de elemento, localidades y barrios en el formulario de sitios inclusivos)
     // Para ajustar las opciones disponibles
     const [availableElements, setAvailableElements] = useState([]);
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
     const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
+<<<<<<< HEAD
 
     const selectedLocality = Form.useWatch("locality", form);
 
+=======
+    
+    const selectedLocality = Form.useWatch("locality", form);
+    
+>>>>>>> db490ee (agregado el selector de elemento, localidades y barrios en el formulario de sitios inclusivos)
     // Traemos todos los elementos, localidades y barrios disponibles para escoger
     useEffect(() => {
 
@@ -221,7 +242,11 @@ const AddEditInclusiveSite = ({ site }) => {
             >
                 <Select>
                     {availableNeighborhoods.map(neighborhood => {
+<<<<<<< HEAD
                         if (neighborhood.associatedLocality === selectedLocality) {
+=======
+                        if(neighborhood.associatedLocality === selectedLocality){
+>>>>>>> db490ee (agregado el selector de elemento, localidades y barrios en el formulario de sitios inclusivos)
                             return (
                                 <Select.Option value={neighborhood.name}>{neighborhood.name}</Select.Option>
                             )
