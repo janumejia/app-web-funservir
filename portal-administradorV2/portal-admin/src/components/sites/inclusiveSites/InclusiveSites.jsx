@@ -216,7 +216,7 @@ const ManageInclusiveSites = () => {
             dataIndex: "gallery",
             key: "gallery",
             editable: true,
-            render: (_, record) => {
+            render: (gallery) => {
                 // const imgs = data.map((doc,index)=>doc.gallery.map((obj, j) => {
                 //     return {
                 //         uid: index * 4 + j + 1,
@@ -225,16 +225,21 @@ const ManageInclusiveSites = () => {
                 //         url: obj.secure_url
                 //     }
                 // }))
-                const imgs = data.map((doc,index)=>doc.gallery.map((obj, j)=>{
-                    return{
-                        uid: index * 4 + j + 1,
-                        key: index * 4 + j + 1,
-                        name: `img${index * 4 + j + 1}`,
-                        url: obj.secure_url
-                    }
-                }))
+                // console.log(" record: ", record);
+                // console.log(" record.gallery: ", record.gallery);
+                // console.log(" record['gallery']: ", record['gallery']);
+                const imgs = gallery.map((element) => {
+                    const urlSplitted = element.image.secure_url.split("/");
+                    const objToReturn = {
+                                uid: element._id,
+                                key: element._id,
+                                name: urlSplitted[urlSplitted.length - 1],
+                                url: element.image.secure_url,
+                            }
+                    return objToReturn;   
+                })
                 
-                return <GalleryVisualizationMode urlArray={imgs} myKey={record._id}/>
+                return <GalleryVisualizationMode urlArray={imgs} myKey={gallery._id}/>
             },
             sorter: (a, b) => a.gender.localeCompare(b.gender)
         },
