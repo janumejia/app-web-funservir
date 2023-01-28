@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
     //Mirar esa propiedad "warningOnly"
-    
+
     const [latlng, setLatLng] = useState(site.location);
-    
+
     const action = async () => {
         try {
             // site.location = latlng;
@@ -19,22 +19,42 @@ const AddEditInclusiveSite = ({ site }) => {
             console.log("row ", row)
             if (site._id === "0") {
                 axios.post('/addInclusiveSites', { ...row, "location": latlng }, { headers: { 'token': localStorage.getItem("token") } })
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+                        if (res.status === 200) {
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+                    })
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+                    });
             } else if (site._id !== "0") {
                 axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng }, { headers: { 'token': localStorage.getItem("token") } })
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+                        if (res.status === 200) {
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+                    })
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+                    });
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos en un formato válido!');
         }
     }
-    
+
     // Para ajustar las opciones disponibles
     const [availableElements, setAvailableElements] = useState([]);
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
     const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
-    
+
     const selectedLocality = Form.useWatch("locality", form);
-    
+
     // Traemos todos los elementos, localidades y barrios disponibles para escoger
     useEffect(() => {
 
@@ -201,7 +221,7 @@ const AddEditInclusiveSite = ({ site }) => {
             >
                 <Select>
                     {availableNeighborhoods.map(neighborhood => {
-                        if(neighborhood.associatedLocality === selectedLocality){
+                        if (neighborhood.associatedLocality === selectedLocality) {
                             return (
                                 <Select.Option value={neighborhood.name}>{neighborhood.name}</Select.Option>
                             )
