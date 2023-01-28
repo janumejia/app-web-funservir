@@ -6,12 +6,6 @@ import GalleryVisualizationMode from './GalleryVisualizationMode';
 import AddEditInclusiveSite from './AddEditForm';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete } from 'antd';
 
-// Para el idioma español y otra cosa de la componente DataPicker
-import esES from 'antd/es/date-picker/locale/es_ES';
-import moment from 'moment';
-
-
-
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
         return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
