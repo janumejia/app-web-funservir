@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
+import GalleryVisualizationMode from './GalleryVisualizationMode';
 import AddEditInclusiveSite from './AddEditForm';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete } from 'antd';
 
 // Para el idioma español y otra cosa de la componente DataPicker
 import esES from 'antd/es/date-picker/locale/es_ES';
@@ -39,11 +40,10 @@ const ManageInclusiveSites = () => {
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
     }, [])
-
     let isEditing = (record) => record._id === editingKey;
-    
+
     const edit = (record) => {
-        editedObject = {...record};
+        editedObject = { ...record };
         setEditingKey(record._id);
     };
 
@@ -51,81 +51,81 @@ const ManageInclusiveSites = () => {
         setEditingKey('');
     };
 
-    const saveEdit = async (key) => {
-        try {
+    // const saveEdit = async (key) => {
+    //     try {
 
-            const row = await form.validateFields();
-            const newData = [...data];
-            const index = newData.findIndex((item) => key === item._id);
-            const item = newData[index];
+    //         const row = await form.validateFields();
+    //         const newData = [...data];
+    //         const index = newData.findIndex((item) => key === item._id);
+    //         const item = newData[index];
 
-            if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
+    //         if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
 
-                const newUser = {
-                    name: row.name,
-                    lastName: row.lastName,
-                    email: row.email,
-                    password: row.password,
-                    dateOfBirth: row.dateOfBirth,
-                    gender: row["gender"],
-                    address: row.address,
-                    condition: [...row.condition],
-                    isCaregiver: row["isCaregiver"],
-                    institution: row.institution,
-                    userType: row["userType"]
-                }
+    //             const newUser = {
+    //                 name: row.name,
+    //                 lastName: row.lastName,
+    //                 email: row.email,
+    //                 password: row.password,
+    //                 dateOfBirth: row.dateOfBirth,
+    //                 gender: row["gender"],
+    //                 address: row.address,
+    //                 condition: [...row.condition],
+    //                 isCaregiver: row["isCaregiver"],
+    //                 institution: row.institution,
+    //                 userType: row["userType"]
+    //             }
 
-                axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
-                    .then((res) => {
+    //             axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
+    //                 .then((res) => {
 
-                        // Respuesta OK
-                        if (res.status === 200) {
-                            // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-                            let dateOfBirth = new Date(res.data.element.dateOfBirth);
-                            let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-                            res.data.element.dateOfBirth = dateOfBirth2;
+    //                     // Respuesta OK
+    //                     if (res.status === 200) {
+    //                         // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+    //                         let dateOfBirth = new Date(res.data.element.dateOfBirth);
+    //                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+    //                         res.data.element.dateOfBirth = dateOfBirth2;
 
-                            newData.splice(index, 1, res.data.element);
-                            setData(newData);
-                            setEditingKey('');
-                            message.success(res.data.message);
-                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-                    })
-                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-                    });
-            } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
+    //                         newData.splice(index, 1, res.data.element);
+    //                         setData(newData);
+    //                         setEditingKey('');
+    //                         message.success(res.data.message);
+    //                     } else message.warning(res.status + " - Respuesta del servidor desconocida");
+    //                 })
+    //                 .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+    //                     if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+    //                     else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+    //                     else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+    //                 });
+    //         } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
-                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+    //             axios.post('/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
+    //                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
-                        if (res.status === 200) {
-                            // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-                            let dateOfBirth = new Date(res.data.doc.dateOfBirth);
-                            let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-                            res.data.doc.dateOfBirth = dateOfBirth2;
+    //                     if (res.status === 200) {
+    //                         // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
+    //                         let dateOfBirth = new Date(res.data.doc.dateOfBirth);
+    //                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
+    //                         res.data.doc.dateOfBirth = dateOfBirth2;
 
-                            newData.splice(index, 1, res.data.doc);
-                            setData(newData);
-                            setEditingKey('');
+    //                         newData.splice(index, 1, res.data.doc);
+    //                         setData(newData);
+    //                         setEditingKey('');
 
-                            message.success(res.data.message);
-                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-                    })
-                    .catch((error) => {// Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-                    });
-            } else {
-                message.warning('¡Debes completar todos los campos obligatorios!');
-            }
-        } catch (errInfo) {
-            message.warning('¡Debes completar todos los campos en un formato válido!');
-        }
-    };
+    //                         message.success(res.data.message);
+    //                     } else message.warning(res.status + " - Respuesta del servidor desconocida");
+    //                 })
+    //                 .catch((error) => {// Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+    //                     if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+    //                     else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+    //                     else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+    //                 });
+    //         } else {
+    //             message.warning('¡Debes completar todos los campos obligatorios!');
+    //         }
+    //     } catch (errInfo) {
+    //         message.warning('¡Debes completar todos los campos en un formato válido!');
+    //     }
+    // };
 
     const handleDelete = (key) => {
         const newData = [...data];
@@ -151,7 +151,7 @@ const ManageInclusiveSites = () => {
             message.success('Se ha eliminado el Usuario exitosamente');
         }
     };
-
+    const [contador, setContador] = useState(0);
     const columns = [
         {
             title: 'Nombre*',
@@ -201,8 +201,8 @@ const ManageInclusiveSites = () => {
             dataIndex: "location",
             key: "location",
             editable: true,
-            // render: (item) => {return Object.values(item)[0]+","+Object.values(item)[1]},
-            // sorter: (a, b) => a.condition.length - b.condition.length
+            render: (item) => { return Object.values(item)[0] + "," + Object.values(item)[1] },
+            sorter: (a, b) => a.condition.length - b.condition.length
         },
         {
             title: 'Localidad*',
@@ -222,6 +222,26 @@ const ManageInclusiveSites = () => {
             dataIndex: "gallery",
             key: "gallery",
             editable: true,
+            render: (_, record) => {
+                // const imgs = data.map((doc,index)=>doc.gallery.map((obj, j) => {
+                //     return {
+                //         uid: index * 4 + j + 1,
+                //         key: index * 4 + j + 1,
+                //         name: `img${index * 4 + j + 1}`,
+                //         url: obj.secure_url
+                //     }
+                // }))
+                const imgs = data.map((doc,index)=>doc.gallery.map((obj, j)=>{
+                    return{
+                        uid: index * 4 + j + 1,
+                        key: index * 4 + j + 1,
+                        name: `img${index * 4 + j + 1}`,
+                        url: obj.secure_url
+                    }
+                }))
+                
+                return <GalleryVisualizationMode urlArray={imgs} myKey={record._id}/>
+            },
             sorter: (a, b) => a.gender.localeCompare(b.gender)
         },
         {
@@ -261,7 +281,7 @@ const ManageInclusiveSites = () => {
                 category: "",
                 contactNumber: "",
                 inclusiveElements: [],
-                location: {"lat":"","lng":""},
+                location: { "lat": "", "lng": "" },
                 locality: "",
                 neighborhood: "",
                 gallery: [],
@@ -275,7 +295,7 @@ const ManageInclusiveSites = () => {
     return editingKey ?
         (
             <>
-            <AddEditInclusiveSite site={editedObject}/>
+                <AddEditInclusiveSite site={editedObject} />
                 <Space>
                     <Button type="primary" onClick={cancel}>
                         Regresar
