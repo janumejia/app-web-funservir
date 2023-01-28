@@ -14,7 +14,7 @@ const props = {
 };
 
 const GalleryVisualizationMode = ({ urlArray, myKey }) => {
-  
+
     return (
         <Upload
             {...props}

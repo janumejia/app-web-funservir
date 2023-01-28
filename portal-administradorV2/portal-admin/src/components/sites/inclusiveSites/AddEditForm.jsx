@@ -1,7 +1,7 @@
 import { Button, Form, Input, message, Space, Select } from 'antd';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import UploadImage from './UploadImage';
 
 const AddEditInclusiveSite = ({ site }) => {
@@ -50,7 +50,14 @@ const AddEditInclusiveSite = ({ site }) => {
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
     const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
 
+
     const selectedLocality = Form.useWatch("locality", form);
+
+    useEffect(() => {
+        if(site.locality !== selectedLocality && selectedLocality !== undefined){
+            form.setFieldValue("neighborhood", "");
+        }
+    }, [selectedLocality])
 
     // Traemos todos los elementos, localidades y barrios disponibles para escoger
     useEffect(() => {
@@ -74,7 +81,6 @@ const AddEditInclusiveSite = ({ site }) => {
             .then((res) => {
                 setAvailableNeighborhoods(res.data);
             }).catch((error) => console.error(error));
-
 
     }, [])
 
@@ -164,13 +170,12 @@ const AddEditInclusiveSite = ({ site }) => {
                 <Select>
                     {availableElements.map(element => {
                         return (
-                            <Select.Option value={element.name}>{element.name}</Select.Option>
+                            <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
                         )
                     })}
                 </Select>
             </Form.Item>
             <Form.Item
-                name="location"
                 label="Ubicación"
                 rules={[
                     {
@@ -199,7 +204,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 <Select>
                     {availableLocalities.map(locality => {
                         return (
-                            <Select.Option value={locality.name}>{locality.name}</Select.Option>
+                            <Select.Option key={locality.name} value={locality.name}>{locality.name}</Select.Option>
                         )
                     })}
                 </Select>
@@ -220,7 +225,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     {availableNeighborhoods.map(neighborhood => {
                         if (neighborhood.associatedLocality === selectedLocality) {
                             return (
-                                <Select.Option value={neighborhood.name}>{neighborhood.name}</Select.Option>
+                                <Select.Option key={neighborhood.name} value={neighborhood.name}>{neighborhood.name}</Select.Option>
                             )
                         }
                     })}
@@ -230,8 +235,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 name="gallery"
                 label="Galeria"
             >
-                <UploadImage />
-                <Input gallery="gallery" placeholder="Imagenes del sitio" />
+                <UploadImage gallery={site.gallery}/>
             </Form.Item>
             <Space style={{ margin: "20px" }}>
                 <Button type="primary" onClick={action}>

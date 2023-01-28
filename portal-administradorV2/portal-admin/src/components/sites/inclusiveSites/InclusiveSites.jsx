@@ -34,6 +34,7 @@ const ManageInclusiveSites = () => {
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
     }, [])
+
     let isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
@@ -44,6 +45,8 @@ const ManageInclusiveSites = () => {
     const cancel = () => {
         setEditingKey('');
     };
+
+    // const { setImg } = useContext(ImageContext);
 
     // const saveEdit = async (key) => {
     //     try {
@@ -221,15 +224,15 @@ const ManageInclusiveSites = () => {
                 const imgs = gallery.map((element) => {
                     const urlSplitted = element.public_id.split("/");
                     const objToReturn = {
-                                uid: element.asset_id,
-                                key: element.asset_id,
-                                name: urlSplitted[urlSplitted.length - 1],
-                                url: element.secure_url,
-                            }
-                    return objToReturn;   
+                        uid: element.asset_id,
+                        key: element.asset_id,
+                        name: urlSplitted[urlSplitted.length - 1],
+                        url: element.secure_url,
+                    }
+                    return objToReturn;
                 })
-                
-                return <GalleryVisualizationMode urlArray={imgs}/>
+
+                return <GalleryVisualizationMode urlArray={imgs} />
             },
             sorter: (a, b) => a.gender.localeCompare(b.gender)
         },
@@ -281,8 +284,9 @@ const ManageInclusiveSites = () => {
         }
     };
 
-    return editingKey ?
-        (
+    return (
+            editingKey ?
+            (
             <>
                 <AddEditInclusiveSite site={editedObject} />
                 <Space>
@@ -291,7 +295,7 @@ const ManageInclusiveSites = () => {
                     </Button>
                 </Space>
             </>
-        ) : (
+            ) : (
             <Form form={form} component={false}>
                 <Space align="start" wrap={true}>
                     <Button
@@ -338,7 +342,8 @@ const ManageInclusiveSites = () => {
                     scroll={{ x: 2150 }}
                 />
             </Form>
-        );
+            )
+    )
 };
 
 export default ManageInclusiveSites;

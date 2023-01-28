@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import { RcFile, UploadProps } from 'antd/es/upload';
@@ -12,7 +12,7 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-const UploadImage = () => {
+const UploadImage = ({ gallery }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -24,14 +24,36 @@ const UploadImage = () => {
     //     status: 'done',
     //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     // },
+    
+    
+    // console.log(map)
+    
     const [fileList, setFileList] = useState([]);
+    
+    useEffect(()=> {
+        const mapa = gallery.map((element) => {
+            const urlSplitted = element.public_id.split("/");
+            const objToReturn = {
+                uid: element.asset_id,
+                name: urlSplitted[urlSplitted.length - 1],
+                status: 'done',
+                url: element.secure_url,
+            };
+            return objToReturn;
+        })
+
+        console.log("mapa:  ", mapa);
+
+        setFileList(mapa);
+    }, [])
+
 
     const handleCancel = () => setPreviewOpen(false);
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
-            console.log("se usa")
+            console.log("el base64: ", file.preview)
         }
 
         setPreviewImage(file.url || file.preview);
