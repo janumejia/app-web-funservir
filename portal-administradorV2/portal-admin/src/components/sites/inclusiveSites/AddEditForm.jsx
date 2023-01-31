@@ -33,7 +33,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 const imgToDelete = []; // Aquí almacenamos los códigos asset_id de las imágenes que queremos borrar
                 for (let index = 0; index < site.gallery.length; index++){
                     const found = previousImagesPreserved.find(element => element.uid === site.gallery[index].asset_id);
-                    if (found === undefined) imgToDelete.push(site.gallery[index].asset_id); // Aqui le podemos cambiar la propiedad de la imagen que queremos borrar. En este caso de asset_id
+                    if (found === undefined) imgToDelete.push(site.gallery[index].public_id); // Aqui le podemos cambiar la propiedad de la imagen que queremos borrar. En este caso de asset_id
                 }
 
                 axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng, "imgToAdd": arrayBase64, "imgToDelete": imgToDelete }, { headers: { 'token': localStorage.getItem("token") } })

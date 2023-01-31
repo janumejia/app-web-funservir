@@ -36,23 +36,21 @@ const addInclusiveSites = async (req, res) => {
             Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then( async (element) => {
                 if (element) {
 
-                    // const resAux = async (image) => {
-                    //     await cloudinary.uploader.upload(image, {
-                    //         upload_preset: "sites_pictures"
-                    //     })
-                    // }
-
+                    // En esta parte vamos a recorrer el arreglo que contiene los base64 de las imágenes a agregar y los va a subir a Cloudinary, uno por uno
                     const uploadRes = [];
                     for (let index = 0; index < inputs.imgToAdd.length; index++){
-                        const resAux = await cloudinary.uploader.upload(inputs.imgToAdd[index], {
+                        await cloudinary.uploader.upload(inputs.imgToAdd[index], {
                             upload_preset: "sites_pictures"
-                        }).catch(error => {
-                            console.log("error: ", error);
                         })
-                        uploadRes.push(resAux);
-                        // uploadRes.push(await resAux(inputs.imgToAdd[index]).then());                    
+                        .then(resAux => {
+                            uploadRes.push(resAux);
+                        })
+                        .catch(error => {
+                            console.log("error: ", error);
+                        })                   
                     }
 
+                    // Creación del objeto a agregar en mongodb
                     const newInclusiveSites = new InclusiveSites({
                         name: inputs.name,
                         description: inputs.description,
