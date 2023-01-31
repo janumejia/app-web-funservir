@@ -1,3 +1,4 @@
+const cloudinary = require("../../../middlewares/cloudinary");
 const InclusiveSites = require("../../../model/site")
 const Neighborhoods = require("../../../model/neighborhoods")
 const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex } = require("../../../regex") // Importación de patrones de Regex
@@ -20,10 +21,10 @@ const editInclusiveSites = async (req, res) => {
 
     /* Sanitización entradas */
     // Validar el tipo de dato y si cumple con los caracteres permitidos
-    for (var i = 0; i < dataArray.length; i++) {
-        if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
-        if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
-    }
+    // for (var i = 0; i < dataArray.length; i++) {
+    //     if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
+    //     if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
+    // }
     // /* Fin sanitización entradas */
 
     InclusiveSites.findOne({ '_id': inputs._id }).then((element) => {
@@ -35,8 +36,39 @@ const editInclusiveSites = async (req, res) => {
             InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
                 if (element && element._id.toString() !== inputs._id) res.status(409).json({ message: "Ya existe otro sitio inclusivo con ese nombre" })
                 else {
-                    Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then((element) => {
+                    Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then(async (element) => {
                         if (element) {
+
+
+                            // En esta parte vamos a recorrer el arreglo que contiene los base64 de las imágenes a agregar y los va a subir a Cloudinary, uno por uno
+                            const uploadRes = [];
+                            for (let index = 0; index < inputs.imgToAdd.length; index++) {
+                                await cloudinary.uploader.upload(inputs.imgToAdd[index], {
+                                    upload_preset: "sites_pictures"
+                                })
+                                    .then(resAux => {
+                                        uploadRes.push(resAux);
+                                    })
+                                    .catch(error => {
+                                        console.log("error: ", error);
+                                    })
+                            }
+
+                            //Aquí vamos a eliminar archivos de Cloudinary
+                            const deletedImgs = [];
+                            for (let index = 0; index < inputs.imgToDelete.length; index++) {
+                                await cloudinary.uploader.destroy(inputs.imgToDelete[index]) // Aquí le pasamos el public_id de la imagen a borrar
+                                    .then(resAux => {
+                                        deletedImgs.push(inputs.imgToDelete[index]);
+                                    })
+                                    .catch(error => {
+                                        console.log("error: ", error);
+                                        allOk = false;
+                                    })
+                            }
+                            console.log(deletedImgs)
+
+
                             const query = { _id: inputs._id };
                             const update = {
                                 name: inputs.name,
@@ -47,13 +79,16 @@ const editInclusiveSites = async (req, res) => {
                                 location: inputs.location,
                                 locality: inputs.locality,
                                 neighborhood: inputs.neighborhood,
-                                gallery: inputs.gallery
+                                $push: { gallery: { $each: uploadRes } },
+                                // $pull: { gallery: { $in:  deletedImgs } }
                             }
                             InclusiveSites.findByIdAndUpdate(query, update).then((element) => {
-                                res.status(200).json({ message: "Sitio inclusivo actualizado correctamente" });
+                                InclusiveSites.
+
+                                    res.status(200).json({ message: "Sitio inclusivo actualizado correctamente" });
                             }).catch((error) => {
                                 console.error(error)
-                                res.status(500).json({ message: "Error en creación de sitios inclusivo" })
+                                res.status(500).json({ message: "Error en actualización de sitios inclusivo" })
                             })
                         } else {
                             res.status(404).json({ message: "No existe el barrio o localidad ingresada" })
