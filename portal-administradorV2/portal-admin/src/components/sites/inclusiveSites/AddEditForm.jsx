@@ -1,7 +1,7 @@
 import { Button, Form, Input, message, Space, Select, Popconfirm } from 'antd';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
-import { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import UploadImage from './UploadImage';
 
 const AddEditInclusiveSite = ({ site }) => {

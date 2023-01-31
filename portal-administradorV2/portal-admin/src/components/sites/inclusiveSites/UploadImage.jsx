@@ -26,13 +26,9 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
     //     status: 'done',
     //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     // },
-
-
-    // console.log(map)
-
     const [fileList, setFileList] = useState([]);
-    console.log("fileList: ", fileList)
-    useEffect(() => {
+
+    useEffect(()=> {
         const mapa = gallery.map((element) => {
             const urlSplitted = element.public_id.split("/");
             const objToReturn = {
@@ -43,8 +39,6 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
             };
             return objToReturn;
         })
-
-        console.log("mapa:  ", mapa);
 
         setFileList(mapa);
     }, [])
