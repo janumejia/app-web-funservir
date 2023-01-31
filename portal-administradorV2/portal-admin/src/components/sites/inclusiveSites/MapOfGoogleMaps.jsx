@@ -17,9 +17,9 @@ const MapOfGoogleMaps = ({ latlng, setLatLng }) => {
 }
 
 const Map = ({ latlng, setLatLng}) => {
-    const center = useMemo(() => ({ lat: 4.641440, lng: -74.097518 }), []);
-    const [selected, setSelected] = useState({"lat": parseFloat(latlng.lat), "lng": parseFloat(latlng.lng)});
-    
+    const [selected, setSelected] = useState( isNaN(parseFloat(latlng.lat)) ? { lat: 4.641440, lng: -74.097518 } : {"lat": parseFloat(latlng.lat), "lng": parseFloat(latlng.lng)} );
+    const center = useMemo(() => ( selected ), []);
+
     useEffect(() => {
         setLatLng(selected);
     }, [selected]);
@@ -31,8 +31,8 @@ const Map = ({ latlng, setLatLng}) => {
             </div>
 
             <GoogleMap
-                zoom={12}
                 center={center}
+                zoom={ isNaN(parseFloat(latlng.lat)) ? 10 : 16}
                 mapContainerClassName="map-container"
             >
                 {selected && <MarkerF position={selected} />}
