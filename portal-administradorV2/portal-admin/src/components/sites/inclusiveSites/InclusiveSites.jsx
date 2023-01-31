@@ -5,6 +5,7 @@ import './index.css';
 import GalleryVisualizationMode from './GalleryVisualizationMode';
 import AddEditInclusiveSite from './AddEditForm';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete } from 'antd';
+const { Link } = Typography;
 
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
@@ -128,7 +129,7 @@ const ManageInclusiveSites = () => {
         const newData = [...data];
         const index = newData.findIndex((item) => key === item._id);
         if (key !== "0") {
-            axios.post('/deleteUser', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
+            axios.post('/deleteInclusiveSites', { _id: key }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                     if (res.status === 200) {
@@ -199,7 +200,13 @@ const ManageInclusiveSites = () => {
             dataIndex: "location",
             key: "location",
             editable: true,
-            render: (item) => { return Object.values(item)[0] + "," + Object.values(item)[1] },
+            render: (item) => {
+                return (
+                    <Link href={`http://www.google.com/maps/place/${Object.values(item)[0]},${Object.values(item)[1]}`} target="_blank">
+                        {"Lat: " + Object.values(item)[0] + ", Lng: " + Object.values(item)[1]}
+                    </Link>
+                )
+            },
             sorter: (a, b) => a.condition.length - b.condition.length
         },
         {
@@ -222,11 +229,11 @@ const ManageInclusiveSites = () => {
             editable: true,
             render: (gallery) => {
                 const imgs = gallery.map((element) => {
-                    const urlSplitted = element.public_id.split("/");
+                    // const urlSplitted = element.public_id.split("/");
                     const objToReturn = {
                         uid: element.asset_id,
                         key: element.asset_id,
-                        name: urlSplitted[urlSplitted.length - 1],
+                        name: element.asset_id,
                         url: element.secure_url,
                     }
                     return objToReturn;
@@ -285,63 +292,63 @@ const ManageInclusiveSites = () => {
     };
 
     return (
-            editingKey ?
+        editingKey ?
             (
-            <>
-                <AddEditInclusiveSite site={editedObject} />
-                <Space>
-                    <Button type="primary" onClick={cancel}>
-                        Regresar
-                    </Button>
-                </Space>
-            </>
+                <>
+                    <AddEditInclusiveSite site={editedObject} />
+                    <Space>
+                        <Button type="primary" onClick={cancel}>
+                            Regresar
+                        </Button>
+                    </Space>
+                </>
             ) : (
-            <Form form={form} component={false}>
-                <Space align="start" wrap={true}>
-                    <Button
-                        onClick={handleAdd}
-                        type="primary"
-                        style={{
-                            marginBottom: 16,
-                        }}
-                        size='large'
-                    >
-                        Añadir sitio inclusivo
-                    </Button>
-                    <AutoComplete
-                        dropdownMatchSelectWidth={252}
-                        style={{
-                            width: 300
-                        }}
-                    >
-                        <Input.Search size='large'
-                            placeholder="Buscar..."
-                            enterButton
-                            onSearch={(value) => {
-                                setSearchedText(value);
+                <Form form={form} component={false}>
+                    <Space align="start" wrap={true}>
+                        <Button
+                            onClick={handleAdd}
+                            type="primary"
+                            style={{
+                                marginBottom: 16,
                             }}
-                        />
-                    </AutoComplete>
+                            size='large'
+                        >
+                            Añadir sitio inclusivo
+                        </Button>
+                        <AutoComplete
+                            dropdownMatchSelectWidth={252}
+                            style={{
+                                width: 300
+                            }}
+                        >
+                            <Input.Search size='large'
+                                placeholder="Buscar..."
+                                enterButton
+                                onSearch={(value) => {
+                                    setSearchedText(value);
+                                }}
+                            />
+                        </AutoComplete>
 
-                </Space>
-                <Table
-                    locale={{
-                        triggerDesc: 'Ordenar descendiente',
-                        triggerAsc: 'Ordenar ascendiente',
-                        cancelSort: 'Cancelar ordenamiento'
-                    }}
-                    rowKey={record => record._id}
-                    bordered
-                    dataSource={data}
-                    columns={mergedColumns}
-                    rowClassName="editable-row"
-                    pagination={{
-                        onChange: cancel,
-                        pageSize: 10
-                    }}
-                    scroll={{ x: 2150 }}
-                />
-            </Form>
+                    </Space>
+                    <Table
+                        locale={{
+                            triggerDesc: 'Ordenar descendiente',
+                            triggerAsc: 'Ordenar ascendiente',
+                            cancelSort: 'Cancelar ordenamiento'
+                        }}
+                        rowKey={record => record._id}
+                        bordered
+                        dataSource={data}
+                        columns={mergedColumns}
+                        rowClassName="editable-row"
+                        pagination={{
+                            onChange: cancel,
+                            pageSize: 10
+                        }}
+                        scroll={{ x: 2150 }}
+                    />
+                </Form>
             )
     )
 };

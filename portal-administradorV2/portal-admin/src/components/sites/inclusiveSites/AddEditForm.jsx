@@ -9,25 +9,34 @@ const AddEditInclusiveSite = ({ site }) => {
     //Mirar esa propiedad "warningOnly"
 
     const [latlng, setLatLng] = useState(site.location);
+    const [arrayBase64, setArrayBase64] = useState([]);
+    const [previousImagesPreserved, setPreviousImagesPreserved] = useState([]);
 
     const action = async () => {
         try {
             const row = await form.validateFields();
-            console.log("row ", row)
+
             if (site._id === "0") {
-                axios.post('/addInclusiveSites', { ...row, "location": latlng }, { headers: { 'token': localStorage.getItem("token") } })
-                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
-                        if (res.status === 200) {
-                            message.success(res.data.message);
-                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-                    })
-                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-                    });
+                axios.post('/addInclusiveSites', { ...row, "location": latlng, "imgToAdd": arrayBase64 }, { headers: { 'token': localStorage.getItem("token") } })
+                .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+                    if (res.status === 200) {
+                        message.success(res.data.message);
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
+                })
+                .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+                });
             } else if (site._id !== "0") {
-                axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng }, { headers: { 'token': localStorage.getItem("token") } })
+
+                const imgToDelete = []; // Aquí almacenamos los códigos asset_id de las imágenes que queremos borrar
+                for (let index = 0; index < site.gallery.length; index++){
+                    const found = previousImagesPreserved.find(element => element.uid === site.gallery[index].asset_id);
+                    if (found === undefined) imgToDelete.push(site.gallery[index].asset_id); // Aqui le podemos cambiar la propiedad de la imagen que queremos borrar. En este caso de asset_id
+                }
+
+                axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng, "imgToAdd": arrayBase64, "imgToDelete": imgToDelete }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
                         if (res.status === 200) {
                             message.success(res.data.message);
@@ -41,6 +50,7 @@ const AddEditInclusiveSite = ({ site }) => {
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos en un formato válido!');
+            console.log(errInfo)
         }
     }
 
@@ -235,7 +245,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 name="gallery"
                 label="Galeria"
             >
-                <UploadImage gallery={site.gallery}/>
+                <UploadImage gallery={site.gallery} setArrayBase64={setArrayBase64} setPreviousImagesPreserved={setPreviousImagesPreserved}  />
             </Form.Item>
             <Space style={{ margin: "20px" }}>
                 <Button type="primary" onClick={action}>

@@ -4,6 +4,7 @@ import { Modal, Upload } from 'antd';
 import { RcFile, UploadProps } from 'antd/es/upload';
 import { UploadFile } from 'antd/es/upload/interface';
 
+//Tratamiento de imagenes
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -12,10 +13,11 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-const UploadImage = ({ gallery }) => {
+const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
+
 
     // filelist es un arreglo con objetos que tienen esta forma:
     // {
@@ -24,13 +26,13 @@ const UploadImage = ({ gallery }) => {
     //     status: 'done',
     //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     // },
-    
-    
+
+
     // console.log(map)
-    
+
     const [fileList, setFileList] = useState([]);
-    
-    useEffect(()=> {
+    console.log("fileList: ", fileList)
+    useEffect(() => {
         const mapa = gallery.map((element) => {
             const urlSplitted = element.public_id.split("/");
             const objToReturn = {
@@ -52,7 +54,7 @@ const UploadImage = ({ gallery }) => {
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
+            file.preview = await getBase64(file.originFileObj)
             console.log("el base64: ", file.preview)
         }
 
@@ -63,8 +65,38 @@ const UploadImage = ({ gallery }) => {
 
     const handleChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
+        console.log(newFileList);
+        // storeTheBase64Value(newFileList);
     }
-
+    
+    useEffect(() => {
+        const storeTheBase64Value = async (newFileList) => {
+            const aux1 = [];
+            const aux2 = [];
+            for (let index = 0; index < newFileList.length; index++) {
+                const file = newFileList[index]
+                console.log("file: ", file)
+                if (file.originFileObj !== undefined) {
+                    try {
+                        const theBase64 = await getBase64(file.originFileObj);
+                        console.log("here is the theBase64: ", theBase64)
+                        aux1.push(theBase64);
+                    } catch (error) {
+                        console.log("Error en el método getBase64_Multiple", error);
+                    }
+                } else { 
+                    aux2.push(file);
+                }
+            }
+            console.log("aux1 :", aux1)
+            setArrayBase64(aux1); // Parece que este valor no se actualiza automáticamente
+            console.log("aux2 :", aux2)
+            setPreviousImagesPreserved(aux2);
+        }
+        
+        storeTheBase64Value(fileList);
+    }, [fileList])
+    
     const uploadButton = (
         <div>
             <PlusOutlined />

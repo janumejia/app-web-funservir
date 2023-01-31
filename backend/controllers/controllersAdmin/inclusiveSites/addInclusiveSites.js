@@ -1,6 +1,7 @@
+const cloudinary = require("../../../middlewares/cloudinary");
 const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
-const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex,  inclusiveElementsRegex} = require("../../../regex") // Importación de patrones de Regex
+const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -9,15 +10,15 @@ const addInclusiveSites = async (req, res) => {
 
     // Definición de las variables que esperamos
     const dataArray = [
-        {input: 'name', dataType: 'string', regex: nameRegex },
-        {input: 'description', dataType: 'string', regex: descriptionRegex },
-        {input: 'category', dataType: 'string', regex: categoryRegex },
-        {input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
-        {input: 'inclusiveElements', dataType: 'object', isArray: true},
-        {input: 'location', dataType: 'object'},
-        {input: 'locality', dataType: 'string', regex: localityRegex },
-        {input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
-        {input: 'gallery', dataType: 'object'},
+        { input: 'name', dataType: 'string', regex: nameRegex },
+        { input: 'description', dataType: 'string', regex: descriptionRegex },
+        { input: 'category', dataType: 'string', regex: categoryRegex },
+        { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        { input: 'inclusiveElements', dataType: 'object', isArray: true },
+        { input: 'location', dataType: 'object' },
+        { input: 'locality', dataType: 'string', regex: localityRegex },
+        { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
+        // Falta verificar: imgToAdd e imgToDelete
     ]
 
     /* Sanitización entradas */
@@ -32,8 +33,26 @@ const addInclusiveSites = async (req, res) => {
         if (element) {
             res.status(409).json({ message: "Ya existe este sitio inclusivo" })
         } else {
-            Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then((element) => {
+            Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then( async (element) => {
                 if (element) {
+
+                    // const resAux = async (image) => {
+                    //     await cloudinary.uploader.upload(image, {
+                    //         upload_preset: "sites_pictures"
+                    //     })
+                    // }
+
+                    const uploadRes = [];
+                    for (let index = 0; index < inputs.imgToAdd.length; index++){
+                        const resAux = await cloudinary.uploader.upload(inputs.imgToAdd[index], {
+                            upload_preset: "sites_pictures"
+                        }).catch(error => {
+                            console.log("error: ", error);
+                        })
+                        uploadRes.push(resAux);
+                        // uploadRes.push(await resAux(inputs.imgToAdd[index]).then());                    
+                    }
+
                     const newInclusiveSites = new InclusiveSites({
                         name: inputs.name,
                         description: inputs.description,
@@ -43,8 +62,10 @@ const addInclusiveSites = async (req, res) => {
                         location: inputs.location,
                         locality: inputs.locality,
                         neighborhood: inputs.neighborhood,
-                        gallery: inputs.gallery
+                        gallery: uploadRes,
                     })
+
+
                     newInclusiveSites.save().then((element) => { // Si todo sale bien...
                         res.status(200).json({ message: "Sitio inclusivo creado correctamente", element })
                     })
@@ -53,8 +74,10 @@ const addInclusiveSites = async (req, res) => {
                             res.status(500).json({ message: "Error en creación de sitios inclusivo" })
                         })
 
+
+
                 } else {
-                    res.status(404).json({ message: "No existe el barrio o localidad ingresada"})
+                    res.status(404).json({ message: "No existe el barrio o localidad ingresada" })
                 }
             })
         }
