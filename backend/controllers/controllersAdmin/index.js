@@ -3,7 +3,9 @@ const adminLoginWithGoogle = require("./adminLoginWithGoogle") // Autenticación
 const editUser = require("./users/editUser")
 const addInclusiveElement = require("./inclusiveElements/addInclusiveElement")
 const addCategory = require("./categories/addCategory")
+const editCategory = require("./categories/editCategory")
 const getCategories = require("./categories/getCategories")
+const deleteCategory = require("./categories/deleteCategory")
 const allUsers = require("./users/allUsers")
 const addUsers = require("./users/addUser")
 const deleteUser = require("./users/deleteUser")
@@ -30,7 +32,9 @@ module.exports = {
     editUser,
     addInclusiveElement,
     addCategory,
+    editCategory,
     getCategories,
+    deleteCategory,
     allUsers,
     addUsers,
     deleteUser,

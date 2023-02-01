@@ -54,17 +54,19 @@ app.post("/addElement",  verifyTokenAdmin, controllersAdmin.addInclusiveElement)
 app.post("/deleteElement",  verifyTokenAdmin, controllersAdmin.deleteElement)
 app.post("/editElement",  verifyTokenAdmin, controllersAdmin.editElement)
 
-// Parametria usuarios:
+// Parametría usuarios:
 app.get("/all_users",  verifyTokenAdmin, controllersAdmin.allUsers)
 app.post("/addUser",  verifyTokenAdmin, controllersAdmin.addUsers)
 app.post("/editUser", verifyTokenAdmin, controllersAdmin.editUser)
 app.post("/deleteUser",  verifyTokenAdmin, controllersAdmin.deleteUser)
 
 // Parametría categorías:
-app.post("/addCategory", verifyTokenAdmin, controllersAdmin.addCategory)
 app.get("/getCategories", verifyTokenAdmin, controllersAdmin.getCategories)
+app.post("/addCategory", verifyTokenAdmin, controllersAdmin.addCategory)
+app.post("/editCategory", verifyTokenAdmin, controllersAdmin.editCategory)
+app.post("/deleteCategory", verifyTokenAdmin, controllersAdmin.deleteCategory)
 
-// Parametria sitios inclusivos
+// Parametría sitios inclusivos
 app.get("/getInclusiveSites", verifyTokenAdmin, controllersAdmin.getInclusiveSites)
 app.post("/addInclusiveSites", verifyTokenAdmin, controllersAdmin.addInclusiveSites)
 app.post("/editInclusiveSites", verifyTokenAdmin, controllersAdmin.editInclusiveSites)

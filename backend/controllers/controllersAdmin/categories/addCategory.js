@@ -3,23 +3,28 @@ const { nameCategoryRegex } = require("../../../regex") // Traemos los regex nec
 
 const addCategory = async (req, res) => {
 
-    const {name} = req.body;
+    const { ...inputs } = req.body;
+
+    // Definición de las variables que esperamos
+    const dataArray = [
+        { input: 'name', dataType: 'string', regex: nameCategoryRegex },
+        // Falta verificar: imgToAdd e imgToDelete
+    ]
 
     /* Sanitización entradas */
-    // 1) Validar el tipo de dato
-    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    
-    // 2) Validar si cumple con los caracteres permitidos
-    const isValidName = nameCategoryRegex.test(name);
+    // Validar el tipo de dato y si cumple con los caracteres permitidos
+    for(var i = 0; i < dataArray.length; i++){
+        if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
+        if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
+    }
+    // /* Fin sanitización entradas */
 
-    if(isValidName === false) return res.json({ message: "Formato de nombre no es válido" }); // Caso malo
-    /* Fin sanitización entradas */
 
-    Categories.findOne({name}).then((element)=>{
+    Categories.findOne({'name': inputs.name}).then((element)=>{
         if(!element){
-            if(name){
+            if(inputs.name){
                 const newCategory = new Categories({
-                    name
+                    name: inputs.name
                 })
                 newCategory.save().then((element) => { // Si todo sale bien...
                     res.json({ message: "Categoría creada correctamente", element})
