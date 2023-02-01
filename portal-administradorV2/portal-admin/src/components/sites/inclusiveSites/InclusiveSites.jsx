@@ -43,7 +43,13 @@ const ManageInclusiveSites = () => {
         setEditingKey(record._id);
     };
 
-    const cancel = () => {
+    const cancel = async () => {
+        
+        await axios.get('/getInclusiveSites', { headers: { 'token': localStorage.getItem("token") } })
+        .then((res) => {
+            setData(res.data); // Se ajustan los datos recibidos del backend
+        }).catch((error) => console.error(error));
+        
         setEditingKey('');
     };
 

@@ -63,7 +63,6 @@ const editInclusiveSites = async (req, res) => {
                                     })
                                     .catch(error => {
                                         console.log("error: ", error);
-                                        allOk = false;
                                     })
                             }
                             console.log(deletedImgs)
@@ -80,10 +79,8 @@ const editInclusiveSites = async (req, res) => {
                                 locality: inputs.locality,
                                 neighborhood: inputs.neighborhood,
                                 $push: { gallery: { $each: uploadRes } },
-                                // $pull: { gallery: { $in:  deletedImgs } }
                             }
                             InclusiveSites.findByIdAndUpdate(query, update).then((element) => {
-                                console.log("deletedImgs: ", deletedImgs)
                                 InclusiveSites.updateMany({ $pull: { gallery: { public_id: { $in: deletedImgs } } } }).then((element) => {
                                     res.status(200).json({ message: "Sitio inclusivo actualizado correctamente, con delete" });
                                 }).catch((error) => {
