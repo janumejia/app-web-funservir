@@ -18,20 +18,20 @@ const AddEditInclusiveSite = ({ site }) => {
 
             if (site._id === "0") {
                 axios.post('/addInclusiveSites', { ...row, "location": latlng, "imgToAdd": arrayBase64 }, { headers: { 'token': localStorage.getItem("token") } })
-                .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
-                    if (res.status === 200) {
-                        message.success(res.data.message);
-                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
-                })
-                .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-                    else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-                });
+                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
+                        if (res.status === 200) {
+                            message.success(res.data.message);
+                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+                    })
+                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
+                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+                    });
             } else if (site._id !== "0") {
 
                 const imgToDelete = []; // Aquí almacenamos los códigos asset_id de las imágenes que queremos borrar
-                for (let index = 0; index < site.gallery.length; index++){
+                for (let index = 0; index < site.gallery.length; index++) {
                     const found = previousImagesPreserved.find(element => element.uid === site.gallery[index].asset_id);
                     if (found === undefined) imgToDelete.push(site.gallery[index].public_id); // Aqui le podemos cambiar la propiedad de la imagen que queremos borrar. En este caso de asset_id
                 }
@@ -58,13 +58,14 @@ const AddEditInclusiveSite = ({ site }) => {
     const [availableElements, setAvailableElements] = useState([]);
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
+    const [availableCategories, setAvailableCategories] = useState([]);
     const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
 
 
     const selectedLocality = Form.useWatch("locality", form);
 
     useEffect(() => {
-        if(site.locality !== selectedLocality && selectedLocality !== undefined){
+        if (site.locality !== selectedLocality && selectedLocality !== undefined) {
             form.setFieldValue("neighborhood", "");
         }
     }, [selectedLocality])
@@ -90,6 +91,11 @@ const AddEditInclusiveSite = ({ site }) => {
         axios.get('/getNeighborhoods', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setAvailableNeighborhoods(res.data);
+            }).catch((error) => console.error(error));
+
+            axios.get('/getCategories', { headers: { 'token': localStorage.getItem("token") } })
+            .then((res) => {
+                setAvailableCategories(res.data);
             }).catch((error) => console.error(error));
 
     }, [])
@@ -152,7 +158,13 @@ const AddEditInclusiveSite = ({ site }) => {
                     },
                 ]}
             >
-                <Input category="category" placeholder="Ingrese la descripción del sitio" />
+                <Select>
+                    {availableCategories.map(element => {
+                        return (
+                            <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
+                        )
+                    })}
+                </Select>
             </Form.Item>
             <Form.Item
                 name="contactNumber"
@@ -245,7 +257,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 name="gallery"
                 label="Galeria"
             >
-                <UploadImage gallery={site.gallery} setArrayBase64={setArrayBase64} setPreviousImagesPreserved={setPreviousImagesPreserved}  />
+                <UploadImage gallery={site.gallery} setArrayBase64={setArrayBase64} setPreviousImagesPreserved={setPreviousImagesPreserved} />
             </Form.Item>
             <Space style={{ margin: "20px" }}>
                 <Button type="primary" onClick={action}>

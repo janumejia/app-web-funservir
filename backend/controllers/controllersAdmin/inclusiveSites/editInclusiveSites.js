@@ -82,7 +82,7 @@ const editInclusiveSites = async (req, res) => {
                             }
                             InclusiveSites.findByIdAndUpdate(query, update).then((element) => {
                                 InclusiveSites.updateMany({ $pull: { gallery: { public_id: { $in: deletedImgs } } } }).then((element) => {
-                                    res.status(200).json({ message: "Sitio inclusivo actualizado correctamente, con delete" });
+                                    res.status(200).json({ message: "Sitio inclusivo actualizado correctamente" });
                                 }).catch((error) => {
                                     console.log(error);
                                     res.status(500).json({ message: "Error en la eliminación de imágenes" })
