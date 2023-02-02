@@ -29,10 +29,13 @@ const addCategory = async (req, res) => {
                 newCategory.save().then((element) => { // Si todo sale bien...
                     res.json({ message: "Categoría creada correctamente", element})
                 })
-                .catch((error) => console.error(error))
+                .catch((error) => {
+                    console.error(error)
+                    res.status(500).json({ message: "Error al agregar categoría"})
+                })
             }
         }else{
-            res.json({ message: "Error"})
+            res.status(409).json({ message: "Ya existe otra categoría con ese nombre"})
         }
     })
 }
