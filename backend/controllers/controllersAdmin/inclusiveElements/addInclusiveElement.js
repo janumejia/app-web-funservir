@@ -19,32 +19,39 @@ const addInclusiveElement = async (req, res) => {
     // }
     // // /* Fin sanitización entradas */
 
-    try {
-        if (image) {
-            const uploadRes = await cloudinary.uploader.upload(image, {
-                upload_preset: "inclusive_elements",
-                public_id: name
-            })
 
-            const element = await InclusiveElement.findOne({ name });
-
-            if (!element && uploadRes) {
-                const inclusiveElement = new InclusiveElement({
-                    name,
-                    image: uploadRes
-                })
-
-                await inclusiveElement.save().then(element => {
-                    res.json(
-                        { message: "Elemento creado correctamente", element })
-                })
-            } else {
-                throw new Error();
+    InclusiveElement.findOne({'name': name}).then( async (element)=>{
+        if(!element){
+            try {
+                if (image) {
+                    const uploadRes = await cloudinary.uploader.upload(image, {
+                        upload_preset: "inclusive_elements",
+                        public_id: name
+                    })
+        
+                    const element = await InclusiveElement.findOne({ name });
+        
+                    if (!element && uploadRes) {
+                        const inclusiveElement = new InclusiveElement({
+                            name,
+                            image: uploadRes
+                        })
+        
+                        await inclusiveElement.save().then(element => {
+                            res.json(
+                                { message: "Elemento creado correctamente", element })
+                        })
+                    } else {
+                        throw new Error();
+                    }
+                }
+            } catch (error) {
+                res.status(500).send(error);
             }
+        }else{
+            res.status(409).json({ message: "Ya existe un elemento inclusivo con este nombre"})
         }
-    } catch (error) {
-        res.status(500).send(error);
-    }
+    })
 }
 
 module.exports = addInclusiveElement

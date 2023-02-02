@@ -77,19 +77,21 @@ const ManageElements = () => {
                         style={{
                             margin: 0,
                         }}
-                        rules={[
+
+                        rules={title !== "Icono*" ? [
                             {
                                 required: true,
                                 message: `¡Introduzca un ${title} válido!`,
                                 pattern: rules(dataIndex),
                             },
-                        ]}
+                        ] : []}
                     >
                         {inputNode}
                     </Form.Item>
                 ) : (
-
+                    
                     (inputType === 'object' ? <img src={record.image.url} alt='' style={{ width: '9%', height: 'auto' }} /> : children)
+            
                 )}
             </td>
         );
@@ -133,7 +135,13 @@ const ManageElements = () => {
                         message.success('Se ha creado el Elemento Inclusivo exitosamente');
                     })
                     .catch((error) => {
-                        message.error('No se ha podido crear el Elemento Inclusivo');
+                        if(error.response?.status === 409){
+                            message.warning('Ya existe otro elemento inclusivo con ese nombre');
+                        } else {
+                            message.error('No se ha podido crear el Elemento Inclusivo');
+
+                        }
+                        console.log("error: ", error)
                     });
             } else if (key !== "0") {
                 axios.post('/editElement', { ...item, ...row, imageUrl }, { headers: { 'token': localStorage.getItem("token") } })
@@ -145,7 +153,11 @@ const ManageElements = () => {
                         message.success('Se editó el Elemento Inclusivo exitosamente');
                     })
                     .catch((error) => {
-                        message.error('No se ha podido modificar el Elemento Inclusivo');
+                        if(error.response?.status === 409){
+                            message.warning('Ya existe otro elemento inclusivo con ese nombre');
+                        } else {
+                            message.error('No se ha podido crear el Elemento Inclusivo');
+                        }
                     });
             } else {
                 message.warning('¡Debes completar todos los campos obligatorios en un formato valido!');

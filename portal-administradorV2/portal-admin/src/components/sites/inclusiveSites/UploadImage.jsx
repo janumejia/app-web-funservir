@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload } from 'antd';
+import { Modal, Upload, message } from 'antd';
 import { RcFile, UploadProps } from 'antd/es/upload';
 import { UploadFile } from 'antd/es/upload/interface';
 
@@ -64,9 +64,19 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
     };
 
     const handleChange = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-        console.log(newFileList);
-        // storeTheBase64Value(newFileList);
+        if(newFileList[newFileList.length - 1].originFileObj){
+            const isJpgOrPng = newFileList[newFileList.length - 1].originFileObj.type === 'image/jpeg' || newFileList[newFileList.length - 1].originFileObj.type === 'image/png';
+            if (!isJpgOrPng) {
+                message.error('¡Solo puedes subir imagenes!');
+            } else {
+                setFileList(newFileList);
+            }
+            
+            console.log("newFileList: ", newFileList);
+        } else{
+            setFileList(newFileList);
+        }
+
     }
     
     useEffect(() => {
@@ -117,6 +127,7 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
                 // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                 listType="picture-card"
                 fileList={fileList}
+                // accept="image/png, image/jpg, image/jpeg"
                 beforeUpload={(file) => false}
                 onPreview={handlePreview}
                 onChange={handleChange}
