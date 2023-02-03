@@ -90,7 +90,7 @@ const ManageElements = () => {
                     </Form.Item>
                 ) : (
                     
-                    (inputType === 'object' ? <img src={record.image.url} alt='' style={{ width: '9%', height: 'auto' }} /> : children)
+                    (inputType === 'object' ? <img src={record.image.url} alt='' style={{ width: 'auto', height: '70px' }} /> : children)
             
                 )}
             </td>
@@ -269,7 +269,7 @@ const ManageElements = () => {
 
     const handleAdd = () => {
         const index = data.findIndex((item) => "0" === item._id);
-        if (index === -1) {
+        if (index === -1 && editingKey === "") {
             const newElement = {
                 _id: "0",
                 name: "",
@@ -278,7 +278,7 @@ const ManageElements = () => {
             setData([...data, newElement]);
             edit(newElement);
         } else {
-            message.error('Ya se encuentra creando un Elemento Inclusivo. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando o editando un Elemento Inclusivo. Finalice la creación o elimine el registro añadido');
         }
     };
 

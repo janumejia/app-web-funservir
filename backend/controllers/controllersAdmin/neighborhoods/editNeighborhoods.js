@@ -51,7 +51,7 @@ const editNeighborhoods = async (req, res) => {
 
     // Retorna si existe el nombre, si no existe la localidad o si no existe el _id:
     if (!doesThis_idExist) return res.json({ message: "No existe el _id" });
-    else if (doesThisNameExist && !isTheSameNameForThis_id) return res.json({ message: "Ya existe este barrio" });
+    else if (doesThisNameExist && !isTheSameNameForThis_id) return res.status(409).json({ message: "Ya existe este barrio" });
     else if(!doesThisAssociatedLocalityExist) return res.json({ message: "No existe la localidad asociada" });
 
     // Edita el registro después de pasar los filtros

@@ -501,7 +501,7 @@ const ManageUsers = () => {
 
     const handleAdd = () => {
         const index = data.findIndex((item) => "0" === item._id);
-        if (index === -1) {
+        if (index === -1 && editingKey === "") {
             const newUser = {
                 _id: "0",
                 name: "",
@@ -519,7 +519,7 @@ const ManageUsers = () => {
             setData([...data, newUser]);
             edit(newUser);
         } else {
-            message.error('Ya se encuentra creando un usuario. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando o editando un usuario. Finalice la creación o elimine el registro añadido');
         }
     };
     return (

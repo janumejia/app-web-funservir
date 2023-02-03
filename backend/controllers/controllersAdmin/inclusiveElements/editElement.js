@@ -24,7 +24,7 @@ const editElement = async (req, res) => {
     // /* Fin sanitización entradas */
 
     Elements.findOne({'name': name}).then( async (element)=>{
-        if(!element){
+        if(!element  || (element && element.name === name )){
             const query = { _id: _id };
             let doc = await Elements.findOne(query);
             if (doc.name !== name && doc.image.secure_url === imageUrl) {

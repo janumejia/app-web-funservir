@@ -44,12 +44,12 @@ const ManageInclusiveSites = () => {
     };
 
     const cancel = async () => {
-        
+
         await axios.get('/getInclusiveSites', { headers: { 'token': localStorage.getItem("token") } })
-        .then((res) => {
-            setData(res.data); // Se ajustan los datos recibidos del backend
-        }).catch((error) => console.error(error));
-        
+            .then((res) => {
+                setData(res.data); // Se ajustan los datos recibidos del backend
+            }).catch((error) => console.error(error));
+
         setEditingKey('');
     };
 
@@ -302,11 +302,9 @@ const ManageInclusiveSites = () => {
             (
                 <>
                     <AddEditInclusiveSite site={editedObject} />
-                    <Space>
-                        <Button type="primary" onClick={cancel}>
-                            Regresar
-                        </Button>
-                    </Space>
+                    <Button type="primary" danger style={{"margin-left": "19px"}} onClick={cancel}>
+                        Regresar
+                    </Button>
                 </>
             ) : (
                 <Form form={form} component={false}>

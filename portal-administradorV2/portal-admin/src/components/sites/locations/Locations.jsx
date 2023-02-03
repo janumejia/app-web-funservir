@@ -348,7 +348,7 @@ const ManageLocations = () => {
 
     const handleAdd = () => {
         const index = data.findIndex((item) => "0" === item._id);
-        if (index === -1) {
+        if (index === -1 && editingKey === "") {
             const newUser = {
                 _id: "0",
                 name: "",
@@ -366,7 +366,7 @@ const ManageLocations = () => {
             setData([...data, newUser]);
             edit(newUser);
         } else {
-            message.error('Ya se encuentra creando una categoría. Finalice la creación o elimine el registro añadido');
+            message.error('Ya se encuentra creando o editando una categoría. Finalice la creación o elimine el registro añadido');
         }
     };
     return (
