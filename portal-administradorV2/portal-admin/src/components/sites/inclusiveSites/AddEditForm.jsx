@@ -72,10 +72,13 @@ const AddEditInclusiveSite = ({ site }) => {
     const [availableElements, setAvailableElements] = useState([]);
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
+<<<<<<< HEAD
     const [availableCategories, setAvailableCategories] = useState([]);
     const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
 
 
+=======
+>>>>>>> 9a90c42 (solucionando otra vez conflictos de git)
     const selectedLocality = Form.useWatch("locality", form);
 
     useEffect(() => {
