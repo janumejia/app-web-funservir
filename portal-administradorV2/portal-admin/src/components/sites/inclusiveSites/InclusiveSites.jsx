@@ -302,9 +302,11 @@ const ManageInclusiveSites = () => {
             (
                 <>
                     <AddEditInclusiveSite site={editedObject} />
-                    <Button type="primary" danger style={{"margin-left": "19px"}} onClick={cancel}>
-                        Regresar
-                    </Button>
+                    <Popconfirm title="¿Estás seguro?" okText="Regresar" cancelText="Seguir editando" onConfirm={cancel}>
+                        <Button type="primary" danger style={{ "margin-left": "19px" }}>
+                            Regresar
+                        </Button>
+                    </Popconfirm>
                 </>
             ) : (
                 <Form form={form} component={false}>
