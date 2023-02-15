@@ -12,6 +12,7 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     isCaregiver: {type: String, required:true},
     institution: {type: String, required: false},
     userType: {type: String, required: true},
+    associatedSites: [String],
 })
 
 module.exports = model("User", userSchema) // Después mongo le pone la s (users)

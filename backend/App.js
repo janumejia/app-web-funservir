@@ -24,15 +24,18 @@ app.use(cors())
 
 // app.use(express.json()) // Nos permitirá ver el body que contiene las peticiones POST y PUT
 
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
+// Para permitir el envió de archivos grandes en el JSON (necesario para las imágenes)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb' }));
 
 /* Para mostrar un mensaje de error personalizado al usuario cuando envía un JSON malformado, en vez del mensaje de error real (puede generar fuga de información), en caso que suceda un error en el backend */
-// app.use(function (err, req, res, next) {
-//     // console.error(err.stack);
-//     res.status(500).json({ message: 'Petición no puede ser procesada' });
-//     console.log(err);
-// });
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError) {
+        res.status(422).json({ message: 'El JSON enviado no es válido' });
+    } else {
+        next();
+    }
+});
 
 /* Rutas de nuestra APP */
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
@@ -49,16 +52,16 @@ app.post("/adminLogin", controllersAdmin.adminLogin)
 app.post("/adminLoginWithGoogle", controllersAdmin.adminLoginWithGoogle)
 
 // Parametría elementos inclusivos:
-app.get("/elements",  verifyTokenAdmin, controllersAdmin.getInclusiveElements)
-app.post("/addElement",  verifyTokenAdmin, controllersAdmin.addInclusiveElement)
-app.post("/deleteElement",  verifyTokenAdmin, controllersAdmin.deleteElement)
-app.post("/editElement",  verifyTokenAdmin, controllersAdmin.editElement)
+app.get("/elements", verifyTokenAdmin, controllersAdmin.getInclusiveElements)
+app.post("/addElement", verifyTokenAdmin, controllersAdmin.addInclusiveElement)
+app.post("/deleteElement", verifyTokenAdmin, controllersAdmin.deleteElement)
+app.post("/editElement", verifyTokenAdmin, controllersAdmin.editElement)
 
 // Parametría usuarios:
-app.get("/all_users",  verifyTokenAdmin, controllersAdmin.allUsers)
-app.post("/addUser",  verifyTokenAdmin, controllersAdmin.addUsers)
+app.get("/all_users", verifyTokenAdmin, controllersAdmin.allUsers)
+app.post("/addUser", verifyTokenAdmin, controllersAdmin.addUsers)
 app.post("/editUser", verifyTokenAdmin, controllersAdmin.editUser)
-app.post("/deleteUser",  verifyTokenAdmin, controllersAdmin.deleteUser)
+app.post("/deleteUser", verifyTokenAdmin, controllersAdmin.deleteUser)
 
 // Parametría categorías:
 app.get("/getCategories", verifyTokenAdmin, controllersAdmin.getCategories)
