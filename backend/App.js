@@ -8,9 +8,6 @@ const controllersAdmin = require("./controllers/controllersAdmin")
 const verifyToken = require("./middlewares/verifyToken");
 const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el admin. Comprobamos que el token tenga tipo de usuario administrador
 
-// Importación módulos de validación
-const { validateNeighborhood } = require("./validators/neighborhood")
-
 const app = express();
 app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP está desarrollada con Express JS
 
@@ -86,7 +83,7 @@ app.post("/deleteLocations", verifyTokenAdmin, controllersAdmin.deleteLocations)
 
 // Parametría barrios:
 app.get("/getNeighborhoods", verifyTokenAdmin, controllersAdmin.getNeighborhoods)
-app.post("/addNeighborhoods", verifyTokenAdmin, validateNeighborhood, controllersAdmin.addNeighborhoods)
+app.post("/addNeighborhoods", verifyTokenAdmin, controllersAdmin.addNeighborhoods)
 app.post("/editNeighborhoods", verifyTokenAdmin, controllersAdmin.editNeighborhoods)
 app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighborhoods)
 
