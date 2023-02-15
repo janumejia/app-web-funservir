@@ -91,6 +91,7 @@ const rules = (dataIndex) => {
 
 const EditableCell = ({
     editing,
+    availableSites,
     dataIndex,
     title,
     inputType,
@@ -110,13 +111,13 @@ const EditableCell = ({
                             style={{
                                 margin: 0,
                             }}>
-                        <Select
-                            mode={(title === "Discapacidad") ? "multiple" : ""}
-                            allowClear={(title === "Discapacidad") ? true : false}
-                            style={{
-                                width: '100%',
-                            }}
-                            placeholder="Seleccione una opción"
+                            <Select
+                                mode={(title === "Discapacidad") ? "multiple" : ""}
+                                allowClear={(title === "Discapacidad") ? true : false}
+                                style={{
+                                    width: '100%',
+                                }}
+                                placeholder="Seleccione una opción"
                             /*onChange={(val) => {
                                 const col = selectedValues.find(column => column.title === title);
                                 if (title === "Discapacidad") {
@@ -130,27 +131,11 @@ const EditableCell = ({
 
                                 }
                             }}*/
-                        >
-                            {options(title)}
-                        </Select>
+                            >
+                                {options(title)}
+                            </Select>
                         </Form.Item>
-                    ) : ((title !== "Fecha de nacimiento*") ? (
-                        <Form.Item
-                            name={dataIndex}
-                            style={{
-                                margin: 0,
-                            }}
-                            rules={[
-                                {
-                                    required: (title === 'Fundación') ? false : true,
-                                    message: `¡Introduzca un ${title} válido!`,
-                                    pattern: rules(dataIndex),
-                                },
-                            ]}
-                        >
-                            {inputNode}
-                        </Form.Item>
-                    ) : (
+                    ) : ((title === "Fecha de nacimiento*") ? (
                         <Form.Item
                             name={dataIndex}
                             style={{
@@ -177,7 +162,33 @@ const EditableCell = ({
                                 defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
                             />
                         </Form.Item>
-                    ))}
+                    ) : ((title === 'Fundación') ? (
+                        <Form.Item
+                            name={dataIndex}
+                            style={{
+                                margin: 0,
+                            }}
+                            rules={[
+                                {
+                                    required: (title === 'Fundación') ? false : true,
+                                    message: `¡Introduzca un ${title} válido!`,
+                                    pattern: rules(dataIndex),
+                                },
+                            ]}
+                        >
+                            {inputNode}
+                        </Form.Item>
+
+                    ) : ((title === 'Sitios asociados') ? (
+                        {/* <Select mode="multiple">
+                            {availableSites.map(element => {
+                                return (
+                                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
+                                )
+                            })}
+                        </Select> */}
+
+                    ) : (console.log("No se ha configurado el titulo: ", title)))))}
                 </>
             ) : (
                 children
@@ -193,14 +204,15 @@ const ManageUsers = () => {
     const [data, setData] = useState("");
     const [editingKey, setEditingKey] = useState('');
     const [searchedText, setSearchedText] = useState("");
-    
-    console.log("localstorage token: ", localStorage.getItem("token"));
+    const [availableSites, setAvailableSites] = useState("");
+
     useEffect(() => {
-        axios.get('/all_users', {headers: { 'token': localStorage.getItem("token") }})
+        console.log("localstorage token: ", localStorage.getItem("token"));
+        axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
                 // y se debe convertir a un formato más fácil de leer: 2022-10-10
-                
+
                 for (let i = 0; i < res.data.length; i++) {
                     if (res.data[i].dateOfBirth) {
                         let dateOfBirthAux = moment(res.data[i].dateOfBirth).format("YYYY-MM-DD");
@@ -210,6 +222,12 @@ const ManageUsers = () => {
 
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
+
+        axios.get('/getInclusiveSites', { headers: { 'token': localStorage.getItem("token") } })
+            .then((res) => {
+                setAvailableSites(res.data);
+            }).catch((error) => console.error(error));
+
     }, [])
 
     const isEditing = (record) => record._id === editingKey;
@@ -440,6 +458,13 @@ const ManageUsers = () => {
             editable: true,
             sorter: (a, b) => a.userType.localeCompare(b.userType)
         },
+        // {
+        //     title: 'Sitios asociados',
+        //     dataIndex: "associatedSites",
+        //     key: "associatedSites",
+        //     editable: true,
+        //     sorter: (a, b) => a.userType.localeCompare(b.userType)
+        // },
         {
             title: 'Operación',
             dataIndex: 'operation',
