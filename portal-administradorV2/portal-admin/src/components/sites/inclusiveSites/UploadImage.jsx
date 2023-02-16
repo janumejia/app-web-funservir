@@ -64,21 +64,20 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
     };
 
     const handleChange = ({ fileList: newFileList }) => {
-        if(newFileList[newFileList.length - 1].originFileObj){
+        if (typeof newFileList[newFileList.length - 1] !== 'undefined' && newFileList[newFileList.length - 1].originFileObj) {
             const isJpgOrPng = newFileList[newFileList.length - 1].originFileObj.type === 'image/jpeg' || newFileList[newFileList.length - 1].originFileObj.type === 'image/png';
             if (!isJpgOrPng) {
                 message.error('¡Solo puedes subir imagenes!');
             } else {
                 setFileList(newFileList);
             }
-            
+
             console.log("newFileList: ", newFileList);
-        } else{
+        } else {
             setFileList(newFileList);
         }
-
     }
-    
+
     useEffect(() => {
         const storeTheBase64Value = async (newFileList) => {
             const aux1 = [];
@@ -94,7 +93,7 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
                     } catch (error) {
                         console.log("Error en el método getBase64_Multiple", error);
                     }
-                } else { 
+                } else {
                     aux2.push(file);
                 }
             }
@@ -103,10 +102,10 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
             console.log("aux2 :", aux2)
             setPreviousImagesPreserved(aux2);
         }
-        
+
         storeTheBase64Value(fileList);
     }, [fileList])
-    
+
     const uploadButton = (
         <div>
             <PlusOutlined />

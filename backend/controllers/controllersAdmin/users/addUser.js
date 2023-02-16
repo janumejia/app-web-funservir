@@ -26,7 +26,7 @@ const addUser = async (req, res) => {
     const isValidLastName = lastNameUserRegex.test(lastName);
     const isValidEmail = emailRegex.test(email);
     const isValidPassword = passwordRegex.test(password);
-    const isValidDateOfBirth = moment(dateOfBirth, 'YYYY-MM-DDThh:mm:ss.SSSZ', true).isValid();
+    const isValidDateOfBirth = moment(dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
     const isValidGender = genderRegex.test(gender);
     const isValidAddress = addressRegex.test(address);
 
