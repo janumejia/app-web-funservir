@@ -5,6 +5,7 @@ import './index.css';
 import GalleryVisualizationMode from './GalleryVisualizationMode';
 import AddEditInclusiveSite from './AddEditForm';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete } from 'antd';
+import ExpandableText from './ExpandableText'; // La componente de abreviar texto
 const { Link } = Typography;
 
 const rules = (dataIndex) => {
@@ -178,7 +179,8 @@ const ManageInclusiveSites = () => {
             dataIndex: "description",
             key: "description",
             editable: true,
-            sorter: (a, b) => a.lastName.localeCompare(b.lastName)
+            sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+            render: (text) => <ExpandableText text={text} maxLength={255} />,
         },
         {
             title: 'Categoria*',

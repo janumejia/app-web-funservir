@@ -162,7 +162,16 @@ const EditableCell = ({
                                 defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
                             />
                         </Form.Item>
-                    ) : ((title === 'Fundación') ? (
+                    ) : ((title === 'Sitios asociados') ? (
+                        {/* <Select mode="multiple">
+                            {availableSites.map(element => {
+                                return (
+                                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
+                                )
+                            })}
+                        </Select> */}
+
+                    ) : (
                         <Form.Item
                             name={dataIndex}
                             style={{
@@ -178,17 +187,8 @@ const EditableCell = ({
                         >
                             {inputNode}
                         </Form.Item>
+                     )))}
 
-                    ) : ((title === 'Sitios asociados') ? (
-                        {/* <Select mode="multiple">
-                            {availableSites.map(element => {
-                                return (
-                                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
-                                )
-                            })}
-                        </Select> */}
-
-                    ) : (console.log("No se ha configurado el titulo: ", title)))))}
                 </>
             ) : (
                 children
