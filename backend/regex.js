@@ -43,7 +43,7 @@ module.exports = {
     addressRegex: new RegExp(/^[a-zA-Z0-9 #,.-]{5,255}$/),
     // conditionRegex:
     isCaregiverRegex: new RegExp(/^(Si|No)$/),
-    institutionRegex: generalAlphabetic(1,255),
+    institutionRegex: generalAlphabetic(0,255),
     userTypeRegex: new RegExp(/^(Regular|Propietario|Administrador)$/),
 
     /* Categorías */

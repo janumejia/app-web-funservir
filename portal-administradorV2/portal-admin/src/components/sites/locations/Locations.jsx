@@ -281,10 +281,6 @@ const ManageLocations = () => {
             filteredValue: [searchedText],
             onFilter: (value, record) => {
                 return String(record.name).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.lastName).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.email).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.address).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.institution).toLocaleLowerCase().includes(value.toLocaleLowerCase())
             }
         },
         {
