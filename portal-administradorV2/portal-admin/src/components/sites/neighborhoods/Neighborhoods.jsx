@@ -362,10 +362,7 @@ const ManageUsers = () => {
             filteredValue: [searchedText],
             onFilter: (value, record) => {
                 return String(record.name).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.lastName).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.email).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.address).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.institution).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.associatedLocality).toLocaleLowerCase().includes(value.toLocaleLowerCase())
             }
         },
         {
@@ -374,7 +371,7 @@ const ManageUsers = () => {
             key: "associatedLocality",
             width: "45%",
             editable: true,
-            sorter: (a, b) => a.condition.length - b.condition.length
+            sorter: (a, b) => a.associatedLocality.length - b.associatedLocality.length
         },
         {
             title: 'Operación',

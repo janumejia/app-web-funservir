@@ -168,10 +168,13 @@ const ManageInclusiveSites = () => {
             filteredValue: [searchedText],
             onFilter: (value, record) => {
                 return String(record.name).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.lastName).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.email).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.address).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-                    || String(record.institution).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.description).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.category).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.contactNumber).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.inclusiveElements).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.locality).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.neighborhood).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.gallery).toLocaleLowerCase().includes(value.toLocaleLowerCase())
             }
         },
         {
@@ -179,7 +182,7 @@ const ManageInclusiveSites = () => {
             dataIndex: "description",
             key: "description",
             editable: true,
-            sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+            sorter: (a, b) => a.description.localeCompare(b.description),
             render: (text) => <ExpandableText text={text} maxLength={255} />,
         },
         {
@@ -187,7 +190,7 @@ const ManageInclusiveSites = () => {
             dataIndex: "category",
             key: "category",
             editable: true,
-            sorter: (a, b) => a.email.localeCompare(b.email)
+            sorter: (a, b) => a.category.localeCompare(b.category)
         },
         {
             title: 'Número de contacto*',
@@ -195,13 +198,13 @@ const ManageInclusiveSites = () => {
             ellipsis: true,
             key: "contactNumber",
             editable: true,
+            sorter: (a, b) => a.contactNumber.localeCompare(b.contactNumber)
         },
         {
             title: 'Elementos inclusivos*',
             dataIndex: "inclusiveElements",
             key: "inclusiveElements",
             editable: true,
-            sorter: (a, b) => a.address.localeCompare(b.address)
         },
         {
             title: 'Ubicación',
@@ -214,21 +217,21 @@ const ManageInclusiveSites = () => {
                         {"Lat: " + Object.values(item)[0] + ", Lng: " + Object.values(item)[1]}
                     </Link>
                 )
-            },
-            sorter: (a, b) => a.condition.length - b.condition.length
+            }
         },
         {
             title: 'Localidad*',
             dataIndex: "locality",
             key: "locality",
-            editable: true
+            editable: true,
+            sorter: (a, b) => a.locality.localeCompare(b.locality)
         },
         {
             title: 'Barrio*',
             dataIndex: "neighborhood",
             key: "neighborhood",
             editable: true,
-            sorter: (a, b) => a.gender.localeCompare(b.gender)
+            sorter: (a, b) => a.locality.localeCompare(b.locality)
         },
         {
             title: 'Galeria*',
@@ -248,8 +251,7 @@ const ManageInclusiveSites = () => {
                 })
 
                 return <GalleryVisualizationMode urlArray={imgs} />
-            },
-            sorter: (a, b) => a.gender.localeCompare(b.gender)
+            }
         },
         {
             title: 'Operación',
