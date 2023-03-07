@@ -1,6 +1,9 @@
 const cloudinary = require("../../../middlewares/cloudinary");
 const InclusiveSites = require("../../../model/site")
 const Neighborhoods = require("../../../model/neighborhoods")
+const User = require("../../../model/user")
+const { ObjectId } = require('mongodb');
+
 const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
@@ -27,8 +30,12 @@ const editInclusiveSites = async (req, res) => {
     // }
     // /* Fin sanitización entradas */
 
-    InclusiveSites.findOne({ '_id': inputs._id }).then((element) => {
-        if (!element) {
+    // Validar que el _id del dueño de sitio exista
+    const userExist = await User.findOne({ '_id': inputs.owner });
+    if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
+
+    InclusiveSites.findOne({ '_id': inputs._id }).then((elementIS) => {
+        if (!elementIS) {
             res.status(404).json({ message: "No existe un sitio inclusivo con ese _id" })
         } else {
 
@@ -79,10 +86,49 @@ const editInclusiveSites = async (req, res) => {
                                 locality: inputs.locality,
                                 neighborhood: inputs.neighborhood,
                                 $push: { gallery: { $each: uploadRes } },
+                                owner: ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
                             }
-                            InclusiveSites.findByIdAndUpdate(query, update).then((element) => {
+                            InclusiveSites.findByIdAndUpdate(query, update).then((element1) => {
                                 InclusiveSites.updateMany({ $pull: { gallery: { public_id: { $in: deletedImgs } } } }).then((element) => {
-                                    res.status(200).json({ message: "Sitio inclusivo actualizado correctamente" });
+
+                                    if(elementIS._id === inputs.owner){
+                                        res.status(200).json({ message: "Sitio actualizado correctamente", element })
+                                    } else if(elementIS._id !== inputs.owner){
+                                        
+                                        // También procedemos a buscar un usuario que tenga ese sitio asociado y lo borramos
+                                        User.updateMany(
+                                            // Filtro para seleccionar los documentos que contienen el _id en el arreglo sitios
+                                            { "associatedSites": { $elemMatch: { $eq: ObjectId(inputs._id) } } },
+                                            // Operador $pull para eliminar el objeto que contiene el _id del arreglo sitios
+                                            { $pull: { associatedSites: ObjectId(inputs._id) } }
+                                          )
+                                            .then((updatedUser) => {
+
+                                                // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
+                                                const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: ObjectId(elementIS._id) } }; // Verificar que el sitio no existe ya en el arreglo
+                                                const update = {
+                                                    $addToSet: { associatedSites: { _id: ObjectId(elementIS._id) } } // Agregar el sitio al arreglo solo si no existe ya en el mismo
+                                                }
+                                                
+                                                User.findByIdAndUpdate(query, update).then((element2) => {
+                                                  res.status(200).json({ message: "Sitio y usuarios actualizados correctamente", element1 });
+                                                  
+          
+                                              }).catch((error) => {
+                                                  console.error(error)
+                                                  res.status(500).json({ message: "Error al agregar sitio inclusivo a dueño de sitio" })
+                                              })
+                                            })
+                                            .catch((error) => {
+                                              console.error(error);
+                                              res.status(500).json({ message: "Error al eliminar sitio del usuario" });
+                                            });
+                                            
+
+
+                                    } else {
+                                        res.status(500).json({ message: "Error" })
+                                    }
                                 }).catch((error) => {
                                     console.log(error);
                                     res.status(500).json({ message: "Error en la eliminación de imágenes" })

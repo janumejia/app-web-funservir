@@ -1,6 +1,9 @@
 const cloudinary = require("../../../middlewares/cloudinary");
 const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
+const User = require("../../../model/user")
+const { ObjectId } = require('mongodb');
+
 const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
@@ -18,6 +21,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'location', dataType: 'object' },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
+        // { input: 'owner', dataType: 'string', regex: ownerRegex },
         // Falta verificar: imgToAdd e imgToDelete
     ]
 
@@ -29,6 +33,11 @@ const addInclusiveSites = async (req, res) => {
     // }
     // /* Fin sanitización entradas */
 
+    // Validar que el _id del dueño de sitio exista
+    const userExist = await User.findOne({ '_id': inputs.owner });
+    if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
+
+    // Guardar sitio de interés
     InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
         if (element) {
             res.status(409).json({ message: "Ya existe este sitio inclusivo" })
@@ -61,27 +70,36 @@ const addInclusiveSites = async (req, res) => {
                         locality: inputs.locality,
                         neighborhood: inputs.neighborhood,
                         gallery: uploadRes,
+                        owner: ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
                     })
 
 
                     newInclusiveSites.save().then((element) => { // Si todo sale bien...
-                        res.status(200).json({ message: "Sitio inclusivo creado correctamente", element })
-                    })
-                        .catch((error) => {
+
+                        // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
+                        const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: ObjectId(element._id) } }; // Verificar que el sitio no existe ya en el arreglo
+                        const update = {
+                            $addToSet: { associatedSites: ObjectId(element._id) } // Agregar el sitio al arreglo solo si no existe ya en el mismo
+                        }
+
+                        User.findByIdAndUpdate(query, update).then((element2) => {
+                            res.status(200).json({ message: "Sitio creado y usuario actualizado correctamente", element })
+
+                        }).catch((error) => {
                             console.error(error)
-                            res.status(500).json({ message: "Error en creación de sitios inclusivo" })
+                            res.status(500).json({ message: "Error al agregar sitio inclusivo a dueño de sitio" })
                         })
-
-
-
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                        res.status(500).json({ message: "Error en creación de sitios inclusivo" })
+                    })
                 } else {
                     res.status(404).json({ message: "No existe el barrio o localidad ingresada" })
                 }
             })
         }
     })
-
-
 }
 
 module.exports = addInclusiveSites
