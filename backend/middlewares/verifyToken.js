@@ -5,7 +5,7 @@ const verifyToken = async (req, res, next) => {
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (error, data) => {
-      if (error) return res.status(401).json({ message: "Token invalido" });
+      if (error) return res.status(401).json({ message: "Token inválido" });
       else {
         req.user = data;
         next();

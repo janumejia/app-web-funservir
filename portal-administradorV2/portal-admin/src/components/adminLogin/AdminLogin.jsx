@@ -122,6 +122,7 @@ const AdminLogin = () => {
                             remember: true,
                         }}
                         onFinish={(e) => onSubmit(e)}
+                        autocomplete= "none"
                     >
                         <Form.Item
                             name="email"
@@ -129,10 +130,11 @@ const AdminLogin = () => {
                                 {
                                     required: true,
                                     message: '¡Por favor introduce tu correo!',
+                                    autocomplete: "none"
                                 },
                             ]}
                         >
-                            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Correo electrónico" />
+                            <Input autocomplete="off" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Correo electrónico" />
                         </Form.Item>
                         <Form.Item
                             name="password"
@@ -140,10 +142,12 @@ const AdminLogin = () => {
                                 {
                                     required: true,
                                     message: '¡Por favor introduce tu contraseña!',
+                                    autocomplete: "none"
                                 },
                             ]}
                         >
                             <Input
+                                autocomplete="off"
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 placeholder="Contraseña"
