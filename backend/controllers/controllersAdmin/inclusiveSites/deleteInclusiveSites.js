@@ -19,9 +19,14 @@ const deleteInclusiveSites = async (req, res) => {
     // }
     /* Fin sanitización entradas */
 
-    await InclusiveSites.deleteOne({ _id: inputs._id })
+    InclusiveSites.deleteOne({ _id: inputs._id })
         .then((element) => {
-            if (element.deletedCount !== 0) res.status(200).json({ message: "Sitio inclusivo borrado correctamente" });
+            if (element.deletedCount !== 0){
+                res.status(200).json({ message: "Sitio inclusivo borrado correctamente" });
+                    
+
+
+            }
             else res.status(400).json({ message: "No se encontró el sitio inclusivo" });
         })
         .catch((error) => {
