@@ -22,6 +22,7 @@ module.exports = {
     locationRegex: new RegExp(/^[-]{0,1}\d{1,4}\.\d{1,20}$/),
     localityRegex: generalAlphanumeric(1,100),
     neighborhoodRegex: generalAlphanumeric(1,100),
+    // imgRegex:
 
     /* Localidades */
     nameLocationRegex: generalAlphanumeric(1,100),

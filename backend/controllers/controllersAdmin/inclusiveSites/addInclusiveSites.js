@@ -3,103 +3,111 @@ const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
 const User = require("../../../model/user")
 const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 
-const { nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
     // Entradas: name, description, category, contactNumber, locality, neighborhood
     const { ...inputs } = req.body;
 
-    // Definición de las variables que esperamos
+    // Declaración de matriz de objetos, donde cada objeto representa un campo que se espera en el JSON de entrada
     const dataArray = [
         { input: 'name', dataType: 'string', regex: nameRegex },
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
-        { input: 'inclusiveElements', dataType: 'object', isArray: true },
-        { input: 'location', dataType: 'object' },
+        { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
-        // { input: 'owner', dataType: 'string', regex: ownerRegex },
-        // Falta verificar: imgToAdd e imgToDelete
+        // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
+        // { input: 'imgToDelete', dataType: 'string', regex: _idMongooseRegex },
+        { input: 'owner', dataType: 'string', regex: _idMongooseRegex },
     ]
 
-    /* Sanitización entradas */
-    // Validar el tipo de dato y si cumple con los caracteres permitidos
-    // for(var i = 0; i < dataArray.length; i++){
-    //     if (typeof (inputs[dataArray[i].input]) !== dataArray[i].dataType) return res.status(422).json({ message: `Tipo de dato de ${dataArray[i].input} no es válido` });
-    //     if (dataArray[i].regex.test(inputs[dataArray[i].input]) === false) return res.status(422).json({ message: `Formato de ${dataArray[i].input} no es válido` });
-    // }
-    // /* Fin sanitización entradas */
-
-    // Validar que el _id del dueño de sitio exista
-    const userExist = await User.findOne({ '_id': inputs.owner });
-    if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
-
-    // Guardar sitio de interés
-    InclusiveSites.findOne({ 'name': inputs.name }).then((element) => {
-        if (element) {
-            res.status(409).json({ message: "Ya existe este sitio inclusivo" })
-        } else {
-            Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality }).then( async (element) => {
-                if (element) {
-
-                    // En esta parte vamos a recorrer el arreglo que contiene los base64 de las imágenes a agregar y los va a subir a Cloudinary, uno por uno
-                    const uploadRes = [];
-                    for (let index = 0; index < inputs.imgToAdd.length; index++){
-                        await cloudinary.uploader.upload(inputs.imgToAdd[index], {
-                            upload_preset: "sites_pictures"
-                        })
-                        .then(resAux => {
-                            uploadRes.push(resAux);
-                        })
-                        .catch(error => {
-                            console.log("error: ", error);
-                        })                   
-                    }
-
-                    // Creación del objeto a agregar en mongodb
-                    const newInclusiveSites = new InclusiveSites({
-                        name: inputs.name,
-                        description: inputs.description,
-                        category: inputs.category,
-                        contactNumber: inputs.contactNumber,
-                        inclusiveElements: inputs.inclusiveElements,
-                        location: inputs.location,
-                        locality: inputs.locality,
-                        neighborhood: inputs.neighborhood,
-                        gallery: uploadRes,
-                        owner: ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
-                    })
-
-
-                    newInclusiveSites.save().then((element) => { // Si todo sale bien...
-
-                        // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
-                        const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: ObjectId(element._id) } }; // Verificar que el sitio no existe ya en el arreglo
-                        const update = {
-                            $addToSet: { associatedSites: ObjectId(element._id) } // Agregar el sitio al arreglo solo si no existe ya en el mismo
-                        }
-
-                        User.findByIdAndUpdate(query, update).then((element2) => {
-                            res.status(200).json({ message: "Sitio creado y usuario actualizado correctamente", element })
-
-                        }).catch((error) => {
-                            console.error(error)
-                            res.status(500).json({ message: "Error al agregar sitio inclusivo a dueño de sitio" })
-                        })
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                        res.status(500).json({ message: "Error en creación de sitios inclusivo" })
-                    })
-                } else {
-                    res.status(404).json({ message: "No existe el barrio o localidad ingresada" })
-                }
-            })
+    // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
+    // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
+    const validateInput = (input, dataName, dataType, regex) => {
+        if (dataType === 'string') {
+            return typeof input === 'string' && regex.test(input);
         }
-    })
+        if (dataType === 'array') {
+            return Array.isArray(input) && input.every(element => regex.test(element)); // Método every para iterar sobre cada uno de los elementos del arreglo y comprobar si cada elemento cumple con la expresión regular
+        }
+        if (dataType === 'object') {
+            return typeof input === 'object' && input !== null &&
+                dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
+                    if (requiredInput !== dataName) return true;
+                    return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
+                });
+        }
+        return false;
+    };
+
+    // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+    // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
+    for (const { input, dataType, regex } of dataArray) {
+        const inputValue = inputs[input];
+        if (!validateInput(inputValue, input, dataType, regex)) {
+            return res.status(422).json({ message: `El valor de ${input} es inválido` });
+        }
+    }
+
+    try {
+        // Validar que el _id del dueño de sitio exista
+        const userExist = await User.findOne({ '_id': inputs.owner });
+        if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
+
+        // Verificar que el barrio y la localidad existan
+        const neighborhood = await Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality });
+        if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
+
+        // Subir las imágenes a Cloudinary
+        const uploadPromises = inputs.imgToAdd.map(img => {
+            return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
+        });
+        const uploadRes = await Promise.all(uploadPromises);
+
+        // Crear objeto a agregar en mongodb
+        const newInclusiveSites = new InclusiveSites({
+            name: inputs.name,
+            description: inputs.description,
+            category: inputs.category,
+            contactNumber: inputs.contactNumber,
+            inclusiveElements: inputs.inclusiveElements,
+            location: inputs.location,
+            locality: inputs.locality,
+            neighborhood: inputs.neighborhood,
+            gallery: uploadRes,
+            owner: ObjectId(inputs.owner),
+        });
+
+        // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente
+        try {
+            const savedSite = await newInclusiveSites.save(); // Guardamos el sitios. Tener en cuenta que si el sitio ya existe se arroja el error con código 11000
+
+            // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
+            const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: savedSite._id } }; // Verificar que el sitio no existe ya en el arreglo
+            const update = {
+                $addToSet: { associatedSites: savedSite._id }
+            };
+
+            const savedUser = await User.findByIdAndUpdate(query, update);
+
+            return res.status(200).json({ message: "Sitio creado y usuario actualizado correctamente", element: savedSite });
+
+        } catch (error) {
+            if (error.code === 11000) return res.status(409).json({ message: "Ya existe este sitio inclusivo" }); // Este código de error se produce cuando hay un índice único duplicado
+            console.error(error);
+            return res.status(500).json({ message: "Error en creación del sitios inclusivo" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error en creación del sitios inclusivo" });
+
+    }
 }
 
 module.exports = addInclusiveSites

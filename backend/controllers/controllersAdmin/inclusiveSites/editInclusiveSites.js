@@ -3,8 +3,12 @@ const InclusiveSites = require("../../../model/site")
 const Neighborhoods = require("../../../model/neighborhoods")
 const User = require("../../../model/user")
 const { ObjectId } = require('mongodb');
+// const NodeClam = require('clamscan');
 
-const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex } = require("../../../regex") // Importación de patrones de Regex
+// Crea un objeto ClamAV para verificación de imágenes libres de virus
+// const clam = new NodeClam().init();
+
+const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -22,15 +26,15 @@ const editInclusiveSites = async (req, res) => {
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
-        // { input: 'imgToAdd', dataType: 'string', regex: imgRegex },
+        // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         // { input: 'imgToDelete', dataType: 'string', regex: _idMongooseRegex },
-        { input: 'owner', dataType: 'string', regex: _idMongooseRegex },
+        { input: 'owner', dataType: 'string', regex: _idMongooseRegex }
     ]
-    
+
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
     // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
     const validateInput = (input, dataName, dataType, regex) => {
-        console.log("entra va validateInput con input:", input, " dataType:", dataType, " regex:", regex)
+        // console.log("entra va validateInput con input:", input, " dataType:", dataType, " regex:", regex)
         if (dataType === 'string') {
             return typeof input === 'string' && regex.test(input);
         }
@@ -40,28 +44,21 @@ const editInclusiveSites = async (req, res) => {
         if (dataType === 'object') {
             return typeof input === 'object' && input !== null &&
                 dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
-                        // console.log("entra a linea 69, dataName:", dataName, " requiredInput:", requiredInput)
-                        if (requiredInput !== dataName) return true;
-                        // else (console.log("entra a linea 70"))
+                    if (requiredInput !== dataName) return true;
                     return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
                 });
         }
         return false;
     };
 
-    // Función validateJson que toma el objeto JSON de entrada como argumento.
-    // La función recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+    // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
     // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
-    const validateJson = (jsonData) => {
-        for (const { input, dataType, regex } of dataArray) {
-            const inputValue = jsonData[input];
-            if (!validateInput(inputValue, input, dataType, regex)) {
-                return res.status(422).json({ message: `El valor de ${input} es inválido` });
-            }
+    for (const { input, dataType, regex } of dataArray) {
+        const inputValue = inputs[input];
+        if (!validateInput(inputValue, input, dataType, regex)) {
+            return res.status(422).json({ message: `El valor de ${input} es inválido` });
         }
-    };
-
-    validateJson(inputs);
+    }
 
     try {
         // Validar que el _id del dueño de sitio exista
@@ -117,7 +114,7 @@ const editInclusiveSites = async (req, res) => {
         // Eliminamos las imágenes del sitio inclusivo que se borraron en Cloudinary
         await InclusiveSites.updateMany({ $pull: { gallery: { public_id: { $in: deletedImgs } } } });
 
-        // Buscamos los usuarios que tienen este sitio inclusivo asociado y lo actualizamos
+        // Buscamos los usuarios que tienen este sitio inclusivo asociado y lo actualizamos (lo desasociamos)
         await User.updateMany(
             // Filtro para seleccionar los documentos que contienen el _id en el arreglo sitios
             { "associatedSites": { $elemMatch: { $eq: ObjectId(inputs._id) } } },
