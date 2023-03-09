@@ -1,7 +1,7 @@
 import { Button, Form, Input, message, Space, Select, Popconfirm } from 'antd';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import UploadImage from './UploadImage';
 
 const AddEditInclusiveSite = ({ site }) => {
@@ -72,13 +72,9 @@ const AddEditInclusiveSite = ({ site }) => {
     const [availableElements, setAvailableElements] = useState([]);
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
-<<<<<<< HEAD
     const [availableCategories, setAvailableCategories] = useState([]);
-    const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
 
 
-=======
->>>>>>> 9a90c42 (solucionando otra vez conflictos de git)
     const selectedLocality = Form.useWatch("locality", form);
 
     useEffect(() => {
