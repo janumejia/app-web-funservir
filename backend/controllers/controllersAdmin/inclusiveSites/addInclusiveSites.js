@@ -87,7 +87,8 @@ const addInclusiveSites = async (req, res) => {
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente
         try {
             const savedSite = await newInclusiveSites.save(); // Guardamos el sitios. Tener en cuenta que si el sitio ya existe se arroja el error con código 11000
-
+            //const a = await InclusiveSites.findById(savedSite._id).populate('owner', {name:1});
+            
             // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
             const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: savedSite._id } }; // Verificar que el sitio no existe ya en el arreglo
             const update = {

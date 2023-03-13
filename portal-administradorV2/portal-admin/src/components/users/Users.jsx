@@ -460,13 +460,22 @@ const ManageUsers = () => {
             editable: true,
             sorter: (a, b) => a.userType.localeCompare(b.userType)
         },
-        // {
-        //     title: 'Sitios asociados',
-        //     dataIndex: "associatedSites",
-        //     key: "associatedSites",
-        //     editable: true,
-        //     sorter: (a, b) => a.userType.localeCompare(b.userType)
-        // },
+        {
+            title: 'Sitios asociados',
+            dataIndex: "associatedSites",
+            key: "associatedSites",
+            editable: true,
+            render: (e)=>{
+                let sites = '';
+                if(e){
+                    e.forEach((e)=>{
+                        sites+=e.name+"\n";
+                    })
+                }
+                return <div style={{ whiteSpace: 'pre-wrap' }}>{sites}</div>;
+            },
+            sorter: (a, b) => a.userType.localeCompare(b.userType)
+        },
         {
             title: 'Operación',
             dataIndex: 'operation',

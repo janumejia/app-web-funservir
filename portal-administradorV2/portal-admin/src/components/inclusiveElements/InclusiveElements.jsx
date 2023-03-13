@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner http://localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Modal, Upload } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete} from 'antd';
 import UploadComponent from './UploadComponent';
 
 const rules = (dataIndex) => {
@@ -69,6 +69,7 @@ const ManageElements = () => {
         ...restProps
     }) => {
         const inputNode = (inputType === 'object' ? <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} /> : <Input />);
+        console.log(record);
         return (
             <td {...restProps}>
                 {editing ? (
@@ -103,7 +104,6 @@ const ManageElements = () => {
         form.setFieldsValue({
             ...record
         });
-
         setEditingKey(record._id);
         setImageUrl(record.image.secure_url)
     };

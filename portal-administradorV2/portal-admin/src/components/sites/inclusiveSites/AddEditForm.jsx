@@ -7,7 +7,7 @@ import UploadImage from './UploadImage';
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
     //Mirar esa propiedad "warningOnly"
-
+    console.log(site);
     const [latlng, setLatLng] = useState(site.location);
     const [arrayBase64, setArrayBase64] = useState([]);
     const [previousImagesPreserved, setPreviousImagesPreserved] = useState([]);
@@ -73,7 +73,6 @@ const AddEditInclusiveSite = ({ site }) => {
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
     const [availableCategories, setAvailableCategories] = useState([]);
-    const [availableNeighInThatLocality, setAvailableNeighInThatLocality] = useState([]);
 
 
     const selectedLocality = Form.useWatch("locality", form);
@@ -112,6 +111,11 @@ const AddEditInclusiveSite = ({ site }) => {
                 setAvailableCategories(res.data);
             }).catch((error) => console.error(error));
 
+        axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
+            .then((res) => {
+                setAvailableElements(res.data);
+            }).catch((error) => console.error(error));
+
     }, [])
 
 
@@ -130,7 +134,8 @@ const AddEditInclusiveSite = ({ site }) => {
                     "location": (site.location) ? site.location.lat + "," + site.location.lng : "",
                     "locality": site.locality,
                     "neighborhood": site.neighborhood,
-                    "gallery": site.gallery
+                    "gallery": site.gallery,
+                    "owner": site.owner
                 }}
             >
                 <Form.Item
