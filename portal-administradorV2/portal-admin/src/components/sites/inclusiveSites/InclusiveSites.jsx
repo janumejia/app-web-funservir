@@ -254,6 +254,18 @@ const ManageInclusiveSites = () => {
             }
         },
         {
+            title: 'Dueño*',
+            dataIndex: "owner",
+            key: "owner",
+            editable: true,
+            render: (e) =>{
+                if(e){
+                    return e.name + " " + e.lastName;
+                }
+            },
+            sorter: (a, b) => a.locality.localeCompare(b.locality)
+        },
+        {
             title: 'Operación',
             dataIndex: 'operation',
             key: "operation",
