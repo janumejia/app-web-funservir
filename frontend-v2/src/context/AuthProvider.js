@@ -13,25 +13,28 @@ const fakeUserData = {
   roles: ['USER', 'ADMIN'],
 };
 
+// Componente provider
 const AuthProvider = (props) => {
+  
   let navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [admin, setAdmin] = useState(false);
+  
   const signIn = async (params) => {
     //console.log(params, 'sign in form Props');
     await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params)
     .then((response)=>{
       console.log(response);
-      if(response.data.user.userType === 'A'){
-        setAdmin(true);
-        setLoggedIn(true);
-        window.location.replace("http://localhost:3002");
-      }else{
+      // if(response.data.user.userType === 'A'){
+      //   setAdmin(true);
+      //   setLoggedIn(true);
+      //   window.location.replace("http://localhost:3002");
+      // }else{
         setUser(fakeUserData);
         setLoggedIn(true);
         navigate('/', { replace: true });
-      }
+      // }
     })
     .catch((error)=>{
       console.error(error);

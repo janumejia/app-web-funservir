@@ -467,7 +467,7 @@ const ManageUsers = () => {
                 let sites = '';
                 if(e){
                     e.forEach((e)=>{
-                        sites+=e.name+"\n";
+                        sites += " - " + e.name + "\n";
                     })
                 }
                 return <div style={{ whiteSpace: 'pre-wrap' }}>{sites}</div>;
