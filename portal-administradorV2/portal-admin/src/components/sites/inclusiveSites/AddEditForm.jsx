@@ -7,7 +7,6 @@ import UploadImage from './UploadImage';
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
     //Mirar esa propiedad "warningOnly"
-    console.log(site);
     const [latlng, setLatLng] = useState(site.location);
     const [arrayBase64, setArrayBase64] = useState([]);
     const [previousImagesPreserved, setPreviousImagesPreserved] = useState([]);
@@ -73,6 +72,7 @@ const AddEditInclusiveSite = ({ site }) => {
     const [availableLocalities, setAvailableLocalities] = useState([]);
     const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
     const [availableCategories, setAvailableCategories] = useState([]);
+    const [availableUsers, setavailableUsers] = useState([]);
 
 
     const selectedLocality = Form.useWatch("locality", form);
@@ -113,12 +113,13 @@ const AddEditInclusiveSite = ({ site }) => {
 
         axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
-                setAvailableElements(res.data);
+                setavailableUsers(res.data);
             }).catch((error) => console.error(error));
 
     }, [])
 
-
+    console.log(availableUsers);
+    
     return (
         <>
             {contextHolder}
@@ -135,7 +136,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     "locality": site.locality,
                     "neighborhood": site.neighborhood,
                     "gallery": site.gallery,
-                    "owner": site.owner
+                    "owner": (site.owner)?site.owner.name +" "+site.owner.lastName:""
                 }}
             >
                 <Form.Item
@@ -276,6 +277,26 @@ const AddEditInclusiveSite = ({ site }) => {
                                     <Select.Option key={neighborhood.name} value={neighborhood.name}>{neighborhood.name}</Select.Option>
                                 )
                             }
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="owner"
+                    label="Dueño del sitio"
+                    rules={[
+                        {
+                            required: true,
+                            message: `¡Introduzca un descripción válida!`,
+                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Select>
+                        {availableUsers.map(element => {
+                            return (
+                                <Select.Option key={element.name} value={element._id}>{element.name+" "+element.lastName}</Select.Option>
+                            )
                         })}
                     </Select>
                 </Form.Item>
