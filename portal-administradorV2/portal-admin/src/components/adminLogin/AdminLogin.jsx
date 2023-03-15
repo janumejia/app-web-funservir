@@ -33,7 +33,7 @@ const AdminLogin = () => {
                 email: e.email,
                 password: e.password
             };
-            // console.log("Usuario ", Usuario)
+
             await axios
                 .post("/adminLogin", Usuario)
                 .then((res) => {
@@ -42,7 +42,7 @@ const AdminLogin = () => {
                     
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
-                            // console.log("ok")
+                    
                             localStorage.setItem("token", data?.user.token);
                             let decodedToken = jwt_decode(data?.user.token);
                             setAuth(decodedToken); // Lo asignamos a la variable global Auth, usando Context
@@ -63,11 +63,11 @@ const AdminLogin = () => {
     };
 
     const googleSuccess = async (resAuth) => {
-        console.log(resAuth);
+       
         await axios
             .post("/adminLoginWithGoogle", resAuth)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
             })
             .catch((error) => {
                 console.error(error);

@@ -209,7 +209,6 @@ const ManageUsers = () => {
     const [availableSites, setAvailableSites] = useState("");
 
     useEffect(() => {
-        console.log("localstorage token: ", localStorage.getItem("token"));
         axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 // Para modificar el formato de la fecha, ya que llega de esta forma: 2022-10-10T00:00:00.000Z
@@ -328,7 +327,6 @@ const ManageUsers = () => {
                             let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
                             res.data.doc.dateOfBirth = dateOfBirth2;
 
-                            console.log("res.data: ", res.data)
                             newData.splice(index, 1, res.data.doc);
                             setData(newData);
                             setEditingKey('');

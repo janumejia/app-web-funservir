@@ -238,7 +238,6 @@ const ManageCategories = () => {
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos en un formato válido!');
-            // console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
         }
     };
 

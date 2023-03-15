@@ -319,7 +319,7 @@ const ManageInclusiveSites = () => {
                 <>
                     <AddEditInclusiveSite site={editedObject} />
                     <Popconfirm title="¿Estás seguro?" okText="Regresar" cancelText="Seguir editando" onConfirm={cancel}>
-                        <Button type="primary" danger style={{ "margin-left": "19px" }}>
+                        <Button type="primary" danger style={{ "marginLeft": "19px" }}>
                             Regresar
                         </Button>
                     </Popconfirm>

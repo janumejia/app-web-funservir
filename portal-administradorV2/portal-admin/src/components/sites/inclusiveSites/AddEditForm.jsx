@@ -63,7 +63,6 @@ const AddEditInclusiveSite = ({ site }) => {
         } catch (errInfo) {
             message.destroy("key-loading")
             message.warning('¡Debes completar todos los campos en un formato válido!');
-            console.log(errInfo)
         }
     }
 
@@ -118,7 +117,6 @@ const AddEditInclusiveSite = ({ site }) => {
 
     }, [])
 
-    console.log(availableUsers);
     
     return (
         <>
@@ -286,8 +284,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     rules={[
                         {
                             required: true,
-                            message: `¡Introduzca un descripción válida!`,
-                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
+                            message: `¡Introduzca un nombre de dueño válido!`,
                             type: 'string'
                         }
                     ]}
@@ -295,7 +292,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     <Select>
                         {availableUsers.map(element => {
                             return (
-                                <Select.Option key={element.name} value={element._id}>{element.name+" "+element.lastName}</Select.Option>
+                                <Select.Option key={element._id} value={element._id}>{element.name + " " + element.lastName}</Select.Option>
                             )
                         })}
                     </Select>
