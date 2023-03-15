@@ -49,7 +49,6 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj)
-            console.log("el base64: ", file.preview)
         }
 
         setPreviewImage(file.url || file.preview);
@@ -66,7 +65,6 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
                 setFileList(newFileList);
             }
 
-            console.log("newFileList: ", newFileList);
         } else {
             setFileList(newFileList);
         }
@@ -78,22 +76,19 @@ const UploadImage = ({ gallery, setArrayBase64, setPreviousImagesPreserved }) =>
             const aux2 = [];
             for (let index = 0; index < newFileList.length; index++) {
                 const file = newFileList[index]
-                console.log("file: ", file)
                 if (file.originFileObj !== undefined) {
                     try {
                         const theBase64 = await getBase64(file.originFileObj);
-                        console.log("here is the theBase64: ", theBase64)
                         aux1.push(theBase64);
                     } catch (error) {
-                        console.log("Error en el método getBase64_Multiple", error);
+                        
                     }
                 } else {
                     aux2.push(file);
                 }
             }
-            console.log("aux1 :", aux1)
+
             setArrayBase64(aux1); // Parece que este valor no se actualiza automáticamente
-            console.log("aux2 :", aux2)
             setPreviousImagesPreserved(aux2);
         }
 

@@ -8,22 +8,31 @@ import { AuthContext } from 'context/AuthProvider';
 import { FORGET_PASSWORD_PAGE } from 'settings/constant';
 import { FieldWrapper, SwitchWrapper, Label } from '../Auth.style';
 
+// DESCRIPCIÓN:
+// Componente del formulario (campos de correo y contraseña) que usa la componente de la página de inicio de sesión. 
+
 export default function SignInForm() {
+  
+  // Extraemos signIn, loggedIn y admin del contexto de autenticación
   const { signIn, loggedIn, admin } = useContext(AuthContext);
+  
+  // Extraemos control, errors, y handleSubmit de useForm
   const {
     control,
     formState: { errors },
     handleSubmit,
   } = useForm();
+  
+  // Función que se ejecuta al enviar el formulario
   const onSubmit = (data) => {
     signIn(data);
     console.log(admin);
   };
+  
+  // Si el usuario está loggeado y no es admin, redirigimos a la página principal
   if (loggedIn && !admin) {
     return <Navigate to="/" replace={true} />;
   }
-
-  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -74,7 +83,7 @@ export default function SignInForm() {
                 <span>La contraseña debe tener mínimo 8 caracteres</span>
               )}
               {errors.password?.type === 'maxLength' && (
-                <span>La contraseña debe no debe superar 20 caracteres</span>
+                <span>La contraseña debe no debe superar 50 caracteres</span>
               )}
             </>
           )
@@ -84,7 +93,7 @@ export default function SignInForm() {
           name="password"
           defaultValue=""
           control={control}
-          rules={{ required: true, minLength: 8, maxLength: 20 }}
+          rules={{ required: true, minLength: 8, maxLength: 50 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input.Password onChange={onChange} onBlur={onBlur} value={value} />
           )}

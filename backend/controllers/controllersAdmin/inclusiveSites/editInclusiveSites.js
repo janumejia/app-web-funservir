@@ -129,7 +129,7 @@ const editInclusiveSites = async (req, res) => {
         };
 
         const updatedUser = await User.findOneAndUpdate(query2, update2);
-        res.status(200).json({ message: "Sitio y usuarios actualizados correctamente" });
+        res.status(200).json({ message: "Sitio actualizado correctamente" });
 
     } catch (error) {
         // Si se produce algún error, lo capturamos y devolvemos un mensaje de error genérico

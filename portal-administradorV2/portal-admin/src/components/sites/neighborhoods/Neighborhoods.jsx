@@ -296,8 +296,6 @@ const ManageUsers = () => {
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
-                            console.log("res.data:");
-                            console.log(res.data);
                             newData.splice(index, 1, res.data.ans);
                             setData(newData);
                             setEditingKey('');

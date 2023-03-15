@@ -69,7 +69,7 @@ const ManageElements = () => {
         ...restProps
     }) => {
         const inputNode = (inputType === 'object' ? <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} /> : <Input />);
-        console.log(record);
+        
         return (
             <td {...restProps}>
                 {editing ? (
@@ -141,7 +141,7 @@ const ManageElements = () => {
                             message.error('No se ha podido crear el Elemento Inclusivo');
 
                         }
-                        console.log("error: ", error)
+                        
                     });
             } else if (key !== "0") {
                 axios.post('/editElement', { ...item, ...row, imageUrl }, { headers: { 'token': localStorage.getItem("token") } })
@@ -164,7 +164,6 @@ const ManageElements = () => {
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos obligatorios en un formato valido!');
-            // console.log('Validate Failed:', errInfo);
         }
     };
 
