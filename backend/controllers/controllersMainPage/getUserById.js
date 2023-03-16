@@ -1,4 +1,4 @@
-const User = require("../model/user") // Traemos el esquema del usuarios
+const User = require("../../model/user") // Traemos el esquema del usuarios
 
 const getUserById = async (req, res) => {
     const { id } = req.user

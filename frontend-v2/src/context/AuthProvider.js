@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "../settings/axiosConfig";
@@ -15,32 +16,36 @@ const fakeUserData = {
 
 // Componente provider
 const AuthProvider = (props) => {
-  
+
   let navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [admin, setAdmin] = useState(false);
-  
+
   const signIn = async (params) => {
     //console.log(params, 'sign in form Props');
     await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
       withCredentials: true
     })
-    .then((response)=>{
-      console.log(response);
-      // if(response.data.user.userType === 'A'){
-      //   setAdmin(true);
-      //   setLoggedIn(true);
-      //   window.location.replace("http://localhost:3002");
-      // }else{
-        setUser(fakeUserData);
-        setLoggedIn(true);
-        navigate('/', { replace: true });
-      // }
-    })
-    .catch((error)=>{
-      console.error(error);
-    })
+      .then((response) => {
+        console.log("response: ", response);
+        if (response.status === 200) {
+          setUser({
+            id: response.data.data._id,
+            name: response.data.data.name,
+            avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80', 
+            roles: response.data.data.userType,
+          });
+          setLoggedIn(true);
+          navigate('/', { replace: true });
+        }
+
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          message.warning(error.response.data.message);
+        }
+      })
   };
 
   // Aquí recibimos los datos del registro
@@ -64,25 +69,37 @@ const AuthProvider = (props) => {
       .post(`${process.env.REACT_APP_HOST_BACK}/register`, params)
       .then((answer) => {
         const { user } = answer.data;
-          // Agregamos a nuestras variables globales la información del usuario logueado (variable user y loggedIn son globales)
-          setUser({
-            id: user._id,
-            name: user.name,
-            avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
-            roles: ['USER', 'ADMIN'],
-          });
-          setLoggedIn(true);
-          navigate('/', { replace: true }); // El {replace: true} es para que una vez logueados, la página anterior sea igual a la actual, con tal de no poder volver a la página de logueo: https://reach.tech/router/api/navigate
+        // Agregamos a nuestras variables globales la información del usuario logueado (variable user y loggedIn son globales)
+        setUser({
+          id: user._id,
+          name: user.name,
+          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
+          roles: ['USER', 'ADMIN'],
+        });
+        setLoggedIn(true);
+        navigate('/', { replace: true }); // El {replace: true} es para que una vez logueados, la página anterior sea igual a la actual, con tal de no poder volver a la página de logueo: https://reach.tech/router/api/navigate
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const logOut = () => {
-    setUser(null);
-    setLoggedIn(false);
-    navigate('/', { replace: true });
+  const logOut = async () => {
+
+    try {
+      const ans = await axios.get(`${process.env.REACT_APP_HOST_BACK}/logout`)
+
+      console.log("isLogout: ", ans.data.success)
+
+      if (ans.data.success === "true") {
+        setUser(null);
+        setLoggedIn(false);
+        navigate('/', { replace: true });
+      }
+    } catch (error) {
+      // console.log("Falló: ", error);
+    }
+
   };
 
   return (

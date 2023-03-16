@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs") // Para cifrar las contraseñas
-const User = require("../model/user") // Traemos el esquema del usuario
+const User = require("../../model/user") // Traemos el esquema del usuario
 
 const register = async (req, res) => {
     const { name, email, password, edad, sexo, direccion, discapacidad, tutor, fundacion, userType } = req.body
