@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs") // Toca bcryptjs porque la version pura de javascript, en cambio bcrypt require de python
-const User = require("../model/user")
+const User = require("../../model/user")
 const jwt = require("jsonwebtoken");
 
 
@@ -13,28 +13,29 @@ const login = async (req, res) => {
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
                 .then((isCorrect) => {
                     if (isCorrect) {
-                        const { id, name, userType } = user
+                        const { _id, name, userType } = user
                         const data = {
-                            id,
+                            _id,
                             name,
+                            userType,
                         };
                         const token = jwt.sign(data, process.env.JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
                         
                         res
-                        .cookie("AWFS-token", token, { httpOnly: true }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                        .cookie("AWFS-token", token, { httpOnly: true, sameSite: "strict" }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
                         .json({
                             message: "Usuario autenticado correctamente",
-                            // user: { token, name, userType}
+                            data: data
                         })
 
                     } else {
-                        res.json({ message: "Correo o contraseña incorrecta", user:{}})
+                        res.status(401).json({ message: "Correo o contraseña incorrectas", user:{}})
                     }
                 })
         }else{
-            res.json({ message: "Correo o contraseña incorrecta", user:{}})
+            res.status(401).json({ message: "Correo o contraseña incorrectas", user:{}})
         }
     })
 }

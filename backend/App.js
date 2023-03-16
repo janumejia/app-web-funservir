@@ -4,7 +4,7 @@ const cors = require("cors")
 const db = require("./database/db")
 const cookieParser = require("cookie-parser");
 
-const controllers = require("./controllers") // No es necesario poner index.js, por defecto lo toma
+const controllers = require("./controllers/controllersMainPage") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
 const verifyToken = require("./middlewares/verifyToken");
 const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el admin. Comprobamos que el token tenga tipo de usuario administrador
@@ -56,6 +56,7 @@ app.use((err, req, res, next) => {
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/register", controllers.register)
 app.post("/loginUser", controllers.login)
+app.get("/logout", controllers.logout)
 
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)

@@ -26,7 +26,7 @@ export default function SignInForm() {
   // Función que se ejecuta al enviar el formulario
   const onSubmit = (data) => {
     signIn(data);
-    console.log(admin);
+    // console.log(admin);
   };
   
   // Si el usuario está loggeado y no es admin, redirigimos a la página principal
