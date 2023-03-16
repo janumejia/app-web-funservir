@@ -57,6 +57,7 @@ app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( p
 app.post("/register", controllers.register)
 app.post("/loginUser", controllers.login)
 app.get("/logout", controllers.logout)
+app.get("/status", controllers.tokenStatus)
 
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)

@@ -1,9 +1,10 @@
-const register = require("./register")
-const login = require("./login")
+const register = require("./authentication/register")
+const login = require("./authentication/login")
 const getUserById = require("./getUserById")
-const getAllSites = require("./getAllSites")
-const searchSites = require("./searchSites")
-const logout = require("./logout")
+const getAllSites = require("./sites/getAllSites")
+const searchSites = require("./sites/searchSites")
+const logout = require("./authentication/logout")
+const tokenStatus = require("./authentication/tokenStatus")
 
 module.exports = {
     register,
@@ -12,4 +13,5 @@ module.exports = {
     getAllSites,
     searchSites,
     logout,
+    tokenStatus,
 }
