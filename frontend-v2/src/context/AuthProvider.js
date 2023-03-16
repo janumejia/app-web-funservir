@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from "../settings/axiosConfig";
 
 // Para usar Context usamos React.createContext() , que retorna un provider y un consumer
 export const AuthContext = React.createContext();
@@ -23,7 +23,9 @@ const AuthProvider = (props) => {
   
   const signIn = async (params) => {
     //console.log(params, 'sign in form Props');
-    await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params)
+    await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
+      withCredentials: true
+    })
     .then((response)=>{
       console.log(response);
       // if(response.data.user.userType === 'A'){
