@@ -2,6 +2,7 @@ require('dotenv').config({ path: '.env' })
 const express = require("express")
 const cors = require("cors")
 const db = require("./database/db")
+const cookieParser = require("cookie-parser");
 
 const controllers = require("./controllers") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
@@ -13,7 +14,21 @@ app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP 
 
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
 en este caso responde las peticiones desde cualquier origen (inseguro) */
-app.use(cors())
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (process.env.ALLOWED_ORIGINS.split(',').indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true, // Para permitir el envío de cookies
+}))
+
+
+app.use(cookieParser()); // Para ajustar la cookie de sesión
+
 /* Agregar encabezados de seguridad en la aplicación */
 // app.use((req, res, next) => {
 //     res.append('Access-Control-Allow-Origin', ['*']);

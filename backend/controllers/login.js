@@ -22,10 +22,13 @@ const login = async (req, res) => {
                             expiresIn: 86400 /* 24hs */,
                         });
                         
-                        res.json({
+                        res
+                        .cookie("AWFS-token", token, { httpOnly: true }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                        .json({
                             message: "Usuario autenticado correctamente",
-                            user: { token, name, userType}
+                            // user: { token, name, userType}
                         })
+
                     } else {
                         res.json({ message: "Correo o contraseña incorrecta", user:{}})
                     }
