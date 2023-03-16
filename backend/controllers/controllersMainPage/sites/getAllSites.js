@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
-const Site = require("../../model/site") // Traemos el esquema del sitio
+const Site = require("../../../model/site") // Traemos el esquema del sitio
 
 const getAllSites = async (req, res) => {
 

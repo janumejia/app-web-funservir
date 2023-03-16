@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const bcrypt = require("bcryptjs") // Toca bcryptjs porque la version pura de javascript, en cambio bcrypt require de python
-const User = require("../../model/user")
+const User = require("../../../model/user")
 const jwt = require("jsonwebtoken");
 
 
