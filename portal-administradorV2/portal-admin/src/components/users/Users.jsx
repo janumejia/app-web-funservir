@@ -329,6 +329,7 @@ const ManageUsers = () => {
                             res.data.doc.dateOfBirth = dateOfBirth2;
 
                             newData.splice(index, 1, res.data.doc);
+                            console.log("res: ", res);
                             setData(newData);
                             setEditingKey('');
 
@@ -481,6 +482,7 @@ const ManageUsers = () => {
             key: "operation",
             width:"9%",
             fixed: "right",
+            width: "9%",
             render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (
@@ -496,7 +498,7 @@ const ManageUsers = () => {
                             </Typography.Link>
                         </Popconfirm>
                         <Popconfirm title="¿Estás seguro?" cancelText="Seguir Editando" onConfirm={cancel}>
-                            <Typography.Link keyboard style={{marginLeft: 8}} type="danger">
+                            <Typography.Link keyboard type="danger" style={{marginRight: 8}}>
                                 Cancelar
                             </Typography.Link>
                         </Popconfirm>

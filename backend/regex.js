@@ -10,6 +10,7 @@ module.exports = {
 
     /* _idMongoose */
     _idMongooseRegex: new RegExp("^[0-9a-fA-F]{24}$"),
+    _idMongooseRegexOrEmpty: new RegExp("^[0-9a-fA-F]{24}$|^$"),
 
     /* Sitios inclusivos */
     nameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/),

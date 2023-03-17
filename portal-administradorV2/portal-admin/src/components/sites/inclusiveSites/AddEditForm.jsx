@@ -283,17 +283,20 @@ const AddEditInclusiveSite = ({ site }) => {
                     label="Dueño del sitio"
                     rules={[
                         {
-                            required: true,
+                            // required: true,
                             message: `¡Introduzca un nombre de dueño válido!`,
                             type: 'string'
                         }
                     ]}
                 >
                     <Select>
+                        <Select.Option key={"vacio"} value={""}>{""}</Select.Option>
                         {availableUsers.map(element => {
-                            return (
-                                <Select.Option key={element._id} value={element._id}>{element.name + " " + element.lastName}</Select.Option>
-                            )
+                            if(element.userType !== "R") {
+                                return (
+                                    <Select.Option key={element._id} value={element._id}>{element.name + " " + element.lastName}</Select.Option>
+                                )
+                            }
                         })}
                     </Select>
                 </Form.Item>
