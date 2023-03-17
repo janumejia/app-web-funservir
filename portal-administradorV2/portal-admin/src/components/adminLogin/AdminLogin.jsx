@@ -134,7 +134,7 @@ const AdminLogin = () => {
                                 },
                             ]}
                         >
-                            <Input autocomplete="off" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Correo electrónico" />
+                            <Input autocomplete="on" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Correo electrónico" />
                         </Form.Item>
                         <Form.Item
                             name="password"
@@ -147,7 +147,7 @@ const AdminLogin = () => {
                             ]}
                         >
                             <Input
-                                autocomplete="off"
+                                autocomplete="on"
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 placeholder="Contraseña"

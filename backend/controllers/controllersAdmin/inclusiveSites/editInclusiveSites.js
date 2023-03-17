@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 // Crea un objeto ClamAV para verificación de imágenes libres de virus
 // const clam = new NodeClam().init();
 
-const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex, _idMongooseRegexOrEmpty } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -28,7 +28,7 @@ const editInclusiveSites = async (req, res) => {
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         // { input: 'imgToDelete', dataType: 'string', regex: _idMongooseRegex },
-        { input: 'owner', dataType: 'string', regex: _idMongooseRegex }
+        { input: 'owner', dataType: 'string', regex: _idMongooseRegexOrEmpty }
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -60,10 +60,13 @@ const editInclusiveSites = async (req, res) => {
         }
     }
 
+
     try {
         // Validar que el _id del dueño de sitio exista
-        const userExist = await User.findById(inputs.owner);
-        if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
+        if(inputs.owner !== "") {
+            const userExist = await User.findById(inputs.owner);
+            if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
+        }
 
         // Comprobamos si el _id del sitio es válido
         const elementIS = await InclusiveSites.findById(inputs._id);
@@ -106,9 +109,16 @@ const editInclusiveSites = async (req, res) => {
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
             $push: { gallery: { $each: uploadRes } },
-            owner: ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
+            // owner: (inputs.owner === "") ? ObjectId(inputs.owner) : ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
         }
 
+        if(inputs.owner === ""){
+            update['$unset'] = { owner: "" };
+        } else {
+            update['owner'] = ObjectId(inputs.owner);
+        }
+
+        console.log("pasa por aqui")
         const updatedSite = await InclusiveSites.findByIdAndUpdate(query, update);
 
         // Eliminamos las imágenes del sitio inclusivo que se borraron en Cloudinary
@@ -122,13 +132,16 @@ const editInclusiveSites = async (req, res) => {
             { $pull: { associatedSites: ObjectId(inputs._id) } }
         );
 
-        // Agregar el sitio a la lista de sitios del usuario correspondiente, solo si aún no está presente
-        const query2 = { _id: ObjectId(inputs.owner) };
-        const update2 = {
-            $addToSet: { associatedSites: { _id: ObjectId(elementIS._id) } }
-        };
+        if(inputs.owner !== ""){
+            // Agregar el sitio a la lista de sitios del usuario correspondiente, solo si aún no está presente
+            const query2 = { _id: ObjectId(inputs.owner) };
+            const update2 = {
+                $addToSet: { associatedSites: { _id: ObjectId(elementIS._id) } }
+            };
 
-        const updatedUser = await User.findOneAndUpdate(query2, update2);
+            const updatedUser = await User.findOneAndUpdate(query2, update2);
+        }
+
         res.status(200).json({ message: "Sitio actualizado correctamente" });
 
     } catch (error) {

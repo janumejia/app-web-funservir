@@ -189,7 +189,7 @@ const EditableCell = ({
                         >
                             {inputNode}
                         </Form.Item>
-                     )))}
+                    )))}
 
                 </>
             ) : (
@@ -285,7 +285,8 @@ const ManageUsers = () => {
                     condition: [...row.condition],
                     isCaregiver: row["isCaregiver"],
                     institution: row.institution,
-                    userType: row["userType"]
+                    userType: row["userType"],
+                    associatedSites: []
                 }
 
                 axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
@@ -328,6 +329,7 @@ const ManageUsers = () => {
                             res.data.doc.dateOfBirth = dateOfBirth2;
 
                             newData.splice(index, 1, res.data.doc);
+                            console.log("res: ", res);
                             setData(newData);
                             setEditingKey('');
 
@@ -462,12 +464,12 @@ const ManageUsers = () => {
             title: 'Sitios asociados',
             dataIndex: "associatedSites",
             key: "associatedSites",
-            editable: true,
-            render: (e)=>{
+            editable: false,
+            render: (e) => {
                 let sites = '';
                 if(e){
                     e.forEach((e)=>{
-                        sites += " - " + e.name + "\n";
+                        sites += " • " + e.name + "\n";
                     })
                 }
                 return <div style={{ whiteSpace: 'pre-wrap' }}>{sites}</div>;
@@ -478,7 +480,9 @@ const ManageUsers = () => {
             title: 'Operación',
             dataIndex: 'operation',
             key: "operation",
+            width:"9%",
             fixed: "right",
+            width: "9%",
             render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (
@@ -494,7 +498,7 @@ const ManageUsers = () => {
                             </Typography.Link>
                         </Popconfirm>
                         <Popconfirm title="¿Estás seguro?" cancelText="Seguir Editando" onConfirm={cancel}>
-                            <Typography.Link keyboard type="danger">
+                            <Typography.Link keyboard type="danger" style={{marginRight: 8}}>
                                 Cancelar
                             </Typography.Link>
                         </Popconfirm>
@@ -505,7 +509,7 @@ const ManageUsers = () => {
                             Editar
                         </Typography.Link>
                         <Popconfirm title="¿Estás seguro?" cancelText="Cancelar" onConfirm={() => handleDelete(record._id)}>
-                            <Typography.Link keyboard disabled={editingKey !== ''} type="danger">
+                            <Typography.Link keyboard style={{marginRight: 8}} disabled={editingKey !== ''} type="danger">
                                 Eliminar
                             </Typography.Link>
                         </Popconfirm>
@@ -548,7 +552,8 @@ const ManageUsers = () => {
                 condition: [],
                 isCaregiver: "",
                 institution: "",
-                userType: ""
+                userType: "",
+                associatedSites: []
             };
             setData([...data, newUser]);
             edit(newUser);
