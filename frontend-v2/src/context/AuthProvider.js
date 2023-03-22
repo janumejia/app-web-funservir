@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { message, notification } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "../settings/axiosConfig";
@@ -22,6 +22,8 @@ const AuthProvider = (props) => {
   const [user, setUser] = useState({});
   const [admin, setAdmin] = useState(false);
 
+  // const [api, contextHolder] = notification.useNotification();
+
   const signIn = async (params) => {
     //console.log(params, 'sign in form Props');
     await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
@@ -33,7 +35,7 @@ const AuthProvider = (props) => {
           setUser({
             id: response.data.data._id,
             name: response.data.data.name,
-            avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80', 
+            avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
             roles: response.data.data.userType,
           });
           setLoggedIn(true);
@@ -43,7 +45,29 @@ const AuthProvider = (props) => {
       })
       .catch((error) => {
         if (error.response.status === 401) {
-          message.warning(error.response.data.message);
+
+          // En forma de notificación:
+          notification.error({
+            message: error.response.data.message,
+            // description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+            placement: 'topLeft',
+            duration: 3,
+            // No funcionan bien los estilos de la notificación
+            // style: {
+              // top: '50%', // Centrado verticalmente
+              // left: '40%', // Centrado horizontalmente
+              // marginLeft: '-6.5em', // Desplazamiento horizontal negativo igual a la mitad del ancho de la notificación
+            // }
+          });
+
+          // En forma de mensaje:
+          message.error(error.response.data.message, 3, undefined, {
+            style: {
+              marginTop: '10vh',
+            },
+          },);
+
+
         }
       })
   };
@@ -54,7 +78,7 @@ const AuthProvider = (props) => {
     params = {
       ...params,
       edad: 20,
-      sexo: "no mucho",
+      sexo: "masculino",
       direccion: "Calle 5 #3-35",
       discapacidad: [
         "Motora",
