@@ -24,6 +24,8 @@ export const ADD_HOTEL_PAGE = '/add-hotel';
 // Login / Registration Page
 export const LOGIN_PAGE = '/sign-in';
 export const REGISTRATION_PAGE = '/sign-up';
+export const REGISTRATION_USER = '/sign-up-user'; // Registro usuario - nuevo flujo
+export const REGISTRATION_OWNER = '/sign-up-owner'; // Registro dueño - nuevo flujo
 export const REGISTRATION_PART_2_PROFILE_PAGE = '/sign-up-second-part';
 export const REGISTRATION_PART_2_IMAGE_EDIT_PAGE = 'change-image';
 export const REGISTRATION_PART_2_PASSWORD_CHANGE_PAGE = 'change-password';

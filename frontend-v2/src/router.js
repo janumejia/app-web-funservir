@@ -24,6 +24,8 @@ import {
   AGENT_IMAGE_EDIT_PAGE,
   AGENT_PASSWORD_CHANGE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
+  REGISTRATION_USER,
+  REGISTRATION_OWNER,
 } from './settings/constant';
 
 // protected route
@@ -63,6 +65,9 @@ const SignUpSiteOwnerPage = React.lazy(() => import('containers/Auth/SignUpSiteO
 const ForgetPasswordPage = React.lazy(() =>
   import('containers/Auth/ForgetPassword')
 );
+const SignUpUserPage = React.lazy(() => import('containers/Auth/SignUp/SignUpUser/AddUser')); // Registro de usuario - nuevo flujo
+const SignUpOwnerPage = React.lazy(() => import('containers/Auth/SignUp/SignUpOwner/AddOwner')); // Registro de dueño de sitio - nuevo flujo
+
 const NotFound = React.lazy(() => import('containers/404/404'));
 // protected route
 const AddListingPage = React.lazy(() =>
@@ -237,6 +242,27 @@ export default function AppRoutes() {
             </React.Suspense>
           }
         />
+
+        {/* FORMULARIO DE REGISTRO DE USUARIO NORMAL */}
+        <Route
+          path={REGISTRATION_USER}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <SignUpUserPage />
+            </React.Suspense>
+          }
+        />
+
+        {/* FORMULARIO DE REGISTRO DE DUEÑO DE SITIO */}
+        <Route
+          path={REGISTRATION_OWNER}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <SignUpOwnerPage />
+            </React.Suspense>
+          }
+        />
+
         {/* Protected routes */}
         <Route
           path={ADD_HOTEL_PAGE}
