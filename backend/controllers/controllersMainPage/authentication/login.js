@@ -31,11 +31,11 @@ const login = async (req, res) => {
                         })
 
                     } else {
-                        res.status(401).json({ message: "Correo o contraseña incorrectas", user:{}})
+                        res.status(401).json({ message: "Correo y/o contraseña incorrecta", user:{}})
                     }
                 })
         }else{
-            res.status(401).json({ message: "Correo o contraseña incorrectas", user:{}})
+            res.status(401).json({ message: "Correo y/o contraseña incorrecta", user:{}})
         }
     })
 }

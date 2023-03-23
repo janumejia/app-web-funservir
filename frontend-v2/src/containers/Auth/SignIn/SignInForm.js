@@ -100,6 +100,7 @@ export default function SignInForm() {
         />
       </FormControl>
       <FieldWrapper>
+        {/* Botón de "Recordarme" en el login
         <SwitchWrapper>
           <Controller
             control={control}
@@ -111,7 +112,7 @@ export default function SignInForm() {
             )}
           />
           <Label>Recordarme</Label>
-        </SwitchWrapper>
+        </SwitchWrapper> */}
         <Link to={FORGET_PASSWORD_PAGE}>¿Olvidaste tu contraseña?</Link>
       </FieldWrapper>
       <Button

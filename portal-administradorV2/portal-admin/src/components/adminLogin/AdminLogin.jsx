@@ -58,7 +58,13 @@ const AdminLogin = () => {
                     message.error('Error en la autenticación');
                 });
         } else { // No están todos los campos llenos
-            message.error('No están todos los campos llenos');
+            message.error('No están todos los campos llenos', { 
+                style: {
+                  fontSize: '18px',
+                  backgroundColor: 'red',
+                  color: 'white',
+                },
+            });
         }
     };
 

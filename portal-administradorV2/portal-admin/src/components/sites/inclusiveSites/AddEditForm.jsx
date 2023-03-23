@@ -117,7 +117,7 @@ const AddEditInclusiveSite = ({ site }) => {
 
     }, [])
 
-    
+
     return (
         <>
             {contextHolder}
@@ -134,7 +134,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     "locality": site.locality,
                     "neighborhood": site.neighborhood,
                     "gallery": site.gallery,
-                    "owner": (site.owner)?site.owner.name +" "+site.owner.lastName:""
+                    "owner": (site.owner) ? site.owner.name + " " + site.owner.lastName : ""
                 }}
             >
                 <Form.Item
@@ -292,7 +292,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     <Select>
                         <Select.Option key={"vacio"} value={""}>{""}</Select.Option>
                         {availableUsers.map(element => {
-                            if(element.userType !== "R") {
+                            if (element.userType === "Administrador" || element.userType === "Propietario") {
                                 return (
                                     <Select.Option key={element._id} value={element._id}>{element.name + " " + element.lastName}</Select.Option>
                                 )
