@@ -18,6 +18,8 @@ import {
   FORGET_PASSWORD_PAGE,
   AGENT_IMAGE_EDIT_PAGE,
   AGENT_PASSWORD_CHANGE_PAGE,
+  REGISTRATION_USER,
+  REGISTRATION_OWNER,
 } from 'settings/constant';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -35,6 +37,8 @@ export default function Layout() {
       location.pathname === CHANGE_PASSWORD_PAGE ||
       location.pathname === FORGET_PASSWORD_PAGE ||
       location.pathname === REGISTRATION_PAGE ||
+      // location.pathname === REGISTRATION_USER ||
+      location.pathname === REGISTRATION_OWNER ||
       location.pathname === REGISTRATION_SITE_OWNER_PAGE  ? (
         <Content>
           <Outlet />
@@ -52,6 +56,7 @@ export default function Layout() {
           location.pathname === CHANGE_PASSWORD_PAGE ||
           location.pathname === FORGET_PASSWORD_PAGE ||
           location.pathname === PRIVACY_PAGE ||
+          location.pathname === REGISTRATION_USER ||
           location.pathname ===
             `${AGENT_ACCOUNT_SETTINGS_PAGE + AGENT_IMAGE_EDIT_PAGE}` ||
           location.pathname ===

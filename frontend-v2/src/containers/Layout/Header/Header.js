@@ -82,7 +82,7 @@ export default function Header() {
             avatar={<Logo src={avatarImg} />}
             profileMenu={<ProfileMenu avatar={<Logo src={avatarImg} />} />}
             headerType={headerType}
-            searchComponent={<NavbarSearch />}
+            searchComponent={ (location.pathname !== '/sign-up-user' && location.pathname !== '/sign-up-owner' ) && <NavbarSearch />}
             location={location}
             searchVisibility={searchVisibility}
           />
