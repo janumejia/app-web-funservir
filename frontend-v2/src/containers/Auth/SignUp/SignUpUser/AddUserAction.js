@@ -1,4 +1,4 @@
-export default function addListingAction(state, payload) {
+export default function addDataAction(state, payload) {
   return {
     ...state,
     data: {
@@ -8,8 +8,8 @@ export default function addListingAction(state, payload) {
   };
 }
 
-export function addListingResetAction() {
+export function addDataResetAction() {
   return {
-    data: { guest: 0, bed: 0 },
+    data: {},
   };
 }
