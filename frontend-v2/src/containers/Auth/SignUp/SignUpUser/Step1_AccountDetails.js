@@ -13,6 +13,7 @@ const AccountDetails = ({ setStep }) => {
 
   const {
     control,
+    setValue,
     formState: { errors },
     handleSubmit,
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
@@ -28,6 +29,13 @@ const AccountDetails = ({ setStep }) => {
 
   const [password, setPassword] = useState(typeof state?.data?.password === 'undefined' ? "" : state.data.password); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
   const [confirmPassword, setConfirmPassword] = useState(typeof state?.data?.confirmPassword === 'undefined' ? "" : state.data.confirmPassword); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
+
+  const handleOnChange = (key, event) => {
+    actions.addDataAction({ [key]: event.target.value });
+    setValue(key, event.target.value);
+  };
+
+  console.log("state:", state)
 
   const onSubmit = (data) => {
     actions.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
@@ -68,6 +76,7 @@ const AccountDetails = ({ setStep }) => {
                   <Input
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
+                      handleOnChange('name', e);
                       trigger("name");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -105,6 +114,7 @@ const AccountDetails = ({ setStep }) => {
                   <Input
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
+                      handleOnChange('lastName', e);
                       trigger("lastName");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -143,6 +153,7 @@ const AccountDetails = ({ setStep }) => {
               <Input
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
+                  handleOnChange('email', e);
                   trigger("email");
                 }}
                 onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -183,6 +194,7 @@ const AccountDetails = ({ setStep }) => {
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
                       setPassword(e.target.value); // Ajustamos el valor de la contraseña de nuestro useState, para posteriormente compara con la contraseña del campo confirmar contraseña
+                      handleOnChange('password', e);
                       trigger("password");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -236,6 +248,7 @@ const AccountDetails = ({ setStep }) => {
                   <Input.Password
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
+                      handleOnChange('confirmPassword', e);
                       setConfirmPassword(e.target.value);
                       trigger("confirmPassword");
                     }}
@@ -243,7 +256,7 @@ const AccountDetails = ({ setStep }) => {
                       trigger("confirmPassword");
                       onBlur();
                     }}
-                    value={value}
+                    value={state?.data?.confirmPassword}
                     placeholder="Escribe otra vez tu contraseña"
 
                     // Para evitar copy paste de la contraseña

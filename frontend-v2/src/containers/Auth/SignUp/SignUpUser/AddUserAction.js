@@ -10,6 +10,8 @@ export default function addDataAction(state, payload) {
 
 export function addDataResetAction() {
   return {
-    data: {},
+    data: {
+      password: "0"
+    },
   };
 }
