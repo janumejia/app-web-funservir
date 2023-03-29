@@ -1,4 +1,4 @@
-const register = require("./authentication/register")
+const registerUser = require("./authentication/registerUser")
 const login = require("./authentication/login")
 const getUserById = require("./getUserById")
 const getAllSites = require("./sites/getAllSites")
@@ -7,7 +7,7 @@ const logout = require("./authentication/logout")
 const tokenStatus = require("./authentication/tokenStatus")
 
 module.exports = {
-    register,
+    registerUser,
     login,
     getUserById,
     getAllSites,
