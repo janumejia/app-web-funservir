@@ -6,12 +6,14 @@ import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddUserAction';
 import { FormHeader, Title, Description, FormContent, FormAction } from './AddUser.style';
+import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
 
 const AccountDetails = ({ setStep }) => {
   const { actions, state } = useStateMachine({ addDataAction }); // Usamos el estado global de StateMachine
 
   const {
     control,
+    setValue,
     formState: { errors },
     handleSubmit,
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
@@ -25,7 +27,15 @@ const AccountDetails = ({ setStep }) => {
     },
   });
 
-  const [password, setPassword] = useState(state?.data?.password); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
+  const [password, setPassword] = useState(typeof state?.data?.password === 'undefined' ? "" : state.data.password); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
+  const [confirmPassword, setConfirmPassword] = useState(typeof state?.data?.confirmPassword === 'undefined' ? "" : state.data.confirmPassword); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
+
+  const handleOnChange = (key, event) => {
+    actions.addDataAction({ [key]: event.target.value });
+    setValue(key, event.target.value);
+  };
+
+  console.log("state:", state)
 
   const onSubmit = (data) => {
     actions.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
@@ -36,7 +46,7 @@ const AccountDetails = ({ setStep }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 1: Detalles de la cuenta</Title>
+          <Title>Paso 1 de 2: Detalles de la cuenta</Title>
           <Description>
             Completa los datos de tu cuenta para iniciar sesión en la aplicación.
           </Description>
@@ -66,6 +76,7 @@ const AccountDetails = ({ setStep }) => {
                   <Input
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
+                      handleOnChange('name', e);
                       trigger("name");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -103,6 +114,7 @@ const AccountDetails = ({ setStep }) => {
                   <Input
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
+                      handleOnChange('lastName', e);
                       trigger("lastName");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -141,6 +153,7 @@ const AccountDetails = ({ setStep }) => {
               <Input
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
+                  handleOnChange('email', e);
                   trigger("email");
                 }}
                 onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -163,7 +176,8 @@ const AccountDetails = ({ setStep }) => {
                 errors.password && errors.password.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.password && errors.password.type === "pattern" ? (
-                  <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
+                  // <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
+                  <span />
                 ) : null
               }
             >
@@ -180,6 +194,7 @@ const AccountDetails = ({ setStep }) => {
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
                       setPassword(e.target.value); // Ajustamos el valor de la contraseña de nuestro useState, para posteriormente compara con la contraseña del campo confirmar contraseña
+                      handleOnChange('password', e);
                       trigger("password");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -188,6 +203,16 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={value}
                     placeholder="Escribe tu contraseña"
+
+                    // Para evitar copy paste de la contraseña
+                    // onPaste={(e) => {
+                    //   e.preventDefault()
+                    //   return false;
+                    // }}
+                    // onCopy={(e) => {
+                    //   e.preventDefault()
+                    //   return false;
+                    // }}
                   />
                 )}
               />
@@ -201,9 +226,11 @@ const AccountDetails = ({ setStep }) => {
                 errors.confirmPassword && errors.confirmPassword.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.confirmPassword && errors.confirmPassword.type === "pattern" ? (
-                  <span>¡La contraseña está en un formato no válido!</span>
+                  // <span>¡La contraseña está en un formato no válido!</span>
+                  <span />
                 ) : errors.confirmPassword && errors.confirmPassword.type === "validate" ? (
-                  <span>¡Las contraseñas no coincide!</span>
+                  // <span>¡Las contraseñas no coincide!</span>
+                  <span />
                 ) : null
               }
             >
@@ -221,20 +248,53 @@ const AccountDetails = ({ setStep }) => {
                   <Input.Password
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
+                      handleOnChange('confirmPassword', e);
+                      setConfirmPassword(e.target.value);
                       trigger("confirmPassword");
                     }}
                     onBlur={() => { // Cuando el usuario quita el focus del campo
                       trigger("confirmPassword");
                       onBlur();
                     }}
-                    value={value}
+                    value={state?.data?.confirmPassword}
                     placeholder="Escribe otra vez tu contraseña"
+
+                    // Para evitar copy paste de la contraseña
+                    // onPaste={(e) => {
+                    //   e.preventDefault()
+                    //   return false;
+                    // }}
+                    // onCopy={(e) => {
+                    //   e.preventDefault()
+                    //   return false;
+                    // }}
+
                   />
                 )}
               />
+
+
             </FormControl>
           </Col>
         </Row>
+
+        {/* Checklist donde se muestra que la contraseña ingresada cumple con lo requerido */}
+        <PasswordChecklist
+          rules={["minLength", "maxLength", "specialChar", "number", "capital", "lowercase", "match"]}
+          minLength={8}
+          maxLength={70}
+          value={password}
+          valueAgain={confirmPassword}
+          messages={{
+            minLength: "La contraseña tiene más de 8 caracteres.",
+            maxLength: "La contraseña tiene menos de 70 caracteres.",
+            specialChar: "La contraseña tiene caracteres especiales.",
+            number: "La contraseña tiene un número.",
+            capital: "La contraseña tiene una letra mayúscula.",
+            lowercase: "La contraseña tiene una letra minúscula.",
+            match: "Las contraseñas coinciden.",
+          }}
+        />
       </FormContent>
       <FormAction>
         <div className="inner-wrapper">

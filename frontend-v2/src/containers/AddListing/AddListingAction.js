@@ -1,4 +1,6 @@
 export default function addListingAction(state, payload) {
+  console.log("pasa por aqui")
+  console.log("state: ", state, " payload: ", payload);
   return {
     ...state,
     data: {

@@ -32,6 +32,7 @@ const BasicInformation = ({ setStep }) => {
 
   const handleOnChange = (key, event) => {
     actions.addListingAction({ [key]: event.target.value });
+    console.log("key: ", key, " ", "event:", event.target.value);
     setValue(key, event.target.value);
   };
 

@@ -8,6 +8,8 @@ import Step2_BasicInformation from './Step2_BasicInformation'; // Paso 2
 
 import Stepper from './AddUser.style';
 
+createStore(); // Siempre hay que crearlo para que pueda leer el estado guardado en la sessionStorage
+
 // Descripción:
 // Componente de registro de usuario, donde controlamos los pasos de registro que debe completar el que va el usuario
 // y desplegamos la respectiva pantalla de acuerdo al paso en el que se encuentra (solo son 2 pasos)

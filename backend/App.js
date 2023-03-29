@@ -54,7 +54,7 @@ app.use((err, req, res, next) => {
 
 /* Rutas de nuestra APP */
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
-app.post("/register", controllers.register)
+app.post("/registerUser", controllers.registerUser)
 app.post("/loginUser", controllers.login)
 app.get("/logout", controllers.logout)
 app.get("/status", controllers.tokenStatus)

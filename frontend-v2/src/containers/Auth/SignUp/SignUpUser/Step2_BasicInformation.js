@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Radio, Button, Input, DatePicker } from 'antd';
+import { Row, Col, Radio, Button, Input, DatePicker, Checkbox, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction, { addDataResetAction } from './AddUserAction';
 import {
@@ -12,6 +12,8 @@ import {
   FormContent,
   FormAction,
 } from './AddUser.style';
+import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
+import { useNavigate } from 'react-router-dom';
 
 // import locale from 'antd/lib/locale-provider/es_ES';
 
@@ -19,6 +21,7 @@ import {
 const BasicInformationU = ({ setStep }) => {
   const {
     control,
+    setValue,
     formState: { errors },
     handleSubmit,
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
@@ -33,14 +36,44 @@ const BasicInformationU = ({ setStep }) => {
     },
   });
 
-  const { state } = useStateMachine({ addDataAction });
-  const { actions } = useStateMachine({ addDataResetAction });
+  const { actions: actionsUpdate , state } = useStateMachine({ addDataAction });
+  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
+  
+  console.log("actionsReset: ", actionsReset)
 
-  const onSubmit = (data) => {
+  const handleOnChange = (key, event) => {
+    console.log("handleOnChange ---");
+    console.log(key, event);
+    actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });
+    setValue(key, (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value));
+  };
+
+  // const [formData, setFormData] = useState({}); // Para poder almacenar los valores del formulario cuando se da click en volver
+  const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
     const formData = { ...state.data, ...data };
-    console.log('add hotel data: ', formData);
-    alert(JSON.stringify(formData, null, 2));
-    actions.addDataResetAction();
+    // console.log('add hotel data: ', formData);
+    // alert(JSON.stringify(formData, null, 2));
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
+      if (res) {
+        if (res.status === 200) {
+          message.success(res.data.message);
+          // setTimeout(function () {
+            actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
+            navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+          // }, 3000);
+        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+      }
+    } catch (error) {
+      if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+      else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+      else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+    }
+
+    // actions.addDataResetAction(); // Para resetear los campos una vez termine el registro
   };
 
   return (
@@ -48,7 +81,7 @@ const BasicInformationU = ({ setStep }) => {
       <FormContent>
         <FormHeader>
           <Title>
-            Paso 2: Información básica del usuario
+            Paso 2 de 2: Información básica del usuario
           </Title>
           <Description>
             Completa los últimos campos sobre tu información personal para finalizar tu registro.
@@ -75,7 +108,10 @@ const BasicInformationU = ({ setStep }) => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
-                    onChange={onChange}
+                    onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                      onChange(e);
+                      handleOnChange('dateOfBirth', e);
+                    }}
                     placeholder="Selecciona una fecha"
                   // locale="es_ES" // set the locale to Spanish. No sirve :/
                   />
@@ -86,9 +122,9 @@ const BasicInformationU = ({ setStep }) => {
         </Row>
 
         <FormControl
-        label="Genero"
-        labelTag="h3"
-        error={
+          label="Genero"
+          labelTag="h3"
+          error={
             errors.gender && errors.gender.type === "required" ? (
               <span>¡Este campo es requerido!</span>
             ) : errors.gender && errors.gender.type === "pattern" ? (
@@ -107,7 +143,10 @@ const BasicInformationU = ({ setStep }) => {
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Radio.Group
-                onChange={onChange}
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('gender', e);
+                }}
                 onBlur={onBlur}
                 value={value}
                 options={
@@ -145,6 +184,7 @@ const BasicInformationU = ({ setStep }) => {
               <Input
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
+                  handleOnChange('address', e);
                   trigger("address");
                 }}
                 onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -173,21 +213,21 @@ const BasicInformationU = ({ setStep }) => {
             control={control}
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <Radio.Group
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                options={
-                  [
-                    { label: 'Motora', value: 'Motora' },
-                    { label: 'Visual', value: 'Visual' },
-                    { label: 'Auditiva', value: 'Auditiva' },
-                    { label: 'Intelectual', value: 'Intelectual' },
-                    { label: 'Psicosocial', value: 'Psicosocial' },
-                  ]
-                }
-                mode="tags"
-              />
+              <Checkbox.Group
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('condition', e);
+                }}
+                value={value}>
+                <Checkbox value="Motriz">Motriz</Checkbox>
+                <Checkbox value="Visual">Visual</Checkbox>
+                <Checkbox value="Auditiva">Auditiva</Checkbox>
+                <Checkbox value="Sensorial">Sensorial</Checkbox>
+                <Checkbox value="Comunicación">Comunicación</Checkbox>
+                <Checkbox value="Mental">Mental</Checkbox>
+                <Checkbox value="Multiples">Multiples</Checkbox>
+                <Checkbox value="Otra">Otra</Checkbox>
+              </Checkbox.Group>
             )}
           />
         </FormControl>
@@ -214,7 +254,10 @@ const BasicInformationU = ({ setStep }) => {
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Radio.Group
-                onChange={onChange}
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('isCaregiver', e);
+                }}
                 onBlur={onBlur}
                 value={value}
                 options={
@@ -249,6 +292,7 @@ const BasicInformationU = ({ setStep }) => {
               <Input
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
+                  handleOnChange('institution', e);
                   trigger("institution");
                 }}
                 onBlur={() => { // Cuando el usuario quita el focus del campo
@@ -265,14 +309,15 @@ const BasicInformationU = ({ setStep }) => {
 
       </FormContent>
 
-
-
       <FormAction>
         <div className="inner-wrapper">
           <Button
             className="back-btn"
             htmlType="button"
-            onClick={() => setStep(1)}
+            onClick={() => {
+              // actions.addDataAction(formData); // Falta implementar esto
+              setStep(1)
+            }}
           >
             <IoIosArrowBack /> Volver
           </Button>

@@ -30,7 +30,7 @@ const Wrapper = styled.div`
     }
   }
 
-  .ant-checkbox-wrapper {
+  ${'' /* .ant-checkbox-wrapper {
     .ant-checkbox {
       + span {
         font-size: 15px;
@@ -49,7 +49,24 @@ const Wrapper = styled.div`
         }
       }
     }
+  } */}
+
+  .ant-checkbox-group {
+    .ant-checkbox-checked .ant-checkbox-inner {
+      background-color: ${themeGet('primary.0', '#008489')};
+      border-color: ${themeGet('primary.0', '#008489')};
+    }
+    .ant-checkbox:focus .ant-checkbox-inner {
+      box-shadow: none;
+    }
+    .ant-checkbox:hover .ant-checkbox-inner {
+      border-color: ${themeGet('primary.0', '#008489')};
+    }
+    .ant-checkbox-input:focus + .ant-checkbox-inner {
+      box-shadow: none;
+    }
   }
+
 
   .ant-input-number {
     max-width: 100px;
