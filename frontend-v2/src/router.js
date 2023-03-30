@@ -61,7 +61,6 @@ const PricingPage = React.lazy(() => import('containers/Pricing/Pricing'));
 const PrivacyPage = React.lazy(() => import('containers/Privacy/Privacy'));
 const SignInPage = React.lazy(() => import('containers/Auth/SignIn/SignIn'));
 const SignUpPage = React.lazy(() => import('containers/Auth/SignUp/SignUp'));
-const SignUpSiteOwnerPage = React.lazy(() => import('containers/Auth/SignUpSiteOwner/SignUpOwner')); // Registro dueño de sitio
 const ForgetPasswordPage = React.lazy(() =>
   import('containers/Auth/ForgetPassword')
 );
@@ -218,14 +217,6 @@ export default function AppRoutes() {
           />
         </Route>
         {/* Fin - Segunda página de registro normal */}
-        <Route
-          path={REGISTRATION_SITE_OWNER_PAGE}
-          element={
-            <React.Suspense fallback={<Loader />}>
-              <SignUpSiteOwnerPage />
-            </React.Suspense>
-          }
-        />
         <Route
           path={FORGET_PASSWORD_PAGE}
           element={

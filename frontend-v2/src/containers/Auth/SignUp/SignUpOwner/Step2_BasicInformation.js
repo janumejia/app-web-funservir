@@ -233,7 +233,7 @@ const BasicInformationU = ({ setStep }) => {
         </FormControl>
 
         <FormControl
-          label="¿Eres tutor de apoyar de alguna persona con capacidades diferenciadas?"
+          label="¿Cumples como tutor para apoyar de alguna persona con capacidades diferenciadas?"
           labelTag="h3"
           error={
             errors.isCaregiver && errors.isCaregiver.type === "required" ? (
@@ -322,7 +322,7 @@ const BasicInformationU = ({ setStep }) => {
             <IoIosArrowBack /> Volver
           </Button>
           <Button type="primary" htmlType="submit">
-            Terminar registro
+            Siguiente
           </Button>
         </div>
       </FormAction>

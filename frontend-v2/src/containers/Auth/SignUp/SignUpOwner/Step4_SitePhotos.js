@@ -70,12 +70,12 @@ const HotelPhotos = ({ setStep }) => {
           <Button
             className="back-btn"
             htmlType="button"
-            onClick={() => setStep(1)}
+            onClick={() => setStep(3)}
           >
-            <IoIosArrowBack /> Back
+            <IoIosArrowBack /> Volver
           </Button>
           <Button type="primary" htmlType="submit">
-            Next
+            Siguiente
           </Button>
         </div>
       </FormAction>
