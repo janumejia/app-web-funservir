@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import { Button } from 'antd';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addListingAction from './AddListingAction';
-import { FormHeader, Title, FormContent, FormAction } from './AddListing.style';
+import AddOwnerAction from './AddOwnerAction';
+import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 
 const hotelPhotos = [
   {
@@ -30,7 +30,7 @@ const hotelPhotos = [
 ];
 
 const HotelPhotos = ({ setStep }) => {
-  const { actions, state } = useStateMachine({ addListingAction });
+  const { actions, state } = useStateMachine({ AddOwnerAction });
   const {
     register,
     formState: { errors },
@@ -45,15 +45,15 @@ const HotelPhotos = ({ setStep }) => {
   }, [register]);
 
   const onSubmit = (data) => {
-    actions.addListingAction(data);
-    setStep(3);
+    actions.AddOwnerAction(data);
+    setStep(5);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Step 2: Hotel Photos</Title>
+          <Title>Paso 4 de 5: Detalles de la cuenta</Title>
         </FormHeader>
         <FormControl
           error={errors.hotelPhotos && <span>This field is required!</span>}

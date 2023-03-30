@@ -4,14 +4,14 @@ import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
 import { Row, Col, Radio, Button, Input, DatePicker, Checkbox, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addDataAction, { addDataResetAction } from './AddUserAction';
+import addDataAction, { addDataResetAction } from './AddOwnerAction';
 import {
   FormHeader,
   Title,
   Description,
   FormContent,
   FormAction,
-} from './AddUser.style';
+} from './AddOwner.style';
 import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
 import { useNavigate } from 'react-router-dom';
 
@@ -38,8 +38,6 @@ const BasicInformationU = ({ setStep }) => {
 
   const { actions: actionsUpdate , state } = useStateMachine({ addDataAction });
   const { actions: actionsReset } = useStateMachine({ addDataResetAction });
-  
-  console.log("actionsReset: ", actionsReset)
 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });
@@ -50,26 +48,30 @@ const BasicInformationU = ({ setStep }) => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    const formData = { ...state.data, ...data };
+    actionsUpdate.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
+    setStep(3); // Pasar a la siguiente página de registro
+
+    // Para el registro de un usuario normal
+    // const formData = { ...state.data, ...data };
     // console.log('add hotel data: ', formData);
     // alert(JSON.stringify(formData, null, 2));
 
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
-      if (res) {
-        if (res.status === 200) {
-          message.success(res.data.message);
-          // setTimeout(function () {
-            actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
-            navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
-          // }, 3000);
-        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-      }
-    } catch (error) {
-      if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-      else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-      else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-    }
+    // try {
+    //   const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
+    //   if (res) {
+    //     if (res.status === 200) {
+    //       message.success(res.data.message);
+    //       // setTimeout(function () {
+    //         // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
+    //         // navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+    //       // }, 3000);
+    //     } else message.warning(res.status + " - Respuesta del servidor desconocida");
+    //   }
+    // } catch (error) {
+    //   if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+    //   else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+    //   else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+    // }
 
     // actions.addDataResetAction(); // Para resetear los campos una vez termine el registro
   };
@@ -79,7 +81,7 @@ const BasicInformationU = ({ setStep }) => {
       <FormContent>
         <FormHeader>
           <Title>
-            Paso 2 de 2: Información básica del usuario
+            Paso 2 de 5: Información básica del usuario
           </Title>
           <Description>
             Completa los últimos campos sobre tu información personal para finalizar tu registro.
