@@ -4,8 +4,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { Row, Col, Input, InputNumber, Button, Card } from 'antd';
 import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addDataAction from './AddUserAction';
-import { FormHeader, Title, Description, FormContent, FormAction } from './AddUser.style';
+import addDataAction from './AddOwnerAction';
+import { FormHeader, Title, Description, FormContent, FormAction } from './AddOwner.style';
 import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
 import { AiOutlineCheckCircle } from 'react-icons/ai'; // Para iconos del checklist de la contraseña
 import { BsCircle } from 'react-icons/bs';
@@ -48,7 +48,7 @@ const AccountDetails = ({ setStep }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 1 de 2: Detalles de la cuenta</Title>
+          <Title>Paso 1 de 5: Detalles de la cuenta</Title>
           <Description>
             Completa los datos de tu cuenta para iniciar sesión en la aplicación.
           </Description>

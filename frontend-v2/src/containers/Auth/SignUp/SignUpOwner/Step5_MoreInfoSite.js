@@ -4,14 +4,14 @@ import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
 import { Row, Col, Input, Button } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import MapWithSearchBox from 'components/Map/MapSearchBox';
-import { mapDataHelper } from 'components/Map/mapDataHelper';
-import addListingAction from './AddListingAction';
-import { FormHeader, Title, FormContent, FormAction } from './AddListing.style';
+// import MapWithSearchBox from 'components/Map/MapSearchBox';
+// import { mapDataHelper } from 'components/Map/mapDataHelper';
+import AddOwnerAction from './AddOwnerAction';
+import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 
 const HotelLocation = ({ setStep }) => {
   let tempLocationData = [];
-  const { action, state } = useStateMachine({ addListingAction });
+  const { action, state } = useStateMachine({ AddOwnerAction });
   // eslint-disable-next-line
   const [location, setLocation] = useState([]);
   const {
@@ -30,14 +30,14 @@ const HotelLocation = ({ setStep }) => {
 
   const onSubmit = (data) => {
     action(data);
-    setStep(4);
+    setStep(5);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Step 3: Hotel Location</Title>
+          <Title>Paso 5 de 5: Detalles de la cuenta</Title>
         </FormHeader>
         <Row gutter={30}>
           <Col sm={12}>
@@ -100,7 +100,7 @@ const HotelLocation = ({ setStep }) => {
             )}
           />
         </FormControl>
-        <FormControl
+        {/* <FormControl
           error={errors.locationData && <span>This field is required!</span>}
         >
           <MapWithSearchBox
@@ -111,7 +111,7 @@ const HotelLocation = ({ setStep }) => {
               setLocation(value);
             }}
           />
-        </FormControl>
+        </FormControl> */}
       </FormContent>
       <FormAction>
         <div className="inner-wrapper">
