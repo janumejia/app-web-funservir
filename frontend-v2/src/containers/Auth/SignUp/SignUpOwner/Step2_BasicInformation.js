@@ -19,6 +19,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 const BasicInformationU = ({ setStep }) => {
+
+  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
+
   const {
     control,
     setValue,
@@ -36,8 +39,7 @@ const BasicInformationU = ({ setStep }) => {
     },
   });
 
-  const { actions: actionsUpdate , state } = useStateMachine({ addDataAction });
-  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
+
 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });
