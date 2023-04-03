@@ -12,16 +12,9 @@ import {
   FormContent,
   FormAction,
 } from './AddOwner.style';
-import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
 import { useNavigate } from 'react-router-dom';
 
-// import locale from 'antd/lib/locale-provider/es_ES';
-
-
 const BasicInformationU = ({ setStep }) => {
-
-  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
-
   const {
     control,
     setValue,
@@ -30,16 +23,19 @@ const BasicInformationU = ({ setStep }) => {
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
-      dateOfBirth: state?.data?.dateOfBirth,
-      gender: state?.data?.gender,
-      address: state?.data?.address,
-      condition: state?.data?.condition,
-      isCaregiver: state?.data?.isCaregiver,
-      institution: state?.data?.institution,
+      dateOfBirth: state?.data2?.dateOfBirth,
+      gender: state?.data2?.gender,
+      address: state?.data2?.address,
+      condition: state?.data2?.condition,
+      isCaregiver: state?.data2?.isCaregiver,
+      institution: state?.data2?.institution,
     },
   });
 
+  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
+  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
 
+  console.log("actionsReset: ", actionsReset)
 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });
@@ -52,30 +48,6 @@ const BasicInformationU = ({ setStep }) => {
   const onSubmit = async (data) => {
     actionsUpdate.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
     setStep(3); // Pasar a la siguiente página de registro
-
-    // Para el registro de un usuario normal
-    // const formData = { ...state.data, ...data };
-    // console.log('add hotel data: ', formData);
-    // alert(JSON.stringify(formData, null, 2));
-
-    // try {
-    //   const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
-    //   if (res) {
-    //     if (res.status === 200) {
-    //       message.success(res.data.message);
-    //       // setTimeout(function () {
-    //         // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
-    //         // navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
-    //       // }, 3000);
-    //     } else message.warning(res.status + " - Respuesta del servidor desconocida");
-    //   }
-    // } catch (error) {
-    //   if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-    //   else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-    //   else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-    // }
-
-    // actions.addDataResetAction(); // Para resetear los campos una vez termine el registro
   };
 
   return (
@@ -105,7 +77,7 @@ const BasicInformationU = ({ setStep }) => {
             >
               <Controller
                 name="dateOfBirth"
-                defaultValue={state?.data?.dateOfBirth}
+                defaultValue={state?.data2?.dateOfBirth}
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -137,8 +109,8 @@ const BasicInformationU = ({ setStep }) => {
           <Controller
             name="gender"
             defaultValue={
-              state?.data?.gender !== undefined
-                ? state.data.gender
+              state?.data2?.gender !== undefined
+                ? state.data2.gender
                 : ''
             }
             control={control}
@@ -176,7 +148,7 @@ const BasicInformationU = ({ setStep }) => {
         >
           <Controller
             name="address"
-            defaultValue={state?.data?.address}
+            defaultValue={state?.data2?.address}
             control={control}
             rules={{
               required: true,
@@ -208,8 +180,8 @@ const BasicInformationU = ({ setStep }) => {
           <Controller
             name="condition"
             defaultValue={
-              state?.data?.condition !== undefined
-                ? state.data.condition
+              state?.data2?.condition !== undefined
+                ? state.data2.condition
                 : ''
             }
             control={control}
@@ -235,7 +207,7 @@ const BasicInformationU = ({ setStep }) => {
         </FormControl>
 
         <FormControl
-          label="¿Cumples como tutor para apoyar de alguna persona con capacidades diferenciadas?"
+          label="¿Eres tutor de apoyar de alguna persona con capacidades diferenciadas?"
           labelTag="h3"
           error={
             errors.isCaregiver && errors.isCaregiver.type === "required" ? (
@@ -248,8 +220,8 @@ const BasicInformationU = ({ setStep }) => {
           <Controller
             name="isCaregiver"
             defaultValue={
-              state?.data?.isCaregiver !== undefined
-                ? state.data.isCaregiver
+              state?.data2?.isCaregiver !== undefined
+                ? state.data2.isCaregiver
                 : ''
             }
             control={control}
@@ -284,7 +256,7 @@ const BasicInformationU = ({ setStep }) => {
         >
           <Controller
             name="institution"
-            defaultValue={state?.data?.institution}
+            defaultValue={typeof state.data2.institution === 'undefined' ? "" : state.data2.institution}
             control={control}
             rules={{
               required: false,

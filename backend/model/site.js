@@ -35,6 +35,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     },
     locality: { type: String },
     neighborhood: { type: String },
+    siteAddress: { type: String },
     gallery: [],
     owner: { type: Schema.Types.ObjectId, ref: 'User' },
 })

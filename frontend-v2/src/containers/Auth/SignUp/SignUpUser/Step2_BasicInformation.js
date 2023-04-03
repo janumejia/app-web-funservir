@@ -36,9 +36,9 @@ const BasicInformationU = ({ setStep }) => {
     },
   });
 
-  const { actions: actionsUpdate , state } = useStateMachine({ addDataAction });
+  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
   const { actions: actionsReset } = useStateMachine({ addDataResetAction });
-  
+
   console.log("actionsReset: ", actionsReset)
 
   const handleOnChange = (key, event) => {
@@ -58,17 +58,41 @@ const BasicInformationU = ({ setStep }) => {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
       if (res) {
         if (res.status === 200) {
-          message.success(res.data.message);
+          message.success(res.data.message, 5);
           // setTimeout(function () {
-            actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
-            navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+          actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
+          navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
           // }, 3000);
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
-      if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-      else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-      else message.warning(error.response.status + " - Respuesta del servidor desconocida");
+      const blankMessage = ( // Solución para el navbar de la página no oculte el mensaje desplegado, ya que no cogen los estilos de la componente mensaje (solución chambona pero fue la que funcionó)
+        <>
+          <br />
+          <br />
+        </>
+      );
+      if (typeof error.response.status === 'undefined') {
+        message.destroy()
+        message.info({ content: blankMessage, duration: 5 });
+        message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
+      } else {
+        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+          message.destroy()
+          message.info({ content: blankMessage, duration: 5 });
+          message.warning({ content: error.response.data.message, duration: 5 });
+        }
+        else if (error.response.status >= 500 && error.response.status <= 599) {
+          message.destroy()
+          message.info({ content: blankMessage, duration: 5 });
+          message.error({ content: error.response.data.message, duration: 5 });
+        } // Errores del servidor
+        else {
+          message.destroy()
+          message.info({ content: blankMessage, duration: 5 });
+          message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
+        }
+      }
     }
 
     // actions.addDataResetAction(); // Para resetear los campos una vez termine el registro
@@ -280,7 +304,7 @@ const BasicInformationU = ({ setStep }) => {
         >
           <Controller
             name="institution"
-            defaultValue={state?.data?.institution}
+            defaultValue={typeof state.data.institution === 'undefined' ? "" : state.data.institution}
             control={control}
             rules={{
               required: false,

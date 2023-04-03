@@ -47,18 +47,18 @@ const AuthProvider = (props) => {
         if (error.response.status === 401) {
 
           // En forma de notificación:
-          notification.error({
-            message: error.response.data.message,
-            // description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-            placement: 'topLeft',
-            duration: 3,
-            // No funcionan bien los estilos de la notificación
-            // style: {
-              // top: '50%', // Centrado verticalmente
-              // left: '40%', // Centrado horizontalmente
-              // marginLeft: '-6.5em', // Desplazamiento horizontal negativo igual a la mitad del ancho de la notificación
-            // }
-          });
+          // notification.error({
+          //   message: error.response.data.message,
+          //   // description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+          //   placement: 'topLeft',
+          //   duration: 3,
+          //   // No funcionan bien los estilos de la notificación
+          //   // style: {
+          //     // top: '50%', // Centrado verticalmente
+          //     // left: '40%', // Centrado horizontalmente
+          //     // marginLeft: '-6.5em', // Desplazamiento horizontal negativo igual a la mitad del ancho de la notificación
+          //   // }
+          // });
 
           // En forma de mensaje:
           message.error(error.response.data.message, 3, undefined, {

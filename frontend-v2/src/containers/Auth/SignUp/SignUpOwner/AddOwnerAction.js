@@ -1,8 +1,8 @@
 export default function addDataAction(state, payload) {
   return {
     ...state,
-    data: {
-      ...state.data,
+    data2: {
+      ...state.data2,
       ...payload,
     },
   };
@@ -10,6 +10,6 @@ export default function addDataAction(state, payload) {
 
 export function addDataResetAction() {
   return {
-    data: {},
+    data2: {},
   };
 }

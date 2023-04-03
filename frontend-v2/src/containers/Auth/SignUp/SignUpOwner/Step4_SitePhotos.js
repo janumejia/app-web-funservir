@@ -44,8 +44,8 @@ const HotelPhotos = ({ setStep }) => {
     register('hotelPhotos', { required: true });
   }, [register]);
 
-  const onSubmit = (data) => {
-    actions.AddOwnerAction(data);
+  const onSubmit = (data2) => {
+    actions.AddOwnerAction(data2);
     setStep(5);
   };
 
@@ -53,15 +53,15 @@ const HotelPhotos = ({ setStep }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 4 de 5: Detalles de la cuenta</Title>
+          <Title>Paso 4 de 5: Fotos del sitio</Title>
         </FormHeader>
         <FormControl
           error={errors.hotelPhotos && <span>This field is required!</span>}
         >
           <DragAndDropUploader
             name="hotelPhotos"
-            value={state?.data?.hotelPhotos}
-            onUploadChange={(data) => setValue('hotelPhotos', data)}
+            value={state?.data2?.hotelPhotos}
+            onUploadChange={(data2) => setValue('hotelPhotos', data2)}
           />
         </FormControl>
       </FormContent>
