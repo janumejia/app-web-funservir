@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, InputNumber, Button, Card } from 'antd';
-import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
+import { IoIosArrowBack } from 'react-icons/io';
+import { Row, Col, Input, Button, Select } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddOwnerAction';
 import { FormHeader, Title, Description, FormContent, FormAction } from './AddOwner.style';
-import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
-import { AiOutlineCheckCircle } from 'react-icons/ai'; // Para iconos del checklist de la contraseña
-import { BsCircle } from 'react-icons/bs';
+const { Option } = Select;
 
-const AccountDetails = ({ setStep }) => {
+const AccountDetails = ({ setStep, availableCategories, availableElements }) => {
   const { actions, state } = useStateMachine({ addDataAction }); // Usamos el estado global de StateMachine
 
   const {
@@ -21,26 +18,23 @@ const AccountDetails = ({ setStep }) => {
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
-      name: state?.data?.name,
-      lastName: state?.data?.lastName,
-      email: state?.data?.email,
-      password: state?.data?.password,
-      confirmPassword: state?.data?.confirmPassword,
+      siteName: state?.data2?.sitesitesiteName,
+      locationDescription: state?.data2?.locationDescription,
+      phoneNumber: state?.data2?.phoneNumber,
+      category: state?.data2?.category,
+      inclusiveElements: state?.data2?.inclusiveElements
     },
   });
 
-  const [password, setPassword] = useState(typeof state?.data?.password === 'undefined' ? "" : state.data.password); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
-  const [confirmPassword, setConfirmPassword] = useState(typeof state?.data?.confirmPassword === 'undefined' ? "" : state.data.confirmPassword); // Lo usamos para comparar que las contraseñas ingresadas sean iguales (campos contraseña y confirmar contraseña)
-
   const handleOnChange = (key, event) => {
-    actions.addDataAction({ [key]: event.target.value });
-    setValue(key, event.target.value);
+    actions.addDataAction({ [key]: (key === "category" || key === "inclusiveElements" ? event : event.target.value) });
+    setValue(key, (key === "category" || key === "inclusiveElements" ? event : event.target.value));
   };
 
   console.log("state:", state)
 
-  const onSubmit = (data) => {
-    actions.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
+  const onSubmit = (data2) => {
+    actions.addDataAction(data2); // Guardar la información ingresada en el estado de StateMachine
     setStep(4); // Pasar a la siguiente página de registro
   };
 
@@ -48,122 +42,78 @@ const AccountDetails = ({ setStep }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 3 de 5: Detalles de la cuenta</Title>
+          <Title>Paso 3 de 5: Datos del sitios de interés</Title>
           <Description>
             Completa los datos de tu cuenta para iniciar sesión en la aplicación.
           </Description>
         </FormHeader>
-        <Row gutter={30}>
-          <Col sm={12}>
-            <FormControl
-              label="Nombre"
-              htmlFor="name"
-              error={
-                errors.name && errors.name.type === "required" ? (
-                  <span>¡Este campo es requerido!</span>
-                ) : errors.name && errors.name.type === "pattern" ? (
-                  <span>¡El nombre está en un formato no válido!</span>
-                ) : null
-              }
-            >
-              <Controller
-                name="name"
-                defaultValue={state?.data?.name}
-                control={control}
-                rules={{
-                  required: true,
-                  pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Input
-                    onChange={(e) => { // Cuando el usuario cambia el valor del campo
-                      onChange(e);
-                      handleOnChange('name', e);
-                      trigger("name");
-                    }}
-                    onBlur={() => { // Cuando el usuario quita el focus del campo
-                      trigger("name");
-                      onBlur();
-                    }}
-                    value={value}
-                    placeholder="Escribe tu nombre"
-                  />
-                )}
-              />
-            </FormControl>
-          </Col>
-          <Col sm={12}>
-            <FormControl
-              label="Apellido"
-              htmlFor="lastName"
-              error={
-                errors.lastName && errors.lastName.type === "required" ? (
-                  <span>¡Este campo es requerido!</span>
-                ) : errors.lastName && errors.lastName.type === "pattern" ? (
-                  <span>¡El apellido está en un formato no válido!</span>
-                ) : null
-              }
-            >
-              <Controller
-                name="lastName"
-                defaultValue={state?.data?.lastName}
-                control={control}
-                rules={{
-                  required: true,
-                  pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <Input
-                    onChange={(e) => { // Cuando el usuario cambia el valor del campo
-                      onChange(e);
-                      handleOnChange('lastName', e);
-                      trigger("lastName");
-                    }}
-                    onBlur={() => { // Cuando el usuario quita el focus del campo
-                      trigger("lastName");
-                      onBlur();
-                    }}
-                    value={value}
-                    placeholder="Escribe tu apellido"
-                  />
-                )}
-              />
-            </FormControl>
-          </Col>
-        </Row>
-
         <FormControl
-          label="Correo electrónico"
-          htmlFor="email"
+          label="Nombre del sitio"
+          htmlFor="siteName"
           error={
-            errors.email && errors.email.type === "required" ? (
+            errors.siteName && errors.siteName.type === "required" ? (
               <span>¡Este campo es requerido!</span>
-            ) : errors.email && errors.email.type === "pattern" ? (
-              <span>¡El correo está en un formato no válido!</span>
+            ) : errors.siteName && errors.siteName.type === "pattern" ? (
+              <span>¡El nombre está en un formato no válido!</span>
             ) : null
           }
         >
           <Controller
-            name="email"
-            defaultValue={state?.data?.email}
+            name="siteName"
+            defaultValue={state?.data2?.siteName}
             control={control}
             rules={{
               required: true,
-              pattern: /^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/,
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
-                  handleOnChange('email', e);
-                  trigger("email");
+                  handleOnChange('siteName', e);
+                  trigger("siteName");
                 }}
                 onBlur={() => { // Cuando el usuario quita el focus del campo
-                  trigger("email");
+                  trigger("siteName");
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu correo"
+                placeholder="Escribe tu nombre"
+              />
+            )}
+          />
+        </FormControl>
+
+        <FormControl
+          label="Descripción"
+          htmlFor="locationDescription"
+          error={
+            errors.locationDescription && errors.locationDescription.type === "required" ? (
+              <span>¡Este campo es requerido!</span>
+            ) : errors.locationDescription && errors.locationDescription.type === "pattern" ? (
+              <span>¡La descripción está en un formato no válido!</span>
+            ) : null
+          }
+        >
+          <Controller
+            name="locationDescription"
+            defaultValue={state?.data2?.locationDescription}
+            control={control}
+            rules={{
+              required: true,
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,2000}$/
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input.TextArea
+                rows={5}
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('locationDescription', e);
+                  trigger("locationDescription");
+                }}
+                onBlur={onBlur}
+                value={value}
+                placeholder="Escribe una descripción de tu hotel, puede ayudar a los viajeros a darse una idea de lo que se pueden encontrar en tu lugar."
               />
             )}
           />
@@ -172,49 +122,35 @@ const AccountDetails = ({ setStep }) => {
         <Row gutter={30}>
           <Col sm={12}>
             <FormControl
-              label="Contraseña"
-              htmlFor="password"
+              label="Número telefónico"
+              htmlFor="phoneNumber"
               error={
-                errors.password && errors.password.type === "required" ? (
+                errors.phoneNumber && errors.phoneNumber.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
-                ) : errors.password && errors.password.type === "pattern" ? (
-                  // <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
-                  <span />
+                ) : errors.phoneNumber && errors.phoneNumber.type === "pattern" ? (
+                  <span>¡El número está en un formato no válido!</span>
                 ) : null
               }
             >
               <Controller
-                name="password"
-                defaultValue={state?.data?.password}
+                name="phoneNumber"
+                defaultValue={state?.data2?.phoneNumber}
                 control={control}
                 rules={{
                   required: true,
-                  pattern: /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  pattern: /^\d{10}$/ // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input.Password
+                  <Input
+                    rows={5}
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      setPassword(e.target.value); // Ajustamos el valor de la contraseña de nuestro useState, para posteriormente compara con la contraseña del campo confirmar contraseña
-                      handleOnChange('password', e);
-                      trigger("password");
+                      handleOnChange('phoneNumber', e);
+                      trigger("phoneNumber");
                     }}
-                    onBlur={() => { // Cuando el usuario quita el focus del campo
-                      trigger("password");
-                      onBlur();
-                    }}
+                    onBlur={onBlur}
                     value={value}
-                    placeholder="Escribe tu contraseña"
-
-                  // Para evitar copy paste de la contraseña
-                  // onPaste={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
-                  // onCopy={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
+                    placeholder="Escribe tu número telefónico"
                   />
                 )}
               />
@@ -222,85 +158,73 @@ const AccountDetails = ({ setStep }) => {
           </Col>
           <Col sm={12}>
             <FormControl
-              label="Confirmar contraseña"
-              htmlFor="confirmPassword"
-              error={
-                errors.confirmPassword && errors.confirmPassword.type === "required" ? (
-                  <span>¡Este campo es requerido!</span>
-                ) : errors.confirmPassword && errors.confirmPassword.type === "pattern" ? (
-                  // <span>¡La contraseña está en un formato no válido!</span>
-                  <span />
-                ) : errors.confirmPassword && errors.confirmPassword.type === "validate" ? (
-                  // <span>¡Las contraseñas no coincide!</span>
-                  <span />
-                ) : null
-              }
+              label="Categoria"
+              htmlFor="category"
             >
               <Controller
-                name="confirmPassword"
-                defaultValue={state?.data?.confirmPassword}
+                name="category"
+                defaultValue={state?.data2?.category}
                 control={control}
-                rules={{
-                  required: true,
-                  // pattern:  /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
-                  validate: (value) =>
-                    value === password || false,
-                }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input.Password
+                  <Select
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      handleOnChange('confirmPassword', e);
-                      setConfirmPassword(e.target.value);
-                      trigger("confirmPassword");
+                      handleOnChange('category', e);
                     }}
-                    onBlur={() => { // Cuando el usuario quita el focus del campo
-                      trigger("confirmPassword");
-                      onBlur();
-                    }}
-                    value={state?.data?.confirmPassword}
-                    placeholder="Escribe otra vez tu contraseña"
-
-                  // Para evitar copy paste de la contraseña
-                  // onPaste={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
-                  // onCopy={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
-
-                  />
+                    value={value}
+                  >
+                    {availableCategories.map(element => {
+                      return (
+                        <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
+                      )
+                    })}
+                  </Select>
                 )}
               />
-
-
             </FormControl>
           </Col>
         </Row>
-
-        {/* Checklist donde se muestra que la contraseña ingresada cumple con lo requerido */}
-
-        <PasswordChecklist
-          rules={["minLength", "maxLength", "specialChar", "number", "capital", "lowercase", "match"]}
-          minLength={8}
-          maxLength={70}
-          value={password}
-          valueAgain={confirmPassword}
-          messages={{
-            minLength: "La contraseña tiene más de 8 caracteres.",
-            maxLength: "La contraseña tiene menos de 70 caracteres.",
-            specialChar: "La contraseña tiene caracteres especiales.",
-            number: "La contraseña tiene un número.",
-            capital: "La contraseña tiene una letra mayúscula.",
-            lowercase: "La contraseña tiene una letra minúscula.",
-            match: "Las contraseñas coinciden.",
-          }}
-        />
+        <FormControl
+          label="Elementos inclusivos"
+          htmlFor="inclusiveElements"
+        >
+          <Controller
+            name="inclusiveElements"
+            defaultValue={state?.data2?.inclusiveElements}
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Select
+                mode="multiple"
+                style={{
+                  width: '100%',
+                }}
+                placeholder="Seleccione una opción"
+                allowClear={true}
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('inclusiveElements', e);
+                }}
+                value={value}
+              >
+                {availableElements.map(element => {
+                  return (
+                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
+                  )
+                })}
+              </Select>
+            )}
+          />
+        </FormControl>
       </FormContent>
       <FormAction>
         <div className="inner-wrapper">
+          <Button
+            className="back-btn"
+            htmlType="button"
+            onClick={() => setStep(2)}
+          >
+            <IoIosArrowBack /> Volver
+          </Button>
           <Button type="primary" htmlType="submit">
             Siguiente
           </Button>

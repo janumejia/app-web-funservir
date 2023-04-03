@@ -482,7 +482,6 @@ const ManageUsers = () => {
             key: "operation",
             width:"9%",
             fixed: "right",
-            width: "9%",
             render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (

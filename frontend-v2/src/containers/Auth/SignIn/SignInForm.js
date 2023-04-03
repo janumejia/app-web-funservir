@@ -83,7 +83,7 @@ export default function SignInForm() {
                 <span>La contraseña debe tener mínimo 8 caracteres</span>
               )}
               {errors.password?.type === 'maxLength' && (
-                <span>La contraseña debe no debe superar 50 caracteres</span>
+                <span>La contraseña debe no debe superar 70 caracteres</span>
               )}
             </>
           )
@@ -93,7 +93,7 @@ export default function SignInForm() {
           name="password"
           defaultValue=""
           control={control}
-          rules={{ required: true, minLength: 8, maxLength: 50 }}
+          rules={{ required: true, minLength: 8, maxLength: 70 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input.Password onChange={onChange} onBlur={onBlur} value={value} />
           )}

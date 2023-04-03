@@ -2,6 +2,7 @@ const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, conditionRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
+var validator = require('validator');
 
 const addUser = async (req, res) => {
     // Entradas: name, description, category, contactNumber, locality, neighborhood
@@ -12,7 +13,7 @@ const addUser = async (req, res) => {
         { input: 'name', dataType: 'string', regex: nameUserRegex },
         { input: 'lastName', dataType: 'string', regex: lastNameUserRegex },
         { input: 'email', dataType: 'string', regex: emailRegex },
-        { input: 'password', dataType: 'string', regex: passwordRegex },
+        // { input: 'password', dataType: 'string', regex: passwordRegex }, // Se hace más abajo de otra manera usando la librería validator
         // { input: 'dateOfBirth', dataType: 'string', regex: inclusiveElementsRegex },
         { input: 'gender', dataType: 'string', regex: genderRegex },
         { input: 'address', dataType: 'string', regex: addressRegex },
@@ -48,10 +49,14 @@ const addUser = async (req, res) => {
             return res.status(422).json({ message: `El valor de ${input} es inválido` });
         }
     }
-
+    
+    // Validación de la contraseña ingresada
+    const isValidPassword = typeof inputs.password === 'string' && validator.isStrongPassword(inputs.password) ? true : false;
+    if(!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
+    
     // Validación de la fecha ingresada
-    const isValidDateOfBirth = moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
-    if(!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválido` });
+    const isValidDateOfBirth = typeof inputs.dateOfBirth === 'string' && moment (inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid() ? true : false;
+    if(!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválida` });
 
     User.findOne({ 'email': inputs.email }).then((user) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });

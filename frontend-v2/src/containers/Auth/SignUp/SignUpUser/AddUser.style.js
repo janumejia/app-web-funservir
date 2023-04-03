@@ -7,6 +7,11 @@ const Stepper = styled.div`
   flex-direction: column;
   padding-top: 15px;
 
+  .custom-warning-message {
+    color: red;
+    top: 100;
+  }
+
   h3 {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -21,6 +26,8 @@ const Stepper = styled.div`
     &.ant-progress-line {
       line-height: 1;
     }
+
+
     .ant-progress-outer {
       .ant-progress-inner {
         border-radius: 0;
@@ -99,6 +106,7 @@ export const FormContent = styled.div`
       margin-bottom: 8px;
     }
   }
+
 
   /* uploader style */
   .drag_and_drop_uploader {

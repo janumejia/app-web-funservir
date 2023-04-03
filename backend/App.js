@@ -69,7 +69,7 @@ app.post("/adminLogin", controllersAdmin.adminLogin)
 app.post("/adminLoginWithGoogle", controllersAdmin.adminLoginWithGoogle)
 
 // Parametría elementos inclusivos:
-app.get("/elements", verifyTokenAdmin, controllersAdmin.getInclusiveElements)
+app.get("/elements", controllersAdmin.getInclusiveElements) // No necesita token porque lo necesitamos para el registro de dueño de sitio
 app.post("/addElement", verifyTokenAdmin, controllersAdmin.addInclusiveElement)
 app.post("/deleteElement", verifyTokenAdmin, controllersAdmin.deleteElement)
 app.post("/editElement", verifyTokenAdmin, controllersAdmin.editElement)
@@ -81,7 +81,7 @@ app.post("/editUser", verifyTokenAdmin, controllersAdmin.editUser)
 app.post("/deleteUser", verifyTokenAdmin, controllersAdmin.deleteUser)
 
 // Parametría categorías:
-app.get("/getCategories", verifyTokenAdmin, controllersAdmin.getCategories)
+app.get("/getCategories", controllersAdmin.getCategories) // No necesita token porque lo necesitamos para el registro de dueño de sitio
 app.post("/addCategory", verifyTokenAdmin, controllersAdmin.addCategory)
 app.post("/editCategory", verifyTokenAdmin, controllersAdmin.editCategory)
 app.post("/deleteCategory", verifyTokenAdmin, controllersAdmin.deleteCategory)
@@ -93,13 +93,13 @@ app.post("/editInclusiveSites", verifyTokenAdmin, controllersAdmin.editInclusive
 app.post("/deleteInclusiveSites", verifyTokenAdmin, controllersAdmin.deleteInclusiveSites)
 
 // Parametría Localidades:
-app.get("/getLocations", verifyTokenAdmin, controllersAdmin.getLocations)
+app.get("/getLocations", controllersAdmin.getLocations)  // No necesita token porque lo necesitamos para el registro de dueño de sitio
 app.post("/addLocations", verifyTokenAdmin, controllersAdmin.addLocations)
 app.post("/editLocations", verifyTokenAdmin, controllersAdmin.editLocations)
 app.post("/deleteLocations", verifyTokenAdmin, controllersAdmin.deleteLocations)
 
 // Parametría barrios:
-app.get("/getNeighborhoods", verifyTokenAdmin, controllersAdmin.getNeighborhoods)
+app.get("/getNeighborhoods", controllersAdmin.getNeighborhoods)  // No necesita token porque lo necesitamos para el registro de dueño de sitio
 app.post("/addNeighborhoods", verifyTokenAdmin, controllersAdmin.addNeighborhoods)
 app.post("/editNeighborhoods", verifyTokenAdmin, controllersAdmin.editNeighborhoods)
 app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighborhoods)
