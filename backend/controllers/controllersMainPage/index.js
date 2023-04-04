@@ -5,6 +5,7 @@ const getAllSites = require("./sites/getAllSites")
 const searchSites = require("./sites/searchSites")
 const logout = require("./authentication/logout")
 const tokenStatus = require("./authentication/tokenStatus")
+const uniqueEmailValidator = require("./authentication/uniqueEmailValidator")
 
 module.exports = {
     registerUser,
@@ -14,4 +15,5 @@ module.exports = {
     searchSites,
     logout,
     tokenStatus,
+    uniqueEmailValidator,
 }

@@ -58,6 +58,7 @@ app.post("/registerUser", controllers.registerUser)
 app.post("/loginUser", controllers.login)
 app.get("/logout", controllers.logout)
 app.get("/status", controllers.tokenStatus)
+app.post("/uniqueEmailValidator", controllers.uniqueEmailValidator)
 
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)
