@@ -15,17 +15,7 @@ const DragAndDropUploader = ({ name = 'file', onUploadChange }) => {
     showUploadList:true,
     beforeUpload:(file) => false,
     onChange(info) {
-      const { status } = info.file;
-      console.log(status);
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
         onUploadChange(info.fileList);
-      }
-      if (status === 'done') {
-        message.success(`${info.file.name} photo uploaded successfully.`);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} photo upload failed.`);
-      }
     },
   };
 

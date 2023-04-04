@@ -59,11 +59,19 @@ const SitePhotos = ({ setStep }) => {
         </FormHeader>
 
           <DragAndDropUploader
+<<<<<<< HEAD
             name="sitePhotos"
             value={state?.data2?.sitePhotos}
             onUploadChange={(data2) => {
               actions.AddOwnerAction({'sitePhotos': data2});
               setValue('sitePhotos', data2)
+=======
+            name="hotelPhotos"
+            value={state?.data2?.hotelPhotos}
+            onUploadChange={(data2) => {
+              setValue('hotelPhotos', data2)
+
+>>>>>>> 8f52dc9 (commit para poder actualizar desde main)
             }}
           />
 
