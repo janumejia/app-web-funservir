@@ -16,9 +16,6 @@ import axios from "../../../../settings/axiosConfig"; // Para la petición de re
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
-// import locale from 'antd/lib/locale-provider/es_ES';
-
-
 const BasicInformationU = ({ setStep }) => {
   const {
     control,
@@ -53,8 +50,6 @@ const BasicInformationU = ({ setStep }) => {
 
   const onSubmit = async (data) => {
     const formData = { ...state.data, ...data };
-    // console.log('add hotel data: ', formData);
-    // alert(JSON.stringify(formData, null, 2));
 
     try {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
@@ -132,7 +127,7 @@ const BasicInformationU = ({ setStep }) => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
-                    value={value}
+                    // value={value} // Se daña muy feo en algunos casos, por eso lo comento. Por lo tanto, no se guarda este valor en el session storage
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
                       handleOnChange('dateOfBirth', e);
