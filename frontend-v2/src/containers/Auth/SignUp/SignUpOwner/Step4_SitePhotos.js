@@ -41,7 +41,10 @@ const SitePhotos = ({ setStep }) => {
   // };
 
   const getBase64 = (img) => {
+<<<<<<< HEAD
     let base64Universal = [...state?.data2?.hotelPhotos]
+=======
+>>>>>>> c003818 (cambios obligados)
     const reader = new FileReader();
     if (img) {
       reader.readAsDataURL(img);
