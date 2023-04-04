@@ -14,6 +14,7 @@ import {
 } from './AddUser.style';
 import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 // import locale from 'antd/lib/locale-provider/es_ES';
 
@@ -39,7 +40,8 @@ const BasicInformationU = ({ setStep }) => {
   const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
   const { actions: actionsReset } = useStateMachine({ addDataResetAction });
 
-  console.log("actionsReset: ", actionsReset)
+  // console.log("actionsReset: ", actionsReset)
+  console.log("typeof state.data.dateOfBirth: ", typeof state.data.dateOfBirth)
 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });
@@ -130,11 +132,20 @@ const BasicInformationU = ({ setStep }) => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
+                    value={value}
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
                       handleOnChange('dateOfBirth', e);
                     }}
                     placeholder="Selecciona una fecha"
+                    showToday={false}
+                    format="YYYY-MM-DD"
+                    disabledDate={(current) => {
+                      // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
+                      // En este caso, solo permite fechas entre hace 200 años y hoy.
+                      return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
+                    }}
+                    // defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
                   // locale="es_ES" // set the locale to Spanish. No sirve :/
                   />
                 )}

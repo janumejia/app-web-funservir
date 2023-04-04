@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, InputNumber, Button, Card, Tooltip } from 'antd';
+import { Row, Col, Input, InputNumber, Button, Card, Tooltip, message } from 'antd';
 import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddUserAction';
@@ -9,6 +9,19 @@ import { FormHeader, Title, Description, FormContent, FormAction } from './AddUs
 import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
 import validator from "validator";
 import { InfoCircleOutlined } from '@ant-design/icons';
+import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
+
+const emailVerification = async (email) => {
+    try {
+      await axios.post(`${process.env.REACT_APP_HOST_BACK}/uniqueEmailValidator`, { email: email });
+      // No se hace nada aquí, solo cuando el correo está repetido se informa
+    
+    } catch (error) {
+      if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
+    
+    }
+    return true; // Válido
+}
 
 const AccountDetails = ({ setStep }) => {
   const { actions, state } = useStateMachine({ addDataAction }); // Usamos el estado global de StateMachine
@@ -87,11 +100,11 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={value}
                     placeholder="Escribe tu nombre"
-                    // suffix={
-                    //   <Tooltip placement="topRight" title="El nombre solo puede contener caracteres alfabéticos y espacios" >
-                    //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-                    //   </Tooltip>
-                    // }
+                  // suffix={
+                  //   <Tooltip placement="topRight" title="El nombre solo puede contener caracteres alfabéticos y espacios" >
+                  //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
+                  //   </Tooltip>
+                  // }
                   />
                 )}
               />
@@ -130,11 +143,11 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={value}
                     placeholder="Escribe tu apellido"
-                    // suffix={
-                    //   <Tooltip placement="topRight" title="El apellido solo puede contener caracteres alfabéticos y espacios" >
-                    //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-                    //   </Tooltip>
-                    // }
+                  // suffix={
+                  //   <Tooltip placement="topRight" title="El apellido solo puede contener caracteres alfabéticos y espacios" >
+                  //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
+                  //   </Tooltip>
+                  // }
                   />
                 )}
               />
@@ -147,9 +160,9 @@ const AccountDetails = ({ setStep }) => {
           htmlFor="email"
           error={
             errors.email && errors.email.type === "required" ? (
-              <span>¡Este campo es requerido!</span>
-            ) : errors.email && errors.email.type === "validate" ? (
-              <span>¡El correo está en un formato no válido!</span>
+              <span>¡Este campo es requerido!{console.log(errors.email)}</span>
+            ) : errors.email && errors.email.type === "isEmailValid" ? (
+              <span> { errors.email.message } </span>
             ) : null
           }
         >
@@ -160,7 +173,11 @@ const AccountDetails = ({ setStep }) => {
             rules={{
               required: true,
               // pattern: /^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+  $/,
-              validate: (value) => validator.isEmail(value)
+              validate: {
+                isEmailValid: async (value) => {
+                  return validator.isEmail(value) ? (await emailVerification(value) ? true : "¡Este correo ya se encuentra registrado!") : "¡El correo está en un formato no válido!";
+                }
+              }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
@@ -175,11 +192,11 @@ const AccountDetails = ({ setStep }) => {
                 }}
                 value={value}
                 placeholder="Escribe tu correo"
-                // suffix={
-                //   <Tooltip placement="topRight" title='El correo electrónico debe seguir un formato válido. Ejemplo: "usuario@dominio.com". Además, no puede contener el signo de suma (+)' >
-                //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-                //   </Tooltip>
-                // }
+              // suffix={
+              //   <Tooltip placement="topRight" title='El correo electrónico debe seguir un formato válido. Ejemplo: "usuario@dominio.com". Además, no puede contener el signo de suma (+)' >
+              //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
+              //   </Tooltip>
+              // }
               />
             )}
           />

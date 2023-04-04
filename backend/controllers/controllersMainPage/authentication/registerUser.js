@@ -12,7 +12,7 @@ const addUser = async (req, res) => {
     const dataArray = [
         { input: 'name', dataType: 'string', regex: nameUserRegex },
         { input: 'lastName', dataType: 'string', regex: lastNameUserRegex },
-        { input: 'email', dataType: 'string', regex: emailRegex },
+        // { input: 'email', dataType: 'string', regex: emailRegex },
         // { input: 'password', dataType: 'string', regex: passwordRegex }, // Se hace más abajo de otra manera usando la librería validator
         // { input: 'dateOfBirth', dataType: 'string', regex: inclusiveElementsRegex },
         { input: 'gender', dataType: 'string', regex: genderRegex },
@@ -50,6 +50,10 @@ const addUser = async (req, res) => {
         }
     }
     
+    // Validación del correo ingresado
+    const isValidEmail = typeof inputs.email === 'string' && validator.isEmail(inputs.email) ? true : false;
+    if(!isValidEmail) return res.status(422).json({ message: `El valor del correo es inválido` });
+
     // Validación de la contraseña ingresada
     const isValidPassword = typeof inputs.password === 'string' && validator.isStrongPassword(inputs.password) ? true : false;
     if(!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
