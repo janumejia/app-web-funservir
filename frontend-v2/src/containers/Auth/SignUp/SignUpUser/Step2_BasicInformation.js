@@ -38,7 +38,7 @@ const BasicInformationU = ({ setStep }) => {
   const { actions: actionsReset } = useStateMachine({ addDataResetAction });
 
   // console.log("actionsReset: ", actionsReset)
-  console.log("typeof state.data.dateOfBirth: ", typeof state.data.dateOfBirth)
+  // console.log("typeof state.data.dateOfBirth: ", typeof state.data.dateOfBirth)
 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });

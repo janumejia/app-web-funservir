@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, InputNumber, Button, Card, Tooltip, message } from 'antd';
-import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
+import { Row, Col, Input, InputNumber, Button, Card, Tooltip } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddUserAction';
 import { FormHeader, Title, Description, FormContent, FormAction } from './AddUser.style';
 import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
 import validator from "validator";
-import { InfoCircleOutlined } from '@ant-design/icons';
 import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
 
 const emailVerification = async (email) => {
