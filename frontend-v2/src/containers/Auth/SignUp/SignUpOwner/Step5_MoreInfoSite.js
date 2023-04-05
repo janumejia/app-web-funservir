@@ -6,15 +6,14 @@ import { Input, Button, Select } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 // import MapWithSearchBox from 'components/Map/MapSearchBox';
 // import { mapDataHelper } from 'components/Map/mapDataHelper';
-import AddOwnerAction from './AddOwnerAction';
+import addDataAction from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
-const { Option } = Select;
+// const { Option } = Select;
 
-const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
-  let tempLocationData = [];
-  const { actions: actionsUpdate, state } = useStateMachine({ AddOwnerAction });
+const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
+  // let tempLocationData = [];
   // eslint-disable-next-line
-  const [location, setLocation] = useState([]);
+  // const [location, setLocation] = useState([]);
   const {
     control,
     register,
@@ -22,23 +21,39 @@ const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods })
     setValue,
     trigger,
     handleSubmit,
+    watch,
   } = useForm({
     mode: 'onChange',
   });
 
-  useEffect(() => {
-    register('locationData', { required: true });
-  }, [register]);
-
-  const onSubmit = (data2) => {
-    actionsUpdate(data2);
-    setStep(5);
-  };
+  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
 
   const handleOnChange = (key, event) => {
-    actionsUpdate.addDataAction({ [key]: (key === "location" || key === "neighborhood" ? event : event.target.value) });
-    setValue(key, (key === "location" || key === "neighborhood" ? event : event.target.value));
+    actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" ? event : event.target.value) });
+    setValue(key, (key === "locality" || key === "neighborhood" ? event : event.target.value));
   };
+
+  // Para el mapa
+  // useEffect(() => {
+  //   register('locationData', { required: true });
+  // }, [register]);
+
+  // const selectedLocality = Form.useWatch("locality", form);
+  const watchLocality = watch("locality", ""); // Valor por defecto es vacío
+
+  // Cuando cambie la localidad
+  useEffect(() => {
+      console.log("watchLocality: ", watchLocality)
+      actionsUpdate.addDataAction("neighborhood", "");
+      setValue("neighborhood", "");
+  }, [watchLocality])
+
+  const onSubmit = (data) => {
+    // const formData = { ...state.data, ...data };
+    actionsUpdate(data);
+    setStep(4);
+  };
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,7 +78,7 @@ const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods })
             control={control}
             rules={{
               required: true,
-              pattern: /^[a-zA-Z0-9 #,.-]{5,255}$/,
+              pattern: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s.,-/#-]{5,255}$/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
@@ -85,18 +100,18 @@ const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods })
 
         <FormControl
           label="Localidad"
-          htmlFor="location"
+          htmlFor="locality"
           error={
-            errors.location && errors.location.type === "required" ? (
+            errors.locality && errors.locality.type === "required" ? (
               <span>¡Este campo es requerido!</span>
-            ) : errors.location && errors.location.type === "pattern" ? (
+            ) : errors.locality && errors.locality.type === "pattern" ? (
               <span>¡La dirección está en un formato no válido!</span>
             ) : null
           }
         >
           <Controller
-            name="location"
-            defaultValue={state?.data2?.location}
+            name="locality"
+            defaultValue={state?.data2?.locality}
             control={control}
             rules={{
               required: true,
@@ -107,7 +122,7 @@ const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods })
                 value={value}
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
-                  handleOnChange('location', e);
+                  handleOnChange('locality', e);
                 }}
               >
                 {availableLocalities.map(element => {
@@ -147,10 +162,12 @@ const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods })
                   handleOnChange('neighborhood', e);
                 }}
               >
-                {availableNeighborhoods.map(element => {
-                  return (
-                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
-                  )
+                {availableNeighborhoods.map(neighborhood => {
+                  if (neighborhood.associatedLocality === watchLocality) {
+                    return (
+                      <Select.Option key={neighborhood.name} value={neighborhood.name}>{neighborhood.name}</Select.Option>
+                    )
+                  }
                 })}
               </Select>
             )}
@@ -187,4 +204,4 @@ const HotelLocation = ({ setStep, availableLocalities, availableNeighborhoods })
   );
 };
 
-export default HotelLocation;
+export default SiteLocation;

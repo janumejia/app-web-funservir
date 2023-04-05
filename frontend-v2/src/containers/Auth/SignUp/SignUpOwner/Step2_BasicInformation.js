@@ -164,7 +164,7 @@ const BasicInformationU = ({ setStep }) => {
             control={control}
             rules={{
               required: true,
-              pattern: /^[a-zA-Z0-9 #,.-]{5,255}$/,
+              pattern: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s.,-/#-]{5,255}$/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input

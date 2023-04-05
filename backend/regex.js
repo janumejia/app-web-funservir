@@ -13,8 +13,8 @@ module.exports = {
     _idMongooseRegexOrEmpty: new RegExp("^[0-9a-fA-F]{24}$|^$"),
 
     /* Sitios inclusivos */
-    nameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/),
-    descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,2000}$/),
+    nameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/),
+    descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/]){1,2000}$/),
     categoryRegex: generalAlphanumeric(1,100),
     ratingRegex: new RegExp(/^([1-5].[0-9])$/),
     ratingCountRegex: new RegExp(/^\d{1,10}$/),
@@ -39,7 +39,7 @@ module.exports = {
     emailRegex: new RegExp(/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/),
     passwordRegex: new RegExp(/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/), // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
     genderRegex: new RegExp(/^(Masculino|Femenino|Otro)$/),
-    addressRegex: new RegExp(/^[a-zA-Z0-9 #,.-]{5,255}$/),
+    addressRegex: new RegExp(/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s\.,-\/#]{5,255}$/),
     conditionRegex: new RegExp(/^(Motriz|Visual|Auditiva|Sensorial|Comunicación|Mental|Multiples|Otra)$/),
     isCaregiverRegex: new RegExp(/^(Si|No)$/),
     institutionRegex: generalAlphabetic(0,255),
