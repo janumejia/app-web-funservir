@@ -64,7 +64,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             control={control}
             rules={{
               required: true,
-              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/,
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
@@ -101,7 +101,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             control={control}
             rules={{
               required: true,
-              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,2000}$/
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/""“”]){1,2000}$/
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input.TextArea
@@ -198,7 +198,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 style={{
                   width: '100%',
                 }}
-                placeholder="Seleccione una opción"
+                placeholder="Seleccione una o varias opciones"
                 allowClear={true}
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
