@@ -261,7 +261,7 @@ const BasicInformationU = ({ setStep }) => {
         </FormControl>
 
         <FormControl
-          label="¿Eres tutor de apoyar de alguna persona con capacidades diferenciadas?"
+          label="¿Eres tutor de apoyo de alguna persona con capacidades diferenciadas?"
           labelTag="h3"
           error={
             errors.isCaregiver && errors.isCaregiver.type === "required" ? (

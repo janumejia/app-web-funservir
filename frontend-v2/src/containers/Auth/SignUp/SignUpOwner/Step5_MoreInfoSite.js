@@ -4,16 +4,13 @@ import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
 import { Input, Button, Select } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-// import MapWithSearchBox from 'components/Map/MapSearchBox';
-// import { mapDataHelper } from 'components/Map/mapDataHelper';
 import addDataAction from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 // const { Option } = Select;
+import MapWithSearchBox from 'components/Map/MapSearchBox';
+import { mapDataHelper } from 'components/Map/mapDataHelper';
 
 const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
-  // let tempLocationData = [];
-  // eslint-disable-next-line
-  // const [location, setLocation] = useState([]);
   const {
     control,
     register,
@@ -31,29 +28,28 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" ? event : event.target.value) });
     setValue(key, (key === "locality" || key === "neighborhood" ? event : event.target.value));
+    if(key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
+      setValue("neighborhood", "")
+      actionsUpdate.addDataAction({ "neighborhood": "" });
+    }
   };
-
-  // Para el mapa
-  // useEffect(() => {
-  //   register('locationData', { required: true });
-  // }, [register]);
 
   // const selectedLocality = Form.useWatch("locality", form);
   const watchLocality = watch("locality", ""); // Valor por defecto es vacío
-
-  // Cuando cambie la localidad
-  useEffect(() => {
-      console.log("watchLocality: ", watchLocality)
-      actionsUpdate.addDataAction("neighborhood", "");
-      setValue("neighborhood", "");
-  }, [watchLocality])
+  
+  // Para el mapa
+  let tempLocationData = [];
+  const [location, setLocation] = useState([]);
+  
+  useEffect(() => { // (no estoy seguro por qué se usa aquí)
+    register('location', { required: true });
+  }, [register]);
 
   const onSubmit = (data) => {
     // const formData = { ...state.data, ...data };
     actionsUpdate(data);
     setStep(4);
   };
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -173,18 +169,22 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
             )}
           />
         </FormControl>
-        {/* <FormControl
-          error={errors.locationData && <span>This field is required!</span>}
+
+        {/* Selección de ubicación en el mapa */}
+        <FormControl
+          label="Ubicación en el mapa"
+          htmlFor="location"
+          error={errors.location && <span>¡Este campo es requerido!</span>}
         >
           <MapWithSearchBox
-            name="locationData"
+            name="location"
             updateValue={(value) => {
               tempLocationData = mapDataHelper(value);
-              setValue('locationData', tempLocationData);
+              setValue('location', tempLocationData);
               setLocation(value);
             }}
           />
-        </FormControl> */}
+        </FormControl>
       </FormContent >
       <FormAction>
         <div className="inner-wrapper">

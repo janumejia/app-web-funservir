@@ -58,7 +58,7 @@ const BasicInformationU = ({ setStep }) => {
       <FormContent>
         <FormHeader>
           <Title>
-            Paso 2 de 2: Información básica del usuario
+            Paso 2 de 5: Información básica del usuario
           </Title>
           <Description>
             Completa los últimos campos sobre tu información personal para finalizar tu registro.
@@ -219,7 +219,7 @@ const BasicInformationU = ({ setStep }) => {
         </FormControl>
 
         <FormControl
-          label="¿Eres tutor de apoyar de alguna persona con capacidades diferenciadas?"
+          label="¿Eres tutor de apoyo de alguna persona con capacidades diferenciadas?"
           labelTag="h3"
           error={
             errors.isCaregiver && errors.isCaregiver.type === "required" ? (
