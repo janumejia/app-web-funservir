@@ -7,9 +7,10 @@ const MapWrapper = ({ children, ...rest }) => {
   });
 
   if (loadError) {
-    return <div>Map cannot be loaded right now, sorry.</div>;
+    return <div>El mapa no puede ser desplegado en este momento, lo sentimos.</div>;
   }
-  return <>{isLoaded && <GoogleMap {...rest}>{children}</GoogleMap>}</>;
+  return <> { isLoaded && <GoogleMap {...rest}>{children} </GoogleMap> } </>
+  
 };
 
 export default MapWrapper;

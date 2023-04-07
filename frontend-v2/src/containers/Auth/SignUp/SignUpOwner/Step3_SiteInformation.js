@@ -160,11 +160,19 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             <FormControl
               label="Categoria"
               htmlFor="category"
+              error={
+                errors.category && errors.category.type === "required" ? (
+                  <span>¡Este campo es requerido!</span>
+                ) : null
+              }
             >
               <Controller
                 name="category"
                 defaultValue={state?.data2?.category}
                 control={control}
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Select
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
@@ -187,11 +195,19 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         <FormControl
           label="Elementos inclusivos"
           htmlFor="inclusiveElements"
+          // error={
+          //   errors.inclusiveElements && errors.inclusiveElements.type === "required" ? (
+          //     <span>¡Este campo es requerido!</span>
+          //   ) : null
+          // }
         >
           <Controller
             name="inclusiveElements"
             defaultValue={state?.data2?.inclusiveElements}
             control={control}
+            // rules={{
+            //   required: true,
+            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Select
                 mode="multiple"

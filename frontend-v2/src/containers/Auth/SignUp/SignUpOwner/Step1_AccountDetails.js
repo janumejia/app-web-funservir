@@ -59,7 +59,7 @@ const AccountDetails = ({ setStep }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 1 de 2: Detalles de la cuenta</Title>
+          <Title>Paso 1 de 5: Detalles de la cuenta</Title>
           <Description>
             Completa los datos de tu cuenta para iniciar sesión en la aplicación.
           </Description>
