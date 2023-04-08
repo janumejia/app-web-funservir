@@ -1,10 +1,10 @@
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
 import { IoIosArrowBack } from 'react-icons/io';
-import { Row, Col, Input, Button, Select } from 'antd';
+import { Row, Col, Input, Button, Select, InputNumber } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddOwnerAction';
-import { FormHeader, Title, Description, FormContent, FormAction } from './AddOwner.style';
+import { FormHeader, Title, Description, FormContent, FormAction, StyledInputNumber, ColombiaFlag } from './AddOwner.style';
 const { Option } = Select;
 
 const AccountDetails = ({ setStep, availableCategories, availableElements }) => {
@@ -19,8 +19,8 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
       siteName: state?.data2?.sitesitesiteName,
-      locationDescription: state?.data2?.locationDescription,
-      phoneNumber: state?.data2?.phoneNumber,
+      description: state?.data2?.description,
+      contactNumber: state?.data2?.contactNumber,
       category: state?.data2?.category,
       inclusiveElements: state?.data2?.inclusiveElements
     },
@@ -86,18 +86,18 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
 
         <FormControl
           label="Descripción"
-          htmlFor="locationDescription"
+          htmlFor="description"
           error={
-            errors.locationDescription && errors.locationDescription.type === "required" ? (
+            errors.description && errors.description.type === "required" ? (
               <span>¡Este campo es requerido!</span>
-            ) : errors.locationDescription && errors.locationDescription.type === "pattern" ? (
+            ) : errors.description && errors.description.type === "pattern" ? (
               <span>¡La descripción está en un formato no válido!</span>
             ) : null
           }
         >
           <Controller
-            name="locationDescription"
-            defaultValue={state?.data2?.locationDescription}
+            name="description"
+            defaultValue={state?.data2?.description}
             control={control}
             rules={{
               required: true,
@@ -108,12 +108,12 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 rows={5}
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
-                  handleOnChange('locationDescription', e);
-                  trigger("locationDescription");
+                  handleOnChange('description', e);
+                  trigger("description");
                 }}
                 onBlur={onBlur}
                 value={value}
-                placeholder="Escribe una descripción de tu hotel, puede ayudar a los viajeros a darse una idea de lo que se pueden encontrar en tu lugar."
+                placeholder="Comparte una breve descripción de tu sitio para dar una idea a los usuarios de lo que pueden encontrar aquí."
               />
             )}
           />
@@ -123,35 +123,39 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           <Col sm={12}>
             <FormControl
               label="Número telefónico"
-              htmlFor="phoneNumber"
+              htmlFor="contactNumber"
               error={
-                errors.phoneNumber && errors.phoneNumber.type === "required" ? (
+                errors.contactNumber && errors.contactNumber.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
-                ) : errors.phoneNumber && errors.phoneNumber.type === "pattern" ? (
+                ) : errors.contactNumber && errors.contactNumber.type === "pattern" ? (
                   <span>¡El número está en un formato no válido!</span>
                 ) : null
               }
             >
               <Controller
-                name="phoneNumber"
-                defaultValue={state?.data2?.phoneNumber}
+                name="contactNumber"
+                defaultValue={state?.data2?.contactNumber}
                 control={control}
                 rules={{
                   required: true,
                   pattern: /^\d{10}$/ // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input
-                    rows={5}
-                    onChange={(e) => { // Cuando el usuario cambia el valor del campo
-                      onChange(e);
-                      handleOnChange('phoneNumber', e);
-                      trigger("phoneNumber");
-                    }}
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="Escribe tu número telefónico"
-                  />
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <ColombiaFlag style={{ marginRight: '5px' }} /> +57
+                    <div style={{ margin: '4px' }}></div> {/* Esto es un espacio de blanco */}
+                    <Input
+                      rows={5}
+                      onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                        onChange(e);
+                        handleOnChange('contactNumber', e);
+                        trigger("contactNumber");
+                      }}
+                      onBlur={onBlur}
+                      value={value}
+                      placeholder="Escribe tu número telefónico"
+                    />
+                  </div>
                 )}
               />
             </FormControl>
@@ -195,15 +199,15 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         <FormControl
           label="Elementos inclusivos"
           htmlFor="inclusiveElements"
-          // error={
-          //   errors.inclusiveElements && errors.inclusiveElements.type === "required" ? (
-          //     <span>¡Este campo es requerido!</span>
-          //   ) : null
-          // }
+        // error={
+        //   errors.inclusiveElements && errors.inclusiveElements.type === "required" ? (
+        //     <span>¡Este campo es requerido!</span>
+        //   ) : null
+        // }
         >
           <Controller
             name="inclusiveElements"
-            defaultValue={state?.data2?.inclusiveElements}
+            defaultValue={typeof state.data2.inclusiveElements === "undefined" ? [] : state?.data2?.inclusiveElements}
             control={control}
             // rules={{
             //   required: true,

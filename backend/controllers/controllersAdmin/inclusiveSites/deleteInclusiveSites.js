@@ -38,7 +38,7 @@ const deleteInclusiveSites = async (req, res) => {
     for (const { input, dataType, regex } of dataArray) {
         const inputValue = inputs[input];
         if (!validateInput(inputValue, input, dataType, regex)) {
-            return res.status(422).json({ message: `El valor de ${input} es inválido` });
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
     /* Fin sanitización entradas */

@@ -8,7 +8,7 @@ import FormControl from 'components/UI/FormControl/FormControl';
 import AddOwnerAction from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 
-const hotelPhotos = [
+const sitePhotos = [
   {
     uid: '1',
     name: 'hotel-1.png',
@@ -29,7 +29,7 @@ const hotelPhotos = [
   },
 ];
 
-const HotelPhotos = ({ setStep }) => {
+const SitePhotos = ({ setStep }) => {
   const { actions, state } = useStateMachine({ AddOwnerAction });
   const {
     register,
@@ -37,11 +37,11 @@ const HotelPhotos = ({ setStep }) => {
     setValue,
     handleSubmit,
   } = useForm({
-    defaultValues: { hotelPhotos },
+    defaultValues: { sitePhotos },
   });
 
   useEffect(() => {
-    register('hotelPhotos', { required: true });
+    register('sitePhotos', { required: true });
   }, [register]);
 
   const onSubmit = (data2) => {
@@ -56,12 +56,12 @@ const HotelPhotos = ({ setStep }) => {
           <Title>Paso 4 de 5: Fotos del sitio</Title>
         </FormHeader>
         <FormControl
-          error={errors.hotelPhotos && <span>This field is required!</span>}
+          error={errors.sitePhotos && <span>This field is required!</span>}
         >
           <DragAndDropUploader
-            name="hotelPhotos"
-            value={state?.data2?.hotelPhotos}
-            onUploadChange={(data2) => setValue('hotelPhotos', data2)}
+            name="sitePhotos"
+            value={state?.data2?.sitePhotos}
+            onUploadChange={(data2) => setValue('sitePhotos', data2)}
           />
         </FormControl>
       </FormContent>
@@ -83,4 +83,4 @@ const HotelPhotos = ({ setStep }) => {
   );
 };
 
-export default HotelPhotos;
+export default SitePhotos;

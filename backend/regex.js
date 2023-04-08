@@ -13,7 +13,7 @@ module.exports = {
     _idMongooseRegexOrEmpty: new RegExp("^[0-9a-fA-F]{24}$|^$"),
 
     /* Sitios inclusivos */
-    nameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/),
+    siteNameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/),
     descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/]){1,2000}$/),
     categoryRegex: generalAlphanumeric(1,100),
     ratingRegex: new RegExp(/^([1-5].[0-9])$/),
