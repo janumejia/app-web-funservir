@@ -46,13 +46,13 @@ const addUser = async (req, res) => {
     for (const { input, dataType, regex } of dataArray) {
         const inputValue = inputs[input];
         if (!validateInput(inputValue, input, dataType, regex)) {
-            return res.status(422).json({ message: `El valor de ${input} es inválido` });
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
     
     // Validación del correo ingresado
     const isValidEmail = typeof inputs.email === 'string' && validator.isEmail(inputs.email) ? true : false;
-    if(!isValidEmail) return res.status(422).json({ message: `El valor del correo es inválido` });
+    if(!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
 
     // Validación de la contraseña ingresada
     const isValidPassword = typeof inputs.password === 'string' && validator.isStrongPassword(inputs.password) ? true : false;

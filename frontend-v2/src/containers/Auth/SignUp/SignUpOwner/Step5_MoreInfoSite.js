@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Select } from 'antd';
+import { Input, Button, Select, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addDataAction from './AddOwnerAction';
+import addDataAction, { addDataResetAction } from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 // const { Option } = Select;
 import MapWithSearchBox from 'components/Map/MapSearchBox';
 import { mapDataHelper } from 'components/Map/mapDataHelper';
+import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
+import { useNavigate } from 'react-router-dom';
 
 const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
   const {
@@ -24,11 +26,14 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   });
 
   const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
+  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
+  
+  const navigate = useNavigate();
 
   const handleOnChange = (key, event) => {
-    actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" ? event : event.target.value) });
-    setValue(key, (key === "locality" || key === "neighborhood" ? event : event.target.value));
-    if(key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
+    actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value) });
+    setValue(key, (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value));
+    if (key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
       setValue("neighborhood", "")
       actionsUpdate.addDataAction({ "neighborhood": "" });
     }
@@ -36,19 +41,59 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   // const selectedLocality = Form.useWatch("locality", form);
   const watchLocality = watch("locality", ""); // Valor por defecto es vacío
-  
-  // Para el mapa
-  let tempLocationData = [];
-  const [location, setLocation] = useState([]);
-  
+
   useEffect(() => { // (no estoy seguro por qué se usa aquí)
     register('location', { required: true });
   }, [register]);
 
-  const onSubmit = (data) => {
-    // const formData = { ...state.data, ...data };
-    actionsUpdate(data);
-    setStep(4);
+  const onSubmit = async (data) => {
+    const formData = { ...state.data2, ...data };
+    console.log(formData);
+    // actionsUpdate(data);
+    // setStep(4);
+
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);
+      if (res) {
+        if (res.status === 200) {
+          message.success(res.data.message, 5);
+          // setTimeout(function () {
+          // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
+          navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+          // }, 3000);
+        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+      }
+    } catch (error) {
+      const blankMessage = ( // Solución para que el navbar de la página no oculte el mensaje desplegado, ya que no cogen los estilos de la componente mensaje (solución chambona pero fue la que funcionó)
+        <>
+          <br />
+          <br />
+        </>
+      );
+      if (typeof error.response.status === 'undefined') {
+        message.destroy()
+        message.info({ content: blankMessage, duration: 5 });
+        message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
+      } else {
+        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+          message.destroy()
+          message.info({ content: blankMessage, duration: 5 });
+          message.warning({ content: error.response.data.message, duration: 5 });
+        }
+        else if (error.response.status >= 500 && error.response.status <= 599) {
+          message.destroy()
+          message.info({ content: blankMessage, duration: 5 });
+          message.error({ content: error.response.data.message, duration: 5 });
+        } // Errores del servidor
+        else {
+          message.destroy()
+          message.info({ content: blankMessage, duration: 5 });
+          message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
+        }
+      }
+    }
+
+
   };
 
   return (
@@ -115,6 +160,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Select
+                placeholder="Selecciona una localidad"
                 value={value}
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
@@ -152,6 +198,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Select
+                placeholder="Selecciona un barrio"
                 value={value}
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
                   onChange(e);
@@ -179,9 +226,10 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           <MapWithSearchBox
             name="location"
             updateValue={(value) => {
-              tempLocationData = mapDataHelper(value);
-              setValue('location', tempLocationData);
-              setLocation(value);
+              // tempLocationData = mapDataHelper(value);
+              handleOnChange('location', mapDataHelper(value)[0])
+              // setValue('location', tempLocationData);
+              // setLocation({ lat: value[0].geometry.location.lat(), lng: value[0].geometry.location.lng() }); // Ajustamos un objeto con longitud y latitud en el estado de LSM
             }}
           />
         </FormControl>

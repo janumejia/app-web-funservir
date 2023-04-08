@@ -1,4 +1,5 @@
 const registerUser = require("./authentication/registerUser")
+const registerOwner = require("./authentication/registerOwner")
 const login = require("./authentication/login")
 const getUserById = require("./getUserById")
 const getAllSites = require("./sites/getAllSites")
@@ -9,6 +10,7 @@ const uniqueEmailValidator = require("./authentication/uniqueEmailValidator")
 
 module.exports = {
     registerUser,
+    registerOwner,
     login,
     getUserById,
     getAllSites,

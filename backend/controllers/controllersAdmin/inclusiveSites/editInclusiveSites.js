@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 // Crea un objeto ClamAV para verificación de imágenes libres de virus
 // const clam = new NodeClam().init();
 
-const { _idMongooseRegex, nameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex, _idMongooseRegexOrEmpty } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex, _idMongooseRegexOrEmpty } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -18,7 +18,7 @@ const editInclusiveSites = async (req, res) => {
     // Declaración de matriz de objetos, donde cada objeto representa un campo que se espera en el JSON de entrada
     const dataArray = [
         { input: '_id', dataType: 'string', regex: _idMongooseRegex },
-        { input: 'name', dataType: 'string', regex: nameRegex },
+        { input: 'name', dataType: 'string', regex: siteNameRegex },
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
@@ -56,7 +56,7 @@ const editInclusiveSites = async (req, res) => {
     for (const { input, dataType, regex } of dataArray) {
         const inputValue = inputs[input];
         if (!validateInput(inputValue, input, dataType, regex)) {
-            return res.status(422).json({ message: `El valor de ${input} es inválido` });
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
 

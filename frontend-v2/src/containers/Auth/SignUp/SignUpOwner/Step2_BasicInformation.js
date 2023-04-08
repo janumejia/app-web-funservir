@@ -194,10 +194,10 @@ const BasicInformationU = ({ setStep }) => {
             defaultValue={
               state?.data2?.condition !== undefined
                 ? state.data2.condition
-                : ''
+                : []
             }
             control={control}
-            rules={{ required: true }}
+            // rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Checkbox.Group
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
