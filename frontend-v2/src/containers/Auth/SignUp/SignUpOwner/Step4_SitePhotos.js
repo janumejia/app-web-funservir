@@ -28,6 +28,20 @@ const SitePhotos = ({ setStep }) => {
     setStep(5);
   };
   
+<<<<<<< HEAD
+
+  // const getBase64 = (img) => {
+  //   let base64Universal = [...state?.data2?.sitePhotos]
+  //   const reader = new FileReader();
+  //   if (img) {
+  //     reader.readAsDataURL(img);
+  //     reader.onloadend = () => {
+  //       actions.AddOwnerAction({ sitePhotos: reader.result });
+  //     }
+  //   }
+  // };
+=======
+>>>>>>> fc852d1 (falta convertir a base64 y mandar al back)
 
   // const getBase64 = (img) => {
   //   let base64Universal = [...state?.data2?.sitePhotos]
@@ -40,26 +54,13 @@ const SitePhotos = ({ setStep }) => {
   //   }
   // };
 
-  const getBase64 = (img) => {
-<<<<<<< HEAD
-    let base64Universal = [...state?.data2?.hotelPhotos]
-=======
->>>>>>> c003818 (cambios obligados)
-    const reader = new FileReader();
-    if (img) {
-      reader.readAsDataURL(img);
-      reader.onloadend = () => {
-        actions.AddOwnerAction({ hotelPhotos: reader.result });
-      }
-    }
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
           <Title>Paso 4 de 5: Fotos del sitio</Title>
         </FormHeader>
+<<<<<<< HEAD
 
           <DragAndDropUploader
 <<<<<<< HEAD
@@ -75,6 +76,15 @@ const SitePhotos = ({ setStep }) => {
               setValue('hotelPhotos', data2)
 
 >>>>>>> 8f52dc9 (commit para poder actualizar desde main)
+=======
+
+          <DragAndDropUploader
+            name="sitePhotos"
+            value={state?.data2?.sitePhotos}
+            onUploadChange={(data2) => {
+              actions.AddOwnerAction({'sitePhotos': data2});
+              setValue('sitePhotos', data2)
+>>>>>>> fc852d1 (falta convertir a base64 y mandar al back)
             }}
           />
 

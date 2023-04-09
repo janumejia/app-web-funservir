@@ -34,6 +34,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
   console.log("state:", state)
 
   const onSubmit = (data2) => {
+    console.log(data2);
     actions.addDataAction(data2); // Guardar la información ingresada en el estado de StateMachine
     setStep(4); // Pasar a la siguiente página de registro
   };
@@ -175,7 +176,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 defaultValue={state?.data2?.category}
                 control={control}
                 rules={{
-                  required: true,
+                  required: true
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Select
