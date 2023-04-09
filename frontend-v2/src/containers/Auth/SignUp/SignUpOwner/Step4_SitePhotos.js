@@ -8,7 +8,29 @@ import FormControl from 'components/UI/FormControl/FormControl';
 import AddOwnerAction from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 
+<<<<<<< HEAD
 const SitePhotos = ({ setStep }) => {
+=======
+
+
+
+// const handleChange = (info) => {
+
+//   const isJpgOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/png';
+//   if (!isJpgOrPng) {
+//     message.error('¡Solo puedes subir imagenes!');
+//   } else {
+//     getBase64(info.file);
+//   }
+
+//   /*const isLt2M = info.file.size / 1024 / 1024 < 2;
+//   if (!isLt2M) {
+//       message.error('La imagen debe ser menor a 2MB!');
+//   }*/
+// };
+
+const HotelPhotos = ({ setStep }) => {
+>>>>>>> 5115f32 (cambios obligados)
   const { actions, state } = useStateMachine({ AddOwnerAction });
   const {
     register,
@@ -16,7 +38,11 @@ const SitePhotos = ({ setStep }) => {
     setValue,
     handleSubmit,
   } = useForm({
+<<<<<<< HEAD
     defaultValues:  state?.data2?.sitePhotos 
+=======
+    defaultValues: state?.data,
+>>>>>>> 5115f32 (cambios obligados)
   });
 
   useEffect(() => {
@@ -53,6 +79,16 @@ const SitePhotos = ({ setStep }) => {
   //     }
   //   }
   // };
+
+  const getBase64 = (img) => {
+    const reader = new FileReader();
+    if (img) {
+      reader.readAsDataURL(img);
+      reader.onloadend = () => {
+        actions.AddOwnerAction({ hotelPhotos: reader.result });
+      }
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
