@@ -7,35 +7,16 @@ const DraggerWrapper = styled.div``;
 
 const { Dragger } = Upload;
 
-const photos = [
-  {
-    uid: '1',
-    name: 'hotel-1.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '2',
-    name: 'hotel-2.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '3',
-    name: 'hotel-3.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-];
 
 const DragAndDropUploader = ({ name = 'file', onUploadChange }) => {
   const props = {
     name,
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    defaultFileList: photos,
+    accept:"image/png, image/jpg, image/jpeg",
+    showUploadList:true,
+    beforeUpload:(file) => false,
     onChange(info) {
       const { status } = info.file;
+      console.log(status);
       if (status !== 'uploading') {
         console.log(info.file, info.fileList);
         onUploadChange(info.fileList);
@@ -55,7 +36,7 @@ const DragAndDropUploader = ({ name = 'file', onUploadChange }) => {
           <IoIosCloudUpload />
         </div>
         <p className="ant-upload-text">
-          Drag & drop to your image assets or browse
+          Arrastra y suelta tus imagenes o da clic para buscar
         </p>
       </Dragger>
     </DraggerWrapper>

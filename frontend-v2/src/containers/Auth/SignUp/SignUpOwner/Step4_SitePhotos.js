@@ -8,27 +8,6 @@ import FormControl from 'components/UI/FormControl/FormControl';
 import AddOwnerAction from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 
-const sitePhotos = [
-  {
-    uid: '1',
-    name: 'hotel-1.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '2',
-    name: 'hotel-2.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '3',
-    name: 'hotel-3.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-];
-
 const SitePhotos = ({ setStep }) => {
   const { actions, state } = useStateMachine({ AddOwnerAction });
   const {
@@ -37,16 +16,39 @@ const SitePhotos = ({ setStep }) => {
     setValue,
     handleSubmit,
   } = useForm({
-    defaultValues: { sitePhotos },
+    defaultValues:  state?.data2?.sitePhotos 
   });
 
   useEffect(() => {
-    register('sitePhotos', { required: true });
+    register('sitePhotos'); //'sitePhotos', { required: true }
   }, [register]);
 
+  console.log(state);
   const onSubmit = (data2) => {
-    actions.AddOwnerAction(data2);
     setStep(5);
+  };
+  
+
+  // const getBase64 = (img) => {
+  //   let base64Universal = [...state?.data2?.sitePhotos]
+  //   const reader = new FileReader();
+  //   if (img) {
+  //     reader.readAsDataURL(img);
+  //     reader.onloadend = () => {
+  //       actions.AddOwnerAction({ sitePhotos: reader.result });
+  //     }
+  //   }
+  // };
+
+  const getBase64 = (img) => {
+    let base64Universal = [...state?.data2?.hotelPhotos]
+    const reader = new FileReader();
+    if (img) {
+      reader.readAsDataURL(img);
+      reader.onloadend = () => {
+        actions.AddOwnerAction({ hotelPhotos: reader.result });
+      }
+    }
   };
 
   return (
@@ -55,15 +57,16 @@ const SitePhotos = ({ setStep }) => {
         <FormHeader>
           <Title>Paso 4 de 5: Fotos del sitio</Title>
         </FormHeader>
-        <FormControl
-          error={errors.sitePhotos && <span>This field is required!</span>}
-        >
+
           <DragAndDropUploader
             name="sitePhotos"
             value={state?.data2?.sitePhotos}
-            onUploadChange={(data2) => setValue('sitePhotos', data2)}
+            onUploadChange={(data2) => {
+              actions.AddOwnerAction({'sitePhotos': data2});
+              setValue('sitePhotos', data2)
+            }}
           />
-        </FormControl>
+
       </FormContent>
       <FormAction>
         <div className="inner-wrapper">
