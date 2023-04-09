@@ -27,7 +27,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
   const { actions: actionsReset } = useStateMachine({ addDataResetAction });
-  
+
   const navigate = useNavigate();
 
   const handleOnChange = (key, event) => {
@@ -46,11 +46,22 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     register('location', { required: true });
   }, [register]);
 
+  const aux1 = [];
+  const imgsCloudinary = state.data2.sitePhotos.map(async (img) => {
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(img.originFileObj);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    }).then(result=>{
+      aux1.push(result);
+    });
+  });
+
   const onSubmit = async (data) => {
-    const formData = { ...state.data2, ...data };
+
+    const formData = { ...state.data2, ...data, sitePhotos: aux1 };
     console.log(formData);
-    // actionsUpdate(data);
-    // setStep(4);
 
     try {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);

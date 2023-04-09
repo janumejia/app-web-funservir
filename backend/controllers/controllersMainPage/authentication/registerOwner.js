@@ -88,19 +88,19 @@ const addInclusiveSites = async (req, res) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
         const hash = await bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT)); // Hashear de la contraseña
-        
+
         const newUser = new User({
-          name: inputs.name,
-          lastName: inputs.lastName,
-          dateOfBirth: inputs.dateOfBirth,
-          email: inputs.email,
-          password: hash,
-          gender: inputs.gender,
-          address: inputs.address,
-          condition: inputs.condition,
-          isCaregiver: inputs.isCaregiver,
-          institution: inputs.institution,
-          userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
+            name: inputs.name,
+            lastName: inputs.lastName,
+            dateOfBirth: inputs.dateOfBirth,
+            email: inputs.email,
+            password: hash,
+            gender: inputs.gender,
+            address: inputs.address,
+            condition: inputs.condition,
+            isCaregiver: inputs.isCaregiver,
+            institution: inputs.institution,
+            userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
         });
 
         const savedNewUser = await newUser.save(); // Aquí se crea el usuario
@@ -113,11 +113,14 @@ const addInclusiveSites = async (req, res) => {
         const neighborhood = await Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality });
         if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
 
-        // Subir las imágenes a Cloudinary
-    // const uploadPromises = inputs.sitePhotos.map(img => {
-    //         return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
-    //     });
-    //     const uploadRes = await Promise.all(uploadPromises);    
+
+
+        //Subir las imágenes a Cloudinary
+        const uploadPromises = inputs.sitePhotos.map(img => {
+            return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
+        });
+
+        const uploadRes = await Promise.all(uploadPromises);
 
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({
@@ -129,7 +132,7 @@ const addInclusiveSites = async (req, res) => {
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
-            // gallery: uploadRes,
+            gallery: uploadRes,
             owner: ObjectId(inputs.owner),
         });
 
