@@ -40,8 +40,8 @@ const SitePhotos = ({ setStep }) => {
   //   }
   // };
 
+
   const getBase64 = (img) => {
-    let base64Universal = [...state?.data2?.hotelPhotos]
     const reader = new FileReader();
     if (img) {
       reader.readAsDataURL(img);

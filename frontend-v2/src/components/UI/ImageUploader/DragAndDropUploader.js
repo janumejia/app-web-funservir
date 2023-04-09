@@ -7,6 +7,7 @@ const DraggerWrapper = styled.div``;
 
 const { Dragger } = Upload;
 
+<<<<<<< HEAD
 // const photos = [
 //   {
 //     uid: '1',
@@ -45,6 +46,28 @@ const DragAndDropUploader = ({value, onUploadChange}) => {
       status = 'done'
     }
     return false;
+=======
+
+const DragAndDropUploader = ({ name = 'file', onUploadChange }) => {
+  const props = {
+    name,
+    accept:"image/png, image/jpg, image/jpeg",
+    showUploadList:true,
+    beforeUpload:(file) => false,
+    onChange(info) {
+      const { status } = info.file;
+      console.log(status);
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+        onUploadChange(info.fileList);
+      }
+      if (status === 'done') {
+        message.success(`${info.file.name} photo uploaded successfully.`);
+      } else if (status === 'error') {
+        message.error(`${info.file.name} photo upload failed.`);
+      }
+    },
+>>>>>>> c003818 (cambios obligados)
   };
 
   const handleOnChange = (info) => {
@@ -73,7 +96,11 @@ const DragAndDropUploader = ({value, onUploadChange}) => {
           <IoIosCloudUpload />
         </div>
         <p className="ant-upload-text">
+<<<<<<< HEAD
           Arrastra y suelta tus fotos para subirlas o haz clic y selecciona.
+=======
+          Arrastra y suelta tus imagenes o da clic para buscar
+>>>>>>> c003818 (cambios obligados)
         </p>
       </Dragger>
     </DraggerWrapper>
