@@ -17,6 +17,9 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 const BasicInformationU = ({ setStep }) => {
+
+  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
+  
   const {
     control,
     setValue,
@@ -34,7 +37,7 @@ const BasicInformationU = ({ setStep }) => {
     },
   });
 
-  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
+  
   // const { actions: actionsReset } = useStateMachine({ addDataResetAction });
 
   // console.log("actionsReset: ", actionsReset)
@@ -98,7 +101,7 @@ const BasicInformationU = ({ setStep }) => {
                       // En este caso, solo permite fechas entre hace 200 años y hoy.
                       return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
                     }}
-                    // defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
+                  // defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
                   // locale="es_ES" // set the locale to Spanish. No sirve :/
                   />
                 )}
@@ -197,7 +200,6 @@ const BasicInformationU = ({ setStep }) => {
                 : []
             }
             control={control}
-            // rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Checkbox.Group
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
@@ -286,7 +288,7 @@ const BasicInformationU = ({ setStep }) => {
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu dirección."
+                placeholder="Escribe el nombre de la fundación"
               />
             )}
           />

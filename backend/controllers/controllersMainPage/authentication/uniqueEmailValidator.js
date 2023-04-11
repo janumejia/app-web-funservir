@@ -2,7 +2,7 @@ const User = require("../../../model/user")
 var validator = require('validator');
 
 const uniqueEmailValidator = async (req, res) => {
-    // Entradas: name, description, category, contactNumber, locality, neighborhood
+    // Entradas: email
     const { ...inputs } = req.body;
 
     // Validación del correo ingresado

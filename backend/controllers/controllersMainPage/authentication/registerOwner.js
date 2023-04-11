@@ -60,7 +60,7 @@ const addInclusiveSites = async (req, res) => {
         }
         return false;
     };
-
+    
     // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
     // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
     for (const { input, dataType, regex } of dataArray) {
@@ -69,7 +69,7 @@ const addInclusiveSites = async (req, res) => {
             return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
-
+    
     // Validación del correo ingresado
     const isValidEmail = typeof inputs.email === 'string' && validator.isEmail(inputs.email) ? true : false;
     if (!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
@@ -77,30 +77,38 @@ const addInclusiveSites = async (req, res) => {
     // Validación de la contraseña ingresada
     const isValidPassword = typeof inputs.password === 'string' && validator.isStrongPassword(inputs.password) ? true : false;
     if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
-
+    
     // Validación de la fecha ingresada
     const isValidDateOfBirth = typeof inputs.dateOfBirth === 'string' && moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid() ? true : false;
     if (!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválida` });
-
+    
     try {
         // Verificar que el correo no ha sido previamente registrado
         const user = await User.findOne({ 'email': inputs.email });
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
+        // Verificar que el correo no ha sido previamente registrado
+        const site = await InclusiveSites.findOne({ 'name': inputs.siteName });
+        if (site) return res.status(409).json({ message: "Ya existe un sitio con ese nombre" });
+
+        // Verificar que el barrio y la localidad existan
+        const neighborhood = await Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality });
+        if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
+
         const hash = await bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT)); // Hashear de la contraseña
-        
+
         const newUser = new User({
-          name: inputs.name,
-          lastName: inputs.lastName,
-          dateOfBirth: inputs.dateOfBirth,
-          email: inputs.email,
-          password: hash,
-          gender: inputs.gender,
-          address: inputs.address,
-          condition: inputs.condition,
-          isCaregiver: inputs.isCaregiver,
-          institution: inputs.institution,
-          userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
+            name: inputs.name,
+            lastName: inputs.lastName,
+            dateOfBirth: inputs.dateOfBirth,
+            email: inputs.email,
+            password: hash,
+            gender: inputs.gender,
+            address: inputs.address,
+            condition: inputs.condition,
+            isCaregiver: inputs.isCaregiver,
+            institution: inputs.institution,
+            userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
         });
 
         const savedNewUser = await newUser.save(); // Aquí se crea el usuario
@@ -109,15 +117,11 @@ const addInclusiveSites = async (req, res) => {
         const userExist = await User.findOne({ '_id': savedNewUser._id });
         if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
 
-        // Verificar que el barrio y la localidad existan
-        const neighborhood = await Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality });
-        if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
-
         // Subir las imágenes a Cloudinary
-    // const uploadPromises = inputs.sitePhotos.map(img => {
-    //         return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
-    //     });
-    //     const uploadRes = await Promise.all(uploadPromises);    
+        // const uploadPromises = inputs.sitePhotos.map(img => {
+        //         return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
+        //     });
+        //     const uploadRes = await Promise.all(uploadPromises);    
 
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({
@@ -129,7 +133,7 @@ const addInclusiveSites = async (req, res) => {
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
-            // gallery: uploadRes,
+            gallery: uploadRes,
             owner: ObjectId(inputs.owner),
         });
 

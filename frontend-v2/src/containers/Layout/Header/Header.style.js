@@ -83,7 +83,6 @@ const HeaderWrapper = styled.header`
         &.is_transparent {
           background-color: ${themeGet('color.1', '#ffffff')};
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-
           > div > div {
             > svg {
               display: none;

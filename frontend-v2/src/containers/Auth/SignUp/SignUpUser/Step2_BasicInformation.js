@@ -132,7 +132,7 @@ const BasicInformationU = ({ setStep }) => {
                       onChange(e);
                       handleOnChange('dateOfBirth', e);
                     }}
-                    placeholder="Selecciona una fecha"
+                    placeholder="Selecciona tu fecha de nacimiento"
                     showToday={false}
                     format="YYYY-MM-DD"
                     disabledDate={(current) => {
@@ -150,7 +150,7 @@ const BasicInformationU = ({ setStep }) => {
         </Row>
 
         <FormControl
-          label="Genero"
+          label="Género"
           labelTag="h3"
           error={
             errors.gender && errors.gender.type === "required" ? (
@@ -253,7 +253,7 @@ const BasicInformationU = ({ setStep }) => {
                 <Checkbox value="Sensorial">Sensorial</Checkbox>
                 <Checkbox value="Comunicación">Comunicación</Checkbox>
                 <Checkbox value="Mental">Mental</Checkbox>
-                <Checkbox value="Multiples">Multiples</Checkbox>
+                <Checkbox value="Multiples">Múltiples</Checkbox>
                 <Checkbox value="Otra">Otra</Checkbox>
               </Checkbox.Group>
             )}
@@ -290,7 +290,7 @@ const BasicInformationU = ({ setStep }) => {
                 value={value}
                 options={
                   [
-                    { label: 'Si', value: 'Si' },
+                    { label: 'Sí', value: 'Si' },
                     { label: 'No', value: 'No' },
                   ]
                 }
@@ -328,7 +328,7 @@ const BasicInformationU = ({ setStep }) => {
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu dirección."
+                placeholder="Escribe el nombre de la fundación."
               />
             )}
           />
