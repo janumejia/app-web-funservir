@@ -97,7 +97,7 @@ const AccountDetails = ({ setStep }) => {
                       onBlur();
                     }}
                     value={value}
-                    placeholder="Escribe tu nombre"
+                    placeholder="Escribe tu nombre aquí"
                   // suffix={
                   //   <Tooltip placement="topRight" title="El nombre solo puede contener caracteres alfabéticos y espacios" >
                   //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
@@ -140,7 +140,7 @@ const AccountDetails = ({ setStep }) => {
                       onBlur();
                     }}
                     value={value}
-                    placeholder="Escribe tu apellido"
+                    placeholder="Escribe tu apellido aquí"
                   // suffix={
                   //   <Tooltip placement="topRight" title="El apellido solo puede contener caracteres alfabéticos y espacios" >
                   //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
@@ -189,7 +189,7 @@ const AccountDetails = ({ setStep }) => {
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu correo"
+                placeholder="Ej: juan.martinez@dominio.com"
               // suffix={
               //   <Tooltip placement="topRight" title='El correo electrónico debe seguir un formato válido. Ejemplo: "usuario@dominio.com". Además, no puede contener el signo de suma (+)' >
               //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />

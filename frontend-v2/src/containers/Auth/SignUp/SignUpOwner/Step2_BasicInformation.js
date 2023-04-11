@@ -288,7 +288,7 @@ const BasicInformationU = ({ setStep }) => {
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu dirección."
+                placeholder="Escribe el nombre de la fundación"
               />
             )}
           />

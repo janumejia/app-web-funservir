@@ -79,7 +79,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu nombre"
+                placeholder="Escribe tu nombre aquí"
               />
             )}
           />
@@ -154,7 +154,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                       }}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="Escribe tu número telefónico"
+                      placeholder="Escribe tu número telefónico aquí"
                     />
                   </div>
                 )}

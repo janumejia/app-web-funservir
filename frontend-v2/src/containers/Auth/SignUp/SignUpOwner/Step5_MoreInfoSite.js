@@ -144,7 +144,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu dirección."
+                placeholder="Escribe tu dirección aquí"
               />
             )}
           />
