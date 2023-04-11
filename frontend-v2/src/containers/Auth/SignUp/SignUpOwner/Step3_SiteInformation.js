@@ -5,7 +5,21 @@ import { Row, Col, Input, Button, Select, InputNumber } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddOwnerAction';
 import { FormHeader, Title, Description, FormContent, FormAction, StyledInputNumber, ColombiaFlag } from './AddOwner.style';
+import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
+
 const { Option } = Select;
+
+const inclusiveSiteNameVerification = async (siteName) => {
+  try {
+    await axios.post(`${process.env.REACT_APP_HOST_BACK}/uniqueSiteNameValidator`, { siteName: siteName });
+    // No se hace nada aquí, solo cuando el nombre está repetido se informa
+  
+  } catch (error) {
+    if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
+  
+  }
+  return true; // Válido
+}
 
 const AccountDetails = ({ setStep, availableCategories, availableElements }) => {
   const { actions, state } = useStateMachine({ addDataAction }); // Usamos el estado global de StateMachine
@@ -54,8 +68,8 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           error={
             errors.siteName && errors.siteName.type === "required" ? (
               <span>¡Este campo es requerido!</span>
-            ) : errors.siteName && errors.siteName.type === "pattern" ? (
-              <span>¡El nombre está en un formato no válido!</span>
+              ) : errors.siteName && errors.siteName.type === "isSiteNameValid" ? (
+              <span> { errors.siteName.message } </span>
             ) : null
           }
         >
@@ -65,7 +79,14 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             control={control}
             rules={{
               required: true,
-              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/,
+              // pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/,
+              validate: {
+                isSiteNameValid: async (value) => {
+                  const pattern = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/;
+                  return pattern.test(value) ? (await inclusiveSiteNameVerification(value) ? true : "¡Este nombre ya se encuentra registrado!") : "¡El nombre está en un formato no válido!";
+                }
+              }
+
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
