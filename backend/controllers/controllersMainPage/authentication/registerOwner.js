@@ -1,3 +1,4 @@
+const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
 const cloudinary = require("../../../middlewares/cloudinary");
 const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
@@ -109,6 +110,7 @@ const addInclusiveSites = async (req, res) => {
             isCaregiver: inputs.isCaregiver,
             institution: inputs.institution,
             userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
+            profilePicture: randomAvatar(inputs.gender)
         });
 
         const savedNewUser = await newUser.save(); // Aquí se crea el usuario

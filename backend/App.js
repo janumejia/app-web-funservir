@@ -21,6 +21,7 @@ app.use(cors({
             var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
             return callback(new Error(msg), false);
         }
+        console.log("pasa por aqui")
         return callback(null, true);
     },
     credentials: true, // Para permitir el envío de cookies
