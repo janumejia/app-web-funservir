@@ -13,11 +13,12 @@ const login = async (req, res) => {
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
                 .then((isCorrect) => {
                     if (isCorrect) {
-                        const { _id, name, userType } = user
+                        const { _id, name, userType, profilePicture } = user
                         const data = {
                             _id,
                             name,
                             userType,
+                            profilePicture
                         };
                         const token = jwt.sign(data, process.env.JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
