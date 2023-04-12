@@ -1,164 +1,6 @@
-const characteristics = {
-    "topType": [
-        "NoHair",
-        "Eyepatch",
-        "Hat",
-        "Hijab",
-        "Turban",
-        "WinterHat1",
-        "WinterHat2",
-        "WinterHat3",
-        "WinterHat4",
-        "LongHairBigHair",
-        "LongHairBob",
-        "LongHairBun",
-        "LongHairCurly",
-        "LongHairCurvy",
-        "LongHairDreads",
-        "LongHairFrida",
-        "LongHairFro",
-        "LongHairFroBand",
-        "LongHairNotTooLong",
-        "LongHairShavedSides",
-        "LongHairMiaWallace",
-        "LongHairStraight",
-        "LongHairStraight2",
-        "LongHairStraightStrand",
-        "ShortHairDreads01",
-        "ShortHairDreads02",
-        "ShortHairFrizzle",
-        "ShortHairShaggyMullet",
-        "ShortHairShortCurly",
-        "ShortHairShortFlat",
-        "ShortHairShortRound",
-        "ShortHairShortWaved",
-        "ShortHairSides",
-        "ShortHairTheCaesar",
-        "ShortHairTheCaesarSidePart"
-    ],
-    "accessoriesType": [
-        "Blank",
-        "Kurt",
-        "Prescription01",
-        "Prescription02",
-        "Round",
-        "Sunglasses",
-        "Wayfarers"
-    ],
-    "hatColor": [
-        "Black",
-        "Blue01",
-        "Blue02",
-        "Blue03",
-        "Gray01",
-        "Gray02",
-        "Heather",
-        "PastelBlue",
-        "PastelGreen",
-        "PastelOrange",
-        "PastelRed",
-        "PastelYellow",
-        "Pink",
-        "Red",
-        "White",
-    ],
-    "hairColor": [
-        "Auburn",
-        "Black",
-        "Blonde",
-        "BlondeGolden",
-        "Brown",
-        "BrownDark",
-        "PastelPink",
-        "Blue",
-        "Platinum",
-        "Red",
-        "SilverGray"
-    ],
-    "facialHairType": [
-        "Blank",
-        "BeardMedium",
-        "BeardLight",
-        "BeardMagestic",
-        "MoustacheFancy",
-        "MoustacheMagnum"
-    ],
-    "facialHairColor": [
-        "Auburn",
-        "Black",
-        "Blonde",
-        "BlondeGolden",
-        "Brown",
-        "BrownDark",
-        "Platinum",
-        "Red",
-    ],
-    "clotheType": [
-        "BlazerShirt",
-        "BlazerSweater",
-        "CollarSweater",
-        "GraphicShirt",
-        "Hoodie",
-        "Overall",
-        "ShirtCrewNeck",
-        "ShirtScoopNeck",
-        "ShirtVNeck"
-    ],
-    "clotheColor": [
-        "Black",
-        "Blue01",
-        "Blue02",
-        "Blue03",
-        "Gray01",
-        "Gray02",
-        "Heather",
-        "PastelBlue",
-        "PastelGreen",
-        "PastelOrange",
-        "PastelRed",
-        "PastelYellow",
-        "Pink",
-        "Red",
-        "White",
-    ],
-    "eyeType": [
-        "Default",
-        "Happy",
-        "Side",
-        "Squint",
-        "Surprised",
-        "Wink",
-        "WinkWacky"
-    ],
-    "eyebrowType": [
-        "Default",
-        "DefaultNatural",
-        "FlatNatural",
-        "RaisedExcited",
-        "RaisedExcitedNatural",
-        "UnibrowNatural",
-        "UpDown",
-        "UpDownNatural"
-    ],
-    "mouthType": [
-        "Default",
-        "Eating",
-        "Grimace",
-        "Serious",
-        "Smile",
-        "Tongue",
-        "Twinkle",
-    ],
-    "skinColor": [
-        "Tanned",
-        "Yellow",
-        "Pale",
-        "Light",
-        "Brown",
-        "DarkBrown",
-        "Black"
-    ]
-}
+const {femenineCharacteristics} = require('./femenineCharacteristics');
+const {maleCharacteristics} = require('./maleCharacteristics');
+const {otherCharacteristics} = require('./otherCharacteristics');
 
 const randomItem = (characteristic) => {
     const random = Math.floor(Math.random() * characteristic.length);
@@ -167,33 +9,51 @@ const randomItem = (characteristic) => {
 
 const randomAvatar = (gender) => {
     if (gender === 'Femenino') {
-
-        const topType = randomItem(characteristics.topType);
-        const accessoriesType = randomItem(characteristics.accessoriesType);
-        const hatColor = randomItem(characteristics.hatColor);
-        const hairColor = randomItem(characteristics.hairColor);
-        const clotheType = randomItem(characteristics.clotheType);
-        const clotheColor = randomItem(characteristics.clotheColor);
-        const eyeType = randomItem(characteristics.eyeType);
-        const eyebrowType = randomItem(characteristics.eyebrowType);
-        const mouthType = randomItem(characteristics.mouthType);
-        const skinColor = randomItem(characteristics.skinColor);
+        
+        const topType = randomItem(femenineCharacteristics.topType);
+        const accessoriesType = randomItem(femenineCharacteristics.accessoriesType);
+        const hatColor = randomItem(femenineCharacteristics.hatColor);
+        const hairColor = randomItem(femenineCharacteristics.hairColor);
+        const clotheType = randomItem(femenineCharacteristics.clotheType);
+        const clotheColor = randomItem(femenineCharacteristics.clotheColor);
+        const eyeType = randomItem(femenineCharacteristics.eyeType);
+        const eyebrowType = randomItem(femenineCharacteristics.eyebrowType);
+        const mouthType = randomItem(femenineCharacteristics.mouthType);
+        const skinColor = randomItem(femenineCharacteristics.skinColor);
 
         let url = `https://avataaars.io/?avatarStyle=Circle&topType=${topType}&accessoriesType=${accessoriesType}&hairColor=${hairColor}&hatColor=${hatColor}&clotheType=${clotheType}&clotheColor=${clotheColor}&eyeType=${eyeType}&eyebrowType=${eyebrowType}&mouthType=${mouthType}&skinColor=${skinColor}`
         return url;
-    } else {
-        const topType = randomItem(characteristics.topType);
-        const accessoriesType = randomItem(characteristics.accessoriesType);
-        const hatColor = randomItem(characteristics.hatColor);
-        const hairColor = randomItem(characteristics.hairColor);
-        const facialHairType = randomItem(characteristics.facialHairType);
-        const facialHairColor = randomItem(characteristics.facialHairColor);
-        const clotheType = randomItem(characteristics.clotheType);
-        const clotheColor = randomItem(characteristics.clotheColor);
-        const eyeType = randomItem(characteristics.eyeType);
-        const eyebrowType = randomItem(characteristics.eyebrowType);
-        const mouthType = randomItem(characteristics.mouthType);
-        const skinColor = randomItem(characteristics.skinColor);
+    } else if(gender === 'Masculino'){
+
+        const topType = randomItem(maleCharacteristics.topType);
+        const accessoriesType = randomItem(maleCharacteristics.accessoriesType);
+        const hatColor = randomItem(maleCharacteristics.hatColor);
+        const hairColor = randomItem(maleCharacteristics.hairColor);
+        const facialHairType = randomItem(maleCharacteristics.facialHairType);
+        const facialHairColor = randomItem(maleCharacteristics.facialHairColor);
+        const clotheType = randomItem(maleCharacteristics.clotheType);
+        const clotheColor = randomItem(maleCharacteristics.clotheColor);
+        const eyeType = randomItem(maleCharacteristics.eyeType);
+        const eyebrowType = randomItem(maleCharacteristics.eyebrowType);
+        const mouthType = randomItem(maleCharacteristics.mouthType);
+        const skinColor = randomItem(maleCharacteristics.skinColor);
+
+        let url = `https://avataaars.io/?avatarStyle=Circle&topType=${topType}&accessoriesType=${accessoriesType}&hairColor=${hairColor}&hatColor=${hatColor}&facialHairType=${facialHairType}&facialHairColor=${facialHairColor}&clotheType=${clotheType}&clotheColor=${clotheColor}&eyeType=${eyeType}&eyebrowType=${eyebrowType}&mouthType=${mouthType}&skinColor=${skinColor}`
+        return url;
+    }else if(gender === 'Otro'){
+
+        const topType = randomItem(otherCharacteristics.topType);
+        const accessoriesType = randomItem(otherCharacteristics.accessoriesType);
+        const hatColor = randomItem(otherCharacteristics.hatColor);
+        const hairColor = randomItem(otherCharacteristics.hairColor);
+        const facialHairType = randomItem(otherCharacteristics.facialHairType);
+        const facialHairColor = randomItem(otherCharacteristics.facialHairColor);
+        const clotheType = randomItem(otherCharacteristics.clotheType);
+        const clotheColor = randomItem(otherCharacteristics.clotheColor);
+        const eyeType = randomItem(otherCharacteristics.eyeType);
+        const eyebrowType = randomItem(otherCharacteristics.eyebrowType);
+        const mouthType = randomItem(otherCharacteristics.mouthType);
+        const skinColor = randomItem(otherCharacteristics.skinColor);
 
         let url = `https://avataaars.io/?avatarStyle=Circle&topType=${topType}&accessoriesType=${accessoriesType}&hairColor=${hairColor}&hatColor=${hatColor}&facialHairType=${facialHairType}&facialHairColor=${facialHairColor}&clotheType=${clotheType}&clotheColor=${clotheColor}&eyeType=${eyeType}&eyebrowType=${eyebrowType}&mouthType=${mouthType}&skinColor=${skinColor}`
         return url;
