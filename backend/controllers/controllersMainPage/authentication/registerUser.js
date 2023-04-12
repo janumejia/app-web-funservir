@@ -1,3 +1,5 @@
+const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
+
 const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
@@ -68,6 +70,7 @@ const addUser = async (req, res) => {
         bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT), (err, hash) => {
             if (err) return res.status(500).json({ error: err });
 
+            
             const newUser = new User({
                 name: inputs.name,
                 lastName: inputs.lastName,
@@ -80,6 +83,7 @@ const addUser = async (req, res) => {
                 isCaregiver: inputs.isCaregiver,
                 institution: inputs.institution,
                 userType: "Regular", // Porque en este controlador solo se registra usuario normal
+                profilePicture: randomAvatar(inputs.gender)
             });
 
             newUser.save().then((savedUser) => {
