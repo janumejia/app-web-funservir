@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Radio, Button, Input, DatePicker, Checkbox, message } from 'antd';
+import { Row, Col, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addDataAction, { addDataResetAction } from './AddOwnerAction';
+import addDataAction from './AddOwnerAction';
 import {
   FormHeader,
   Title,
@@ -12,8 +11,7 @@ import {
   FormContent,
   FormAction,
 } from './AddOwner.style';
-import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
-import { useNavigate } from 'react-router-dom';
+
 import moment from 'moment';
 
 const BasicInformationU = ({ setStep }) => {
@@ -88,10 +86,10 @@ const BasicInformationU = ({ setStep }) => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
-                    value={(state.data2.dateOfBirth) ? moment(state.data2.dateOfBirth) : ""} // Se daña muy feo en algunos casos, por eso lo comento. Por lo tanto, no se guarda este valor en el session storage
+                    value={(state.data2.dateOfBirth) ? moment(state.data2.dateOfBirth) : ""}
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      if (e._d) handleOnChange('dateOfBirth', e._d);
+                      if(e._d) handleOnChange('dateOfBirth', e._d);
                     }}
                     placeholder="Selecciona una fecha"
                     showToday={false}

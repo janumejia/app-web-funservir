@@ -96,7 +96,7 @@ const AccountDetails = ({ setStep }) => {
                       trigger("name");
                       onBlur();
                     }}
-                    value={value}
+                    value={(value && value.trim() === "")?"":value}
                     placeholder="Escribe tu nombre aquí"
                   // suffix={
                   //   <Tooltip placement="topRight" title="El nombre solo puede contener caracteres alfabéticos y espacios" >
@@ -139,7 +139,7 @@ const AccountDetails = ({ setStep }) => {
                       trigger("lastName");
                       onBlur();
                     }}
-                    value={value}
+                    value={(value && value.trim() === "")?"":value}
                     placeholder="Escribe tu apellido aquí"
                   // suffix={
                   //   <Tooltip placement="topRight" title="El apellido solo puede contener caracteres alfabéticos y espacios" >
@@ -188,7 +188,7 @@ const AccountDetails = ({ setStep }) => {
                   trigger("email");
                   onBlur();
                 }}
-                value={value}
+                value={(value && value.trim() === "")?"":value}
                 placeholder="Ej: juan.martinez@dominio.com"
               // suffix={
               //   <Tooltip placement="topRight" title='El correo electrónico debe seguir un formato válido. Ejemplo: "usuario@dominio.com". Además, no puede contener el signo de suma (+)' >
