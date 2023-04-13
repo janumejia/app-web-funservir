@@ -41,6 +41,7 @@ const Stepper = styled.div`
 
 export const FormHeader = styled.div`
   margin-bottom: 30px;
+  z-index: 2;
   @media (max-width: 480px) {
     margin-bottom: 0;
   }

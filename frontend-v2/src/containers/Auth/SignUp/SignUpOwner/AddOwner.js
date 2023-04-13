@@ -27,15 +27,6 @@ const AddOwner = () => {
 
   // Se ejecuta cada vez que se modifica el valor de count
   useEffect(() => {
-    message.destroy()
-    const blankMessage = ( // Solución para el navbar de la página no oculte el mensaje desplegado, ya que no cogen los estilos de la componente mensaje (solución chambona pero fue la que funcionó)
-      <>
-        <br />
-        <br />
-      </>
-    );
-    message.info({ content: blankMessage, duration: 20 });
-    
     axios.get(`${process.env.REACT_APP_HOST_BACK}/elements`)
       .then((res) => {
         setAvailableElements(res.data);

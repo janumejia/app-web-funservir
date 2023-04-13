@@ -60,7 +60,7 @@ export default function Header() {
     <HeaderWrapper>
       <Sticky
         top={headerType === 'transparent' ? -1 : 0}
-        innerZ={10001}
+        innerZ={2}
         activeClass="isHeaderSticky"
       >
         {width > 991 ? (
