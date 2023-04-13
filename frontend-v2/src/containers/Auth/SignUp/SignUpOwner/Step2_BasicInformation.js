@@ -19,7 +19,7 @@ import moment from 'moment';
 const BasicInformationU = ({ setStep }) => {
 
   const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
-  
+
   const {
     control,
     setValue,
@@ -37,7 +37,7 @@ const BasicInformationU = ({ setStep }) => {
     },
   });
 
-  
+
   // const { actions: actionsReset } = useStateMachine({ addDataResetAction });
 
   // console.log("actionsReset: ", actionsReset)
@@ -88,13 +88,14 @@ const BasicInformationU = ({ setStep }) => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
-                    // value={value} // Se daña muy feo en algunos casos, por eso lo comento. Por lo tanto, no se guarda este valor en el session storage
+                    value={(state.data2.dateOfBirth) ? moment(state.data2.dateOfBirth) : ""} // Se daña muy feo en algunos casos, por eso lo comento. Por lo tanto, no se guarda este valor en el session storage
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      handleOnChange('dateOfBirth', e);
+                      if (e._d) handleOnChange('dateOfBirth', e._d);
                     }}
                     placeholder="Selecciona una fecha"
                     showToday={false}
+                    allowClear={false}
                     format="YYYY-MM-DD"
                     disabledDate={(current) => {
                       // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.

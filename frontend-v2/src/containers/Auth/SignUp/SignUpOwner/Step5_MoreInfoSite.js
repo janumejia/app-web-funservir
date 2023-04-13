@@ -61,7 +61,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   const onSubmit = async (data) => {
 
     const formData = { ...state.data2, ...data, sitePhotos: aux1 };
-    console.log(formData);
 
     try {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);
@@ -72,6 +71,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
           navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
           // }, 3000);
+          actionsReset.addDataResetAction();
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {

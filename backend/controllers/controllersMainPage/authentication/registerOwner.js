@@ -97,7 +97,7 @@ const addInclusiveSites = async (req, res) => {
         if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
 
         const hash = await bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT)); // Hashear de la contraseña
-
+        
         const newUser = new User({
             name: inputs.name,
             lastName: inputs.lastName,
@@ -120,10 +120,10 @@ const addInclusiveSites = async (req, res) => {
         if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
 
         // Subir las imágenes a Cloudinary
-        // const uploadPromises = inputs.sitePhotos.map(img => {
-        //         return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
-        //     });
-        //     const uploadRes = await Promise.all(uploadPromises);    
+        const uploadPromises = inputs.sitePhotos.map(img => {
+                return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
+            });
+            const uploadRes = await Promise.all(uploadPromises);    
 
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({
@@ -136,7 +136,7 @@ const addInclusiveSites = async (req, res) => {
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
             gallery: uploadRes,
-            owner: ObjectId(inputs.owner),
+            owner: ObjectId(savedNewUser._id),
         });
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente
@@ -145,7 +145,7 @@ const addInclusiveSites = async (req, res) => {
             //const a = await InclusiveSites.findById(savedSite._id).populate('owner', {name:1});
 
             // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
-            const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: savedSite._id } }; // Verificar que el sitio no existe ya en el arreglo
+            const query = { _id: ObjectId(savedNewUser._id), associatedSites: { $ne: savedSite._id } }; // Verificar que el sitio no existe ya en el arreglo
             const update = {
                 $addToSet: { associatedSites: savedSite._id }
             };
