@@ -47,10 +47,14 @@ const DragAndDropUploader = ({value, onUploadChange}) => {
     return false;
   };
 
+  const removeBadPics = (picture) =>{
+    return picture.status !== 'error';
+  }
   const handleOnChange = (info) => {
     
     if (status === 'done') {
-      onUploadChange(info.fileList);
+      const result = info.fileList.filter(removeBadPics);
+      onUploadChange(result);
       message.success(`¡${info.file.name} ha sido subida correctamente!.`);
       status = null;
     } else if(info.file.status === 'removed'){
@@ -66,6 +70,7 @@ const DragAndDropUploader = ({value, onUploadChange}) => {
       className="uploader" 
       beforeUpload={beforeUpload} 
       multiple= {true}
+      maxCount={8}
       onChange={handleOnChange}
       defaultFileList={value}
       >
