@@ -61,7 +61,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   const onSubmit = async (data) => {
 
     const formData = { ...state.data2, ...data, sitePhotos: aux1 };
-    console.log(formData);
 
     try {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);
@@ -72,33 +71,25 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
           navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
           // }, 3000);
+          actionsReset.addDataResetAction();
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
-      const blankMessage = ( // Solución para que el navbar de la página no oculte el mensaje desplegado, ya que no cogen los estilos de la componente mensaje (solución chambona pero fue la que funcionó)
-        <>
-          <br />
-          <br />
-        </>
-      );
+      
       if (typeof error.response.status === 'undefined') {
-        message.destroy()
-        message.info({ content: blankMessage, duration: 5 });
+
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {
         if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
-          message.destroy()
-          message.info({ content: blankMessage, duration: 5 });
+
           message.warning({ content: error.response.data.message, duration: 5 });
         }
         else if (error.response.status >= 500 && error.response.status <= 599) {
-          message.destroy()
-          message.info({ content: blankMessage, duration: 5 });
+
           message.error({ content: error.response.data.message, duration: 5 });
         } // Errores del servidor
         else {
-          message.destroy()
-          message.info({ content: blankMessage, duration: 5 });
+
           message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
         }
       }

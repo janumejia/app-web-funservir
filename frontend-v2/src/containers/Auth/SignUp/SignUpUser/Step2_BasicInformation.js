@@ -17,6 +17,10 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 const BasicInformationU = ({ setStep }) => {
+
+  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
+  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
+
   const {
     control,
     setValue,
@@ -34,11 +38,6 @@ const BasicInformationU = ({ setStep }) => {
     },
   });
 
-  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
-  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
-
-  // console.log("actionsReset: ", actionsReset)
-  // console.log("typeof state.data.dateOfBirth: ", typeof state.data.dateOfBirth)
 
   const handleOnChange = (key, event) => {
     actionsUpdate.addDataAction({ [key]: (key === 'condition' || key === 'dateOfBirth' ? event : event.target.value) });
@@ -63,30 +62,17 @@ const BasicInformationU = ({ setStep }) => {
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
-      const blankMessage = ( // Solución para el navbar de la página no oculte el mensaje desplegado, ya que no cogen los estilos de la componente mensaje (solución chambona pero fue la que funcionó)
-        <>
-          <br />
-          <br />
-        </>
-      );
+
       if (typeof error.response.status === 'undefined') {
-        message.destroy()
-        message.info({ content: blankMessage, duration: 5 });
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {
         if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
-          message.destroy()
-          message.info({ content: blankMessage, duration: 5 });
           message.warning({ content: error.response.data.message, duration: 5 });
         }
         else if (error.response.status >= 500 && error.response.status <= 599) {
-          message.destroy()
-          message.info({ content: blankMessage, duration: 5 });
           message.error({ content: error.response.data.message, duration: 5 });
         } // Errores del servidor
         else {
-          message.destroy()
-          message.info({ content: blankMessage, duration: 5 });
           message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
         }
       }
@@ -127,20 +113,21 @@ const BasicInformationU = ({ setStep }) => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
-                    // value={value} // Se daña muy feo en algunos casos, por eso lo comento. Por lo tanto, no se guarda este valor en el session storage
+                    value={(state.data.dateOfBirth) ? moment(state.data.dateOfBirth) : ""}
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      handleOnChange('dateOfBirth', e);
+                      if(e._d) handleOnChange('dateOfBirth', e._d);
                     }}
                     placeholder="Selecciona tu fecha de nacimiento"
                     showToday={false}
+                    allowClear={false}
                     format="YYYY-MM-DD"
                     disabledDate={(current) => {
                       // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
                       // En este caso, solo permite fechas entre hace 200 años y hoy.
                       return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
                     }}
-                    // defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
+                  // defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
                   // locale="es_ES" // set the locale to Spanish. No sirve :/
                   />
                 )}
@@ -219,7 +206,7 @@ const BasicInformationU = ({ setStep }) => {
                   trigger("address");
                   onBlur();
                 }}
-                value={value}
+                value={(value && value.trim() === "")?"":value}
                 placeholder="Escribe tu dirección."
               />
             )}
@@ -236,10 +223,9 @@ const BasicInformationU = ({ setStep }) => {
             defaultValue={
               state?.data?.condition !== undefined
                 ? state.data.condition
-                : ''
+                : []
             }
             control={control}
-            rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Checkbox.Group
                 onChange={(e) => { // Cuando el usuario cambia el valor del campo
@@ -327,7 +313,7 @@ const BasicInformationU = ({ setStep }) => {
                   trigger("institution");
                   onBlur();
                 }}
-                value={value}
+                value={(value && value.trim() === "")?"":value}
                 placeholder="Escribe el nombre de la fundación."
               />
             )}
