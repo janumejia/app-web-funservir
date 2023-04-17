@@ -26,7 +26,7 @@ const login = async (req, res) => {
                         
                         // Cambiar después de sameSite: "none" a sameSite: "strict"
                         res
-                        .cookie("AWFS-token", token, { httpOnly: true, sameSite: "none", domain: "localhost", hostOnly: false }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                        .cookie("AWFS-token", token, { httpOnly: true, sameSite: "Strict", domain: "localhost", hostOnly: false }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
                         .json({
                             message: "Usuario autenticado correctamente",
                             data: data

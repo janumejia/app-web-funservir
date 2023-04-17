@@ -13,6 +13,7 @@ const tokenStatus = async (req, res) => {
             _id: decoded._id,
             name: decoded.name,
             userType: decoded.userType,
+            profilePicture: decoded?.profilePicture
         };
         return res.status(200).json({ message: 'Token válido', data: data });
     } catch (err) {
