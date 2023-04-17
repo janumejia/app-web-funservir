@@ -62,8 +62,11 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
     const formData = { ...state.data2, ...data, sitePhotos: aux1 };
 
+    message.loading("Subiendo registro, por favor espera", 0)
+    
     try {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);
+      message.destroy();
       if (res) {
         if (res.status === 200) {
           message.success(res.data.message, 5);
@@ -75,7 +78,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
-      
+      message.destroy();
       if (typeof error.response.status === 'undefined') {
 
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
