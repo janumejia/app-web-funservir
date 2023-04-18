@@ -21,6 +21,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     //         thumb_url: { type: String }
     //     }
     // },
+    siteAddress: { type: String },
     location: {
             // id: { type: Number },
             lat: { type: String },

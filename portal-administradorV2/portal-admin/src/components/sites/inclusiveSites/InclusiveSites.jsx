@@ -207,17 +207,10 @@ const ManageInclusiveSites = () => {
             editable: true,
         },
         {
-            title: 'Ubicación',
-            dataIndex: "location",
-            key: "location",
+            title: 'Dirección*',
+            dataIndex: "siteAddress",
+            key: "siteAddress",
             editable: true,
-            render: (item) => {
-                return (
-                    <Link href={`http://www.google.com/maps/place/${Object.values(item)[0]},${Object.values(item)[1]}`} target="_blank">
-                        {"Lat: " + Object.values(item)[0] + ", Lng: " + Object.values(item)[1]}
-                    </Link>
-                )
-            }
         },
         {
             title: 'Localidad*',
@@ -232,6 +225,19 @@ const ManageInclusiveSites = () => {
             key: "neighborhood",
             editable: true,
             sorter: (a, b) => a.locality.localeCompare(b.locality)
+        },
+        {
+            title: 'Ubicación',
+            dataIndex: "location",
+            key: "location",
+            editable: true,
+            render: (item) => {
+                return (
+                    <Link href={`http://www.google.com/maps/place/${Object.values(item)[0]},${Object.values(item)[1]}`} target="_blank">
+                        {"Lat: " + Object.values(item)[0] + ", Lng: " + Object.values(item)[1]}
+                    </Link>
+                )
+            }
         },
         {
             title: 'Galeria*',
@@ -302,6 +308,7 @@ const ManageInclusiveSites = () => {
                 category: "",
                 contactNumber: "",
                 inclusiveElements: [],
+                siteAddress: "",
                 location: { "lat": "", "lng": "" },
                 locality: "",
                 neighborhood: "",

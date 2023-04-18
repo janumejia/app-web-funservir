@@ -5,7 +5,7 @@ const User = require("../../../model/user")
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -19,6 +19,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
@@ -77,6 +78,7 @@ const addInclusiveSites = async (req, res) => {
             category: inputs.category,
             contactNumber: inputs.contactNumber,
             inclusiveElements: inputs.inclusiveElements,
+            siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,

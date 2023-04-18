@@ -130,6 +130,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     "category": site.category,
                     "contactNumber": site.contactNumber,
                     "inclusiveElements": site.inclusiveElements,
+                    "siteAddress": site.siteAddress,
                     "location": (site.location) ? site.location.lat + "," + site.location.lng : "",
                     "locality": site.locality,
                     "neighborhood": site.neighborhood,
@@ -192,12 +193,12 @@ const AddEditInclusiveSite = ({ site }) => {
                         {
                             required: true,
                             message: `¡Introduzca un número de contacto válido!`,
-                            pattern: /^\d{7,12}$/,
+                            pattern: /^\d{10}$/,
                             type: 'string'
                         }
                     ]}
                 >
-                    <Input contactnumber="contactNumber" placeholder="Ingrese número de contacto del sitio" />
+                    <Input contactnumber="contactNumber" placeholder="Ingrese el número de contacto del sitio" />
                 </Form.Item>
                 <Form.Item
                     name="inclusiveElements"
@@ -220,19 +221,18 @@ const AddEditInclusiveSite = ({ site }) => {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label="Ubicación"
+                    name="siteAddress"
+                    label="Dirección"
                     rules={[
                         {
                             required: true,
-                            message: `¡Seleccione una ubicación!`,
-                        },
-                        {
-                            type: 'string',
-                        },
+                            message: `¡Introduzca una dirección válida!`,
+                            pattern: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s.,-/#-]{5,255}$/,
+                            type: 'string'
+                        }
                     ]}
                 >
-                    <MapOfGoogleMaps latlng={latlng} setLatLng={setLatLng} />
-                    <Input size="large" disabled={true} bordered={false} placeholder="Vació" value={JSON.stringify(latlng)} />
+                    <Input siteAddress="siteAddress" placeholder="Ingrese la dirección del sitio" />
                 </Form.Item>
                 <Form.Item
                     name="locality"
@@ -277,6 +277,21 @@ const AddEditInclusiveSite = ({ site }) => {
                             }
                         })}
                     </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Ubicación en el mapa"
+                    rules={[
+                        {
+                            required: true,
+                            message: `¡Seleccione una ubicación!`,
+                        },
+                        {
+                            type: 'string',
+                        },
+                    ]}
+                >
+                    <MapOfGoogleMaps latlng={latlng} setLatLng={setLatLng} />
+                    <Input size="large" disabled={true} bordered={false} placeholder="Vació" value={JSON.stringify(latlng)} />
                 </Form.Item>
                 <Form.Item
                     name="owner"

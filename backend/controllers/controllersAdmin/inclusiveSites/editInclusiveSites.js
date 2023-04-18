@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 // Crea un objeto ClamAV para verificación de imágenes libres de virus
 // const clam = new NodeClam().init();
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex, _idMongooseRegexOrEmpty } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imgRegex, _idMongooseRegexOrEmpty } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -23,6 +23,7 @@ const editInclusiveSites = async (req, res) => {
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
@@ -105,6 +106,7 @@ const editInclusiveSites = async (req, res) => {
             category: inputs.category,
             contactNumber: inputs.contactNumber,
             inclusiveElements: inputs.inclusiveElements,
+            siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
