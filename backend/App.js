@@ -78,7 +78,7 @@ app.post("/deleteElement", verifyTokenAdmin, controllersAdmin.deleteElement)
 app.post("/editElement", verifyTokenAdmin, controllersAdmin.editElement)
 
 // Parametría usuarios:
-app.get("/all_users", verifyTokenAdmin, controllersAdmin.allUsers)
+app.get("/all_users",  controllersAdmin.allUsers)
 app.post("/addUser", verifyTokenAdmin, controllersAdmin.addUsers)
 app.post("/editUser", verifyTokenAdmin, controllersAdmin.editUser)
 app.post("/deleteUser", verifyTokenAdmin, controllersAdmin.deleteUser)
@@ -116,7 +116,7 @@ app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighb
 /* Fin rutas de nuestra APP */
 
 // Leer puerto por donde funcionará nuestro servidor
-const host = process.env.BACKEND_HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
+const host = BACKEND_NODE_ENV === "development" ? (process.env.BACKEND_HOST || '0.0.0.0') : process.env.ZEET_DEPLOYMENT_URL; // ZEET_DEPLOYMENT_URL la asigna por defecto zeet
 const port = process.env.BACKEND_PORT
 
 app.listen(port, host, () => { // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
