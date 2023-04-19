@@ -26,8 +26,12 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
             multiple={false}
             beforeUpload={(file) => {
                 const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+                const isLessThan2MB = file.size / 1024 / 1024 <= 2;
                 if (!isJpgOrPng) {
-                    message.error('¡Solo puedes subir imagenes!');
+                    message.error('¡Solo puedes subir imágenes!');
+                    return Upload.LIST_IGNORE;
+                }else if(!isLessThan2MB){
+                    message.error('¡La imagen debe pesar menos de 2MB!');
                     return Upload.LIST_IGNORE;
                 }else{
                     return false;

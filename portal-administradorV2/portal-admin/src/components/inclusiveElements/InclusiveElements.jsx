@@ -113,6 +113,7 @@ const ManageElements = () => {
             const item = newData[index];
 
             if (key === "0" && row.name !== " " && imageUrl) {
+                message.loading("Cargando elemento inclusivo", 0)
                 const newElement = {
                     name: row.name,
                     image: imageUrl
@@ -123,9 +124,11 @@ const ManageElements = () => {
                         setData(newData);
                         setImageUrl("");
                         setEditingKey('');
+                        message.destroy()
                         message.success('Se ha creado el Elemento Inclusivo exitosamente');
                     })
                     .catch((error) => {
+                        message.destroy()
                         if(error.response?.status === 409){
                             message.warning('Ya existe otro elemento inclusivo con ese nombre');
                         } else {
@@ -135,15 +138,18 @@ const ManageElements = () => {
                         
                     });
             } else if (key !== "0") {
+                message.loading("Cargando elemento inclusivo", 0)
                 axios.post('/editElement', { ...item, ...row, imageUrl }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => {
                         newData.splice(index, 1, res.data);
                         setData(newData);
                         setImageUrl("");
                         setEditingKey('');
+                        message.destroy()
                         message.success('Se editó el Elemento Inclusivo exitosamente');
                     })
                     .catch((error) => {
+                        message.destroy()
                         if(error.response?.status === 409){
                             message.warning('Ya existe otro elemento inclusivo con ese nombre');
                         } else {
