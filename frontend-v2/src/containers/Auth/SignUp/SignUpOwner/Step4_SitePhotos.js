@@ -23,33 +23,11 @@ const SitePhotos = ({ setStep }) => {
     register('sitePhotos'); //'sitePhotos', { required: true }
   }, [register]);
 
-  console.log(state);
+
   const onSubmit = (data2) => {
     setStep(5);
   };
   
-
-  // const getBase64 = (img) => {
-  //   let base64Universal = [...state?.data2?.sitePhotos]
-  //   const reader = new FileReader();
-  //   if (img) {
-  //     reader.readAsDataURL(img);
-  //     reader.onloadend = () => {
-  //       actions.AddOwnerAction({ sitePhotos: reader.result });
-  //     }
-  //   }
-  // };
-
-
-  const getBase64 = (img) => {
-    const reader = new FileReader();
-    if (img) {
-      reader.readAsDataURL(img);
-      reader.onloadend = () => {
-        actions.AddOwnerAction({ hotelPhotos: reader.result });
-      }
-    }
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

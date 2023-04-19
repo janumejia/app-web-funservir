@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
         <BrowserRouter>
-          <GoogleOAuthProvider clientId={process.env.PORTALADMIN_REACT_APP_GOOGLE_CLIENTID}>
+          <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
             <App />
           </GoogleOAuthProvider>
         </BrowserRouter>

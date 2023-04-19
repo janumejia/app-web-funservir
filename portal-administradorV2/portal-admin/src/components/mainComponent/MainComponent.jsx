@@ -23,9 +23,9 @@ import AuthContext from "../../context/AuthProvider";
 
 const { Header, Content, Sider } = Layout;
 
-const options = ["Elementos Inclusivos", "Usuarios", "Categorias"]; //Estos son los menus
-const url = ["elements", "users", "categories"]; //Estas son las URL
-const items2 = [AlertOutlined, SmileOutlined, AppstoreOutlined].map(
+const options = ["Usuarios", "Elementos Inclusivos","Categorias"]; //Estos son los menus
+const url = ["users", "elements","categories"]; //Estas son las URL
+const items2 = [SmileOutlined, AlertOutlined,AppstoreOutlined].map(
   (icon, index) => {
     return {
       key: url[index],

@@ -11,7 +11,7 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
                     marginTop: 8,
                 }}
             >
-                Subir Icono
+                Elegir foto
             </div>
         </div>
     );
@@ -26,12 +26,12 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
             multiple={false}
             beforeUpload={(file) => {
                 const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
-                const isLessThan2MB = file.size / 1024 / 1024 <= 5;
+                const isLessThan2MB = file.size / 1024 / 1024 <= 2;
                 if (!isJpgOrPng) {
-                    message.error('¡Solo puedes subir imagenes!');
+                    message.error('¡Solo puedes subir imágenes!');
                     return Upload.LIST_IGNORE;
                 }else if(!isLessThan2MB){
-                    message.error('¡La imagen debe pesar menos de 5MB!');
+                    message.error('¡La imagen debe pesar menos de 2MB!');
                     return Upload.LIST_IGNORE;
                 }else{
                     return false;
@@ -44,8 +44,9 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
                     src={imageUrl}
                     alt="avatar"
                     style={{
-                        height:'100%',
+                        height: '100%',
                         width: '100%',
+                        borderRadius: '50%',
                         objectFit: 'contain'
                     }}
                 />

@@ -12,7 +12,7 @@ const editElement = async (req, res) => {
     // if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
     // if(typeof(imageUrl) !== 'string') return res.status(422).json({ message: "Tipo de dato de URL de imagen no es válido" });
     // if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    
+
     // // 2) Validar si cumple con los caracteres permitidos
     // const isValid_id = _idMongooseRegex.test(_id);
     // const isValidImageURL = imageUrlRegex.test(imageUrlRegex);
@@ -23,44 +23,37 @@ const editElement = async (req, res) => {
     // if(isValidName === false) return res.json({ message: "Formato de nombre no es válido" }); 
     // /* Fin sanitización entradas */
 
-    Elements.findOne({'name': name}).then( async (element)=>{
-        if(!element  || (element && element.name === name )){
+    try {
+        const element = await Elements.findOne({ 'name': name });
+
+        if (!element || (element && element.name === name)) {
             const query = { _id: _id };
             let doc = await Elements.findOne(query);
+
             if (doc.name !== name && doc.image.secure_url === imageUrl) {
-                try {
-                    const renameRes = await cloudinary.uploader.rename(`inclusiveElements/${doc.name}`, `inclusiveElements/${name}`);
-                    doc.name = name;
-                    doc.image = renameRes;
-                    await doc.save();
-                    res.json(doc);
-        
-                } catch (error) {
-                    res.status(500).send(error);
-                }
+                const renameRes = await cloudinary.uploader.rename(`inclusiveElements/${doc.name}`, `inclusiveElements/${name}`);
+                doc.name = name;
+                doc.image = renameRes;
+                await doc.save();
             } else {
-                try {
-                    const uploadRes = await cloudinary.uploader.upload(imageUrl, {
-                        upload_preset: "inclusive_elements",
-                        public_id: name,
-                        invalidate: true
-                    })
-        
-                    doc.name = name;
-                    doc.image = uploadRes;
-                    await doc.save();
-                    res.json(doc);
-        
-                } catch (error) {
-                    res.status(500).send(error);
-                }
+                const uploadRes = await cloudinary.uploader.upload(imageUrl, {
+                    upload_preset: "inclusive_elements",
+                    public_id: name,
+                    invalidate: true
+                });
+
+                doc.name = name;
+                doc.image = uploadRes;
+                await doc.save();
             }
-        
-        }else{
-            res.status(409).json({ message: "Ya existe un elemento inclusivo con este nombre"})
+
+            res.json(doc);
+        } else {
+            res.status(409).json({ message: "Ya existe un elemento inclusivo con este nombre" });
         }
-    })
-    
+    } catch (error) {
+        res.status(500).json({ message: "Hubo un error al cargar el elemento inclusivo" });
+    }
 }
 
 module.exports = editElement
