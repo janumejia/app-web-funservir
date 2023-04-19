@@ -67,7 +67,7 @@ const addUser = async (req, res) => {
     User.findOne({ 'email': inputs.email }).then((user) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
-        bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT), (err, hash) => {
+        bcrypt.hash(inputs.password, parseInt(process.env.BACKEND_SALT_BCRYPT), (err, hash) => {
             if (err) return res.status(500).json({ error: err });
 
             

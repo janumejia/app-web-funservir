@@ -20,7 +20,7 @@ const login = async (req, res) => {
                             userType,
                             profilePicture
                         };
-                        const token = jwt.sign(data, process.env.JWT_SECRET, { //revisar el método "sign"
+                        const token = jwt.sign(data, process.env.BACKEND_JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
                         

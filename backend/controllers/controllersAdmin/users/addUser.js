@@ -116,7 +116,7 @@ const addUser = async (req, res) => {
         // console.log("associatedSitesToDelete: ", associatedSitesToDelete);
         
 
-        bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), (err, hash) => {
+        bcrypt.hash(password, parseInt(process.env.BACKEND_SALT_BCRYPT), (err, hash) => {
             if (err) return res.status(500).json({ error: err });
 
             const newUser = new User({

@@ -7,9 +7,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon App.js",
+    "start": "node App.js",
     "dev": "nodemon App.js",
-    "debug": "nodemon --inspect App.js"
+    "debug": "nodemon --inspect App.js",
+    "build": "node App.js"
   },
   "keywords": [],
   "author": "",
