@@ -116,11 +116,11 @@ app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighb
 /* Fin rutas de nuestra APP */
 
 // Leer puerto por donde funcionará nuestro servidor
-console.log("process.env.ZEET_DEPLOYMENT_URL ---> ", process.env.ZEET_DEPLOYMENT_URL)
 const host = process.env.BACKEND_NODE_ENV === "development" ? (process.env.BACKEND_HOST || '0.0.0.0') : process.env.ZEET_DEPLOYMENT_URL; // ZEET_DEPLOYMENT_URL la asigna por defecto zeet
 const port = process.env.BACKEND_PORT
 
 app.listen(port, host, () => { // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
+    console.log("process.env.ZEET_DEPLOYMENT_URL ---> ", process.env.ZEET_DEPLOYMENT_URL)
     console.log(`Servidor funcionando en el puerto ${port} y host ${host}`)
     db() // Llamamos a la función db
 })
