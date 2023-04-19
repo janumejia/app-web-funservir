@@ -7,7 +7,6 @@ const generalAlphabetic = (min, max) => { return new RegExp("^([A-Za-zñÑáéí
 /* Fin generales */
 
 module.exports = {
-
     /* _idMongoose */
     _idMongooseRegex: new RegExp("^[0-9a-fA-F]{24}$"),
     _idMongooseRegexOrEmpty: new RegExp("^[0-9a-fA-F]{24}$|^$"),
