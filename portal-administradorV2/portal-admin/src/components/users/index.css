@@ -3,3 +3,10 @@
     top: 100%;
     font-size: 12px;
   }
+
+  .ant-upload-select-picture-card i {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  height: 5px;
+}
