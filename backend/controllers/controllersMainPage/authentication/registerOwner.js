@@ -96,7 +96,7 @@ const addInclusiveSites = async (req, res) => {
         const neighborhood = await Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality });
         if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
 
-        const hash = await bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT)); // Hashear de la contraseña
+        const hash = await bcrypt.hash(inputs.password, parseInt(process.env.BACKEND_SALT_BCRYPT)); // Hashear de la contraseña
         
         const newUser = new User({
             name: inputs.name,

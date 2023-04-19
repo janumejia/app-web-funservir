@@ -17,7 +17,7 @@ en este caso responde las peticiones desde cualquier origen (inseguro) */
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
-        if (process.env.ALLOWED_ORIGINS.split(',').indexOf(origin) === -1) {
+        if (process.env.BACKEND_ALLOWED_ORIGINS.split(',').indexOf(origin) === -1) {
             var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
             return callback(new Error(msg), false);
         }
@@ -116,8 +116,8 @@ app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighb
 /* Fin rutas de nuestra APP */
 
 // Leer puerto por donde funcionará nuestro servidor
-const host = process.env.HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
-const port = process.env.PORT
+const host = process.env.BACKEND_HOST || '0.0.0.0' // 0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida
+const port = process.env.BACKEND_PORT
 
 app.listen(port, host, () => { // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
     console.log(`Servidor funcionando en el puerto ${port} y host ${host}`)

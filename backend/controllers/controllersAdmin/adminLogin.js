@@ -18,13 +18,13 @@ const AdminLogin = async (req, res) =>{
                         userType,
                     };
 
-                    const token = jwt.sign(data, process.env.JWT_SECRET, {
+                    const token = jwt.sign(data, process.env.BACKEND_JWT_SECRET, {
                         expiresIn: '10h'
                     });
                     
                     res.cookie('token', token, { 
                         httpOnly: true,
-                        secure: process.env.NODE_ENV !== "development",
+                        secure: process.env.BACKEND_NODE_ENV !== "development",
                     });
 
                     res.json({

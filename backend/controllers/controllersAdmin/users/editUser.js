@@ -98,7 +98,7 @@ const editUser = async (req, res) => {
     const query = { _id: _id };
     let doc = await User.findOne(query).populate('associatedSites', {name:1, _id:0});
     if (doc.password !== password) {
-        bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
+        bcrypt.hash(password, parseInt(process.env.BACKEND_SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
             if (error) res.status(500).json({ message: "error" })
             else {
                 doc.name = name;

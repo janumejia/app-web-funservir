@@ -8,7 +8,7 @@ const tokenStatus = async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Cuando no es válido se genera un error. Por eso el try-catch
+        const decoded = jwt.verify(token, process.env.BACKEND_JWT_SECRET); // Cuando no es válido se genera un error. Por eso el try-catch
         const data = {
             _id: decoded._id,
             name: decoded.name,
