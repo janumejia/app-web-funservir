@@ -109,9 +109,9 @@ app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighb
 
 
 // custom 404
-// app.use((req, res, next) => {
-//     res.status(404).json({ message: 'Upss, ruta no encontrada' });
-// })
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Upss, ruta no encontrada' });
+})
 
 /* Fin rutas de nuestra APP */
 
