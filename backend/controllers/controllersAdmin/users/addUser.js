@@ -1,5 +1,7 @@
 const User = require("../../../model/user")
+const cloudinary = require("../../../middlewares/cloudinary");
 const bcrypt = require("bcryptjs")
+const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, userTypeRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
@@ -14,10 +16,10 @@ const A_and_Not_In_B = (setA, setB) => {
 }
 
 const addUser = async (req, res) => {
+    
+    const { name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType, profilePicture } = req.body;
 
-    const { name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType, associatedSites } = req.body;
-
-    if (!name || !lastName || !email || !dateOfBirth || !gender || !password || !address || !isCaregiver || !userType || !associatedSites) {
+    if (!name || !lastName || !email || !dateOfBirth || !gender || !password || !address || !isCaregiver || !userType) {
         return res.status(400).json({ message: "Faltan campos" });
     }
 
@@ -106,40 +108,45 @@ const addUser = async (req, res) => {
     if (isValidUserType === false) return res.status(422).json({ message: "Formato de tipo de usuario no es válido" }); // Caso malo
     /* Fin sanitización entradas */
 
-    User.findOne({ email }).then((user) => {
+    User.findOne({ email }).then(async (user) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
-        // const associatedSitesToAdd = A_and_Not_In_B(associatedSites, user.associatedSites);
-        // const associatedSitesToDelete = A_and_Not_In_B(user.associatedSites, associatedSites);
+        try {
+            const prflPic = (!profilePicture) ? randomAvatar(gender):profilePicture;
+            const uploadRes = await cloudinary.uploader.upload(prflPic, {
+                upload_preset: "profile_pictures",
+                public_id: email
+            })
 
-        // console.log("associatedSitesToAdd: ", associatedSitesToAdd);
-        // console.log("associatedSitesToDelete: ", associatedSitesToDelete);
-        
+            bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (err, hash) => {
+                if (err) return res.status(500).json({ error: err });
 
-        bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), (err, hash) => {
-            if (err) return res.status(500).json({ error: err });
+                const newUser = new User({
+                    name,
+                    lastName,
+                    dateOfBirth,
+                    email,
+                    password: hash,
+                    gender,
+                    address,
+                    condition,
+                    isCaregiver,
+                    institution,
+                    userType,
+                    associatedSites: [],
+                    profilePicture: uploadRes.secure_url
+                });
 
-            const newUser = new User({
-                name,
-                lastName,
-                dateOfBirth,
-                email,
-                password: hash,
-                gender,
-                address,
-                condition,
-                isCaregiver,
-                institution,
-                userType,
+                await newUser.save().then((savedUser) => {
+                    return res.status(200).json({ message: "Usuario creado correctamente", element: savedUser });
+                }).catch((err) => {
+                    console.error(err);
+                    return res.status(500).json({ message: "Error al crear usuario" });
+                });
             });
-
-            newUser.save().then((savedUser) => {
-                return res.status(200).json({ message: "Usuario creado correctamente", element: savedUser });
-            }).catch((err) => {
-                console.error(err);
-                return res.status(500).json({ message: "Error al crear usuario" });
-            });
-        });
+        } catch (error) {
+            res.status(500).send(error);
+        }
     });
 }
 

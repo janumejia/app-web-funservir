@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
+import { Upload } from 'antd';
 import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
-
-// Para el idioma español y otra cosa de la componente DataPicker
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
-
-// import dayjs from 'dayjs';
-// import 'dayjs/locale/es';
-// import esES from 'antd/es/locale/es_ES';
-// dayjs.locale('es');
+import UploadComponent from './UploadComponent';
 
 const { Option } = Select;
 const gender = [
@@ -52,29 +47,6 @@ const options = (title) => {
     }
 }
 
-/*const selectedValues = [
-    {
-        title: "Sexo*",
-        key: "gender",
-        values: ""
-    },
-    {
-        title: "Discapacidad",
-        key: "condition",
-        values: []
-    },
-    {
-        title: "Rol*",
-        key: "userType",
-        values: ""
-    },
-    {
-        title: "Tutor*",
-        key: "isCaregiver",
-        values: ""
-    }
-]*/
-
 const rules = (dataIndex) => {
     if (dataIndex === 'name') {
         return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
@@ -91,114 +63,6 @@ const rules = (dataIndex) => {
     }
 };
 
-const EditableCell = ({
-    editing,
-    availableSites,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-}) => {
-    const inputNode = dataIndex === "password" ? <Input.Password /> : <Input />;
-    return (
-        <td {...restProps}>
-            {editing ? (
-                <>
-                    {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
-                        <Form.Item
-                            name={dataIndex}
-                            style={{
-                                margin: 0,
-                            }}>
-                            <Select
-                                mode={(title === "Discapacidad") ? "multiple" : ""}
-                                allowClear={(title === "Discapacidad") ? true : false}
-                                style={{
-                                    width: '100%',
-                                }}
-                                placeholder="Seleccione una opción"
-                            /*onChange={(val) => {
-                                const col = selectedValues.find(column => column.title === title);
-                                if (title === "Discapacidad") {
-                                    let newArray = [...val]
-                                    if (col.values.includes([...val])) {
-                                        newArray = newArray.filter(disa => disa !== [...val])
-                                    }
-                                    col["values"] = newArray;
-                                } else if (title === "Sexo*" || title === "Rol*" || title === "Tutor*") {
-                                    col["values"] = val;
-
-                                }
-                            }}*/
-                            >
-                                {options(title)}
-                            </Select>
-                        </Form.Item>
-                    ) : ((title === "Fecha de nacimiento*") ? (
-                        <Form.Item
-                            name={dataIndex}
-                            style={{
-                                margin: 0,
-                            }}
-                            rules={[
-                                {
-                                    type: 'object',
-                                    required: true,
-                                    message: `¡Introduzca una fecha!`
-                                },
-                            ]}
-
-                        >
-                            <DatePicker
-                                locale={esES}
-                                showToday={false}
-                                format="YYYY-MM-DD"
-                                disabledDate={(current) => {
-                                    // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
-                                    // En este caso, solo permite fechas entre hace 200 años y hoy.
-                                    return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
-                                }}
-                                defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
-                            />
-                        </Form.Item>
-                    ) : ((title === 'Sitios asociados') ? (
-                        {/* <Select mode="multiple">
-                            {availableSites.map(element => {
-                                return (
-                                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
-                                )
-                            })}
-                        </Select> */}
-
-                    ) : (
-                        <Form.Item
-                            name={dataIndex}
-                            style={{
-                                margin: 0,
-                            }}
-                            rules={[
-                                {
-                                    required: (title === 'Fundación') ? false : true,
-                                    message: `¡Introduzca un ${title} válido!`,
-                                    pattern: rules(dataIndex),
-                                },
-                            ]}
-                        >
-                            {inputNode}
-                        </Form.Item>
-                    )))}
-
-                </>
-            ) : (
-                children
-            )}
-        </td>
-    );
-};
-
 
 const ManageUsers = () => {
 
@@ -207,6 +71,124 @@ const ManageUsers = () => {
     const [editingKey, setEditingKey] = useState('');
     const [searchedText, setSearchedText] = useState("");
     const [availableSites, setAvailableSites] = useState("");
+
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState();
+
+
+    const getBase64 = (file) =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                setImageUrl(reader.result);
+                setLoading(false);
+                resolve(reader.result);
+            }
+            reader.onerror = (error) => reject(error);
+        });
+
+    const handleChange = async (info) => {
+        if (info.file.type === 'image/jpeg' || info.file.type === 'image/png' || info.file.type === 'image/jpg') {
+            await getBase64(info.file);
+        }
+    };
+
+    const EditableCell = ({
+        editing,
+        availableSites,
+        dataIndex,
+        title,
+        inputType,
+        record,
+        index,
+        children,
+        ...restProps
+    }) => {
+        const inputNode = dataIndex === "password" ? <Input.Password /> : <Input />;
+        return (
+            <td {...restProps}>
+                {editing ? (
+                    <>
+                        {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
+                            <Form.Item
+                                name={dataIndex}
+                                style={{
+                                    margin: 0,
+                                }}>
+                                <Select
+                                    mode={(title === "Discapacidad") ? "multiple" : ""}
+                                    allowClear={(title === "Discapacidad") ? true : false}
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                    placeholder="Seleccione una opción"
+                                >
+                                    {options(title)}
+                                </Select>
+                            </Form.Item>
+                        ) : ((title === "Fecha de nacimiento*") ? (
+                            <Form.Item
+                                name={dataIndex}
+                                style={{
+                                    margin: 0,
+                                }}
+                                rules={[
+                                    {
+                                        type: 'object',
+                                        required: true,
+                                        message: `¡Introduzca una fecha!`
+                                    },
+                                ]}
+
+                            >
+                                <DatePicker
+                                    locale={esES}
+                                    showToday={false}
+                                    format="YYYY-MM-DD"
+                                    disabledDate={(current) => {
+                                        // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
+                                        // En este caso, solo permite fechas entre hace 200 años y hoy.
+                                        return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
+                                    }}
+                                    defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
+                                />
+                            </Form.Item>
+                        ) : ((title === 'Foto de perfil*') ? (
+                            <Form.Item
+                                name={dataIndex}
+                                style={{
+                                    margin: 0,
+                                }}>
+                                <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} />
+                            </Form.Item>
+                        ) : (
+                            <Form.Item
+                                name={dataIndex}
+                                style={{
+                                    margin: 0,
+                                }}
+                                rules={[
+                                    {
+                                        required: (title === 'Fundación') ? false : true,
+                                        message: `¡Introduzca un ${title} válido!`,
+                                        pattern: rules(dataIndex),
+                                    },
+                                ]}
+                            >
+                                {inputNode}
+                            </Form.Item>
+                        )))}
+
+                    </>
+                ) : (
+                    (inputType === 'object') ? <img src={record.profilePicture} alt='Foto de perfil' style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
+                )}
+            </td>
+        );
+    };
+
+
 
     useEffect(() => {
         axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
@@ -239,10 +221,12 @@ const ManageUsers = () => {
             ...record
         });
         setEditingKey(record._id);
+        setImageUrl(record.profilePicture)
     };
 
     const cancel = () => {
         setEditingKey('');
+        setImageUrl('');
     };
 
     const saveEdit = async (key) => {
@@ -252,25 +236,6 @@ const ManageUsers = () => {
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
-
-            /*let mVals = {
-                gender: "",
-                condition: [],
-                userType: "",
-                isCaregiver: ""
-            };
-            selectedValues.forEach(column => {
-                if (column.key === "gender") {
-                    mVals["gender"] = column.values;
-                } else if (column.key === "condition") {
-                    column.values.forEach((arr) => mVals["condition"].push(arr));
-                } else if (column.key === "userType") {
-                    mVals["userType"] = column.values;
-                } else if (column.key === "isCaregiver") {
-                    mVals["isCaregiver"] = column.values;
-                }
-            });
-            console.log(mVals);*/
 
             if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
 
@@ -286,7 +251,8 @@ const ManageUsers = () => {
                     isCaregiver: row["isCaregiver"],
                     institution: row.institution,
                     userType: row["userType"],
-                    associatedSites: []
+                    associatedSites: [],
+                    profilePicture: imageUrl
                 }
 
                 axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
@@ -302,13 +268,7 @@ const ManageUsers = () => {
                             newData.splice(index, 1, res.data.element);
                             setData(newData);
                             setEditingKey('');
-                            /*selectedValues.forEach(column => {
-                                if (column.key === "condition") {
-                                    column.values = [];
-                                } else {
-                                    column.values = "";
-                                }
-                            })*/
+                            setImageUrl("");
                             message.success(res.data.message);
                         } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
@@ -319,7 +279,7 @@ const ManageUsers = () => {
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
+                axios.post('/editUser', { ...item, ...row, imageUrl }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -332,7 +292,7 @@ const ManageUsers = () => {
                             console.log("res: ", res);
                             setData(newData);
                             setEditingKey('');
-
+                            setImageUrl("");
                             message.success(res.data.message);
                         } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
@@ -376,6 +336,14 @@ const ManageUsers = () => {
     };
 
     const columns = [
+        {
+            title: 'Foto de perfil*',
+            dataIndex: "profilePicture",
+            key: "profilePicture",
+            width: "6%",
+            align: "left",
+            editable: true,
+        },
         {
             title: 'Nombre*',
             dataIndex: "name",
@@ -467,8 +435,8 @@ const ManageUsers = () => {
             editable: false,
             render: (e) => {
                 let sites = '';
-                if(e){
-                    e.forEach((e)=>{
+                if (e) {
+                    e.forEach((e) => {
                         sites += " • " + e.name + "\n";
                     })
                 }
@@ -480,7 +448,7 @@ const ManageUsers = () => {
             title: 'Operación',
             dataIndex: 'operation',
             key: "operation",
-            width:"9%",
+            width: "9%",
             fixed: "right",
             render: (_, record) => {
                 const editable = isEditing(record);
@@ -497,7 +465,7 @@ const ManageUsers = () => {
                             </Typography.Link>
                         </Popconfirm>
                         <Popconfirm title="¿Estás seguro?" cancelText="Seguir Editando" onConfirm={cancel}>
-                            <Typography.Link keyboard type="danger" style={{marginRight: 8}}>
+                            <Typography.Link keyboard type="danger" style={{ marginRight: 8 }}>
                                 Cancelar
                             </Typography.Link>
                         </Popconfirm>
@@ -508,7 +476,7 @@ const ManageUsers = () => {
                             Editar
                         </Typography.Link>
                         <Popconfirm title="¿Estás seguro?" cancelText="Cancelar" onConfirm={() => handleDelete(record._id)}>
-                            <Typography.Link keyboard style={{marginRight: 8}} disabled={editingKey !== ''} type="danger">
+                            <Typography.Link keyboard style={{ marginRight: 8 }} disabled={editingKey !== ''} type="danger">
                                 Eliminar
                             </Typography.Link>
                         </Popconfirm>
@@ -527,7 +495,7 @@ const ManageUsers = () => {
             ...col,
             onCell: (record) => ({
                 record,
-                inputType: col.dataIndex,
+                inputType: (col.key === 'profilePicture') ? 'object' : col.dataIndex,
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
@@ -552,7 +520,8 @@ const ManageUsers = () => {
                 isCaregiver: "",
                 institution: "",
                 userType: "",
-                associatedSites: []
+                associatedSites: [],
+                profilePicture: ""
             };
             setData([...data, newUser]);
             edit(newUser);

@@ -35,19 +35,10 @@ const ManageElements = () => {
 
     };
 
-    const handleChange = (info) => {
-
-        const isJpgOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('¡Solo puedes subir imagenes!');
-        } else {
+    const handleChange =  (info) => {
+        if (info.file.type === 'image/jpeg' || info.file.type === 'image/png' || info.file.type === 'image/jpg') {
             getBase64(info.file);
         }
-
-        /*const isLt2M = info.file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('La imagen debe ser menor a 2MB!');
-        }*/
     };
     //Fin de manejo de imagenes
 
@@ -91,7 +82,7 @@ const ManageElements = () => {
                     </Form.Item>
                 ) : (
                     
-                    (inputType === 'object' ? <img src={record.image.url} alt='' style={{ width: 'auto', height: '70px' }} /> : children)
+                    (inputType === 'object' ? <img src={record.image.url} alt={`${record.name}`} style={{ width: 'auto', height: '70px' }} /> : children)
             
                 )}
             </td>

@@ -11,7 +11,7 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
                     marginTop: 8,
                 }}
             >
-                Subir Icono
+                Elegir foto
             </div>
         </div>
     );
@@ -40,8 +40,9 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
                     src={imageUrl}
                     alt="avatar"
                     style={{
-                        height:'100%',
+                        height: '100%',
                         width: '100%',
+                        borderRadius: '50%',
                         objectFit: 'contain'
                     }}
                 />

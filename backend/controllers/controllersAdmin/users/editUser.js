@@ -1,27 +1,29 @@
 require('dotenv').config({ path: '.env' })
 const User = require("../../../model/user")
+const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
+const cloudinary = require("../../../middlewares/cloudinary");
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, userTypeRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const editUser = async (req, res) => {
-
-    const { _id,  name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType } = req.body;
+    
+    const { _id, name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType, imageUrl } = req.body;
 
     /* Sanitización entradas */
     // 1) Validar el tipo de dato
-    if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
-    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    if(typeof(lastName) !== 'string') return res.status(422).json({ message: "Tipo de dato de apellido no es válido" });
-    if(typeof(email) !== 'string') return res.status(422).json({ message: "Tipo de dato de correo no es válido" });
-    if(typeof(password) !== 'string') return res.status(422).json({ message: "Tipo de dato de contraseña no es válido" });
-    if(typeof(dateOfBirth) !== 'string') return res.status(422).json({ message: "Tipo de dato de fecha de nacimiento no es válido" });
-    if(typeof(gender) !== 'string') return res.status(422).json({ message: "Tipo de dato de genero no es válido" });
-    if(typeof(address) !== 'string') return res.status(422).json({ message: "Tipo de dato de dirección no es válido" });
-    if(typeof(condition) !== 'object') return res.status(422).json({ message: "Tipo de dato de discapacidades no es válido" }); // Este es el único de tipo object
-    if(typeof(isCaregiver) !== 'string') return res.status(422).json({ message: "Tipo de dato de ¿es tutor? no es válido" });
-    if(typeof(institution) !== 'string') return res.status(422).json({ message: "Tipo de dato de fundación no es válido" });
-    if(typeof(userType) !== 'string') return res.status(422).json({ message: "Tipo de dato de tipo de usuario no es válido" });
+    if (typeof (_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
+    if (typeof (name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
+    if (typeof (lastName) !== 'string') return res.status(422).json({ message: "Tipo de dato de apellido no es válido" });
+    if (typeof (email) !== 'string') return res.status(422).json({ message: "Tipo de dato de correo no es válido" });
+    if (typeof (password) !== 'string') return res.status(422).json({ message: "Tipo de dato de contraseña no es válido" });
+    if (typeof (dateOfBirth) !== 'string') return res.status(422).json({ message: "Tipo de dato de fecha de nacimiento no es válido" });
+    if (typeof (gender) !== 'string') return res.status(422).json({ message: "Tipo de dato de genero no es válido" });
+    if (typeof (address) !== 'string') return res.status(422).json({ message: "Tipo de dato de dirección no es válido" });
+    if (typeof (condition) !== 'object') return res.status(422).json({ message: "Tipo de dato de discapacidades no es válido" }); // Este es el único de tipo object
+    if (typeof (isCaregiver) !== 'string') return res.status(422).json({ message: "Tipo de dato de ¿es tutor? no es válido" });
+    if (typeof (institution) !== 'string') return res.status(422).json({ message: "Tipo de dato de fundación no es válido" });
+    if (typeof (userType) !== 'string') return res.status(422).json({ message: "Tipo de dato de tipo de usuario no es válido" });
 
     // 2) Validar si cumple con los caracteres permitidos
     const isValid_id = _idMongooseRegex.test(_id);
@@ -36,7 +38,7 @@ const editUser = async (req, res) => {
     const isValidCondition = () => {
         let options = { Motriz: 0, Visual: 0, Auditiva: 0, Sensorial: 0, Comunicacion: 0, Mental: 0, Multiples: 0, Otra: 0 }; // Para llevar un conteo de las opciones enviadas y que no existan repetidas
         for (const key in condition) {
-            if(typeof(condition[key]) !== 'string') return false;
+            if (typeof (condition[key]) !== 'string') return false;
             switch (condition[key]) {
                 case ' Motriz ':
                     if (options.Motriz > 0) return false;
@@ -94,41 +96,52 @@ const editUser = async (req, res) => {
     if (isValidInstitution === false) return res.status(422).json({ message: "Formato de institución no es válido" });
     if (isValidUserType === false) return res.status(422).json({ message: "Formato de tipo de usuario no es válido" });
     /* Fin sanitización entradas */
-    
+
     const query = { _id: _id };
-    let doc = await User.findOne(query).populate('associatedSites', {name:1, _id:0});
-    if (doc.password !== password) {
-        bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
-            if (error) res.status(500).json({ message: "error" })
-            else {
-                doc.name = name;
-                doc.lastName = lastName;
-                doc.email = email;
-                doc.password = hashPassword;
-                doc.dateOfBirth = dateOfBirth;
-                doc.gender = gender;
-                doc.address = address;
-                doc.condition = condition;
-                doc.isCaregiver = isCaregiver;
-                doc.institution = institution;
-                doc.userType = userType;
-                await doc.save();
-            }
+    let doc = await User.findOne(query).populate('associatedSites', { name: 1, _id: 0 });
+    try {
+        const prflPic = (!imageUrl) ? randomAvatar(gender):imageUrl;
+        const uploadRes = await cloudinary.uploader.upload(prflPic, {
+            upload_preset: "profile_pictures",
+            public_id: email
         })
-    } else {
-        doc.name = name;
-        doc.lastName = lastName;
-        doc.email = email;
-        doc.dateOfBirth = dateOfBirth;
-        doc.gender = gender;
-        doc.address = address;
-        doc.condition = condition;
-        doc.isCaregiver = isCaregiver;
-        doc.institution = institution;
-        doc.userType = userType;
-        await doc.save();
+        if (doc.password !== password) {
+            bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
+                if (error) res.status(500).json({ message: "error" })
+                else {
+                    doc.name = name;
+                    doc.lastName = lastName;
+                    doc.email = email;
+                    doc.password = hashPassword;
+                    doc.dateOfBirth = dateOfBirth;
+                    doc.gender = gender;
+                    doc.address = address;
+                    doc.condition = condition;
+                    doc.isCaregiver = isCaregiver;
+                    doc.institution = institution;
+                    doc.userType = userType;
+                    doc.profilePicture = uploadRes.secure_url;
+                    await doc.save();
+                }
+            })
+        } else {
+            doc.name = name;
+            doc.lastName = lastName;
+            doc.email = email;
+            doc.dateOfBirth = dateOfBirth;
+            doc.gender = gender;
+            doc.address = address;
+            doc.condition = condition;
+            doc.isCaregiver = isCaregiver;
+            doc.institution = institution;
+            doc.userType = userType;
+            doc.profilePicture = uploadRes.secure_url;
+            await doc.save();
+        }
+        res.status(200).json({ message: "Usuario editado correctamente", doc });
+    } catch (error) {
+        res.status(500).send(error);
     }
-    res.status(200).json({ message: "Usuario editado correctamente", doc });
 }
 
 module.exports = editUser
