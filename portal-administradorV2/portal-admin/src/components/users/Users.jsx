@@ -7,6 +7,7 @@ import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, mess
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
 import UploadComponent from './UploadComponent';
+import validator from "validator";
 
 const { Option } = Select;
 const gender = [
@@ -20,9 +21,9 @@ const disabilities = [
     <Option key="Visual" value=" Visual ">Visual</Option>,
     <Option key="Auditiva" value=" Auditiva ">Auditiva</Option>,
     <Option key="Sensorial" value=" Sensorial ">Sensorial</Option>,
-    <Option key="Comunicación" value=" Comunicacion ">Comunicación</Option>,
+    <Option key="Comunicación" value=" Comunicación ">Comunicación</Option>,
     <Option key="Mental" value=" Mental ">Mental</Option>,
-    <Option key="Multiples" value=" Multiples ">Múltiples</Option>,
+    <Option key="Multiples" value=" Múltiples ">Múltiples</Option>,
     <Option key="Otra" value=" Otra ">Otra(s)</Option>
 ];
 const rol = [
@@ -53,9 +54,9 @@ const rules = (dataIndex) => {
     } else if (dataIndex === 'lastName') {
         return (/^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/);
     } else if (dataIndex === 'email') {
-        return (/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/);
+        return (/^.*$/);
     } else if (dataIndex === 'password') {
-        return (/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords . Además, la segunda parte del regex hace match con el hash generado por bcrypt: https://stackoverflow.com/a/64636008/19294516
+        return (/^.*$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords . Además, la segunda parte del regex hace match con el hash generado por bcrypt: https://stackoverflow.com/a/64636008/19294516
     } else if (dataIndex === 'institution') {
         return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/);
     } else if (dataIndex === 'address') {
@@ -173,6 +174,25 @@ const ManageUsers = () => {
                                         required: (title === 'Fundación') ? false : true,
                                         message: `¡Introduzca un ${title} válido!`,
                                         pattern: rules(dataIndex),
+                                        validator: async (_, value) => {
+                                                if (title === 'Email*'){
+                                                    const aux = validator.isEmail(value) ? Promise.resolve() : Promise.reject();
+                                                    return aux;
+                                                } else if(title === 'Contraseña*'){
+                                                    const aux = validator.isStrongPassword(value) ?  Promise.resolve() : Promise.reject();
+                                                    return aux;
+                                                }
+                                                return true;
+                                            }
+                                        // ({ getFieldValue }) => ({
+                                        //     validator(_, value) {
+                                        //         if (!value || getFieldValue('password') === value) {
+                                        //             return Promise.resolve();
+                                        //         }
+                                        //                     return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                        //         },
+                                        // }),
+
                                     },
                                 ]}
                             >
@@ -183,8 +203,9 @@ const ManageUsers = () => {
                     </>
                 ) : (
                     (inputType === 'object') ? <img src={record.profilePicture} alt='Foto de perfil' style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
-                )}
-            </td>
+                )
+                }
+            </td >
         );
     };
 

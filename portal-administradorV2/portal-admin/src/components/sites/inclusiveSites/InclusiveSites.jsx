@@ -183,7 +183,7 @@ const ManageInclusiveSites = () => {
             key: "description",
             editable: true,
             sorter: (a, b) => a.description.localeCompare(b.description),
-            render: (text) => <ExpandableText text={text} maxLength={255} />,
+            render: (text) => <ExpandableText text={text} maxLength={256} />,
         },
         {
             title: 'Categoria*',

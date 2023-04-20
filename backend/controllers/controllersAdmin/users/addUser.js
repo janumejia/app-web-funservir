@@ -1,9 +1,10 @@
 const User = require("../../../model/user")
 const cloudinary = require("../../../middlewares/cloudinary");
 const bcrypt = require("bcryptjs")
-const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
+const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, userTypeRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
+var validator = require('validator');
 
 // perform difference operation
 // elements of set a that are not in set b
@@ -16,7 +17,7 @@ const A_and_Not_In_B = (setA, setB) => {
 }
 
 const addUser = async (req, res) => {
-    
+
     const { name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType, profilePicture } = req.body;
 
     if (!name || !lastName || !email || !dateOfBirth || !gender || !password || !address || !isCaregiver || !userType) {
@@ -40,8 +41,8 @@ const addUser = async (req, res) => {
     // 2) Validar si cumple con los caracteres permitidos
     const isValidName = nameUserRegex.test(name);
     const isValidLastName = lastNameUserRegex.test(lastName);
-    const isValidEmail = emailRegex.test(email);
-    const isValidPassword = passwordRegex.test(password);
+    // const isValidEmail = emailRegex.test(email); // Se hace más abajo
+    // const isValidPassword = passwordRegex.test(password); // igual
     const isValidDateOfBirth = moment(dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
     const isValidGender = genderRegex.test(gender);
     const isValidAddress = addressRegex.test(address);
@@ -97,8 +98,8 @@ const addUser = async (req, res) => {
 
     if (isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" });
     if (isValidLastName === false) return res.status(422).json({ message: "Formato de apellido no es válido" });
-    if (isValidEmail === false) return res.status(422).json({ message: "Formato de correo no es válido" });
-    if (isValidPassword === false) return res.status(422).json({ message: "Formato de contraseña no es válido" });
+    // if (isValidEmail === false) return res.status(422).json({ message: "Formato de correo no es válido" });
+    // if (isValidPassword === false) return res.status(422).json({ message: "Formato de contraseña no es válido" });
     if (isValidDateOfBirth === false) return res.status(422).json({ message: "Formato de fecha de nacimiento no es válido" });
     if (isValidGender === false) return res.status(422).json({ message: "Formato de genero no es válido" });
     if (isValidAddress === false) return res.status(422).json({ message: "Formato de dirección no es válido" });
@@ -106,13 +107,26 @@ const addUser = async (req, res) => {
     if (isValidIsCaregiver === false) return res.status(422).json({ message: "Formato de ¿es tutor? no es válido" });
     if (isValidInstitution === false) return res.status(422).json({ message: "Formato de institución no es válido" });
     if (isValidUserType === false) return res.status(422).json({ message: "Formato de tipo de usuario no es válido" }); // Caso malo
+
+
+    // Validación del correo ingresado
+    const isValidEmail = typeof email === 'string' && validator.isEmail(email) ? true : false;
+    if (!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
+
+    // Validación de la contraseña ingresada
+    const isValidPassword = typeof password === 'string' && validator.isStrongPassword(password) ? true : false;
+    if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
+
+
     /* Fin sanitización entradas */
+
+
 
     User.findOne({ email }).then(async (user) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
         try {
-            const prflPic = (!profilePicture) ? randomAvatar(gender):profilePicture;
+            const prflPic = (!profilePicture) ? randomAvatar(gender) : profilePicture;
             const uploadRes = await cloudinary.uploader.upload(prflPic, {
                 upload_preset: "profile_pictures",
                 public_id: email
