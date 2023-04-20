@@ -39,10 +39,10 @@ const AdminLogin = () => {
                 .then((res) => {
                     const { data } = res;
                     // Cookies.set('token', data?.user.token); // Pero no se le puede agregar http only (no permite la ejecución de js)
-                    
+
                     if (Object.values(data.user).length !== 0) {
                         setTimeout(() => {
-                    
+
                             localStorage.setItem("token", data?.user.token);
                             let decodedToken = jwt_decode(data?.user.token);
                             setAuth(decodedToken); // Lo asignamos a la variable global Auth, usando Context
@@ -58,18 +58,18 @@ const AdminLogin = () => {
                     message.error('Error en la autenticación');
                 });
         } else { // No están todos los campos llenos
-            message.error('No están todos los campos llenos', { 
+            message.error('No están todos los campos llenos', {
                 style: {
-                  fontSize: '18px',
-                  backgroundColor: 'red',
-                  color: 'white',
+                    fontSize: '18px',
+                    backgroundColor: 'red',
+                    color: 'white',
                 },
             });
         }
     };
 
     const googleSuccess = async (resAuth) => {
-       
+
         await axios
             .post("/adminLoginWithGoogle", resAuth)
             .then((res) => {
@@ -128,7 +128,7 @@ const AdminLogin = () => {
                             remember: true,
                         }}
                         onFinish={(e) => onSubmit(e)}
-                        autocomplete= "none"
+                        autocomplete="none"
                     >
                         <Form.Item
                             name="email"
@@ -160,14 +160,15 @@ const AdminLogin = () => {
 
                             />
                         </Form.Item>
-                        <Form.Item>
-                            <Form.Item name="remember" valuePropName="checked" noStyle>
+                        <Form.Item >
+                            {/* <Form.Item name="remember" valuePropName="checked" noStyle>
                                 <Checkbox>Recordarme</Checkbox>
-                            </Form.Item>
+                            </Form.Item> */}
 
                             <a className="login-form-forgot" href="/">
                                 ¿Olvidaste tu contraseña?
                             </a>
+
                         </Form.Item>
 
                         <Form.Item>
