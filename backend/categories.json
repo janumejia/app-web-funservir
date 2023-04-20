@@ -1,0 +1,80 @@
+[
+    {
+        "name": "Restaurante"
+    },
+    {
+        "name": "Cafetería"
+    },
+    {
+        "name": "Bar"
+    },
+    {
+        "name": "Restaurante de comida rápida"
+    },
+    {
+        "name": "Panadería"
+    },
+    {
+        "name": "Supermercado"
+    },
+    {
+        "name": "Farmacia"
+    },
+    {
+        "name": "Hospital"
+    },
+    {
+        "name": "Biblioteca"
+    },
+    {
+        "name": "Museo"
+    },
+    {
+        "name": "Galería de arte"
+    },
+    {
+        "name": "Teatro"
+    },
+    {
+        "name": "Cine"
+    },
+    {
+        "name": "Parque"
+    },
+    {
+        "name": "Jardín botánico"
+    },
+    {
+        "name": "Zoológico"
+    },
+    {
+        "name": "Acuario"
+    },
+    {
+        "name": "Estadio"
+    },
+    {
+        "name": "Gimnasio"
+    },
+    {
+        "name": "Piscina"
+    },
+    {
+        "name": "Centro de convenciones"
+    },
+    {
+        "name": "Centro comercial"
+    },
+    {
+        "name": "Mercado"
+    },
+    {
+        "name": "Tienda de ropa"
+    },
+    {
+        "name": "Tienda de electrónica"
+    },
+    {
+        "name": "Tienda de deportes"
+    }
+]
