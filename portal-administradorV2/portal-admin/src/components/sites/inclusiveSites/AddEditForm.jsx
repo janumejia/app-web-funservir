@@ -159,12 +159,16 @@ const AddEditInclusiveSite = ({ site }) => {
                         {
                             required: true,
                             message: `¡Introduzca un descripción válida!`,
-                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,2000}$/,
+                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/]){1,2000}$/,
                             type: 'string'
                         }
                     ]}
                 >
-                    <Input description="description" placeholder="Ingrese la descripción del sitio" />
+                    <Input.TextArea
+                        rows={4}
+                        description="description"
+                        placeholder="Ingrese la descripción del sitio"
+                    />
                 </Form.Item>
                 <Form.Item
                     name="category"
@@ -172,13 +176,13 @@ const AddEditInclusiveSite = ({ site }) => {
                     rules={[
                         {
                             required: true,
-                            message: `¡Introduzca un descripción válida!`,
-                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
+                            message: `¡Introduzca un categoría válida!`,
+                            // pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
                             type: 'string'
                         }
                     ]}
                 >
-                    <Select>
+                    <Select > {/* listHeight={600}  por si quiere poner mas sugerencias*/}
                         {availableCategories.map(element => {
                             return (
                                 <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>

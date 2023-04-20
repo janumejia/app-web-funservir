@@ -39,9 +39,9 @@ module.exports = {
     passwordRegex: new RegExp(/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/), // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
     genderRegex: new RegExp(/^(Masculino|Femenino|Otro)$/),
     addressRegex: new RegExp(/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s\.,-\/#]{5,255}$/),
-    conditionRegex: new RegExp(/^(Motriz|Visual|Auditiva|Sensorial|Comunicación|Mental|Multiples|Otra)$/),
+    conditionRegex: new RegExp(/^( Motriz | Visual | Auditiva | Sensorial | Comunicación | Mental | Múltiples | Otra )$/),
     isCaregiverRegex: new RegExp(/^(Si|No)$/),
-    institutionRegex: generalAlphabetic(0,255),
+    institutionRegex: generalAlphanumeric(0,255),
     userTypeRegex: new RegExp(/^(Regular|Propietario|Administrador)$/),
 
     /* Categorías */

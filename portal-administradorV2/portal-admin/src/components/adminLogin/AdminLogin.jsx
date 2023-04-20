@@ -177,7 +177,7 @@ const AdminLogin = () => {
                             </Button>
                         </Form.Item>
                     </Form>
-                    <div className="googleloginbutton">
+                    {/* <div className="googleloginbutton">
                         <GoogleLogin
                             onSuccess={googleSuccess}
                             onError={googleFailure}
@@ -185,7 +185,7 @@ const AdminLogin = () => {
                             width={301}
                         // theme="filled_blue"
                         />
-                    </div>
+                    </div> */}
                     {/* <Button
                         // className={classes.googleButton}
                         color="primary"

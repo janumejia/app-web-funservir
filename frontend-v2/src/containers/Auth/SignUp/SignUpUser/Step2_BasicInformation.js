@@ -233,14 +233,14 @@ const BasicInformationU = ({ setStep }) => {
                   handleOnChange('condition', e);
                 }}
                 value={value}>
-                <Checkbox value="Motriz">Motriz</Checkbox>
-                <Checkbox value="Visual">Visual</Checkbox>
-                <Checkbox value="Auditiva">Auditiva</Checkbox>
-                <Checkbox value="Sensorial">Sensorial</Checkbox>
-                <Checkbox value="Comunicación">Comunicación</Checkbox>
-                <Checkbox value="Mental">Mental</Checkbox>
-                <Checkbox value="Multiples">Múltiples</Checkbox>
-                <Checkbox value="Otra">Otra</Checkbox>
+                <Checkbox value=" Motriz ">Motriz</Checkbox>
+                <Checkbox value=" Visual ">Visual</Checkbox>
+                <Checkbox value=" Auditiva ">Auditiva</Checkbox>
+                <Checkbox value=" Sensorial ">Sensorial</Checkbox>
+                <Checkbox value=" Comunicación ">Comunicación</Checkbox>
+                <Checkbox value=" Mental ">Mental</Checkbox>
+                <Checkbox value=" Múltiples ">Múltiples</Checkbox>
+                <Checkbox value=" Otra ">Otra</Checkbox>
               </Checkbox.Group>
             )}
           />
@@ -300,7 +300,7 @@ const BasicInformationU = ({ setStep }) => {
             control={control}
             rules={{
               required: false,
-              pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){0,255}$/,
+              pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü0-9 ]){0,255}$/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
