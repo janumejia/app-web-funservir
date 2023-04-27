@@ -228,7 +228,7 @@ const BasicInformationU = ({ setStep }) => {
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <Checkbox.Group
-                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo 
                   onChange(e);
                   handleOnChange('condition', e);
                 }}
