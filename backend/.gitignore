@@ -5,3 +5,6 @@ node_modules
 
 #Snyk
 .dccache
+
+# Carpeta del proyecto listo para ser desplegado
+dist
