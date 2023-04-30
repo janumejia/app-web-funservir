@@ -53,6 +53,7 @@ app.use((err, req, res, next) => {
 });
 
 /* Rutas de nuestra APP */
+app.get('/testServer', (req, res) => { res.json('Server Up!'); });
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/registerUser", controllers.registerUser)
 app.post("/registerOwner", controllers.registerOwner)
