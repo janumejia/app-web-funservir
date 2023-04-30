@@ -7,10 +7,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon App.js",
-    "dev": "nodemon App.js",
-    "debug": "nodemon --inspect App.js",
-    "build": "node App.js"
+    "start": "nodemon src/App.js",
+    "start-normal": "node src/App.js",
+    "dev": "nodemon src/App.js",
+    "debug": "nodemon --inspect src/App.js",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && babel ./src --out-dir dist --copy-files",
+    "prod": "node ./dist/App.js"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +35,9 @@
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.5",
+    "@babel/preset-env": "^7.21.5",
     "nodemon": "^2.0.19"
   }
 }
