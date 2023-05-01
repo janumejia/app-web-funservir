@@ -14,20 +14,7 @@ app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP 
 
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
 en este caso responde las peticiones desde cualquier origen (inseguro) */
-// app.use(cors({
-//     origin: function (origin, callback) {
-//         if (!origin) return callback(null, true);
-//         console.log(process.env.BACKEND_ALLOWED_ORIGINS.split(','))
-//         if (process.env.BACKEND_ALLOWED_ORIGINS.split(',').indexOf(origin) === -1) {
-//             var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-//             return callback(new Error(msg), false);
-//         }
-//         return callback(null, true);
-//     },
-//     credentials: true, // Para permitir el envío de cookies
-// }))
-
-corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',')
+corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.all('*', function (req, res, next) {
     const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
@@ -117,11 +104,10 @@ app.post("/addNeighborhoods", verifyTokenAdmin, controllersAdmin.addNeighborhood
 app.post("/editNeighborhoods", verifyTokenAdmin, controllersAdmin.editNeighborhoods)
 app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighborhoods)
 
-
 // custom 404
-// app.use((req, res, next) => {
-//     res.status(404).json({ message: 'Upss, ruta no encontrada' });
-// })
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Upss, ruta no encontrada' });
+})
 
 /* Fin rutas de nuestra APP */
 
@@ -130,7 +116,6 @@ const host = process.env.BACKEND_HOST;
 const port = process.env.BACKEND_PORT
 
 app.listen(port, host, () => { // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
-    // console.log("process.env.ZEET_DEPLOYMENT_URL ---> ", process.env.ZEET_DEPLOYMENT_URL)
     console.log(`Servidor funcionando en http://${host}:${port}`)
     db() // Llamamos a la función db
 })
