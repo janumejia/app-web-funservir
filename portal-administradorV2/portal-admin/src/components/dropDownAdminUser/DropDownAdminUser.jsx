@@ -17,7 +17,7 @@ const menu = (
           
           <a
             rel="noopener noreferrer"
-            href={process.env.REACT_APP_HOST_BACK}
+            href="/"
           >
             Cerrar Sesión
           </a>
