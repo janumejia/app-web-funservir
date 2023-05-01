@@ -14,7 +14,7 @@ app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP 
 
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
 en este caso responde las peticiones desde cualquier origen (inseguro) */
-corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
+const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.all('*', function (req, res, next) {
     const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
