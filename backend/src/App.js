@@ -17,10 +17,20 @@ en este caso responde las peticiones desde cualquier origen (inseguro) */
 const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.all('*', function (req, res, next) {
-    const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+    try {
+        res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        if (req.method === 'OPTIONS') {
+            // Nada aquí
+        } else { // Para métodos POST Y GET
+            const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
+            res.header("Access-Control-Allow-Origin", origin);
+        }
+        next();
+    } catch (error) {
+        console.error('Error setting CORS headers:', error);
+        res.status(500).json({ message: "Hubo un problema al procesar CORS" });
+    }
 });
 
 app.use(cookieParser()); // Para ajustar la cookie de sesión
@@ -49,7 +59,7 @@ app.use((err, req, res, next) => {
 });
 
 /* Rutas de nuestra APP */
-app.get('/', (req, res) => { res.json('¡Backend Funcionando!'); });
+app.get('/', (req, res) => { res.json({ message: "¡Backend Funcionando!" }); });
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/registerUser", controllers.registerUser)
 app.post("/registerOwner", controllers.registerOwner)
