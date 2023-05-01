@@ -14,18 +14,27 @@ app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP 
 
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
 en este caso responde las peticiones desde cualquier origen (inseguro) */
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-        if (process.env.BACKEND_ALLOWED_ORIGINS.split(',').indexOf(origin) === -1) {
-            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    },
-    credentials: true, // Para permitir el envío de cookies
-}))
+// app.use(cors({
+//     origin: function (origin, callback) {
+//         if (!origin) return callback(null, true);
+//         console.log(process.env.BACKEND_ALLOWED_ORIGINS.split(','))
+//         if (process.env.BACKEND_ALLOWED_ORIGINS.split(',').indexOf(origin) === -1) {
+//             var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+//             return callback(new Error(msg), false);
+//         }
+//         return callback(null, true);
+//     },
+//     credentials: true, // Para permitir el envío de cookies
+// }))
 
+corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',')
+
+app.all('*', function (req, res, next) {
+    const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use(cookieParser()); // Para ajustar la cookie de sesión
 
@@ -53,7 +62,7 @@ app.use((err, req, res, next) => {
 });
 
 /* Rutas de nuestra APP */
-app.get('/', (req, res) => { res.json('Server Up!'); });
+app.get('/', (req, res) => { res.json('¡Backend Funcionando!'); });
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/registerUser", controllers.registerUser)
 app.post("/registerOwner", controllers.registerOwner)
