@@ -16,22 +16,28 @@ app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP 
 en este caso responde las peticiones desde cualquier origen (inseguro) */
 const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
-app.all('*', function (req, res, next) {
-    try {
-        res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        if (req.method === 'OPTIONS') {
-            // Nada aquí
-        } else { // Para métodos POST Y GET
-            const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
-            res.header("Access-Control-Allow-Origin", origin);
-        }
-        next();
-    } catch (error) {
-        console.error('Error setting CORS headers:', error);
-        res.status(500).json({ message: "Hubo un problema al procesar CORS" });
-    }
-});
+app.use(cors({
+    origin: corsOrigins,
+    credentials: true, // Para permitir el envÃ­o de cookies
+}))
+
+// app.all('*', function (req, res, next) {
+//     try {
+//         res.header('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+//         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//         console.log("req.method: ", req.method)
+//         if (req.method === 'OPTIONS') {
+//             // Nada aquí
+//         } else { // Para métodos POST Y GET
+//             const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
+//             res.header("Access-Control-Allow-Origin", origin);
+//         }
+//         next();
+//     } catch (error) {
+//         console.error('Error setting CORS headers:', error);
+//         res.status(500).json({ message: "Hubo un problema al procesar CORS" });
+//     }
+// });
 
 app.use(cookieParser()); // Para ajustar la cookie de sesión
 
