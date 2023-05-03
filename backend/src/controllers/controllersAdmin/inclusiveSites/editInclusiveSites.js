@@ -102,6 +102,7 @@ const editInclusiveSites = async (req, res) => {
         const query = { _id: inputs._id };
         const update = {
             name: inputs.name,
+            status: inputs.status,
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
