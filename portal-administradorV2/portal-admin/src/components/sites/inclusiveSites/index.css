@@ -16,3 +16,7 @@
 .Button{
   margin-left: 1000px;
 }
+
+.ant-space {
+  display: inline-grid;
+}

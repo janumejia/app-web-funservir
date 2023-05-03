@@ -4,7 +4,7 @@ import "antd/dist/antd.min.css";
 import './index.css';
 import GalleryVisualizationMode from './GalleryVisualizationMode';
 import AddEditInclusiveSite from './AddEditForm';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Tag } from 'antd';
 import ExpandableText from './ExpandableText'; // La componente de abreviar texto
 const { Link } = Typography;
 
@@ -40,6 +40,8 @@ const ManageInclusiveSites = () => {
     let isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
+        console.log("record: ", record)
+        // record.owner._id = data.owner._id
         editedObject = { ...record };
         setEditingKey(record._id);
     };
@@ -53,84 +55,6 @@ const ManageInclusiveSites = () => {
 
         setEditingKey('');
     };
-
-    // const { setImg } = useContext(ImageContext);
-
-    // const saveEdit = async (key) => {
-    //     try {
-
-    //         const row = await form.validateFields();
-    //         const newData = [...data];
-    //         const index = newData.findIndex((item) => key === item._id);
-    //         const item = newData[index];
-
-    //         if (key === "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row.isCaregiver && row.userType) {
-
-    //             const newUser = {
-    //                 name: row.name,
-    //                 lastName: row.lastName,
-    //                 email: row.email,
-    //                 password: row.password,
-    //                 dateOfBirth: row.dateOfBirth,
-    //                 gender: row["gender"],
-    //                 address: row.address,
-    //                 condition: [...row.condition],
-    //                 isCaregiver: row["isCaregiver"],
-    //                 institution: row.institution,
-    //                 userType: row["userType"]
-    //             }
-
-    //             axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
-    //                 .then((res) => {
-
-    //                     // Respuesta OK
-    //                     if (res.status === 200) {
-    //                         // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-    //                         let dateOfBirth = new Date(res.data.element.dateOfBirth);
-    //                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-    //                         res.data.element.dateOfBirth = dateOfBirth2;
-
-    //                         newData.splice(index, 1, res.data.element);
-    //                         setData(newData);
-    //                         setEditingKey('');
-    //                         message.success(res.data.message);
-    //                     } else message.warning(res.status + " - Respuesta del servidor desconocida");
-    //                 })
-    //                 .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-    //                     if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-    //                     else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-    //                     else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-    //                 });
-    //         } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
-
-    //             axios.post('/editUser', { ...item, ...row }, { headers: { 'token': localStorage.getItem("token") } })
-    //                 .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
-
-    //                     if (res.status === 200) {
-    //                         // Estas 3 lineas son para pasar la visualización de la fecha de nacimiento de 2022-10-10T00:00:00.000Z a 2022-10-10
-    //                         let dateOfBirth = new Date(res.data.doc.dateOfBirth);
-    //                         let dateOfBirth2 = dateOfBirth.getFullYear() + "-" + (dateOfBirth.getMonth() + 1) + "-" + dateOfBirth.getDate();
-    //                         res.data.doc.dateOfBirth = dateOfBirth2;
-
-    //                         newData.splice(index, 1, res.data.doc);
-    //                         setData(newData);
-    //                         setEditingKey('');
-
-    //                         message.success(res.data.message);
-    //                     } else message.warning(res.status + " - Respuesta del servidor desconocida");
-    //                 })
-    //                 .catch((error) => {// Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-    //                     if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-    //                     else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-    //                     else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-    //                 });
-    //         } else {
-    //             message.warning('¡Debes completar todos los campos obligatorios!');
-    //         }
-    //     } catch (errInfo) {
-    //         message.warning('¡Debes completar todos los campos en un formato válido!');
-    //     }
-    // };
 
     const handleDelete = (key) => {
         const newData = [...data];
@@ -264,12 +188,41 @@ const ManageInclusiveSites = () => {
             dataIndex: "owner",
             key: "owner",
             editable: true,
-            render: (e) =>{
-                if(e){
+            render: (e) => {
+                if (e) {
                     return e.name + " " + e.lastName;
                 }
             },
             sorter: (a, b) => a.locality.localeCompare(b.locality)
+        },
+        {
+            title: 'Estado',
+            dataIndex: "status",
+            key: "status",
+            editable: true,
+            render: (status) => {
+                let color = "";
+
+                if (status) {
+                    if (status === "Aprobado") {
+                        color = "green";
+                    } else if (status === "Pendiente") {
+                        color = "yellow";
+                    }
+                }
+
+                return (
+                    <Tag color={color}>
+                        {status}
+                    </Tag>
+                )
+            },
+            sorter: (a, b) => {
+                if (!a || !a.status) a.status = ""
+                if (!b || !b.status) b.status = ""
+
+                return a.status.localeCompare(b.status);
+            }
         },
         {
             title: 'Operación',

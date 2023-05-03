@@ -1,7 +1,8 @@
 import { Button, Form, Input, message, Space, Select, Popconfirm } from 'antd';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
-import { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import UploadImage from './UploadImage';
 
 const AddEditInclusiveSite = ({ site }) => {
@@ -10,12 +11,14 @@ const AddEditInclusiveSite = ({ site }) => {
     const [latlng, setLatLng] = useState(site.location);
     const [arrayBase64, setArrayBase64] = useState([]);
     const [previousImagesPreserved, setPreviousImagesPreserved] = useState([]);
-    const [messageApi, contextHolder] = message.useMessage();
+    const [siteStatus, setSiteStatus] = useState(site.status)
 
     const action = async () => {
         try {
             const row = await form.validateFields();
 
+            console.log("row: ", row);
+            row.status = "Aprobado";
 
             message.open({
                 key: 'key-loading',
@@ -25,19 +28,19 @@ const AddEditInclusiveSite = ({ site }) => {
             });
 
             if (site._id === "0") {
-                axios.post('/addInclusiveSites', { ...row, "location": latlng, "imgToAdd": arrayBase64 }, { headers: { 'token': localStorage.getItem("token") } })
-                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
-                        message.destroy("key-loading")
-                        if (res.status === 200) {
-                            message.success(res.data.message);
-                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-                    })
-                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-                        message.destroy("key-loading")
-                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-                    });
+                try {
+                    const res = await axios.post('/addInclusiveSites', { ...row, "location": latlng, "imgToAdd": arrayBase64 }, { headers: { 'token': localStorage.getItem("token") } });
+                    message.destroy("key-loading")
+                    if (res.status === 200) {
+                        message.success(res.data.message);
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
+
+                } catch (error) {
+                    message.destroy("key-loading")
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning("Respuesta del servidor desconocida");
+                }
             } else if (site._id !== "0") {
 
                 const imgToDelete = []; // Aquí almacenamos los códigos asset_id de las imágenes que queremos borrar
@@ -46,24 +49,28 @@ const AddEditInclusiveSite = ({ site }) => {
                     if (found === undefined) imgToDelete.push(site.gallery[index].public_id); // Aqui le podemos cambiar la propiedad de la imagen que queremos borrar. En este caso de asset_id
                 }
 
-                axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng, "imgToAdd": arrayBase64, "imgToDelete": imgToDelete }, { headers: { 'token': localStorage.getItem("token") } })
-                    .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
-                        message.destroy("key-loading")
-                        if (res.status === 200) {
-                            message.success(res.data.message);
-                        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-                    })
-                    .catch((error) => { // Aquí se manejan los códigos de respuesta entre 400 y 599 (errores cliente y errores servidor)
-                        message.destroy("key-loading")
-                        if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
-                        else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
-                        else message.warning(error.response.status + " - Respuesta del servidor desconocida");
-                    });
+                try {
+                    const res = await axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng, "imgToAdd": arrayBase64, "imgToDelete": imgToDelete }, { headers: { 'token': localStorage.getItem("token") } });
+                    message.destroy("key-loading")
+                    if (res.status === 200) {
+                        message.success(res.data.message);
+                        setSiteStatus("Aprobado");
+                    } else message.warning(res.status + " - Respuesta del servidor desconocida");
+                } catch (error) {
+                    message.destroy("key-loading")
+                    if (error.response.status >= 400 && error.response.status <= 499) message.warning(error.response.data.message); // Errores del cliente
+                    else if (error.response.status >= 500 && error.response.status <= 599) message.error(error.response.data.message); // Errores del servidor
+                    else message.warning("Respuesta del servidor desconocida");
+                }
             }
         } catch (errInfo) {
             message.destroy("key-loading")
             message.warning('¡Debes completar todos los campos en un formato válido!');
         }
+    }
+
+    const actionReject = async () => {
+        message.warning("falta implementar el método de rechazar")
     }
 
     // Para ajustar las opciones disponibles
@@ -84,43 +91,44 @@ const AddEditInclusiveSite = ({ site }) => {
 
     // Traemos todos los elementos, localidades y barrios disponibles para escoger
     useEffect(() => {
+        const fetchData = async () => {
 
-        axios.get('/elements', { headers: { 'token': localStorage.getItem("token") } })
-            .then((res) => {
-                setAvailableElements(res.data);
-            }).catch((error) => console.error(error));
+            if (siteStatus === "Pendiente") {
+                await message.warning(
+                    <span>
+                        Sitio de interés en estado <span style={{ fontWeight: 'bold' }}>pendiente</span>. Revísalo y apruébalo o recházalo.
+                    </span>
+                    , 4);
+            }
 
+            try {
+                const elements = await axios.get('/elements', { headers: { 'token': localStorage.getItem("token") } });
+                setAvailableElements(elements.data);
 
-        axios.get('/getLocations', { headers: { 'token': localStorage.getItem("token") } })
-            .then((res) => {
-                setAvailableLocalities(res.data);
-            }).catch((error) => {
-                message.error('No se pudieron cargar los datos');
+                const locations = await axios.get('/getLocations', { headers: { 'token': localStorage.getItem("token") } });
+                setAvailableLocalities(locations.data);
+
+                const neighborhoods = await axios.get('/getNeighborhoods', { headers: { 'token': localStorage.getItem("token") } });
+                setAvailableNeighborhoods(neighborhoods.data);
+
+                const categories = await axios.get('/getCategories', { headers: { 'token': localStorage.getItem("token") } });
+                setAvailableCategories(categories.data);
+
+                const users = await axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } });
+                setavailableUsers(users.data);
+            } catch (error) {
+                message.error('No se pudieron cargar los datos de selección');
                 console.error(error);
-            });
+            }
+        }
 
-
-        axios.get('/getNeighborhoods', { headers: { 'token': localStorage.getItem("token") } })
-            .then((res) => {
-                setAvailableNeighborhoods(res.data);
-            }).catch((error) => console.error(error));
-
-        axios.get('/getCategories', { headers: { 'token': localStorage.getItem("token") } })
-            .then((res) => {
-                setAvailableCategories(res.data);
-            }).catch((error) => console.error(error));
-
-        axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
-            .then((res) => {
-                setavailableUsers(res.data);
-            }).catch((error) => console.error(error));
-
+        fetchData();
     }, [])
 
+    console.log("site: ", site)
 
     return (
         <>
-            {contextHolder}
             <Form
                 form={form}
                 layout="vertical"
@@ -135,7 +143,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     "locality": site.locality,
                     "neighborhood": site.neighborhood,
                     "gallery": site.gallery,
-                    "owner": (site.owner) ? site.owner.name + " " + site.owner.lastName : ""
+                    "owner": (site?.owner) ? site.owner._id : ""
                 }}
             >
                 <Form.Item
@@ -325,14 +333,29 @@ const AddEditInclusiveSite = ({ site }) => {
                 >
                     <UploadImage gallery={site.gallery} setArrayBase64={setArrayBase64} setPreviousImagesPreserved={setPreviousImagesPreserved} />
                 </Form.Item>
-                <Space style={{ margin: "20px" }}>
+                {siteStatus === "Pendiente" ? (
+                    <Space style={{ margin: "20px", display: "inline-grid" }} size={20}>
+                        <Popconfirm title="¿Estás seguro?" okText="Aprobar" cancelText="Seguir revisando" onConfirm={action}>
+                            <Button icon={<CheckOutlined />} type="primary">
+                                Aprobar
+                            </Button>
+                        </Popconfirm>
 
-                    <Popconfirm title="¿Estás seguro?" okText="Guardar" cancelText="Seguir editando" onConfirm={action}>
-                        <Button type="primary">
-                            Guardar
-                        </Button>
-                    </Popconfirm>
-                </Space>
+                        <Popconfirm title="¿Estás seguro de rechazar y eliminar el sitio?" okText="Rechazar y eliminar" cancelText="Seguir revisando" onConfirm={actionReject}>
+                            <Button icon={<CloseOutlined />} danger>
+                                Rechazar
+                            </Button>
+                        </Popconfirm>
+                    </Space>
+                ) : (
+                    <Space style={{ margin: "20px" }} >
+                        <Popconfirm title="¿Estás seguro?" okText="Guardar" cancelText="Seguir editando" onConfirm={action}>
+                            <Button type="primary">
+                                Guardar
+                            </Button>
+                        </Popconfirm>
+                    </Space>
+                )}
             </Form>
         </>
     )

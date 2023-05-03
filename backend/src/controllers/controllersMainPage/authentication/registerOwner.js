@@ -128,6 +128,7 @@ const addInclusiveSites = async (req, res) => {
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({
             name: inputs.siteName,
+            status: "Pendiente",
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
