@@ -4,6 +4,7 @@ import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
 import { useEffect, useState } from 'react';
 import UploadImage from './UploadImage';
+import { useNavigate } from "react-router-dom";
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -12,6 +13,7 @@ const AddEditInclusiveSite = ({ site }) => {
     const [arrayBase64, setArrayBase64] = useState([]);
     const [previousImagesPreserved, setPreviousImagesPreserved] = useState([]);
     const [siteStatus, setSiteStatus] = useState(site.status)
+    const navigate = useNavigate();
 
     const action = async () => {
         try {
@@ -70,8 +72,26 @@ const AddEditInclusiveSite = ({ site }) => {
     }
 
     const actionReject = async () => {
-        message.warning("falta implementar el método de rechazar")
-    }
+        try {
+            const response = await axios.post('/deleteInclusiveSites', { _id: site._id }, { headers: { 'token': localStorage.getItem("token") } });
+
+            if (response.status === 200) {
+                message.success(response.data.message);
+                navigate(`/dashboard`, { replace: true });
+            } else {
+                message.warning(response.status + " - Respuesta del servidor desconocida");
+            }
+        } catch (error) {
+            if (error.response.status >= 400 && error.response.status <= 499) {
+                message.warning(error.response.data.message);
+            } else if (error.response.status >= 500 && error.response.status <= 599) {
+                message.error(error.response.data.message);
+            } else {
+                message.warning("Respuesta del servidor desconocida");
+            }
+        }
+    };
+
 
     // Para ajustar las opciones disponibles
     const [availableElements, setAvailableElements] = useState([]);
