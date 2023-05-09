@@ -1,10 +1,11 @@
-import { Button, Form, Input, message, Space, Select, Popconfirm } from 'antd';
+import axios from "../../../api/axios";
+import { Button, Form, Input, message, Space, Select, Popconfirm, TimePicker, Row, Col } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
-import axios from "../../../api/axios";
 import { useEffect, useState } from 'react';
 import UploadImage from './UploadImage';
 import { useNavigate } from "react-router-dom";
+import moment from 'moment';
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -14,6 +15,15 @@ const AddEditInclusiveSite = ({ site }) => {
     const [previousImagesPreserved, setPreviousImagesPreserved] = useState([]);
     const [siteStatus, setSiteStatus] = useState(site.status)
     const navigate = useNavigate();
+    const [schedule, setSchedule] = useState({
+        Lunes: { start: "09:00", end: "17:00" },
+        Martes: { start: "09:00", end: "17:00" },
+        Miercoles: { start: "09:00", end: "17:00" },
+        Jueves: { start: "09:00", end: "17:00" },
+        Viernes: { start: "09:00", end: "17:00" },
+        Sabado: { start: "10:00", end: "14:00" },
+        Domingo: { start: "cerrado", end: "cerrado" }
+    });
 
     const action = async () => {
         try {
@@ -145,7 +155,13 @@ const AddEditInclusiveSite = ({ site }) => {
         fetchData();
     }, [])
 
-    console.log("site: ", site)
+    const handleScheduleChange = (day, value) => {
+        console.log("day: ", day, " value: ", value)
+        // const updatedSchedule = { ...schedule };
+        // updatedSchedule[day] = { start: value ? value[0].format('HH:mm') : "", end: value ? value[1].format('HH:mm') : "" };
+        // setSchedule(updatedSchedule);
+        // console.log("schedule: ", schedule)
+    };
 
     return (
         <>
@@ -251,6 +267,35 @@ const AddEditInclusiveSite = ({ site }) => {
                             )
                         })}
                     </Select>
+                </Form.Item>
+                <Form.Item
+                    name="siteSchedule"
+                    label="Horario del sitio"
+                    rules={[
+                        {
+                            required: true,
+                        }
+                    ]}
+                >
+                    {Object.keys(schedule).map((day) => (
+                        <Row gutter={[16, 16]}>
+                            <Col span={3}>
+                                {day}:
+                            </Col>
+                            <Col span={8}>
+                                <TimePicker.RangePicker
+                                    defaultValue={[
+                                        moment(schedule[day].start, "HH:mm"),
+                                        moment(schedule[day].end, "HH:mm")
+                                    ]}
+                                    format="HH:mm"
+                                    onChange={(value) => {
+                                        handleScheduleChange(day, value);
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    ))}
                 </Form.Item>
                 <Form.Item
                     name="siteAddress"
