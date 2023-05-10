@@ -121,20 +121,13 @@ const addUser = async (req, res) => {
 
     /* Fin sanitización entradas */
 
-<<<<<<< HEAD:backend/src/controllers/controllersAdmin/users/addUser.js
 
 
-=======
->>>>>>> 1289b97c8fd9cf8fb151c0b891ff3763abce5b9e:backend/controllers/controllersAdmin/users/addUser.js
     User.findOne({ email }).then(async (user) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
         try {
-<<<<<<< HEAD:backend/src/controllers/controllersAdmin/users/addUser.js
             const prflPic = (!profilePicture) ? randomAvatar(gender) : profilePicture;
-=======
-            const prflPic = (!profilePicture) ? randomAvatar(gender):profilePicture;
->>>>>>> 1289b97c8fd9cf8fb151c0b891ff3763abce5b9e:backend/controllers/controllersAdmin/users/addUser.js
             const uploadRes = await cloudinary.uploader.upload(prflPic, {
                 upload_preset: "profile_pictures",
                 public_id: email
