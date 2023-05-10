@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
-import { Upload } from 'antd';
 import './index.css';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
 import esES from 'antd/es/date-picker/locale/es_ES';
