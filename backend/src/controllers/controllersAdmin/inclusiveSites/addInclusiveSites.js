@@ -84,6 +84,7 @@ const addInclusiveSites = async (req, res) => {
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
             gallery: uploadRes,
+            schedule: inputs.schedule,
             owner: ObjectId(inputs.owner),
         });
 

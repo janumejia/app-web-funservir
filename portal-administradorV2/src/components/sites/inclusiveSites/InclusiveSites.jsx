@@ -129,6 +129,31 @@ const ManageInclusiveSites = () => {
             dataIndex: "inclusiveElements",
             key: "inclusiveElements",
             editable: true,
+            render: (elements) => {
+                const aux = elements.map((element) => {
+                    return ( <Tag color={"blue"}>{element}</Tag>);
+                })
+                return aux;
+            }
+        },
+        {
+            title: 'Horario*',
+            dataIndex: "schedule",
+            key: "schedule",
+            editable: true,
+            render: (schedule) => {
+                if (schedule) {
+                    const aux = Object.entries(schedule).map(([day, times]) => {
+                        const startTime = times.start ? times.start : 'null';
+                        const endTime = times.end ? times.end : 'null';
+                        return ( <Tag> {day.slice(0, 2)} {startTime}-{endTime}</Tag> );
+                    })
+                    return aux
+
+                } else {
+                    return "-"
+                }
+            }
         },
         {
             title: 'Dirección*',

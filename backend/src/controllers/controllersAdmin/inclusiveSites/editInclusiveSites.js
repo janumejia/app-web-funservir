@@ -110,7 +110,9 @@ const editInclusiveSites = async (req, res) => {
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
+            schedule: inputs.schedule,
             neighborhood: inputs.neighborhood,
+
             $push: { gallery: { $each: uploadRes } },
             // owner: (inputs.owner === "") ? ObjectId(inputs.owner) : ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
         }

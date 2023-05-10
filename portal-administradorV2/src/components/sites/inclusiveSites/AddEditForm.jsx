@@ -16,13 +16,13 @@ const AddEditInclusiveSite = ({ site }) => {
     const [siteStatus, setSiteStatus] = useState(site.status)
     const navigate = useNavigate();
     const [schedule, setSchedule] = useState({
-        Lunes: { start: "09:00", end: "17:00" },
-        Martes: { start: "09:00", end: "17:00" },
-        Miercoles: { start: "09:00", end: "17:00" },
-        Jueves: { start: "09:00", end: "17:00" },
-        Viernes: { start: "09:00", end: "17:00" },
-        Sabado: { start: "10:00", end: "14:00" },
-        Domingo: { start: "cerrado", end: "cerrado" }
+        Lunes: site.schedule && site.schedule["Lunes"] ? site.schedule["Lunes"] : { start: null, end: null },
+        Martes: site.schedule && site.schedule["Martes"] ? site.schedule["Martes"] : { start: null, end: null },
+        Miercoles: site.schedule && site.schedule["Miercoles"] ? site.schedule["Miercoles"] : { start: null, end: null },
+        Jueves: site.schedule && site.schedule["Jueves"] ? site.schedule["Jueves"] : { start: null, end: null },
+        Viernes: site.schedule && site.schedule["Viernes"] ? site.schedule["Viernes"] : { start: null, end: null },
+        Sabado: site.schedule && site.schedule["Sabado"] ? site.schedule["Sabado"] : { start: null, end: null },
+        Domingo: site.schedule && site.schedule["Domingo"] ? site.schedule["Domingo"] : { start: null, end: null },
     });
 
     const action = async () => {
@@ -41,7 +41,7 @@ const AddEditInclusiveSite = ({ site }) => {
 
             if (site._id === "0") {
                 try {
-                    const res = await axios.post('/addInclusiveSites', { ...row, "location": latlng, "imgToAdd": arrayBase64 }, { headers: { 'token': localStorage.getItem("token") } });
+                    const res = await axios.post('/addInclusiveSites', { ...row, "location": latlng, "imgToAdd": arrayBase64, "schedule": schedule  }, { headers: { 'token': localStorage.getItem("token") } });
                     message.destroy("key-loading")
                     if (res.status === 200) {
                         message.success(res.data.message);
@@ -62,7 +62,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 }
 
                 try {
-                    const res = await axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng, "imgToAdd": arrayBase64, "imgToDelete": imgToDelete }, { headers: { 'token': localStorage.getItem("token") } });
+                    const res = await axios.post('/editInclusiveSites', { ...site, ...row, "location": latlng, "imgToAdd": arrayBase64, "imgToDelete": imgToDelete, "schedule": schedule  }, { headers: { 'token': localStorage.getItem("token") } });
                     message.destroy("key-loading")
                     if (res.status === 200) {
                         message.success(res.data.message);
@@ -137,13 +137,13 @@ const AddEditInclusiveSite = ({ site }) => {
 
                 const locations = await axios.get('/getLocations', { headers: { 'token': localStorage.getItem("token") } });
                 setAvailableLocalities(locations.data);
-
+                
                 const neighborhoods = await axios.get('/getNeighborhoods', { headers: { 'token': localStorage.getItem("token") } });
                 setAvailableNeighborhoods(neighborhoods.data);
 
                 const categories = await axios.get('/getCategories', { headers: { 'token': localStorage.getItem("token") } });
                 setAvailableCategories(categories.data);
-
+                
                 const users = await axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } });
                 setavailableUsers(users.data);
             } catch (error) {
@@ -271,28 +271,31 @@ const AddEditInclusiveSite = ({ site }) => {
                 <Form.Item
                     name="siteSchedule"
                     label="Horario del sitio"
-                    rules={[
-                        {
-                            required: true,
-                        }
-                    ]}
                 >
                     {Object.keys(schedule).map((day) => (
                         <Row gutter={[16, 16]}>
                             <Col span={3}>
                                 {day}:
                             </Col>
-                            <Col span={8}>
-                                <TimePicker.RangePicker
-                                    defaultValue={[
-                                        moment(schedule[day].start, "HH:mm"),
-                                        moment(schedule[day].end, "HH:mm")
-                                    ]}
-                                    format="HH:mm"
-                                    onChange={(value) => {
-                                        handleScheduleChange(day, value);
-                                    }}
-                                />
+                            <Col span={9}>
+                                <Form.Item name={day} key={day}>
+                                    <TimePicker.RangePicker
+                                        defaultValue={[
+                                            schedule[day].start ? moment(schedule[day].start, "HH:mm") : null,
+                                            schedule[day].end ? moment(schedule[day].end, "HH:mm") : null
+                                        ]}
+                                        format="HH:mm"
+                                        onChange={async (value) => {
+                                            const updatedSchedule = { ...schedule };
+                                            if (value) {
+                                                updatedSchedule[day] = { start:  value[0]._d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}), end:  value[1]._d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}) };
+                                            } else {
+                                                updatedSchedule[day] = { start:  null, end: null };
+                                            }
+                                            setSchedule(updatedSchedule);
+                                        }}
+                                    />
+                                </Form.Item>
                             </Col>
                         </Row>
                     ))}
