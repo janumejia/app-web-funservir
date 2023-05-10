@@ -114,6 +114,7 @@ const editInclusiveSites = async (req, res) => {
             $push: { gallery: { $each: uploadRes } },
             // owner: (inputs.owner === "") ? ObjectId(inputs.owner) : ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
         }
+
         if(inputs.owner === ""){
             update['$unset'] = { owner: "" };
         } else {

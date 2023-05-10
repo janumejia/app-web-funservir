@@ -98,6 +98,7 @@ const ManageInclusiveSites = () => {
                     || String(record.inclusiveElements).toLocaleLowerCase().includes(value.toLocaleLowerCase())
                     || String(record.locality).toLocaleLowerCase().includes(value.toLocaleLowerCase())
                     || String(record.neighborhood).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.gallery).toLocaleLowerCase().includes(value.toLocaleLowerCase())
             }
         },
         {
@@ -222,17 +223,6 @@ const ManageInclusiveSites = () => {
 
                 return a.status.localeCompare(b.status);
             }
-        },
-        {
-            title: 'Última actualización',
-            dataIndex: "updatedAt",
-            key: "updatedAt",
-            editable: false,
-            render: (text, record) => {
-                const date = new Date(text);
-                return date.toLocaleDateString();
-            },
-            sorter: (a, b) => a.locality.localeCompare(b.locality)
         },
         {
             title: 'Operación',
