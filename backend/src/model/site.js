@@ -69,6 +69,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     siteAddress: { type: String },
     gallery: [],
     owner: { type: Schema.Types.ObjectId, ref: 'User' },
-})
+},
+    { timestamps: true })
 
 module.exports = model("Site", siteSchema) // Después mongo le pone la s (users)
