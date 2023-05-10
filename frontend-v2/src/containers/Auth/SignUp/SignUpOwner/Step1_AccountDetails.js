@@ -53,7 +53,6 @@ const AccountDetails = ({ setStep }) => {
   const onSubmit = (data) => {
     actions.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
     setStep(2); // Pasar a la siguiente página de registro
-    window.scrollTo(0,0);
   };
 
   return (
