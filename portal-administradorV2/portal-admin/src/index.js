@@ -6,16 +6,19 @@ import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 // import { CookiesProvider } from "react-cookie";
 import { AuthProvider } from './context/AuthProvider'
+import { UncheckedSitesProvider } from './context/UncheckedSitesProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
-    <AuthProvider>
-        <BrowserRouter>
-          <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
-            <App />
-          </GoogleOAuthProvider>
-        </BrowserRouter>
-    </AuthProvider>
- 
+  <AuthProvider>
+    <UncheckedSitesProvider>
+      <BrowserRouter>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
+          <App />
+        </GoogleOAuthProvider>
+      </BrowserRouter>
+    </UncheckedSitesProvider>
+  </AuthProvider>
+
 );
