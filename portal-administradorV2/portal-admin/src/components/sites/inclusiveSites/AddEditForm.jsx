@@ -2,10 +2,11 @@ import { Button, Form, Input, message, Space, Select, Popconfirm, TimePicker, Ro
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import MapOfGoogleMaps from './MapOfGoogleMaps';
 import axios from "../../../api/axios";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import UploadImage from './UploadImage';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
+import UncheckedSitesContext from "../../../context/UncheckedSitesProvider";
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -24,6 +25,8 @@ const AddEditInclusiveSite = ({ site }) => {
         Sabado: site.schedule && site.schedule["Sabado"] ? site.schedule["Sabado"] : { start: null, end: null },
         Domingo: site.schedule && site.schedule["Domingo"] ? site.schedule["Domingo"] : { start: null, end: null },
     });
+    const { updateUncheckedSites } = useContext(UncheckedSitesContext);
+
 
     const action = async () => {
         try {
@@ -45,6 +48,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     message.destroy("key-loading")
                     if (res.status === 200) {
                         message.success(res.data.message);
+                        await updateUncheckedSites();
                     } else message.warning(res.status + " - Respuesta del servidor desconocida");
 
                 } catch (error) {
@@ -66,6 +70,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     message.destroy("key-loading")
                     if (res.status === 200) {
                         message.success(res.data.message);
+                        await updateUncheckedSites();
                         setSiteStatus("Aprobado");
                     } else message.warning(res.status + " - Respuesta del servidor desconocida");
                 } catch (error) {
