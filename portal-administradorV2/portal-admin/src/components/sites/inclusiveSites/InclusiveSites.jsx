@@ -131,6 +131,30 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             dataIndex: "inclusiveElements",
             key: "inclusiveElements",
             editable: true,
+            render: (elements) => {
+                const aux = elements.map((element) => {
+                    return ( <Tag color={"blue"}>{element}</Tag>);
+                })
+                return aux;
+            }
+        },
+        {
+            title: 'Horario*',
+            dataIndex: "schedule",
+            key: "schedule",
+            editable: true,
+            render: (schedule) => {
+                if (schedule) {
+                    const aux = Object.entries(schedule).map(([day, times]) => {
+                        if(times.start && times.end ) return ( <Tag color={"green"}> {day.slice(0, 2)} {times.start}-{times.end}</Tag> );
+                        else return ( <Tag> {day.slice(0, 2)} Cerrado</Tag> );
+                    })
+                    return aux
+
+                } else {
+                    return "-"
+                }
+            }
         },
         {
             title: 'Dirección*',

@@ -21,6 +21,36 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     //         thumb_url: { type: String }
     //     }
     // },
+    schedule: {
+        Lunes: {
+            start: { type: String },
+            end: { type: String },
+        },
+        Martes: { 
+            start: { type: String },
+            end: { type: String },
+        },
+        Miercoles: { 
+            start: { type: String },
+            end: { type: String },
+        },
+        Jueves: { 
+            start: { type: String },
+            end: { type: String },
+        },
+        Viernes: { 
+            start: { type: String },
+            end: { type: String },
+        },
+        Sabado: { 
+            start: { type: String },
+            end: { type: String },
+        },
+        Domingo: { 
+            start: { type: String },
+            end: { type: String },
+        },
+    },
     siteAddress: { type: String },
     location: {
         // id: { type: Number },

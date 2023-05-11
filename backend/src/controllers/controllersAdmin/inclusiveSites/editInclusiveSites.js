@@ -107,6 +107,7 @@ const editInclusiveSites = async (req, res) => {
             category: inputs.category,
             contactNumber: inputs.contactNumber,
             inclusiveElements: inputs.inclusiveElements,
+            schedule: inputs.schedule,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
