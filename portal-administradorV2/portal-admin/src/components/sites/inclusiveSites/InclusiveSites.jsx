@@ -23,7 +23,7 @@ const rules = (dataIndex) => {
 };
 
 let editedObject = {};
-const ManageInclusiveSites = () => {
+const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState("");
@@ -31,13 +31,15 @@ const ManageInclusiveSites = () => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
+        
         axios.get('/getInclusiveSites', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
+            if(isAnySitePending === true) setSearchedText('Pendiente');
     }, [])
-
-    let isEditing = (record) => record._id === editingKey;
+    
+    //let isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
         console.log("record: ", record)
@@ -98,6 +100,7 @@ const ManageInclusiveSites = () => {
                     || String(record.inclusiveElements).toLocaleLowerCase().includes(value.toLocaleLowerCase())
                     || String(record.locality).toLocaleLowerCase().includes(value.toLocaleLowerCase())
                     || String(record.neighborhood).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+                    || String(record.status).toLocaleLowerCase().includes(value.toLocaleLowerCase())
             }
         },
         {
@@ -318,6 +321,7 @@ const ManageInclusiveSites = () => {
                                 enterButton
                                 onSearch={(value) => {
                                     setSearchedText(value);
+                                    setIsAnySitePending(value);
                                 }}
                             />
                         </AutoComplete>

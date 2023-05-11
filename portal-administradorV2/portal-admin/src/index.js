@@ -9,7 +9,7 @@ import { AuthProvider } from './context/AuthProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+
     <AuthProvider>
         <BrowserRouter>
           <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
@@ -17,5 +17,5 @@ root.render(
           </GoogleOAuthProvider>
         </BrowserRouter>
     </AuthProvider>
-  </React.StrictMode>
+ 
 );

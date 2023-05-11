@@ -24,7 +24,7 @@ const addInclusiveSites = require("./inclusiveSites/addInclusiveSites")
 const editInclusiveSites = require("./inclusiveSites/editInclusiveSites")
 const getInclusiveSites = require("./inclusiveSites/getInclusiveSites")
 const deleteInclusiveSites = require("./inclusiveSites/deleteInclusiveSites")
-
+const siteNotification = require("./notifications/siteNotifications")
 
 module.exports = {
     adminLogin,
@@ -53,4 +53,5 @@ module.exports = {
     getInclusiveSites,
     editInclusiveSites,
     deleteInclusiveSites,
+    siteNotification
 }

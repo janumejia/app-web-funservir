@@ -120,6 +120,9 @@ app.post("/addNeighborhoods", verifyTokenAdmin, controllersAdmin.addNeighborhood
 app.post("/editNeighborhoods", verifyTokenAdmin, controllersAdmin.editNeighborhoods)
 app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighborhoods)
 
+//Notificaciones
+app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)
+
 // custom 404
 // app.use((req, res, next) => {
 //     res.status(404).json({ message: 'Upss, ruta no encontrada' });

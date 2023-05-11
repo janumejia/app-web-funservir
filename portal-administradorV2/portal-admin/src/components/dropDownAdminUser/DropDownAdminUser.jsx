@@ -28,12 +28,9 @@ const menu = (
   />
 );
 
-const handleButtonClick = (e) => {
-  console.log("click left button", e);
-};
 
 const DropDownAdminuser = ({name}) => (
-    <Dropdown.Button id="usrBtn" onClick={handleButtonClick} overlay={menu} icon={<UserOutlined />}>
+    <Dropdown.Button id="usrBtn" overlay={menu} icon={<UserOutlined />}>
         {name}
     </Dropdown.Button>
 );

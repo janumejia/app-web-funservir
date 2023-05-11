@@ -25,7 +25,23 @@
 .ant-space {
   display: grid;
   justify-content: space-between;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto  auto;
   align-content: flex-end;
 
+}
+
+button.link {
+	font-family: "Verdana" sans-serif;
+	font-size: 1em;
+	text-align: left;
+	color: #069;
+	background: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+}
+
+.notification:hover{
+  cursor: pointer;
 }

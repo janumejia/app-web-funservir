@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import {Routes, Route, Link} from "react-router-dom"
+import { useContext, useState } from 'react';
+import { Routes, Route, Link } from "react-router-dom"
 import Users from "../users/Users"
 import InclusiveElements from "../inclusiveElements/InclusiveElements";
 import InclusiveSites from "../sites/inclusiveSites/InclusiveSites";
@@ -7,12 +7,12 @@ import Locations from "../sites/locations/Locations";
 import Neighborhoods from "../sites/neighborhoods/Neighborhoods";
 import Categories from "../categories/Categories"
 import DropDownAdminuser from "../dropDownAdminUser/DropDownAdminUser";
+import UncheckedSitesNotification from './UncheckedSitesNotification';
 import React from "react";
 import "antd/dist/antd.min.css";
 import "./main.css";
 import jwt_decode from "jwt-decode";
 import {
-  CalendarOutlined,
   SmileOutlined,
   AlertOutlined,
   AppstoreOutlined,
@@ -23,9 +23,9 @@ import AuthContext from "../../context/AuthProvider";
 
 const { Header, Content, Sider } = Layout;
 
-const options = ["Usuarios", "Elementos Inclusivos","Categorias"]; //Estos son los menus
-const url = ["users", "elements","categories"]; //Estas son las URL
-const items2 = [SmileOutlined, AlertOutlined,AppstoreOutlined].map(
+const options = ["Usuarios", "Elementos Inclusivos", "Categorias"]; //Estos son los menus
+const url = ["users", "elements", "categories"]; //Estas son las URL
+const items2 = [SmileOutlined, AlertOutlined, AppstoreOutlined].map(
   (icon, index) => {
     return {
       key: url[index],
@@ -33,7 +33,7 @@ const items2 = [SmileOutlined, AlertOutlined,AppstoreOutlined].map(
       label: `${options[index]}`,
       children: new Array(1).fill(null).map((_, j) => {
         const subKey = index * 4 + j + 1;
-        return {          
+        return {
           key: subKey,
           label: (<Link to={url[index]}>{`Gestionar ${options[index]}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aquí
         };
@@ -50,7 +50,7 @@ const submenuManageSites = {
   key: "",
   icon: React.createElement(CompassOutlined),
   label: `Gestionar sitios`,
-  children: optionsManageSites.map( (option, index) => {
+  children: optionsManageSites.map((option, index) => {
     return {
       key: itemKey[index],
       label: (<Link to={optionsUrl[index]}>{`Gestionar ${option}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aquí
@@ -62,71 +62,77 @@ items2.push(submenuManageSites); // Agregamos el objeto anterior en la ultima po
 
 const MainComponent = () => {
   const { auth } = useContext(AuthContext); // Aquí podemos consultar el token
-
-  let href=window.location.href.split('/');
-  href=href[3]
+  const [sitiosPendientes, setSitiosPendientes] = useState(null);
+  
+  let href = window.location.href.split('/');
+  href = href[3]
   const token = jwt_decode(localStorage.getItem('token'));
-  return(
-  <> {/*Los links deben ir dentro del contexto del Router*/}
+  return (
+    <> {/*Los links deben ir dentro del contexto del Router*/}
 
-    <Layout
-    style={{
-      minHeight: '100vh',
-    }}
-  >
-    <Header className="header">
-      <Space>
-      <Link to="/dashboard"><div className="logo"><img src="/funservirLogo.jpg" alt="Funservir Logo"/></div></Link>
-      <DropDownAdminuser name={token.name}></DropDownAdminuser>
-      </Space>
-    </Header>
-    
-    <Layout>
-      <Sider width={200} className="site-layout-background">
-        <Menu
-          mode="inline"
-          style={{
-            height: "100%",
-            borderRight: 0
-          }}
-          items={items2}
-          defaultOpenKeys={[href]} //Ultimar detalles para que quede seleccionado también
-        />
-      </Sider>
       <Layout
         style={{
-          padding: "0 24px 24px"
+          minHeight: '100vh',
         }}
       >
-        <Breadcrumb
-          style={{
-            margin: "16px 0"
-          }}
-        >
-        </Breadcrumb>
-        <Content
-          className="site-layout-background"
-          style={{
-            padding: 24,
-            margin: 0,
-            minHeight: 280
-          }}
-        >
-          <Routes>
-          <Route path="/elements" element={<InclusiveElements/>}/>
-          <Route path="/users" element={<Users/>}/>
-          <Route path="/categories" element={<Categories />}/>
-          <Route path="/sites" element={<InclusiveSites/>}/>
-          <Route path="/inclusiveSites" element={<InclusiveSites/>}/>
-          <Route path="/locations" element={<Locations/>}/>
-          <Route path="/neighborhoods" element={<Neighborhoods/>}/>
-          </Routes>
-        </Content>
+        <Header className="header">
+          <Space>
+            <Link to="/dashboard"><div className="logo"><img src="/funservirLogo.jpg" alt="Funservir Logo" /></div></Link>
+            <Space>
+              <Space>
+                <UncheckedSitesNotification filtrarSitios={setSitiosPendientes}></UncheckedSitesNotification>
+              </Space>
+              <DropDownAdminuser name={token.name}></DropDownAdminuser>
+            </Space>
+          </Space>
+        </Header>
+
+        <Layout>
+          <Sider width={200} className="site-layout-background">
+            <Menu
+              mode="inline"
+              style={{
+                height: "100%",
+                borderRight: 0
+              }}
+              items={items2}
+              defaultOpenKeys={[href]} //Ultimar detalles para que quede seleccionado también
+            />
+          </Sider>
+          <Layout
+            style={{
+              padding: "0 24px 24px"
+            }}
+          >
+            <Breadcrumb
+              style={{
+                margin: "16px 0"
+              }}
+            >
+            </Breadcrumb>
+            <Content
+              className="site-layout-background"
+              style={{
+                padding: 24,
+                margin: 0,
+                minHeight: 280
+              }}
+            >
+              <Routes>
+                <Route path="/elements" element={<InclusiveElements />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/sites" element={<InclusiveSites />} />
+                <Route path="/inclusiveSites" element={<InclusiveSites isAnySitePending={sitiosPendientes} setIsAnySitePending={setSitiosPendientes}/>} />
+                <Route path="/locations" element={<Locations />} />
+                <Route path="/neighborhoods" element={<Neighborhoods />} />
+              </Routes>
+            </Content>
+          </Layout>
+        </Layout>
       </Layout>
-    </Layout>
-  </Layout>
-  </>
+    </>
   )
-        };
+};
 
 export default MainComponent;
