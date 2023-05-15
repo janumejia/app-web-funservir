@@ -23,6 +23,7 @@ const editInclusiveSites = async (req, res) => {
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        // schedule se verifica más abajo
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         { input: 'locality', dataType: 'string', regex: localityRegex },
@@ -61,10 +62,24 @@ const editInclusiveSites = async (req, res) => {
         }
     }
 
+    // Verificación de schedule
+    const validateTime = (schedule) => {
+        const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+        for (let day in schedule) {
+            const start = schedule[day]["start"];
+            const end = schedule[day]["end"];
+            if ((start !== null && !timeRegex.test(start)) || (end !== null && !timeRegex.test(end))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    if (!validateTime(inputs.schedule)) return res.status(422).json({ message: `El valor de la fecha no es válido` });
 
     try {
         // Validar que el _id del dueño de sitio exista
-        if(inputs.owner !== "") {
+        if (inputs.owner !== "") {
             const userExist = await User.findById(inputs.owner);
             if (!userExist) return res.status(404).json({ message: "No existe un usuario con ese _id" });
         }
@@ -115,7 +130,7 @@ const editInclusiveSites = async (req, res) => {
             $push: { gallery: { $each: uploadRes } },
             // owner: (inputs.owner === "") ? ObjectId(inputs.owner) : ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
         }
-        if(inputs.owner === ""){
+        if (inputs.owner === "") {
             update['$unset'] = { owner: "" };
         } else {
             update['owner'] = ObjectId(inputs.owner);
@@ -135,7 +150,7 @@ const editInclusiveSites = async (req, res) => {
             { $pull: { associatedSites: ObjectId(inputs._id) } }
         );
 
-        if(inputs.owner !== ""){
+        if (inputs.owner !== "") {
             // Agregar el sitio a la lista de sitios del usuario correspondiente, solo si aún no está presente
             const query2 = { _id: ObjectId(inputs.owner) };
             const update2 = {

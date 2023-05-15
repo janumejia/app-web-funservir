@@ -5,7 +5,7 @@ const User = require("../../../model/user")
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imageRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -19,6 +19,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        // schedule se verifica más abajo
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         { input: 'locality', dataType: 'string', regex: localityRegex },
@@ -56,6 +57,59 @@ const addInclusiveSites = async (req, res) => {
         }
     }
 
+    // Verificación de schedule
+    const validateTime = (schedule) => {
+        const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+        for (let day in schedule) {
+            const start = schedule[day]["start"];
+            const end = schedule[day]["end"];
+            if ((start !== null && !timeRegex.test(start)) || (end !== null && !timeRegex.test(end))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    if (!validateTime(inputs.schedule)) return res.status(422).json({ message: `El valor de la fecha no es válido` });
+
+    // Validación de imagen enviada
+    const isBase64 = (str) => {
+        try {
+            return Buffer.from(str, 'base64').toString('base64') === str;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    const isImageValid = (base64Image) => {
+        const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+        if (!isBase64(base64Image)) {
+            return false;
+        }
+        const sizeInBytes = Buffer.byteLength(base64Image, 'base64');
+        return sizeInBytes <= maxSize;
+    }
+
+    
+    const validateImages = (images) => {
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            if (!imageRegex.test(image)) {
+                return false;
+            }
+            const base64Image = image.split(",")[1];
+            if (!isImageValid(base64Image)) {
+                return false;
+            }
+        }
+        
+        return true;
+    };
+
+    // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
+    // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
+    if (!validateImages(inputs.imgToAdd)) return res.status(422).json({ message: `La imagen no es válida por su formato o tamaño` });
+
     try {
         // Validar que el _id del dueño de sitio exista
         const userExist = await User.findOne({ '_id': inputs.owner });
@@ -92,7 +146,7 @@ const addInclusiveSites = async (req, res) => {
         try {
             const savedSite = await newInclusiveSites.save(); // Guardamos el sitios. Tener en cuenta que si el sitio ya existe se arroja el error con código 11000
             //const a = await InclusiveSites.findById(savedSite._id).populate('owner', {name:1});
-            
+
             // Procedemos a guardar también el sitio en el arreglo de sitios del usuario correspondiente
             const query = { _id: ObjectId(inputs.owner), associatedSites: { $ne: savedSite._id } }; // Verificar que el sitio no existe ya en el arreglo
             const update = {

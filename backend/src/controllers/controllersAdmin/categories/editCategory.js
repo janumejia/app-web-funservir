@@ -9,7 +9,6 @@ const editCategory = async (req, res) => {
     const dataArray = [
         { input: '_id', dataType: 'string', regex: _idMongooseRegex },
         { input: 'name', dataType: 'string', regex: nameCategoryRegex },
-        // Falta verificar: imgToAdd e imgToDelete
     ]
 
     /* Sanitización entradas */
