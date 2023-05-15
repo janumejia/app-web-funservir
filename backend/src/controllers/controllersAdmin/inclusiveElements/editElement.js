@@ -6,6 +6,10 @@ const { ...regex } = require("../../../regex") // Traemos los regex necesarios p
 
 const editElement = async (req, res) => {
     const { ...inputs } = req.body;
+
+    // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+    if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
+
     const imageUrl = inputs.imageUrl
     const name = inputs.name
 

@@ -4,8 +4,12 @@ const { ...regex } = require("../../../regex") // Traemos los regex necesarios p
 
 const addInclusiveElement = async (req, res) => {
   const { ...inputs } = req.body;
+
+  // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+  if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
+
   const name = inputs.name;
-  const image = inputs.image
+  const image = inputs.image;
 
   // Definición de las variables que esperamos
   const dataArray = [
@@ -60,7 +64,7 @@ const addInclusiveElement = async (req, res) => {
 
   // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
   // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
-  if(!isImageValid(image.split(",")[1])) return res.status(422).json({ message: `La imagen no es válido por su formato o tamaño` });
+  if (!isImageValid(image.split(",")[1])) return res.status(422).json({ message: `La imagen no es válido por su formato o tamaño` });
 
   try {
     const element = await InclusiveElement.findOne({ 'name': name });

@@ -23,6 +23,7 @@ module.exports = {
     localityRegex: generalAlphanumeric(1,100),
     neighborhoodRegex: generalAlphanumeric(1,100),
     timeRegex: new RegExp(/^([01]\d|2[0-3]):([0-5]\d)$/),
+    imgToDeleteRegex: new RegExp(/^[a-zA-Z0-9_.\/-]+$/),
 
     // imgRegex:
 
