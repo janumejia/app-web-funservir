@@ -5,51 +5,66 @@ const { nameNeighborhoodRegex, nameAssociatedLocalityRegex } = require("../../..
 
 const addNeighborhoods = async (req, res) => {
 
-    const { name, associatedLocality } = req.body;
+    const { ...inputs } = req.body;
 
-    /* Sanitización entradas */
-    // 1) Validar el tipo de dato
-    if (typeof (name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    if (typeof (associatedLocality) !== 'string') return res.status(422).json({ message: "Tipo de dato de localidad asociada no es válido" });
+    // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+    if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
 
-    // 2) Validar si cumple con los caracteres permitidos
-    const isValidName = nameNeighborhoodRegex.test(name);
-    const isValidAssociatedLocality = nameAssociatedLocalityRegex.test(associatedLocality);
+    const dataArray = [
+        { input: 'name', dataType: 'string', regex: nameNeighborhoodRegex },
+        { input: 'associatedLocality', dataType: 'string', regex: nameAssociatedLocalityRegex },
+    ]
 
-    if (isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" });
-    if (isValidAssociatedLocality === false) return res.status(422).json({ message: "Formato de localidad asociada no es válido" }); // Caso malo
-    /* Fin sanitización entradas */
+    // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
+    // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
+    const validateInput = (input, dataName, dataType, regex) => {
+        if (dataType === 'string') {
+            return typeof input === 'string' && regex.test(input);
+        }
+        if (dataType === 'array') {
+            return Array.isArray(input) && input.every(element => regex.test(element)); // Método every para iterar sobre cada uno de los elementos del arreglo y comprobar si cada elemento cumple con la expresión regular
+        }
+        if (dataType === 'object') {
+            return typeof input === 'object' && input !== null &&
+                dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
+                    if (requiredInput !== dataName) return true;
+                    return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
+                });
+        }
+        return false;
+    };
 
-    else { // Caso bueno
-        // Comprobamos primero que no exista ese barrio en la bd
-        // let doesThisNeighborhoodExist = false;
-        Neighborhoods.findOne({ name }).then((element) => {
-            if (element) {
-                // doesThisNeighborhoodExist = true;
-                res.status(409).json({ message: "Ya existe este barrio" })
-            } else {
-                // Y también comprobamos que la localidad asociada exista
-                Location.findOne({ 'name': associatedLocality }).then((element) => {
-                    if (element) {
-                        const newNeighborhoods = new Neighborhoods({
-                            name,
-                            associatedLocality
-                        })
-                        newNeighborhoods.save().then((element) => { // Si todo sale bien...
-                            res.status(200).json({ message: "Barrio creado correctamente", element })
-                        })
-                            .catch((error) => {
-                                console.error(error)
-                                res.status(500).json({ message: "Error en creación de barrio" })
-                            })
+    // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+    // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
+    for (const { input, dataType, regex } of dataArray) {
+        const inputValue = inputs[input];
+        if (!validateInput(inputValue, input, dataType, regex)) {
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
+        }
+    }
 
-                    } else {
-                        res.status(404).json({ message: "No existe esta localidad asociada " + associatedLocality })
-                    }
-                })
-            }
-        })
+    // Comprobamos primero que no exista ese barrio en la bd
+    try {
+        const existingNeighborhood = await Neighborhoods.findOne({ name: inputs.name });
+        if (existingNeighborhood) {
+            return res.status(409).json({ message: "Ya existe este barrio" });
+        }
 
+        const associatedLocality = await Location.findOne({ name: inputs.associatedLocality });
+        if (!associatedLocality) {
+            return res.status(404).json({ message: "No existe esta localidad asociada: " + inputs.associatedLocality });
+        }
+
+        const newNeighborhood = new Neighborhoods({
+            name: inputs.name,
+            associatedLocality: inputs.associatedLocality,
+        });
+        const savedNeighborhood = await newNeighborhood.save();
+
+        res.status(200).json({ message: "Barrio creado correctamente", element: savedNeighborhood });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error en creación de barrio" });
     }
 }
 
