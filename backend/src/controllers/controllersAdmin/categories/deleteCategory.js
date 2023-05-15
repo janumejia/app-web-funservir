@@ -8,7 +8,6 @@ const deleteCategory = async(req, res) =>{
     // Definición de las variables que esperamos
     const dataArray = [
         { input: '_id', dataType: 'string', regex: _idMongooseRegex },
-        // Falta verificar: imgToAdd e imgToDelete
     ]
 
     /* Sanitización entradas */

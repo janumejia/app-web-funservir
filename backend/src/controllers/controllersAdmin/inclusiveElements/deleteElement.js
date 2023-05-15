@@ -1,29 +1,53 @@
 const Elements = require("../../../model/inclusiveElements.js");
 const cloudinary = require("../../../middlewares/cloudinary");
-const { _idMongooseRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
+const { ...regex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
-const deleteElement = async(req, res) =>{
+const deleteElement = async (req, res) => {
 
-    const {_id } = req.body;
-    // /* Sanitización entradas */
-    // // 1) Validar el tipo de dato
-    // if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
+    const { ...inputs } = req.body;
 
-    // // 2) Validar si cumple con los caracteres permitidos 
-    // const isValid_id = _idMongooseRegex.test(_id);
+    // Definición de las variables que esperamos
+    const dataArray = [
+        { input: '_id', dataType: 'string', regex: regex._idMongooseRegex },
+        { input: 'name', dataType: 'string', regex: regex.nameInclusiveElementRegex },
+    ]
 
-    // if(isValid_id == false) return res.json({ message: "Formato de _id no es válido" }); // Caso malo
-    // /* Fin sanitización entradas */
+    // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
+    // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
+    const validateInput = (input, dataName, dataType, regex) => {
+        if (dataType === 'string') {
+            return typeof input === 'string' && regex.test(input);
+        }
+        if (dataType === 'array') {
+            return Array.isArray(input) && input.every(element => regex.test(element)); // Método every para iterar sobre cada uno de los elementos del arreglo y comprobar si cada elemento cumple con la expresión regular
+        }
+        if (dataType === 'object') {
+            return typeof input === 'object' && input !== null &&
+                dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
+                    if (requiredInput !== dataName) return true;
+                    return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
+                });
+        }
+        return false;
+    };
+
+    // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+    // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
+    for (const { input, dataType, regex } of dataArray) {
+        const inputValue = inputs[input];
+        if (!validateInput(inputValue, input, dataType, regex)) {
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
+        }
+    }
 
 
-    await Elements.deleteOne({_id:_id})
-    .then((element)=>{
-        cloudinary.uploader.destroy(`inclusiveElements/${resto.name}`);
-        res.json({ message: "Usuario borrado correctamente", element});
-    })
-    .catch((error)=>{
-        res.json({message: "No se encontro el usuario o no se pudo eliminar"});
-    })
+    try {
+        const element = await Elements.deleteOne({ _id: inputs._id });
+        await cloudinary.uploader.destroy(`inclusiveElements/${inputs.name}`);
+        res.json({ message: "Elemento borrado correctamente", element });
+    } catch (error) {
+        res.json({ message: "No se encontró el elemento o no se pudo eliminar" });
+    }
 
 }
 

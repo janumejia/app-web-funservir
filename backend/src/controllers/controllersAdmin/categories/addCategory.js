@@ -8,7 +8,6 @@ const addCategory = async (req, res) => {
     // Definición de las variables que esperamos
     const dataArray = [
         { input: 'name', dataType: 'string', regex: nameCategoryRegex },
-        // Falta verificar: imgToAdd e imgToDelete
     ]
 
     /* Sanitización entradas */

@@ -22,6 +22,8 @@ module.exports = {
     locationRegex: new RegExp(/^[-]{0,1}\d{1,4}\.\d{1,20}$/),
     localityRegex: generalAlphanumeric(1,100),
     neighborhoodRegex: generalAlphanumeric(1,100),
+    timeRegex: new RegExp(/^([01]\d|2[0-3]):([0-5]\d)$/),
+
     // imgRegex:
 
     /* Localidades */
@@ -49,7 +51,7 @@ module.exports = {
 
     /* Elementos inclusivos */
     nameInclusiveElementRegex: generalAlphabetic(1,100),
-    // Falta regex para la imagen en base64
-    imageUrlRegex: new RegExp(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/),
+    imageRegex: new RegExp(/(^data:image\/(?:jpe?g|png|gif|bmp|webp|svg|ico|tiff?);base64,.*)/),
+    imageUrlRegex: new RegExp(/(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$)/),
 
 };

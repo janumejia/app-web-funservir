@@ -166,7 +166,7 @@ const ManageElements = () => {
 
     const handleDelete = (key) => {
         const newData = [...data];
-        const index = newData.findIndex((item) => key === item._id);
+        const index = newData.findIndex((item) => key._id === item._id);
         if (key !== "0") {
             axios.post('/deleteElement', { _id: key._id, name: key.name }, { headers: { 'token': localStorage.getItem("token") } })
                 .then((res) => {
