@@ -12,6 +12,9 @@ const addInclusiveSites = async (req, res) => {
     // Entradas: name, description, category, contactNumber, locality, neighborhood
     const { ...inputs } = req.body;
 
+        // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+        if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
+
     // Declaración de matriz de objetos, donde cada objeto representa un campo que se espera en el JSON de entrada
     const dataArray = [
         { input: 'name', dataType: 'string', regex: siteNameRegex },

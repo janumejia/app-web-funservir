@@ -8,6 +8,9 @@ const deleteInclusiveSites = async (req, res) => {
     // Entradas: _id
     const { ...inputs } = req.body;
 
+    // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+    if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
+
     // Definición de las variables que esperamos
     const dataArray = [
         { input: '_id', dataType: 'string', regex: _idMongooseRegex },
@@ -44,19 +47,19 @@ const deleteInclusiveSites = async (req, res) => {
     /* Fin sanitización entradas */
 
     InclusiveSites.deleteOne({ _id: inputs._id })
-        .then( async (element) => {
-            if (element.deletedCount !== 0){
-                
+        .then(async (element) => {
+            if (element.deletedCount !== 0) {
+
                 // Buscamos los usuarios que tienen este sitio inclusivo asociado y lo actualizamos (lo desasociamos)
                 await User.updateMany(
                     // Filtro para seleccionar los documentos que contienen el _id en el arreglo sitios
                     { "associatedSites": { $elemMatch: { $eq: ObjectId(inputs._id) } } },
                     // Operador $pull para eliminar el objeto que contiene el _id del arreglo sitios
                     { $pull: { associatedSites: ObjectId(inputs._id) } }
-                    );
-                
+                );
+
                 res.status(200).json({ message: "Sitio inclusivo borrado correctamente" });
-                    
+
             }
             else res.status(400).json({ message: "No se encontró el sitio inclusivo" });
         })
