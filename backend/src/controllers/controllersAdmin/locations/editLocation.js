@@ -3,44 +3,65 @@ const Location = require("../../../model/locations");
 const { _idMongooseRegex, nameLocationRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 
 const editLocation = async (req, res) => {
-    const { _id, name } = req.body;
-    
-    /* Sanitización entradas */
-    // 1) Validar el tipo de dato
-    if(typeof(_id) !== 'string') return res.status(422).json({ message: "Tipo de dato de _id no es válido" });
-    if(typeof(name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    
-    // 2) Validar si cumple con los caracteres permitidos 
-    const isValid_id = _idMongooseRegex.test(_id);
-    const isValidName = nameLocationRegex.test(name);
+    const { ...inputs } = req.body;
 
-    if(isValid_id == false) return res.status(422).json({ message: "Formato de _id no es válido" });
-    if(isValidName == false) return res.status(422).json({ message: "Formato de nombre no es válido" }); // Caso malo
-    /* Fin sanitización entradas */
-    
-    let doesThisNameExist = false;
-    await Location.findOne({ name }).then((element) => {
-        if (element) doesThisNameExist = true;
-    })
+    // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+    if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
 
-    let doesThis_idExist = false;
-    await Location.findOne({ _id }).then((element) => {
-        if (element) doesThis_idExist = true;
-    })
+    const dataArray = [
+        { input: '_id', dataType: 'string', regex: _idMongooseRegex },
+        { input: 'name', dataType: 'string', regex: nameLocationRegex },
+    ]
 
-    // Retorna Error si existe el nombre o si no existe el _id:
-    if(doesThisNameExist) return res.status(409).json({ message: "Ya existe esta localidad" });
-    else if (!doesThis_idExist) return res.status(404).json({ message: "No existe el _id" });
+    // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
+    // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
+    const validateInput = (input, dataName, dataType, regex) => {
+        if (dataType === 'string') {
+            return typeof input === 'string' && regex.test(input);
+        }
+        if (dataType === 'array') {
+            return Array.isArray(input) && input.every(element => regex.test(element)); // Método every para iterar sobre cada uno de los elementos del arreglo y comprobar si cada elemento cumple con la expresión regular
+        }
+        if (dataType === 'object') {
+            return typeof input === 'object' && input !== null &&
+                dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
+                    if (requiredInput !== dataName) return true;
+                    return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
+                });
+        }
+        return false;
+    };
 
-    // Edita el registro después de pasar los filtros
-    const query = { _id: _id };
-    const update = {
-        name: name,
+    // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+    // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
+    for (const { input, dataType, regex } of dataArray) {
+        const inputValue = inputs[input];
+        if (!validateInput(inputValue, input, dataType, regex)) {
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
+        }
     }
-    await Location.findByIdAndUpdate(query, update);
-    let ans = await Location.findOne(query);
-    res.status(200).json({message: "Localidad actualizada correctamente", ans});
 
+    try {
+        const existingName = await Location.findOne({ name: inputs.name });
+        if (existingName) {
+            return res.status(409).json({ message: "Ya existe esta localidad" });
+        }
+
+        const existingId = await Location.findOne({ _id: inputs._id });
+        if (!existingId) {
+            return res.status(404).json({ message: "No existe el _id" });
+        }
+
+        const query = { _id: inputs._id };
+        const update = { name: inputs.name };
+        await Location.findByIdAndUpdate(query, update);
+        const updatedElement = await Location.findOne(query);
+
+        res.status(200).json({ message: "Localidad actualizada correctamente", ans: updatedElement });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error al actualizar la localidad" });
+    }
 }
 
 module.exports = editLocation
