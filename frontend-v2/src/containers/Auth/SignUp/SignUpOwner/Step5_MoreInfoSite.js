@@ -47,7 +47,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   }, [register]);
 
   const aux1 = [];
-  const imgsCloudinary = state.data2.sitePhotos.map(async (img) => {
+  const imgsCloudinary = state?.data2?.sitePhotos?.map(async (img) => {
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(img.originFileObj);
