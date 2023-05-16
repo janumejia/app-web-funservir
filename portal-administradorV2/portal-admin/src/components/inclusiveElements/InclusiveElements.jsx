@@ -204,7 +204,17 @@ const ManageElements = () => {
             width: '40%',
             editable: true,
         },
-
+        {
+            title: 'Última actualización',
+            dataIndex: "updatedAt",
+            key: "updatedAt",
+            editable: false,
+            render: (text, record) => {
+                const date = new Date(text);
+                return date.toLocaleDateString();
+            },
+            sorter: (a, b) => a.locality.localeCompare(b.locality)
+        },
         {
             title: 'Operación',
             dataIndex: 'operation',
