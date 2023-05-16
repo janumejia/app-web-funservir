@@ -3,166 +3,108 @@ const cloudinary = require("../../../middlewares/cloudinary");
 const bcrypt = require("bcryptjs")
 const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
-const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, userTypeRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
+const { ...regex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
 
-// perform difference operation
-// elements of set a that are not in set b
-const A_and_Not_In_B = (setA, setB) => {
-    let differenceSet = new Set(setA)
-    for (let i of setB) {
-        differenceSet.delete(i)
-    }
-    return differenceSet
-}
-
 const addUser = async (req, res) => {
-    
-    const { name, lastName, email, password, dateOfBirth, gender, address, condition, isCaregiver, institution, userType, profilePicture } = req.body;
 
+    const { ...inputs } = req.body;
 
-    if (!name || !lastName || !email || !dateOfBirth || !gender || !password || !address || !isCaregiver || !userType) {
-        return res.status(400).json({ message: "Faltan campos" });
-    }
+    // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+    if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
 
-    /* Sanitización entradas */
-    // 1) Validar el tipo de dato
-    if (typeof (name) !== 'string') return res.status(422).json({ message: "Tipo de dato de nombre no es válido" });
-    if (typeof (lastName) !== 'string') return res.status(422).json({ message: "Tipo de dato de apellido no es válido" });
-    if (typeof (email) !== 'string') return res.status(422).json({ message: "Tipo de dato de correo no es válido" });
-    if (typeof (password) !== 'string') return res.status(422).json({ message: "Tipo de dato de contraseña no es válido" });
-    if (typeof (dateOfBirth) !== 'string') return res.status(422).json({ message: "Tipo de dato de fecha de nacimiento no es válido" });
-    if (typeof (gender) !== 'string') return res.status(422).json({ message: "Tipo de dato de genero no es válido" });
-    if (typeof (address) !== 'string') return res.status(422).json({ message: "Tipo de dato de dirección no es válido" });
-    if (typeof (condition) !== 'object') return res.status(422).json({ message: "Tipo de dato de discapacidades no es válido" }); // Este es el único de tipo object
-    if (typeof (isCaregiver) !== 'string') return res.status(422).json({ message: "Tipo de dato de ¿es tutor? no es válido" });
-    if (typeof (institution) !== 'string') return res.status(422).json({ message: "Tipo de dato de fundación no es válido" });
-    if (typeof (userType) !== 'string') return res.status(422).json({ message: "Tipo de dato de tipo de usuario no es válido" });
+    const dataArray = [
+        { input: 'name', dataType: 'string', regex: regex.nameUserRegex },
+        { input: 'lastName', dataType: 'string', regex: regex.lastNameUserRegex },
+        { input: 'email', dataType: 'string', regex: regex.emailRegex },
+        { input: 'password', dataType: 'string', regex: regex.passwordRegex },
+        // { input: 'dateOfBirth', dataType: 'string', regex: regex.emailRegex }, // Se válida más abajo de otra forma
+        { input: 'gender', dataType: 'string', regex: regex.genderRegex },
+        { input: 'address', dataType: 'string', regex: regex.addressRegex },
+        { input: 'condition', dataType: 'array', regex: regex.conditionRegex },
+        { input: 'isCaregiver', dataType: 'string', regex: regex.isCaregiverRegex },
+        { input: 'institution', dataType: 'string', regex: regex.institutionRegex },
+        { input: 'userType', dataType: 'string', regex: regex.userTypeRegex },
+        { input: 'profilePicture', dataType: 'string', regex: regex.profilePictureRegex },
 
-    // 2) Validar si cumple con los caracteres permitidos
-    const isValidName = nameUserRegex.test(name);
-    const isValidLastName = lastNameUserRegex.test(lastName);
-    // const isValidEmail = emailRegex.test(email); // Se hace más abajo
-    // const isValidPassword = passwordRegex.test(password); // igual
-    const isValidDateOfBirth = moment(dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
-    const isValidGender = genderRegex.test(gender);
-    const isValidAddress = addressRegex.test(address);
+    ]
 
-    const isValidCondition = () => {
-        let options = { Motriz: 0, Visual: 0, Auditiva: 0, Sensorial: 0, Comunicacion: 0, Mental: 0, Multiples: 0, Otra: 0 }; // Para llevar un conteo de las opciones enviadas y que no existan repetidas
-        for (const key in condition) {
-            if (typeof (condition[key]) !== 'string') return false;
-            switch (condition[key]) {
-                case ' Motriz ':
-                    if (options.Motriz > 0) return false;
-                    options.Motriz++;
-                    break;
-                case ' Visual ':
-                    if (options.Visual > 0) return false;
-                    options.Visual++;
-                    break;
-                case ' Auditiva ':
-                    if (options.Auditiva > 0) return false;
-                    options.Auditiva++;
-                    break;
-                case ' Sensorial ':
-                    if (options.Sensorial > 0) return false;
-                    options.Sensorial++;
-                    break;
-                case ' Comunicacion ':
-                    if (options.Comunicacion > 0) return false;
-                    options.Comunicacion++;
-                    break;
-                case ' Mental ':
-                    if (options.Mental > 0) return false;
-                    options.Mental++;
-                    break;
-                case ' Multiples ':
-                    if (options.Multiples > 0) return false;
-                    options.Multiples++;
-                    break;
-                case ' Otra ':
-                    if (options.Otra > 0) return false;
-                    options.Otra++;
-                    break;
-                default:
-                    return false;
-            }
+    // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
+    // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
+    const validateInput = (input, dataName, dataType, regex) => {
+        if (dataType === 'string') {
+            return typeof input === 'string' && regex.test(input);
         }
-        return true;
+        if (dataType === 'array') {
+            return Array.isArray(input) && input.every(element => regex.test(element)); // Método every para iterar sobre cada uno de los elementos del arreglo y comprobar si cada elemento cumple con la expresión regular
+        }
+        if (dataType === 'object') {
+            return typeof input === 'object' && input !== null &&
+                dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
+                    if (requiredInput !== dataName) return true;
+                    return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
+                });
+        }
+        return false;
+    };
+
+    // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+    // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
+    for (const { input, dataType, regex } of dataArray) {
+        const inputValue = inputs[input];
+        if (!validateInput(inputValue, input, dataType, regex)) {
+            return res.status(422).json({ message: `El valor de ${input} no es válido` });
+        }
     }
 
-    const isValidIsCaregiver = isCaregiverRegex.test(isCaregiver);
-    const isValidInstitution = institutionRegex.test(institution);
-    const isValidUserType = userTypeRegex.test(userType);
-
-
-    if (isValidName === false) return res.status(422).json({ message: "Formato de nombre no es válido" });
-    if (isValidLastName === false) return res.status(422).json({ message: "Formato de apellido no es válido" });
-    // if (isValidEmail === false) return res.status(422).json({ message: "Formato de correo no es válido" });
-    // if (isValidPassword === false) return res.status(422).json({ message: "Formato de contraseña no es válido" });
+    // Validación de fecha de nacimiento
+    const isValidDateOfBirth = moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
     if (isValidDateOfBirth === false) return res.status(422).json({ message: "Formato de fecha de nacimiento no es válido" });
-    if (isValidGender === false) return res.status(422).json({ message: "Formato de genero no es válido" });
-    if (isValidAddress === false) return res.status(422).json({ message: "Formato de dirección no es válido" });
-    if (isValidCondition() === false) return res.status(422).json({ message: "Formato de discapacidad no es válido" });
-    if (isValidIsCaregiver === false) return res.status(422).json({ message: "Formato de ¿es tutor? no es válido" });
-    if (isValidInstitution === false) return res.status(422).json({ message: "Formato de institución no es válido" });
-    if (isValidUserType === false) return res.status(422).json({ message: "Formato de tipo de usuario no es válido" }); // Caso malo
-
 
     // Validación del correo ingresado
-    const isValidEmail = typeof email === 'string' && validator.isEmail(email) ? true : false;
+    const isValidEmail = validator.isEmail(inputs.email) ? true : false;
     if (!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
 
     // Validación de la contraseña ingresada
-    const isValidPassword = typeof password === 'string' && validator.isStrongPassword(password) ? true : false;
+    const isValidPassword = validator.isStrongPassword(inputs.password) ? true : false;
     if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
-
-
     /* Fin sanitización entradas */
 
-
-
-    User.findOne({ email }).then(async (user) => {
-        if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
-
-        try {
-            const prflPic = (!profilePicture) ? randomAvatar(gender) : profilePicture;
-            const uploadRes = await cloudinary.uploader.upload(prflPic, {
-                upload_preset: "profile_pictures",
-                public_id: email
-            })
-
-            bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (err, hash) => {
-                if (err) return res.status(500).json({ error: err });
-
-                const newUser = new User({
-                    name,
-                    lastName,
-                    dateOfBirth,
-                    email,
-                    password: hash,
-                    gender,
-                    address,
-                    condition,
-                    isCaregiver,
-                    institution,
-                    userType,
-                    associatedSites: [],
-                    profilePicture: uploadRes.secure_url
-                });
-
-                await newUser.save().then((savedUser) => {
-                    return res.status(200).json({ message: "Usuario creado correctamente", element: savedUser });
-                }).catch((err) => {
-                    console.error(err);
-                    return res.status(500).json({ message: "Error al crear usuario" });
-                });
-            });
-        } catch (error) {
-            res.status(500).send(error);
+    try {
+        const user = await User.findOne({ email: inputs.email });
+        if (user) {
+            return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
         }
-    });
+
+        const prflPic = (!inputs.profilePicture) ? randomAvatar(inputs.gender) : inputs.profilePicture;
+        const uploadRes = await cloudinary.uploader.upload(prflPic, {
+            upload_preset: "profile_pictures",
+            public_id: inputs.email
+        });
+
+        const hash = await bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT));
+        const newUser = new User({
+            name: inputs.name,
+            lastName: inputs.lastName,
+            dateOfBirth: inputs.dateOfBirth,
+            email: inputs.email,
+            password: hash,
+            gender: inputs.gender,
+            address: inputs.address,
+            condition: inputs.condition,
+            isCaregiver: inputs.isCaregiver,
+            institution: inputs.institution,
+            userType: inputs.userType,
+            associatedSites: [],
+            profilePicture: uploadRes.secure_url
+        });
+
+        const savedUser = await newUser.save();
+        return res.status(200).json({ message: "Usuario creado correctamente", element: savedUser });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error al crear usuario" });
+    }
 }
 
 module.exports = addUser
