@@ -180,7 +180,7 @@ const editInclusiveSites = async (req, res) => {
         const updatedSite = await InclusiveSites.findByIdAndUpdate(query, update);
 
         // Eliminamos las imágenes del sitio inclusivo que se borraron en Cloudinary
-        await InclusiveSites.updateMany({ $pull: { gallery: { public_id: { $in: deletedImgs } } } });
+        await InclusiveSites.updateOne({ name: inputs.name }, { $pull: { gallery: { public_id: { $in: deletedImgs } } } });
 
         // Buscamos los usuarios que tienen este sitio inclusivo asociado y lo actualizamos (lo desasociamos)
         await User.updateMany(
