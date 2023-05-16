@@ -38,7 +38,7 @@ module.exports = {
     nameUserRegex: generalAlphabetic(1,100),
     lastNameUserRegex: generalAlphabetic(1,100),
     // dateOfBirth: se valida en el backend de otra forma
-    emailRegex: new RegExp(/^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+$/),
+    emailRegex: new RegExp(/^[^@+]+@/), // Para no permitir el signo de suma antes del @. Documentación: https://www.fastmail.help/hc/en-us/articles/360060591053-Plus-addressing-and-subdomain-addressing#:~:text=Plus%20addressing%20means%20any%20email,%2C%20sites%2C%20or%20mailing%20lists
     passwordRegex: new RegExp(/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/), // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
     genderRegex: new RegExp(/^(Masculino|Femenino|Otro)$/),
     addressRegex: new RegExp(/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s\.,-\/#]{5,255}$/),
@@ -46,6 +46,7 @@ module.exports = {
     isCaregiverRegex: new RegExp(/^(Si|No)$/),
     institutionRegex: generalAlphanumeric(0,255),
     userTypeRegex: new RegExp(/^(Regular|Propietario|Administrador)$/),
+    profilePictureRegex: new RegExp(/(^data:image\/(?:jpe?g|png|gif|bmp|webp|svg|ico|tiff?);base64,.*)|(^$)/), // Vació es válido
 
     /* Categorías */
     nameCategoryRegex: generalAlphabetic(1,100),
