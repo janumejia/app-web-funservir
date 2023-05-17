@@ -265,6 +265,7 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             title: 'Operación',
             dataIndex: 'operation',
             key: "operation",
+            width: "8%",
             fixed: "right",
             render: (_, record) => {
                 return (
