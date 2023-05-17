@@ -121,7 +121,6 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
         {
             title: 'Número de contacto*',
             dataIndex: "contactNumber",
-            ellipsis: true,
             key: "contactNumber",
             editable: true,
             sorter: (a, b) => a.contactNumber.localeCompare(b.contactNumber)
