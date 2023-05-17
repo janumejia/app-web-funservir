@@ -139,6 +139,18 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             }
         },
         {
+            title: 'Más información sobre inclusividad del sitio',
+            dataIndex: "moreInfoInclusivity",
+            key: "moreInfoInclusivity",
+            editable: true,
+            sorter: (a, b) => {
+                if (!a || !a.moreInfoInclusivity) a.moreInfoInclusivity = ""
+                if (!b || !b.moreInfoInclusivity) b.moreInfoInclusivity = ""
+
+                return a.moreInfoInclusivity.localeCompare(b.moreInfoInclusivity);
+            }
+        },
+        {
             title: 'Horario*',
             dataIndex: "schedule",
             key: "schedule",
@@ -234,6 +246,8 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
                         color = "green";
                     } else if (status === "Pendiente") {
                         color = "yellow";
+                    } else if (status === "Rechazado") {
+                        color = "red";
                     }
                 }
 

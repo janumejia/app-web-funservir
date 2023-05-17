@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 // Crea un objeto ClamAV para verificación de imágenes libres de virus
 // const clam = new NodeClam().init();
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imageRegex, _idMongooseRegexOrEmpty, imgToDeleteRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imageRegex, _idMongooseRegexOrEmpty, imgToDeleteRegex, siteStatusRegex, moreInfoInclusivityRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -26,6 +26,7 @@ const editInclusiveSites = async (req, res) => {
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        { input: 'moreInfoInclusivity', dataType: 'string', regex: moreInfoInclusivityRegex },
         // schedule se verifica más abajo
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
@@ -33,7 +34,8 @@ const editInclusiveSites = async (req, res) => {
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         { input: 'imgToDelete', dataType: 'array', regex: imgToDeleteRegex },
-        { input: 'owner', dataType: 'string', regex: _idMongooseRegexOrEmpty }
+        { input: 'owner', dataType: 'string', regex: _idMongooseRegexOrEmpty },
+        { input: 'status', dataType: 'string', regex: siteStatusRegex }
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -163,6 +165,7 @@ const editInclusiveSites = async (req, res) => {
             category: inputs.category,
             contactNumber: inputs.contactNumber,
             inclusiveElements: inputs.inclusiveElements,
+            moreInfoInclusivity: inputs.moreInfoInclusivity,
             schedule: inputs.schedule,
             siteAddress: inputs.siteAddress,
             location: inputs.location,

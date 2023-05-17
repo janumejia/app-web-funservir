@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker, Tag } from 'antd';
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
 import UploadComponent from './UploadComponent';
@@ -425,6 +425,12 @@ const ManageUsers = () => {
             dataIndex: "condition",
             key: "condition",
             editable: true,
+            render: (elements) => {
+                const aux = elements.map((element) => {
+                    return ( <Tag>{element}</Tag>);
+                })
+                return aux;
+            },
             sorter: (a, b) => a.condition.length - b.condition.length
         },
         {
