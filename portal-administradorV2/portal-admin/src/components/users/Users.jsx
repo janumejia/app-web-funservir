@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios'; // Ojo, se usa un archivo axios personalizado, para no tener que poner localhost:4000 a cada rato
 import "antd/dist/antd.min.css";
 import './index.css';
-import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker, Tag } from 'antd';
+import { Form, Input, Popconfirm, Table, Typography, Button, Space, Select, message, AutoComplete, DatePicker, Tag, Tooltip } from 'antd';
 import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
 import UploadComponent from './UploadComponent';
@@ -462,13 +462,17 @@ const ManageUsers = () => {
             render: (e) => {
                 let sites = '';
                 if (e) {
-                    e.forEach((e) => {
-                        sites += " • " + e.name + "\n";
-                    })
+                  sites = e.map((item) => (
+                    <Tooltip title={item.name} key={item.id}>
+                        <Tag key={item.id} color={"blue"} style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {item.name}
+                        </Tag>
+                    </Tooltip>
+                  ));
                 }
+              
                 return <div style={{ whiteSpace: 'pre-wrap' }}>{sites}</div>;
-            },
-            sorter: (a, b) => a.userType.localeCompare(b.userType)
+            }
         },
         {
             title: 'Operación',
