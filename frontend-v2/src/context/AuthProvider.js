@@ -39,14 +39,14 @@ const AuthProvider = (props) => {
               roles: res.data.data.userType,
             });
             setLoggedIn(true);
-            navigate('/', { replace: true });
+            // navigate('/', { replace: true });
   
           } else message.warning(res.status + " - Respuesta del servidor desconocida");
         }
       } catch (error) {
         setUser(null);
         setLoggedIn(false);
-        navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+        // navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
       }
     }
 
