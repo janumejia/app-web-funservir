@@ -15,6 +15,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     ratingCount: { type: Number },
     contactNumber: { type: String },
     inclusiveElements: [String],
+    moreInfoInclusivity: { type: String },
     // image: {
     //     type: {
     //         url: { type: String },

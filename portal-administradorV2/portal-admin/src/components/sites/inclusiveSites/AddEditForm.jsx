@@ -27,14 +27,8 @@ const AddEditInclusiveSite = ({ site }) => {
     });
     const { updateUncheckedSites } = useContext(UncheckedSitesContext);
 
-
-    const action = async () => {
+    const updateInfoSite = async (row) => {
         try {
-            const row = await form.validateFields();
-
-            console.log("row: ", row);
-            row.status = "Aprobado";
-
             message.open({
                 key: 'key-loading',
                 type: 'loading',
@@ -86,25 +80,18 @@ const AddEditInclusiveSite = ({ site }) => {
         }
     }
 
-    const actionReject = async () => {
-        try {
-            const response = await axios.post('/deleteInclusiveSites', { _id: site._id }, { headers: { 'token': localStorage.getItem("token") } });
+    const action = async () => {
+        const row = await form.validateFields();
+        row.status = "Aprobado";
 
-            if (response.status === 200) {
-                message.success(response.data.message);
-                navigate(`/dashboard`, { replace: true });
-            } else {
-                message.warning(response.status + " - Respuesta del servidor desconocida");
-            }
-        } catch (error) {
-            if (error.response.status >= 400 && error.response.status <= 499) {
-                message.warning(error.response.data.message);
-            } else if (error.response.status >= 500 && error.response.status <= 599) {
-                message.error(error.response.data.message);
-            } else {
-                message.warning("Respuesta del servidor desconocida");
-            }
-        }
+        await updateInfoSite(row);
+    }
+
+    const actionReject = async () => {
+        const row = await form.validateFields();
+        row.status = "Rechazado";
+
+        await updateInfoSite(row);
     };
 
 
@@ -202,7 +189,7 @@ const AddEditInclusiveSite = ({ site }) => {
                         {
                             required: true,
                             message: `¡Introduzca un descripción válida!`,
-                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/]){1,2000}$/,
+                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/,
                             type: 'string'
                         }
                     ]}
@@ -268,6 +255,25 @@ const AddEditInclusiveSite = ({ site }) => {
                     </Select>
                 </Form.Item>
                 <Form.Item
+                    name="moreInfoInclusivity"
+                    label="Más información sobre inclusividad del sitio"
+                    rules={[
+                        {
+                            // required: true,
+                            message: `¡Introduzca un texto válido!`,
+                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,255}$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input.TextArea
+                        rows={2}
+                        moreInfoInclusivity="moreInfoInclusivity"
+                        placeholder="Ingrese algo más sobre la inclusividad del sitio"
+                    />
+                    {/* <Input moreInfoInclusivity="moreInfoInclusivity" placeholder="Ingrese algo más sobre la inclusividad del sitio" /> */}
+                </Form.Item>
+                <Form.Item
                     name="siteSchedule"
                     label="Horario del sitio"
                 >
@@ -287,9 +293,9 @@ const AddEditInclusiveSite = ({ site }) => {
                                         onChange={async (value) => {
                                             const updatedSchedule = { ...schedule };
                                             if (value) {
-                                                updatedSchedule[day] = { start:  value[0]._d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}), end:  value[1]._d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}) };
+                                                updatedSchedule[day] = { start: value[0]._d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }), end: value[1]._d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) };
                                             } else {
-                                                updatedSchedule[day] = { start:  null, end: null };
+                                                updatedSchedule[day] = { start: null, end: null };
                                             }
                                             setSchedule(updatedSchedule);
                                         }}
@@ -408,7 +414,7 @@ const AddEditInclusiveSite = ({ site }) => {
                             </Button>
                         </Popconfirm>
 
-                        <Popconfirm title="¿Estás seguro de rechazar y eliminar el sitio?" okText="Rechazar y eliminar" cancelText="Seguir revisando" onConfirm={actionReject}>
+                        <Popconfirm title="¿Estás seguro de rechazar el sitio?" okText="Rechazar" cancelText="Seguir revisando" onConfirm={actionReject}>
                             <Button icon={<CloseOutlined />} danger>
                                 Rechazar
                             </Button>

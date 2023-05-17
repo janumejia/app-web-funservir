@@ -13,19 +13,19 @@ module.exports = {
 
     /* Sitios inclusivos */
     siteNameRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/),
-    descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/]){1,2000}$/),
+    descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/),
     categoryRegex: generalAlphanumeric(1,100),
     ratingRegex: new RegExp(/^([1-5].[0-9])$/),
     ratingCountRegex: new RegExp(/^\d{1,10}$/),
     contactNumberRegex: new RegExp(/^\d{10}$/), // Deben ser +57
     inclusiveElementsRegex: generalAlphanumeric(1,100),
+    moreInfoInclusivityRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,255}$/),
     locationRegex: new RegExp(/^[-]{0,1}\d{1,4}\.\d{1,20}$/),
     localityRegex: generalAlphanumeric(1,100),
     neighborhoodRegex: generalAlphanumeric(1,100),
     timeRegex: new RegExp(/^([01]\d|2[0-3]):([0-5]\d)$/),
     imgToDeleteRegex: new RegExp(/^[a-zA-Z0-9_.\/-]+$/),
-
-    // imgRegex:
+    siteStatusRegex: new RegExp(/^(Pendiente|Aprobado|Rechazado)$/),
 
     /* Localidades */
     nameLocationRegex: generalAlphanumeric(1,100),
@@ -37,7 +37,6 @@ module.exports = {
     /* Usuarios */
     nameUserRegex: generalAlphabetic(1,100),
     lastNameUserRegex: generalAlphabetic(1,100),
-    // dateOfBirth: se valida en el backend de otra forma
     emailRegex: new RegExp(/^[^@+]+@/), // Para no permitir el signo de suma antes del @. Documentación: https://www.fastmail.help/hc/en-us/articles/360060591053-Plus-addressing-and-subdomain-addressing#:~:text=Plus%20addressing%20means%20any%20email,%2C%20sites%2C%20or%20mailing%20lists
     passwordRegex: new RegExp(/^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/), // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
     genderRegex: new RegExp(/^(Masculino|Femenino|Otro)$/),
