@@ -208,8 +208,6 @@ const ManageUsers = () => {
         );
     };
 
-
-
     useEffect(() => {
         axios.get('/all_users', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
