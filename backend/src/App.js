@@ -134,9 +134,22 @@ app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)
 const host = process.env.BACKEND_HOST;
 const port = process.env.BACKEND_PORT
 
-app.listen(port, host, () => { // Sintaxis -> app.listen([port[, host[, backlog]]][, callback]) Más info en: https://www.geeksforgeeks.org/express-js-app-listen-function/
-    console.log(`Servidor funcionando en http://${host}:${port}`)
-    db() // Llamamos a la función db
-})
+// Para manejo de errores cuando no es posible conectarse con mongodb
+try {
+    db().then(() => {
+            app.listen(port, host, () => {
+                console.log(`Servidor funcionando en http://${host}:${port}`);
+            });
+        })
+        .catch((error) => {
+            console.error('Error al iniciar el servidor:', error);
+        });
+} catch (error) {
+    console.error('Error en la conexión con la base de datos:', error);
 
+    // Send an error response to the client
+    app.use((req, res, next) => {
+        res.status(500).json({ error: 'There was an error connecting to the database. Please try again later.' });
+    });
+}
 module.exports = app

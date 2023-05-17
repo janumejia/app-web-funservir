@@ -2,13 +2,18 @@
 require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const mongoose = require("mongoose")
 
-// Como es un objeto podemos traer las variables de entorno
-const BACKEND_MONGO_URL = `${process.env.BACKEND_MONGO_URL}`
-
-const db = async () => {
-    await mongoose.connect(BACKEND_MONGO_URL) // Al método mongoose le debemos pasar donde se encuentra la BD
-    .then(() => console.log("DB Funcionando")) // Si todo OK...
-    .catch(error => console.error(error)) // Si hay algún problema...
-}
+const db = () => {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(process.env.BACKEND_MONGO_URL)
+        .then(() => {
+          console.log('Database connected successfully');
+          resolve();
+        })
+        .catch((error) => {
+          console.error('Error connecting to the database:', error);
+          reject(error);
+        });
+    });
+  };
 
 module.exports = db
