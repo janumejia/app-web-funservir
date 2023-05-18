@@ -10,7 +10,7 @@ import {
   REGISTRATION_SITE_OWNER_PAGE,
   AGENT_PROFILE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
-  ADD_HOTEL_PAGE,
+  ADD_SITE_PAGE,
   PRICING_PLAN_PAGE,
   SINGLE_POST_PAGE,
   PRIVACY_PAGE,
@@ -49,7 +49,7 @@ export default function Layout() {
           </Content>
           {location.pathname === LISTING_POSTS_PAGE ||
           location.pathname === PRICING_PLAN_PAGE ||
-          location.pathname === ADD_HOTEL_PAGE ||
+          location.pathname === ADD_SITE_PAGE ||
           location.pathname === AGENT_PROFILE_PAGE ||
           location.pathname === CHANGE_PASSWORD_PAGE ||
           location.pathname === FORGET_PASSWORD_PAGE ||

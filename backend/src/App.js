@@ -66,15 +66,19 @@ app.use((err, req, res, next) => {
 
 /* Rutas de nuestra APP */
 app.get('/', (req, res) => { res.json({ message: "¡Backend Funcionando!" }); });
-app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/registerUser", controllers.registerUser)
 app.post("/registerOwner", controllers.registerOwner)
 app.post("/loginUser", controllers.login)
-app.get("/logout", controllers.logout)
 app.get("/status", controllers.tokenStatus)
 app.post("/uniqueEmailValidator", controllers.uniqueEmailValidator)
 app.post("/uniqueSiteNameValidator", controllers.uniqueSitenameValidator)
 
+// Usuario logueado
+app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
+app.get("/logout", verifyToken, controllers.logout)
+app.post("/addSite", verifyToken, controllers.addSite)
+
+// Busqueda de sitios
 app.get("/sites", controllers.getAllSites)
 app.get("/sites/search=:patternToSearch", controllers.searchSites)
 

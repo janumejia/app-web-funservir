@@ -1,17 +1,15 @@
-export default function addListingAction(state, payload) {
-  console.log("pasa por aqui")
-  console.log("state: ", state, " payload: ", payload);
+export default function addDataAction(state, payload) {
   return {
     ...state,
-    data: {
-      ...state.data,
+    dataAddSite: {
+      ...state.dataAddSite,
       ...payload,
     },
   };
 }
 
-export function addListingResetAction() {
+export function addDataResetAction() {
   return {
-    data: { guest: 0, bed: 0 },
+    dataAddSite: {},
   };
 }

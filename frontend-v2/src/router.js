@@ -20,7 +20,7 @@ import {
   REGISTRATION_PART_2_ACCOUNT_SETTINGS_PAGE, // Importación ruta agregar más info - banner lado izquierdo
   REGISTRATION_SITE_OWNER_PAGE, // Importación ruta dueño de sitio
   FORGET_PASSWORD_PAGE,
-  ADD_HOTEL_PAGE,
+  ADD_SITE_PAGE,
   AGENT_IMAGE_EDIT_PAGE,
   AGENT_PASSWORD_CHANGE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
@@ -248,7 +248,7 @@ export default function AppRoutes() {
 
         {/* Protected routes */}
         <Route
-          path={ADD_HOTEL_PAGE}
+          path={ADD_SITE_PAGE}
           element={
             <React.Suspense fallback={<Loader />}>
               <RequireAuth>

@@ -17,7 +17,7 @@ import Loader from 'components/Loader/Loader';
 import AuthProvider, { AuthContext } from 'context/AuthProvider';
 import useDataApi from 'library/hooks/useDataApi';
 import {
-  ADD_HOTEL_PAGE,
+  ADD_SITE_PAGE,
   AGENT_PROFILE_PAGE,
   AGENT_PROFILE_FAVORITE,
   AGENT_PROFILE_CONTACT,
@@ -55,8 +55,8 @@ const ProfileNavigation = (props) => {
           </Menu.Item>
         </Menu>
         {loggedIn && (
-          <Link className="add_card" to={ADD_HOTEL_PAGE}>
-            <IoIosAdd /> Add Hotel
+          <Link className="add_card" to={ADD_SITE_PAGE}>
+            <IoIosAdd /> Crear sitio
           </Link>
         )}
       </Container>

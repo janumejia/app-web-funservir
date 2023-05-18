@@ -8,6 +8,7 @@ const logout = require("./authentication/logout")
 const tokenStatus = require("./authentication/tokenStatus")
 const uniqueEmailValidator = require("./authentication/uniqueEmailValidator")
 const uniqueSitenameValidator = require("./authentication/uniqueSitenameValidator")
+const addSite = require("./authentication/authenticatedUser/addSite")
 
 module.exports = {
     registerUser,
@@ -20,4 +21,5 @@ module.exports = {
     tokenStatus,
     uniqueEmailValidator,
     uniqueSitenameValidator,
+    addSite,
 }
