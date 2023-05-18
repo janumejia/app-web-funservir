@@ -19,8 +19,10 @@ const UncheckedSitesNotification = ({ filtrarSitios }) => {
         const page = str.split("/")
         if (page[page.length - 1] !== 'inclusiveSites') navigate("/dashboard/inclusiveSites");
         else {
-            navigate("/");
-            navigate("/dashboard/inclusiveSites");
+            navigate("/dashboard");
+            setTimeout(function() {
+                navigate("/dashboard/inclusiveSites");
+            }, 1); // espera 1 milisegundo
         } 
     }
 
