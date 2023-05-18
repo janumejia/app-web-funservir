@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import { Layout, Form, Input, Button, Checkbox, Avatar, Card, message } from "antd";
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 // import AuthContext from "../../context/AuthProvider";
 import useAuth from '../../hooks/useAuth';
 import jwt_decode from 'jwt-decode'
+import UncheckedSitesContext from "../../context/UncheckedSitesProvider";
 
 
 // import Cookies from 'js-cookie'
@@ -22,6 +23,7 @@ const { Meta } = Card;
 const AdminLogin = () => {
 
     const { setAuth } = useAuth();
+    const { updateUncheckedSites } = useContext(UncheckedSitesContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -47,6 +49,7 @@ const AdminLogin = () => {
                             let decodedToken = jwt_decode(data?.user.token);
                             setAuth(decodedToken); // Lo asignamos a la variable global Auth, usando Context
                             // setJwt(data.token);
+                            updateUncheckedSites();
                             navigate(`/dashboard`, { replace: true }); // replace para reemplazar la anterior página del historial con esta
                         }, 1500);
                     } else {
