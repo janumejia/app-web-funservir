@@ -6,7 +6,7 @@ import { AuthContext } from 'context/AuthProvider';
 import {
   AGENT_PROFILE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
-  ADD_HOTEL_PAGE,
+  ADD_SITE_PAGE,
 } from 'settings/constant';
 
 export default function ProfileMenu({ avatar }) {
@@ -36,7 +36,7 @@ export default function ProfileMenu({ avatar }) {
           <NavLink to={AGENT_PROFILE_PAGE}>Ver perfil</NavLink>
         </Menu.Item>
         <Menu.Item onClick={closeDropdown} key="1">
-          <NavLink to={ADD_HOTEL_PAGE}>Add Hotel</NavLink>
+          <NavLink to={ADD_SITE_PAGE}>Crear sitio</NavLink>
         </Menu.Item> 
         <Menu.Item onClick={closeDropdown} key="2">
           <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Ajustes</NavLink>

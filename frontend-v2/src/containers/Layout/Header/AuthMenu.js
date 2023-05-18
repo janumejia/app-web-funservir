@@ -47,7 +47,7 @@ const AuthMenu = ({ className, avatar }) => {
     //           <NavLink to={LOGIN_PAGE}>Registro normal</NavLink>
     //         </Menu.Item>
     //         {/* <Menu.Item onClick={closeDropdown} key="1">
-    //       <NavLink to={ADD_HOTEL_PAGE}>Add Hotel</NavLink>
+    //       <NavLink to={ADD_SITE_PAGE}>Add Hotel</NavLink>
     //     </Menu.Item> */}
     //         <Menu.Item onClick={closeDropdown} key="2">
     //           <NavLink to={LOGIN_PAGE}>Dueño de sitio</NavLink>

@@ -1,18 +1,18 @@
+require('dotenv').config({ path: '.env' })  // Para traer las variables de entorno
 const jwt = require("jsonwebtoken");
 
 const verifyToken = async (req, res, next) => {
-  const token = req.headers["token"];
+  const token = req.cookies['AWFS-token'];
+  if (!token) {
+      return res.status(401).json({ message: 'No autorizado: No hay token' });
+  }
 
-  if (token) {
-    jwt.verify(token, process.env.BACKEND_JWT_SECRET, (error, data) => {
-      if (error) return res.status(401).json({ message: "Token inválido" });
-      else {
-        req.user = data;
-        next();
-      }
-    });
-  } else {
-    res.status(401).json({ message: "Debes enviar un token" });
+  try {
+      const decoded = jwt.verify(token, process.env.BACKEND_JWT_SECRET); // Cuando no es válido se genera un error. Por eso el try-catch
+      req.decodedDataInToken = decoded;
+      next();
+  } catch (err) {
+      return res.status(401).json({ message: 'No autorizado: Token no válido' });
   }
 };
 

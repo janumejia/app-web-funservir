@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
+import { InputNumber } from 'antd';
 
 const Stepper = styled.div`
   display: flex;
@@ -40,6 +41,7 @@ const Stepper = styled.div`
 
 export const FormHeader = styled.div`
   margin-bottom: 30px;
+  z-index: 2;
   @media (max-width: 480px) {
     margin-bottom: 0;
   }
@@ -278,6 +280,45 @@ export const FormAction = styled.div`
       }
     }
   }
+`;
+
+export const StyledInputNumber = styled(InputNumber)`
+  .ant-input-number-input-wrap {
+    margin-left: -1px;
+    margin-right: -1px;
+    input {
+      width: 200%;
+      height: 40px;
+      padding: 8px 15px;
+      border-radius: 0;
+      border: 1px solid ${themeGet('border.3', '#E6E6E6')};
+      &:hover,
+      &:focus {
+        border-color: ${themeGet('primary.0', '#008489')};
+      }
+    }
+  }
+
+  .ant-input-number-addon {
+    background-color: ${themeGet('primary.0', '#008489')};
+    border-color: ${themeGet('primary.0', '#008489')};
+    border-radius: 0;
+    color: #fff;
+    font-weight: 700;
+    padding: 0 20px;
+    margin-left: -1px;
+    &:hover,
+    &:focus {
+      background-color: ${themeGet('primary.1', '#24b7b7')};
+      border-color: ${themeGet('primary.1', '#24b7b7')};
+    }
+  }
+`;
+
+export const ColombiaFlag = styled.div`
+  width: 30px;
+  height: 20px;
+  background: linear-gradient(180deg, #FCD116 33.33%, #003893 33.33%, #003893 66.66%, #CE1126 66.66%);
 `;
 
 export default Stepper;
