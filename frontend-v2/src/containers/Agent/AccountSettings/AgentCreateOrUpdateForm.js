@@ -1,20 +1,24 @@
 import React, { Fragment } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, Select, Button } from 'antd';
+import { Row, Col, Input, Select, Button, Checkbox, Divider } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import DatePicker from 'components/UI/AntdDatePicker/AntdDatePicker';
 import { FormTitle } from './AccountSettings.style';
+import {
+  InstagramOutlined,
+  FacebookOutlined,
+  TwitterOutlined,
+} from '@ant-design/icons';
 
 const genderOptions = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
-  { label: 'Other', value: 'Other' },
+  { label: 'Masculino', value: 'Masculino' },
+  { label: 'Femenino', value: 'Femenino' },
+  { label: 'Otro', value: 'Otro' },
 ];
-const languageOptions = [
-  { label: 'English', value: 'english' },
-  { label: 'Spanish', value: 'spanish' },
-  { label: 'French', value: 'french' },
-  { label: 'Russian', value: 'russian' },
+
+const isCaregiverOptions = [
+  { label: 'Si', value: 'Si' },
+  { label: 'No', value: 'No' },
 ];
 
 const AgentCreateOrUpdateForm = () => {
@@ -26,17 +30,17 @@ const AgentCreateOrUpdateForm = () => {
   const onSubmit = (data) => console.log(data);
   return (
     <Fragment>
-      <FormTitle>Basic Information</FormTitle>
+      <FormTitle>Información Básica</FormTitle>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={30}>
           <Col lg={12}>
             <FormControl
-              label="First name"
-              htmlFor="firstName"
-              error={errors.firstName && <span>This field is required!</span>}
+              label="Nombre"
+              htmlFor="name"
+              error={errors.name && <span>¡Este campo es requerido!</span>}
             >
               <Controller
-                name="firstName"
+                name="name"
                 defaultValue=""
                 control={control}
                 rules={{ required: true }}
@@ -48,9 +52,9 @@ const AgentCreateOrUpdateForm = () => {
           </Col>
           <Col lg={12}>
             <FormControl
-              label="Last name"
+              label="Apellido"
               htmlFor="lastName"
-              error={errors.lastName && <span>This field is required!</span>}
+              error={errors.lastName && <span>¡Este campo es requerido!</span>}
             >
               <Controller
                 name="lastName"
@@ -67,14 +71,14 @@ const AgentCreateOrUpdateForm = () => {
         <Row gutter={30}>
           <Col lg={12}>
             <FormControl
-              label="Date of birth"
-              htmlFor="dateOfBirthday"
+              label="Fecha de nacimiento"
+              htmlFor="dateOfBirth"
               error={
-                errors.dateOfBirthday && <span>This field is required!</span>
+                errors.dateOfBirth && <span>¡Este campo es requerido!</span>
               }
             >
               <Controller
-                name="dateOfBirthday"
+                name="dateOfBirth"
                 defaultValue=""
                 control={control}
                 rules={{ required: true }}
@@ -89,70 +93,40 @@ const AgentCreateOrUpdateForm = () => {
             </FormControl>
           </Col>
           <Col lg={12}>
-            <Row gutter={30}>
-              <Col md={12}>
-                <FormControl
-                  label="I am"
-                  htmlFor="agentGender"
-                  error={
-                    errors.agentGender && <span>This field is required!</span>
-                  }
-                >
-                  <Controller
-                    name="agentGender"
-                    defaultValue=""
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Select
-                        options={genderOptions}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                      />
-                    )}
+            <FormControl
+              label="Genero"
+              htmlFor="gender"
+              error={
+                errors.gender && <span>¡Este campo es requerido!</span>
+              }
+            >
+              <Controller
+                name="gender"
+                defaultValue=""
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Select
+                    options={genderOptions}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
                   />
-                </FormControl>
-              </Col>
-              <Col md={12}>
-                <FormControl
-                  label="Preferred Language"
-                  htmlFor="preferredLanguage"
-                  error={
-                    errors.preferredLanguage && (
-                      <span>This field is required!</span>
-                    )
-                  }
-                >
-                  <Controller
-                    name="preferredLanguage"
-                    defaultValue=""
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Select
-                        options={languageOptions}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                      />
-                    )}
-                  />
-                </FormControl>
-              </Col>
-            </Row>
+                )}
+              />
+            </FormControl>
           </Col>
         </Row>
         <Row gutter={30}>
           <Col lg={12}>
             <FormControl
-              label="Email address"
+              label="Correo electrónico"
               htmlFor="email"
               error={
                 errors.email && (
                   <>
                     {errors.email?.type === 'required' && (
-                      <span>This field is required!</span>
+                      <span>¡Este campo es requerido!</span>
                     )}
                     {errors.email?.type === 'pattern' && (
                       <span>Please enter a valid email address!</span>
@@ -188,7 +162,7 @@ const AgentCreateOrUpdateForm = () => {
                 errors.phoneNumber && (
                   <>
                     {errors.phoneNumber?.type === 'required' && (
-                      <span>This field is required!</span>
+                      <span>¡Este campo es requerido!</span>
                     )}
                     {errors.phoneNumber?.type === 'pattern' && (
                       <span>Please enter your valid number!</span>
@@ -213,9 +187,9 @@ const AgentCreateOrUpdateForm = () => {
           </Col>
           <Col lg={24}>
             <FormControl
-              label="Where you live"
+              label="Dirección de residencia"
               htmlFor="address"
-              error={errors.address && <span>This field is required!</span>}
+              error={errors.address && <span>¡Este campo es requerido!</span>}
             >
               <Controller
                 name="address"
@@ -232,7 +206,78 @@ const AgentCreateOrUpdateForm = () => {
           </Col>
           <Col lg={24}>
             <FormControl
-              label="Describe Yourself (Optional)"
+              label="¿Tienes alguna limitación física o cognitiva? (Opcional)"
+              htmlFor="condition"
+              error={errors.condition && <span>¡Este campo es requerido!</span>}
+              labelTag="h3"
+            >
+              <Controller
+                name="condition"
+                defaultValue=""
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <h2>
+                    <Checkbox.Group value={value}>
+                      <Checkbox value=" Motriz ">Motriz</Checkbox>
+                      <Checkbox value=" Visual ">Visual</Checkbox>
+                      <Checkbox value=" Auditiva ">Auditiva</Checkbox>
+                      <Checkbox value=" Sensorial ">Sensorial</Checkbox>
+                      <Checkbox value=" Comunicación ">Comunicación</Checkbox>
+                      <Checkbox value=" Mental ">Mental</Checkbox>
+                      <Checkbox value=" Múltiples ">Multiples</Checkbox>
+                      <Checkbox value=" Otra ">Otra</Checkbox>
+                    </Checkbox.Group>
+                  </h2>
+                )}
+              />
+            </FormControl>
+          </Col>
+          <Col lg={12}>
+            <FormControl
+              label="¿Eres tutor de una persona con capacidades diferenciadas?"
+              htmlFor="isCaregiver"
+              error={
+                errors.gender && <span>¡Este campo es requerido!</span>
+              }
+            >
+              <Controller
+                name="isCaregiver"
+                defaultValue=""
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Select
+                    options={isCaregiverOptions}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                  />
+                )}
+              />
+            </FormControl>
+          </Col>
+          <Col lg={12}>
+            <FormControl
+              label="¿Perteneces a alguna fundación? (Opcional)"
+              htmlFor="institution"
+              error={errors.institution && <span>¡Este campo es requerido!</span>}
+            >
+              <Controller
+                name="institution"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input onChange={onChange} onBlur={onBlur} value={value} />
+                )}
+              />
+            </FormControl>
+          </Col>
+          <Col lg={24}>
+            <FormControl
+              label="Descríbete a ti mismo (Opcional)"
               htmlFor="describeYourself"
             >
               <Controller
@@ -254,9 +299,92 @@ const AgentCreateOrUpdateForm = () => {
             </FormControl>
           </Col>
         </Row>
+        <Divider />
+        <FormTitle>Redes sociales (Opcional)</FormTitle>
+        <Row gutter={30}>
+          <Col lg={12}>
+            <FormControl
+              // label="Instagram"
+              htmlFor="socialInstagram"
+              error={
+                errors.socialInstagram && <span>¡Este campo es requerido!</span>
+              }
+            >
+              <Controller
+                name="socialInstagram"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <InstagramOutlined style={{ fontSize: '24px' }} />
+                    <div style={{ margin: '4px' }}></div> {/* Esto es un espacio de blanco */}
+                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Instagram'/>
+                  </div>
+                )}
+              />
+            </FormControl>
+          </Col>
+        </Row>
+        <Row gutter={30}>
+          <Col lg={12}>
+            <FormControl
+              // label="Instagram"
+              htmlFor="socialInstagram"
+              error={
+                errors.socialInstagram && <span>¡Este campo es requerido!</span>
+              }
+            >
+              <Controller
+                name="socialInstagram"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <FacebookOutlined style={{ fontSize: '24px' }} />
+                    <div style={{ margin: '4px' }}></div> {/* Esto es un espacio de blanco */}
+                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Facebook'/>
+                  </div>
+                )}
+              />
+            </FormControl>
+          </Col>
+        </Row>
+        <Row gutter={30}>
+          <Col lg={12}>
+            <FormControl
+              // label="Instagram"
+              htmlFor="socialInstagram"
+              error={
+                errors.socialInstagram && <span>¡Este campo es requerido!</span>
+              }
+            >
+              <Controller
+                name="socialInstagram"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <TwitterOutlined style={{ fontSize: '24px' }} />
+                    <div style={{ margin: '4px' }}></div> {/* Esto es un espacio de blanco */}
+                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Twitter' />
+                  </div>
+                )}
+              />
+            </FormControl>
+          </Col>
+        </Row>
         <div className="submit-container">
           <Button htmlType="submit" type="primary">
-            Save Changes
+            Guardar cambios
           </Button>
         </div>
       </form>
