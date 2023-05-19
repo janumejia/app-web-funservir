@@ -75,7 +75,7 @@ app.post("/uniqueSiteNameValidator", controllers.uniqueSitenameValidator)
 
 // Usuario logueado
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
-app.get("/logout", verifyToken, controllers.logout)
+app.get("/logout", controllers.logout)
 app.post("/addSite", verifyToken, controllers.addSite)
 
 // Busqueda de sitios

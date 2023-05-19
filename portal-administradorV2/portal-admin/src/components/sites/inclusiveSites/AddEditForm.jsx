@@ -160,6 +160,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     "category": site.category,
                     "contactNumber": site.contactNumber,
                     "inclusiveElements": site.inclusiveElements,
+                    "moreInfoInclusivity": site.moreInfoInclusivity ? site.moreInfoInclusivity : "", 
                     "siteAddress": site.siteAddress,
                     "location": (site.location) ? site.location.lat + "," + site.location.lng : "",
                     "locality": site.locality,

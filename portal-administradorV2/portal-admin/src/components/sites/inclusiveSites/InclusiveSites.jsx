@@ -272,7 +272,7 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
                 const date = new Date(text);
                 return date.toLocaleDateString();
             },
-            sorter: (a, b) => a.locality.localeCompare(b.locality)
+            sorter: (a, b) => a.updatedAt.localeCompare(b.updatedAt)
         },
         {
             title: 'Operación',
