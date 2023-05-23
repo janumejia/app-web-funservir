@@ -143,7 +143,7 @@ const BasicInformationU = ({ setStep }) => {
             errors.gender && errors.gender.type === "required" ? (
               <span>¡Este campo es requerido!</span>
             ) : errors.gender && errors.gender.type === "pattern" ? (
-              <span>¡La fecha está en un formato no válido!</span>
+              <span>¡El texto ingresado está en un formato no válido!</span>
             ) : null
           }
         >
@@ -253,7 +253,7 @@ const BasicInformationU = ({ setStep }) => {
             errors.isCaregiver && errors.isCaregiver.type === "required" ? (
               <span>¡Este campo es requerido!</span>
             ) : errors.isCaregiver && errors.isCaregiver.type === "pattern" ? (
-              <span>¡La fecha está en un formato no válido!</span>
+              <span>¡El texto ingresado está en un formato no válido!</span>
             ) : null
           }
         >

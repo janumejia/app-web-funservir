@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs") // Toca bcryptjs porque la version pura de ja
 const User = require("../../../model/user")
 const jwt = require("jsonwebtoken");
 
-
 const login = async (req, res) => {
     const { email, password } = req.body
     
@@ -13,16 +12,29 @@ const login = async (req, res) => {
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
                 .then((isCorrect) => {
                     if (isCorrect) {
-                        const { _id, name, userType, profilePicture } = user
-                        const data = {
-                            _id,
-                            name,
-                            userType,
-                            profilePicture
-                        };
-                        const token = jwt.sign(data, process.env.BACKEND_JWT_SECRET, { //revisar el método "sign"
+                        const { _id, userType } = user
+                        
+                        const token = jwt.sign({ _id, userType }, process.env.BACKEND_JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
+
+                        const data = {
+                            name: user.name,
+                            lastName: user.lastName,
+                            email: user.email,
+                            dateOfBirth: user.dateOfBirth,
+                            gender: user.gender,
+                            address: user.address,
+                            condition: user.condition,
+                            isCaregiver: user.isCaregiver,
+                            institution: user.institution,
+                            associatedSites: user.associatedSites,
+                            profilePicture: user.profilePicture,
+                            describeYourself: user.describeYourself,
+                            socialInstagram: user.socialInstagram,
+                            socialFacebook: user.socialFacebook,
+                            socialTwitter: user.socialTwitter,
+                        };
                         
                         // Cambiar después de sameSite: "none" a sameSite: "strict"
                         res

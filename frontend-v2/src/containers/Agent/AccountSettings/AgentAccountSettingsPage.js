@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
-import { Row, Col, Menu, Avatar } from 'antd';
+import { Row, Col, Menu, Avatar, message } from 'antd';
 import Container from 'components/UI/Container/Container.style';
 import {
   AGENT_PROFILE_PAGE,
@@ -16,8 +16,10 @@ import AccountSettingWrapper, {
   AgentName,
   FromWrapper,
 } from './AccountSettings.style';
+import { AuthContext } from 'context/AuthProvider';
 
 function AccountSettingNavLink() {
+  
   return (
     <SidebarMenuWrapper>
       <Menu
@@ -26,13 +28,13 @@ function AccountSettingNavLink() {
         mode="inline"
       >
         <Menu.Item key="1">
-          <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Edit Profile</NavLink>
+          <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Editar Perfil</NavLink>
         </Menu.Item>
         <Menu.Item key="2">
-          <NavLink to={AGENT_IMAGE_EDIT_PAGE}>Change Photos</NavLink>
+          <NavLink to={AGENT_IMAGE_EDIT_PAGE}>Cambiar Fotos</NavLink>
         </Menu.Item>
         <Menu.Item key="3">
-          <NavLink to={AGENT_PASSWORD_CHANGE_PAGE}>Change Password</NavLink>
+          <NavLink to={AGENT_PASSWORD_CHANGE_PAGE}>Cambiar Contraseña</NavLink>
         </Menu.Item>
       </Menu>
     </SidebarMenuWrapper>
@@ -40,6 +42,9 @@ function AccountSettingNavLink() {
 }
 
 export default function AgentAccountSettingsPage() {
+
+  const { user } = useContext(AuthContext);
+
   return (
     <AccountSettingWrapper>
       <Container fullWidth={true}>
@@ -48,12 +53,12 @@ export default function AgentAccountSettingsPage() {
             <AccountSidebar>
               <AgentAvatar>
                 <Avatar
-                  src="http://s3.amazonaws.com/redqteam.com/isomorphic-reloaded-image/profilepic.png"
+                  src={user && user.profilePicture}
                   alt="avatar"
                 />
                 <ContentWrapper>
-                  <AgentName>Aziz Acharki Ahmedh</AgentName>
-                  <Link to={AGENT_PROFILE_PAGE}>View profile</Link>
+                  <AgentName>{user && user.name} {user && user.lastName}</AgentName>
+                  <Link to={AGENT_PROFILE_PAGE}>Ver perfil</Link>
                 </ContentWrapper>
               </AgentAvatar>
               <AccountSettingNavLink />

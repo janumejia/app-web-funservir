@@ -117,7 +117,7 @@ const BasicInformationU = ({ setStep }) => {
             errors.gender && errors.gender.type === "required" ? (
               <span>¡Este campo es requerido!</span>
             ) : errors.gender && errors.gender.type === "pattern" ? (
-              <span>¡La fecha está en un formato no válido!</span>
+              <span>¡El genero está en un formato no válido!</span>
             ) : null
           }
         >

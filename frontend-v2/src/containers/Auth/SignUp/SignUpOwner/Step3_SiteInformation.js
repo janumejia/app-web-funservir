@@ -123,7 +123,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             control={control}
             rules={{
               required: true,
-              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-;\(\)\[\]¿?¡!$&\/""“”]){1,2000}$/
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input.TextArea
