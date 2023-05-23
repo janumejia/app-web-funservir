@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, Select, Button, Checkbox, Divider } from 'antd';
+import { Row, Col, Input, Select, Button, Checkbox, Divider, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import DatePicker from 'components/UI/AntdDatePicker/AntdDatePicker';
 import { FormTitle } from './AccountSettings.style';
@@ -9,6 +9,9 @@ import {
   FacebookOutlined,
   TwitterOutlined,
 } from '@ant-design/icons';
+import moment from 'moment';
+import { AuthContext } from 'context/AuthProvider';
+import axios from "../../../settings/axiosConfig"; // Para la petición de registro
 
 const genderOptions = [
   { label: 'Masculino', value: 'Masculino' },
@@ -27,7 +30,57 @@ const AgentCreateOrUpdateForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const { user, setUser } = useContext(AuthContext);
+  // const [userInfo, setUserInfo] = useState({})
+
+  const onSubmit = async (data) => {
+    try {
+
+      data.dateOfBirth = data.dateOfBirth.$d;
+
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/updateUserInfo`, data);
+      message.destroy();
+      if (res) {
+        if (res.status === 200) {
+          message.success(res.data.message, 3);
+          // console.log(user)
+          let updatedUser = { // Poner los valores que tiene actualmente el usuario y agregar los que nos llega del back
+            ...user,
+            ...res.data.data
+          }
+          setUser(updatedUser);
+
+          // await setUser(user => ({ // Poner los valores que tiene actualmente el usuario y agregar los que nos llega del back
+          //   ...user,
+          //   ...res.data.data
+          // }))
+
+          // console.log(user)
+        } else message.warning("Respuesta del servidor desconocida", 3);
+      }
+    } catch (error) {
+      console.log(error)
+      message.destroy();
+      if (!error.response || typeof error.response.status === 'undefined') {
+
+        message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+      } else {
+        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+
+          message.warning({ content: error.response.data.message, duration: 3 });
+        }
+        else if (error.response.status >= 500 && error.response.status <= 599) {
+
+          message.error({ content: error.response.data.message, duration: 3 });
+        } // Errores del servidor
+        else {
+          message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+        }
+      }
+    }
+  };
+
   return (
     <Fragment>
       <FormTitle>Información Básica</FormTitle>
@@ -37,13 +90,22 @@ const AgentCreateOrUpdateForm = () => {
             <FormControl
               label="Nombre"
               htmlFor="name"
-              error={errors.name && <span>¡Este campo es requerido!</span>}
+              error={
+                errors.name && errors.name.type === "required" ? (
+                  <span>¡Este campo es requerido!</span>
+                ) : errors.name && errors.name.type === "pattern" ? (
+                  <span>¡El nombre está en un formato no válido!</span>
+                ) : null
+              }
             >
               <Controller
                 name="name"
-                defaultValue=""
+                defaultValue={user.name ? user.name : ""}
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: true,
+                  pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
+                }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input onChange={onChange} onBlur={onBlur} value={value} />
                 )}
@@ -54,13 +116,22 @@ const AgentCreateOrUpdateForm = () => {
             <FormControl
               label="Apellido"
               htmlFor="lastName"
-              error={errors.lastName && <span>¡Este campo es requerido!</span>}
+              error={
+                errors.lastName && errors.lastName.type === "required" ? (
+                  <span>¡Este campo es requerido!</span>
+                ) : errors.lastName && errors.lastName.type === "pattern" ? (
+                  <span>¡El apellido está en un formato no válido!</span>
+                ) : null
+              }
             >
               <Controller
                 name="lastName"
-                defaultValue=""
+                defaultValue={user.lastName ? user.lastName : ""}
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: true,
+                  pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
+                }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input onChange={onChange} onBlur={onBlur} value={value} />
                 )}
@@ -84,9 +155,24 @@ const AgentCreateOrUpdateForm = () => {
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <DatePicker
-                    onChange={onChange}
-                    onBlur={onBlur}
                     value={value}
+                    onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                      onChange(e);
+                    }}
+                    // onChange={(date) => {
+                    //   onChange(date ? date.format('YYYY-MM-DD') : '');
+                    // }}
+                    placeholder="Selecciona una fecha"
+                    showToday={false}
+                    allowClear={false}
+                    format="YYYY-MM-DD"
+                    disabledDate={(current) => {
+                      // La función "disabledDate" recibe una fecha y debe devolver "true" si la fecha debe estar deshabilitada o "false" si la fecha debe estar habilitada.
+                      // En este caso, solo permite fechas entre hace 200 años y hoy.
+                      return current && (current < moment().subtract(200, 'years').startOf('day') || current > moment().endOf('day'));
+                    }}
+                  // defaultPickerValue={moment().subtract(30, 'years').startOf("day")}
+                  // locale="es_ES" // set the locale to Spanish. No sirve :/
                   />
                 )}
               />
@@ -97,12 +183,16 @@ const AgentCreateOrUpdateForm = () => {
               label="Genero"
               htmlFor="gender"
               error={
-                errors.gender && <span>¡Este campo es requerido!</span>
+                errors.gender && errors.gender.type === "required" ? (
+                  <span>¡Este campo es requerido!</span>
+                ) : errors.gender && errors.gender.type === "pattern" ? (
+                  <span>¡El genero está en un formato no válido!</span>
+                ) : null
               }
             >
               <Controller
                 name="gender"
-                defaultValue=""
+                defaultValue={user.gender ? user.gender : ""}
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -118,33 +208,18 @@ const AgentCreateOrUpdateForm = () => {
           </Col>
         </Row>
         <Row gutter={30}>
-          <Col lg={12}>
+          <Col lg={24}>
             <FormControl
               label="Correo electrónico"
               htmlFor="email"
-              error={
-                errors.email && (
-                  <>
-                    {errors.email?.type === 'required' && (
-                      <span>¡Este campo es requerido!</span>
-                    )}
-                    {errors.email?.type === 'pattern' && (
-                      <span>Please enter a valid email address!</span>
-                    )}
-                  </>
-                )
-              }
             >
               <Controller
                 name="email"
-                defaultValue=""
+                defaultValue={user.email ? user.email : ""}
                 control={control}
-                rules={{
-                  required: true,
-                  pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
+                    disabled={true}
                     type="email"
                     onChange={onChange}
                     onBlur={onBlur}
@@ -154,7 +229,9 @@ const AgentCreateOrUpdateForm = () => {
               />
             </FormControl>
           </Col>
-          <Col lg={12}>
+        </Row>
+        <Row gutter={30}>
+          {/* <Col lg={12}>
             <FormControl
               label="Número telefónico"
               htmlFor="phoneNumber"
@@ -184,19 +261,26 @@ const AgentCreateOrUpdateForm = () => {
                 )}
               />
             </FormControl>
-          </Col>
+          </Col> */}
           <Col lg={24}>
             <FormControl
               label="Dirección de residencia"
               htmlFor="address"
-              error={errors.address && <span>¡Este campo es requerido!</span>}
+              error={
+                errors.address && errors.address.type === "required" ? (
+                  <span>¡Este campo es requerido!</span>
+                ) : errors.address && errors.address.type === "pattern" ? (
+                  <span>¡La dirección está en un formato no válido!</span>
+                ) : null
+              }
             >
               <Controller
                 name="address"
-                defaultValue=""
+                defaultValue={user.address ? user.address : ""}
                 control={control}
                 rules={{
                   required: true,
+                  pattern: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚü\s.,-/#-]{5,255}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input onChange={onChange} onBlur={onBlur} value={value} />
@@ -213,11 +297,16 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="condition"
-                defaultValue=""
+                defaultValue={user.condition ? user.condition : ""}
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <h2>
-                    <Checkbox.Group value={value}>
+                    <Checkbox.Group
+                      onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                        onChange(e);
+                      }}
+                      value={value}
+                    >
                       <Checkbox value=" Motriz ">Motriz</Checkbox>
                       <Checkbox value=" Visual ">Visual</Checkbox>
                       <Checkbox value=" Auditiva ">Auditiva</Checkbox>
@@ -234,7 +323,7 @@ const AgentCreateOrUpdateForm = () => {
           </Col>
           <Col lg={12}>
             <FormControl
-              label="¿Eres tutor de una persona con capacidades diferenciadas?"
+              label="¿Eres tutor de persona(s) con capacidades diferenciadas?"
               htmlFor="isCaregiver"
               error={
                 errors.gender && <span>¡Este campo es requerido!</span>
@@ -242,7 +331,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="isCaregiver"
-                defaultValue=""
+                defaultValue={user.isCaregiver ? user.isCaregiver : ""}
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -260,14 +349,19 @@ const AgentCreateOrUpdateForm = () => {
             <FormControl
               label="¿Perteneces a alguna fundación? (Opcional)"
               htmlFor="institution"
-              error={errors.institution && <span>¡Este campo es requerido!</span>}
+              error={
+                errors.institution && errors.institution.type === "pattern" ? (
+                  <span>¡El texto ingresado está en un formato no válido!</span>
+                ) : null
+              }
             >
               <Controller
                 name="institution"
-                defaultValue=""
+                defaultValue={user.institution ? user.institution : ""}
                 control={control}
                 rules={{
-                  required: true,
+                  required: false,
+                  pattern: /^([A-Za-zñÑáéíóúÁÉÍÓÚü0-9 ]){0,255}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input onChange={onChange} onBlur={onBlur} value={value} />
@@ -279,16 +373,23 @@ const AgentCreateOrUpdateForm = () => {
             <FormControl
               label="Descríbete a ti mismo (Opcional)"
               htmlFor="describeYourself"
+              error={
+                errors.institution && errors.institution.type === "pattern" ? (
+                  <span>¡El texto ingresado está en un formato no válido!</span>
+                ) : null
+              }
             >
               <Controller
                 name="describeYourself"
-                defaultValue=""
+                defaultValue={user.describeYourself ? user.describeYourself : ""}
                 control={control}
                 rules={{
                   required: true,
+                  pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input.TextArea
+                    placeholder="Proporciona una breve descripción de ti mismo y tus intereses para que las demás personas puedan conocerte mejor"
                     rows={5}
                     onChange={onChange}
                     onBlur={onBlur}
@@ -312,16 +413,17 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="socialInstagram"
-                defaultValue=""
+                defaultValue={user.socialInstagram ? user.socialInstagram : ""}
                 control={control}
                 rules={{
                   required: true,
+                  pattern: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]+)[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <InstagramOutlined style={{ fontSize: '24px' }} />
                     <div style={{ margin: '4px' }}></div> {/* Esto es un espacio de blanco */}
-                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Instagram'/>
+                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Instagram' />
                   </div>
                 )}
               />
@@ -332,23 +434,24 @@ const AgentCreateOrUpdateForm = () => {
           <Col lg={12}>
             <FormControl
               // label="Instagram"
-              htmlFor="socialInstagram"
+              htmlFor="socialFacebook"
               error={
-                errors.socialInstagram && <span>¡Este campo es requerido!</span>
+                errors.socialFacebook && <span>¡Este campo es requerido!</span>
               }
             >
               <Controller
-                name="socialInstagram"
-                defaultValue=""
+                name="socialFacebook"
+                defaultValue={user.socialFacebook ? user.socialFacebook : ""}
                 control={control}
                 rules={{
                   required: true,
+                  pattern: /^(?:https?:\/\/)?(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]+)[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <FacebookOutlined style={{ fontSize: '24px' }} />
                     <div style={{ margin: '4px' }}></div> {/* Esto es un espacio de blanco */}
-                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Facebook'/>
+                    <Input onChange={onChange} onBlur={onBlur} value={value} placeholder='Facebook' />
                   </div>
                 )}
               />
@@ -359,17 +462,18 @@ const AgentCreateOrUpdateForm = () => {
           <Col lg={12}>
             <FormControl
               // label="Instagram"
-              htmlFor="socialInstagram"
+              htmlFor="socialTwitter"
               error={
-                errors.socialInstagram && <span>¡Este campo es requerido!</span>
+                errors.socialTwitter && <span>¡Este campo es requerido!</span>
               }
             >
               <Controller
-                name="socialInstagram"
-                defaultValue=""
+                name="socialTwitter"
+                defaultValue={user.socialTwitter ? user.socialTwitter : ""}
                 control={control}
                 rules={{
                   required: true,
+                  pattern: /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>

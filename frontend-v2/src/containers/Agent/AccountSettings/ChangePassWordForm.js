@@ -19,14 +19,14 @@ export default function ChangePassWord() {
 
   return (
     <>
-      <FormTitle>Change Password</FormTitle>
+      <FormTitle>Cambiar contraseña</FormTitle>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={30}>
           <Col lg={12}>
             <FormControl
-              label="Enter old password"
+              label="Ingresa la contraseña actual"
               htmlFor="oldPassword"
-              error={errors.oldPassword && <span>This field is required!</span>}
+              error={errors.oldPassword && <span>¡Este campo es obligatorio!</span>}
             >
               <Controller
                 name="oldPassword"
@@ -45,13 +45,13 @@ export default function ChangePassWord() {
           </Col>
           <Col lg={12}>
             <FormControl
-              label="Enter new password"
+              label="Ingresa la nueva contraseña"
               htmlFor="newPassword"
               error={
                 errors.newPassword && (
                   <>
                     {errors.newPassword?.type === 'required' && (
-                      <span>This field is required!</span>
+                      <span>¡Este campo es obligatorio!</span>
                     )}
                     {errors.newPassword?.type === 'minLength' && (
                       <span>New password must be at lest 6 characters!</span>
@@ -82,7 +82,7 @@ export default function ChangePassWord() {
           </Col>
           <Col lg={24}>
             <FormControl
-              label="Confirm new password"
+              label="Confirmar nueva contraseña"
               htmlFor="confirmPassword"
               error={
                 confirmPassword &&

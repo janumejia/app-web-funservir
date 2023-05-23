@@ -69,14 +69,15 @@ app.get('/', (req, res) => { res.json({ message: "¡Backend Funcionando!" }); })
 app.post("/registerUser", controllers.registerUser)
 app.post("/registerOwner", controllers.registerOwner)
 app.post("/loginUser", controllers.login)
-app.get("/status", controllers.tokenStatus)
 app.post("/uniqueEmailValidator", controllers.uniqueEmailValidator)
 app.post("/uniqueSiteNameValidator", controllers.uniqueSitenameValidator)
+app.get("/logout", controllers.logout)
 
 // Usuario logueado
+app.get("/status", verifyToken, controllers.tokenStatus)
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
-app.get("/logout", controllers.logout)
 app.post("/addSite", verifyToken, controllers.addSite)
+app.post("/updateUserInfo", verifyToken, controllers.updateUserInfo)
 
 // Busqueda de sitios
 app.get("/sites", controllers.getAllSites)
@@ -128,9 +129,9 @@ app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighb
 app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)
 
 // custom 404
-// app.use((req, res, next) => {
-//     res.status(404).json({ message: 'Upss, ruta no encontrada' });
-// })
+app.use((req, res, next) => {
+    res.status(404).json({ message: 'Upss, ruta no encontrada' });
+})
 
 /* Fin rutas de nuestra APP */
 

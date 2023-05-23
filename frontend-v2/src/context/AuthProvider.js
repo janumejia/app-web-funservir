@@ -6,15 +6,6 @@ import axios from "../settings/axiosConfig";
 // Para usar Context usamos React.createContext() , que retorna un provider y un consumer
 export const AuthContext = React.createContext();
 
-const fakeUserData = {
-  id: 1,
-  name: 'Julián Andrés',
-  avatar:
-    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
-  roles: ['USER', 'ADMIN'],
-};
-
-
 // Componente provider
 const AuthProvider = (props) => {
 
@@ -29,19 +20,16 @@ const AuthProvider = (props) => {
     const isLoggedIn = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`)
-  
+
         if (res) {
           if (res.status === 200) {
-            setUser({
-              id: res.data.data._id,
-              name: res.data.data.name,
-              avatar: res.data.data.profilePicture,
-              roles: res.data.data.userType,
-            });
+            setUser(...res.data.data);
             setLoggedIn(true);
             // navigate('/', { replace: true });
-  
-          } else message.warning(res.status + " - Respuesta del servidor desconocida");
+            // console.log("res.data:")
+            console.log(...res.data.data)
+
+          } else message.warning("Respuesta del servidor desconocida");
         }
       } catch (error) {
         setUser(null);
@@ -63,19 +51,16 @@ const AuthProvider = (props) => {
       .then((response) => {
         console.log("response: ", response);
         if (response.status === 200) {
-          setUser({
-            id: response.data.data._id,
-            name: response.data.data.name,
-            avatar: response.data.data.profilePicture,
-            roles: response.data.data.userType,
-          });
+          console.log("etoo: ", response.data.data)
+          setUser( response.data.data );
           setLoggedIn(true);
           navigate('/', { replace: true });
         }
 
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        console.log(error)
+        if (error.response && error.response.status && error.response.status === 401) {
 
           // En forma de notificación:
           // notification.error({
@@ -99,45 +84,51 @@ const AuthProvider = (props) => {
           },);
 
 
+        } else {
+          message.error("Hubo un error", 3, undefined, {
+            style: {
+              marginTop: '10vh',
+            },
+          },);
         }
       })
   };
 
   // Aquí recibimos los datos del registro
-  const signUp = async (params) => {
-    // Solo recibimos nombre, correo y contraseña, el resto son datos quemados con tal de probar el registro
-    params = {
-      ...params,
-      edad: 20,
-      sexo: "masculino",
-      direccion: "Calle 5 #3-35",
-      discapacidad: [
-        "Motora",
-        "Visual"
-      ],
-      tutor: false,
-      fundacion: "Funservir",
-      userType: "R"
-    }
+  // const signUp = async (params) => {
+  //   // Solo recibimos nombre, correo y contraseña, el resto son datos quemados con tal de probar el registro
+  //   params = {
+  //     ...params,
+  //     edad: 20,
+  //     sexo: "masculino",
+  //     direccion: "Calle 5 #3-35",
+  //     discapacidad: [
+  //       "Motora",
+  //       "Visual"
+  //     ],
+  //     tutor: false,
+  //     fundacion: "Funservir",
+  //     userType: "R"
+  //   }
 
-    await axios
-      .post(`${process.env.REACT_APP_HOST_BACK}/register`, params)
-      .then((answer) => {
-        const { user } = answer.data;
-        // Agregamos a nuestras variables globales la información del usuario logueado (variable user y loggedIn son globales)
-        setUser({
-          id: user._id,
-          name: user.name,
-          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
-          roles: ['USER', 'ADMIN'],
-        });
-        setLoggedIn(true);
-        navigate('/', { replace: true }); // El {replace: true} es para que una vez logueados, la página anterior sea igual a la actual, con tal de no poder volver a la página de logueo: https://reach.tech/router/api/navigate
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  //   await axios
+  //     .post(`${process.env.REACT_APP_HOST_BACK}/register`, params)
+  //     .then((answer) => {
+  //       const { user } = answer.data;
+  //       // Agregamos a nuestras variables globales la información del usuario logueado (variable user y loggedIn son globales)
+  //       setUser({
+  //         id: user._id,
+  //         name: user.name,
+  //         avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
+  //         roles: ['USER', 'ADMIN'],
+  //       });
+  //       setLoggedIn(true);
+  //       navigate('/', { replace: true }); // El {replace: true} es para que una vez logueados, la página anterior sea igual a la actual, con tal de no poder volver a la página de logueo: https://reach.tech/router/api/navigate
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   const logOut = async () => {
 
@@ -184,7 +175,8 @@ const AuthProvider = (props) => {
         loggedIn,
         logOut,
         signIn,
-        signUp,
+        // signUp,
+        setUser,
         user,
         admin,
       }}

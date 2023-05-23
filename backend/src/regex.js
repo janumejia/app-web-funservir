@@ -46,6 +46,10 @@ module.exports = {
     institutionRegex: generalAlphanumeric(0,255),
     userTypeRegex: new RegExp(/^(Regular|Propietario|Administrador)$/),
     profilePictureRegex: new RegExp(/(^data:image\/(?:jpe?g|png|gif|bmp|webp|svg|ico|tiff?);base64,.*)|(^$)/), // Vació es válido
+    describeYourselfRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/),
+    socialInstagramRegex: new RegExp(/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]+)[\/]{0,1}$/),
+    socialFacebookRegex: new RegExp(/^(?:https?:\/\/)?(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]+)[\/]{0,1}$/),
+    socialTwitterRegex: new RegExp(/^(?:https?:\/\/)?(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)[\/]{0,1}$/),
 
     /* Categorías */
     nameCategoryRegex: generalAlphabetic(1,100),

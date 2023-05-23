@@ -36,7 +36,7 @@ export default class ImageUploader extends React.Component {
         <div className="image-drag-area">
           <FaCamera />
         </div>
-        <div className="ant-upload-text">Upload Photos</div>
+        <div className="ant-upload-text">Subir Imágenes</div>
       </ImageUpload>
     );
     return (
@@ -44,7 +44,7 @@ export default class ImageUploader extends React.Component {
         <Dragger
           action="//jsonplaceholder.typicode.com/posts/"
           listType="picture-card"
-          fileList={fileList}
+          fileList={this.props.fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
           className="image_uploader"

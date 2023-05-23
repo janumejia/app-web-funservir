@@ -52,7 +52,7 @@ export default function Header() {
   let userName = '';
 
   if(user){
-    avatarImg = user.avatar; // Traemos el link del avatar de usuario de nuestra variable global
+    avatarImg = user.profilePicture; // Traemos el link del avatar de usuario de nuestra variable global
     userName = user.name; // Traemos el nombre del usuario de nuestra variable global
   }
 
