@@ -108,7 +108,7 @@ export default function ChangePassWord() {
           <Col lg={24}>
             <div className="submit-container">
               <Button htmlType="submit" type="primary">
-                Save Changes
+                Guardar cambios
               </Button>
             </div>
           </Col>
