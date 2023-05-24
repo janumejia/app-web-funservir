@@ -54,9 +54,8 @@ const AgentCreateOrUpdateForm = () => {
         } else message.warning("Respuesta del servidor desconocida", 3);
       }
     } catch (error) {
-      console.log(error)
       message.destroy();
-      if (!error.response || typeof error.response.status === 'undefined') {
+      if (!error.response || (error.response && typeof error.response.status === 'undefined')) {
 
         message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
       } else {
@@ -88,7 +87,7 @@ const AgentCreateOrUpdateForm = () => {
                 errors.name && errors.name.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.name && errors.name.type === "pattern" ? (
-                  <span>¡El nombre está en un formato no válido!</span>
+                  <span>¡El nombre no está en un formato válido!</span>
                 ) : null
               }
             >
@@ -114,7 +113,7 @@ const AgentCreateOrUpdateForm = () => {
                 errors.lastName && errors.lastName.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.lastName && errors.lastName.type === "pattern" ? (
-                  <span>¡El apellido está en un formato no válido!</span>
+                  <span>¡El apellido no está en un formato válido!</span>
                 ) : null
               }
             >
@@ -180,7 +179,7 @@ const AgentCreateOrUpdateForm = () => {
                 errors.gender && errors.gender.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.gender && errors.gender.type === "pattern" ? (
-                  <span>¡El genero está en un formato no válido!</span>
+                  <span>¡El genero no está en un formato válido!</span>
                 ) : null
               }
             >
@@ -264,7 +263,7 @@ const AgentCreateOrUpdateForm = () => {
                 errors.address && errors.address.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.address && errors.address.type === "pattern" ? (
-                  <span>¡La dirección está en un formato no válido!</span>
+                  <span>¡La dirección no está en un formato válido!</span>
                 ) : null
               }
             >
@@ -345,7 +344,7 @@ const AgentCreateOrUpdateForm = () => {
               htmlFor="institution"
               error={
                 errors.institution && errors.institution.type === "pattern" ? (
-                  <span>¡El texto ingresado está en un formato no válido!</span>
+                  <span>¡El texto ingresado no está en un formato válido!</span>
                 ) : null
               }
             >
@@ -368,8 +367,8 @@ const AgentCreateOrUpdateForm = () => {
               label="Descríbete a ti mismo (Opcional)"
               htmlFor="describeYourself"
               error={
-                errors.institution && errors.institution.type === "pattern" ? (
-                  <span>¡El texto ingresado está en un formato no válido!</span>
+                errors.describeYourself && errors.describeYourself.type === "pattern" ? (
+                  <span>¡El texto ingresado no está en un formato válido!</span>
                 ) : null
               }
             >
@@ -402,7 +401,9 @@ const AgentCreateOrUpdateForm = () => {
               // label="Instagram"
               htmlFor="socialInstagram"
               error={
-                errors.socialInstagram && <span>¡Este campo es requerido!</span>
+                errors.socialInstagram && errors.socialInstagram.type === "pattern" ? (
+                  <span>¡Enlace no válido para la red social!</span>
+                ) : null
               }
             >
               <Controller
@@ -430,7 +431,9 @@ const AgentCreateOrUpdateForm = () => {
               // label="Instagram"
               htmlFor="socialFacebook"
               error={
-                errors.socialFacebook && <span>¡Este campo es requerido!</span>
+                errors.socialFacebook && errors.socialFacebook.type === "pattern" ? (
+                  <span>¡Enlace no válido para la red social!</span>
+                ) : null
               }
             >
               <Controller
@@ -458,7 +461,9 @@ const AgentCreateOrUpdateForm = () => {
               // label="Instagram"
               htmlFor="socialTwitter"
               error={
-                errors.socialTwitter && <span>¡Este campo es requerido!</span>
+                errors.socialTwitter && errors.socialTwitter.type === "pattern" ? (
+                  <span>¡Enlace no válido para la red social!</span>
+                ) : null
               }
             >
               <Controller

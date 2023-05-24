@@ -1,8 +1,10 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Row, Col } from 'antd';
+import { Input, Button, Row, Col, Card } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import { FormTitle } from './AccountSettings.style';
+import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
+import validator from "validator";
 
 export default function ChangePassWord() {
   const {
@@ -22,7 +24,7 @@ export default function ChangePassWord() {
       <FormTitle>Cambiar contraseña</FormTitle>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={30}>
-          <Col lg={12}>
+          <Col lg={24}>
             <FormControl
               label="Ingresa la contraseña actual"
               htmlFor="oldPassword"
@@ -48,39 +50,56 @@ export default function ChangePassWord() {
               label="Ingresa la nueva contraseña"
               htmlFor="newPassword"
               error={
-                errors.newPassword && (
-                  <>
-                    {errors.newPassword?.type === 'required' && (
-                      <span>¡Este campo es obligatorio!</span>
-                    )}
-                    {errors.newPassword?.type === 'minLength' && (
-                      <span>New password must be at lest 6 characters!</span>
-                    )}
-                    {errors.newPassword?.type === 'maxLength' && (
-                      <span>
-                        New password must not be longer than 20 characters!
-                      </span>
-                    )}
-                  </>
-                )
+                errors.newPassword && errors.newPassword.type === "required" ? (
+                  // <span>¡Este campo es requerido!</span>
+                  <span />
+                ) : errors.newPassword && errors.newPassword.type === "validate" ? (
+                  // <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
+                  <span />
+                ) : null
               }
             >
               <Controller
                 name="newPassword"
                 defaultValue=""
                 control={control}
-                rules={{ required: true, minLength: 6, maxLength: 20 }}
+                rules={{
+                  required: true,
+                  // pattern: /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  validate: (value) => validator.isStrongPassword(value)
+                }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input.Password
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                  />
+                  <>
+
+                    <Input.Password
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                    <Card>
+                      <PasswordChecklist
+                        rules={["minLength", "maxLength", "specialChar", "number", "capital", "lowercase"]}
+                        minLength={8}
+                        maxLength={70}
+                        value={value}
+                        messages={{
+                          minLength: "Mínimo 8 caracteres.",
+                          maxLength: "Máximo 70 caracteres.",
+                          specialChar: "Un carácter especial.",
+                          number: "Un número.",
+                          capital: "Una letra mayúscula.",
+                          lowercase: "Una letra minúscula.",
+                        }}
+                        validColor={"#008489"}
+                        invalidColor={"#eeeee4"}
+                      />
+                    </Card>
+                  </>
                 )}
               />
             </FormControl>
           </Col>
-          <Col lg={24}>
+          <Col lg={12}>
             <FormControl
               label="Confirmar nueva contraseña"
               htmlFor="confirmPassword"
@@ -96,11 +115,25 @@ export default function ChangePassWord() {
                 defaultValue=""
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <Input.Password
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                  />
+                  <>
+                    <Input.Password
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                    {/* <Card>
+                      <PasswordChecklist
+                        rules={["match"]}
+                        value={newPassword}
+                        valueAgain={value}
+                        messages={{
+                          match: "Las contraseñas coinciden.",
+                        }}
+                        validColor={"#008489"}
+                        invalidColor={"#eeeee4"}
+                      />
+                    </Card> */}
+                  </>
                 )}
               />
             </FormControl>
