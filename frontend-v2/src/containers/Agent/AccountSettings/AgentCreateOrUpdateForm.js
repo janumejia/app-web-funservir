@@ -44,19 +44,13 @@ const AgentCreateOrUpdateForm = () => {
       if (res) {
         if (res.status === 200) {
           message.success(res.data.message, 3);
-          // console.log(user)
+
           let updatedUser = { // Poner los valores que tiene actualmente el usuario y agregar los que nos llega del back
             ...user,
             ...res.data.data
           }
           setUser(updatedUser);
 
-          // await setUser(user => ({ // Poner los valores que tiene actualmente el usuario y agregar los que nos llega del back
-          //   ...user,
-          //   ...res.data.data
-          // }))
-
-          // console.log(user)
         } else message.warning("Respuesta del servidor desconocida", 3);
       }
     } catch (error) {
@@ -100,7 +94,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="name"
-                defaultValue={user.name ? user.name : ""}
+                defaultValue={user && user.name ? user.name : ""}
                 control={control}
                 rules={{
                   required: true,
@@ -126,7 +120,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="lastName"
-                defaultValue={user.lastName ? user.lastName : ""}
+                defaultValue={user && user.lastName ? user.lastName : ""}
                 control={control}
                 rules={{
                   required: true,
@@ -192,7 +186,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="gender"
-                defaultValue={user.gender ? user.gender : ""}
+                defaultValue={user && user.gender ? user.gender : ""}
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -215,7 +209,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="email"
-                defaultValue={user.email ? user.email : ""}
+                defaultValue={user && user.email ? user.email : ""}
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
@@ -276,7 +270,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="address"
-                defaultValue={user.address ? user.address : ""}
+                defaultValue={user && user.address ? user.address : ""}
                 control={control}
                 rules={{
                   required: true,
@@ -297,7 +291,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="condition"
-                defaultValue={user.condition ? user.condition : ""}
+                defaultValue={user && user.condition ? user.condition : ""}
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <h2>
@@ -331,7 +325,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="isCaregiver"
-                defaultValue={user.isCaregiver ? user.isCaregiver : ""}
+                defaultValue={user && user.isCaregiver ? user.isCaregiver : ""}
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -357,7 +351,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="institution"
-                defaultValue={user.institution ? user.institution : ""}
+                defaultValue={user && user.institution ? user.institution : ""}
                 control={control}
                 rules={{
                   required: false,
@@ -381,11 +375,11 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="describeYourself"
-                defaultValue={user.describeYourself ? user.describeYourself : ""}
+                defaultValue={user && user.describeYourself ? user.describeYourself : ""}
                 control={control}
                 rules={{
-                  required: true,
-                  pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/,
+                  required: false,
+                  pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,2000}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input.TextArea
@@ -413,11 +407,11 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="socialInstagram"
-                defaultValue={user.socialInstagram ? user.socialInstagram : ""}
+                defaultValue={user && user.socialInstagram ? user.socialInstagram : ""}
                 control={control}
                 rules={{
-                  required: true,
-                  pattern: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]+)[\/]{0,1}$/,
+                  required: false,
+                  pattern: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -441,11 +435,11 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="socialFacebook"
-                defaultValue={user.socialFacebook ? user.socialFacebook : ""}
+                defaultValue={user && user.socialFacebook ? user.socialFacebook : ""}
                 control={control}
                 rules={{
-                  required: true,
-                  pattern: /^(?:https?:\/\/)?(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]+)[\/]{0,1}$/,
+                  required: false,
+                  pattern: /^(?:https?:\/\/)?(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -469,11 +463,11 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="socialTwitter"
-                defaultValue={user.socialTwitter ? user.socialTwitter : ""}
+                defaultValue={user && user.socialTwitter ? user.socialTwitter : ""}
                 control={control}
                 rules={{
-                  required: true,
-                  pattern: /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)[\/]{0,1}$/,
+                  required: false,
+                  pattern: /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/([a-zA-Z0-9_]){1,255}[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>

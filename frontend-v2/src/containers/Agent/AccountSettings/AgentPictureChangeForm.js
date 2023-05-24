@@ -14,7 +14,7 @@ export default function AgentPictureChangeForm() {
 
   useEffect(() => {
     const initializeImages = () => {
-      if (user.coverPicture) {
+      if (user && user.coverPicture) {
         setCoverPicture([
           {
             status: 'done',
@@ -23,7 +23,7 @@ export default function AgentPictureChangeForm() {
         ]);
       }
 
-      if (user.profilePicture) {
+      if (user && user.profilePicture) {
         setProfilePicture([
           {
             status: 'done',
