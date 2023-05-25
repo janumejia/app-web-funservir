@@ -12,7 +12,6 @@ import Container from 'components/UI/Container/Container';
 import Image from 'components/UI/Image/Image';
 import Heading from 'components/UI/Heading/Heading';
 import Text from 'components/UI/Text/Text';
-import { ProfilePicLoader } from 'components/UI/ContentLoader/ContentLoader';
 import Loader from 'components/Loader/Loader';
 import AuthProvider, { AuthContext } from 'context/AuthProvider';
 import useDataApi from 'library/hooks/useDataApi';
@@ -45,13 +44,13 @@ const ProfileNavigation = (props) => {
             className={path === location.pathname && 'ant-menu-item-selected'}
             key="0"
           >
-            <NavLink to={path}>Listing</NavLink>
+            <NavLink to={path}>Sitios inclusivos</NavLink>
           </Menu.Item>
           <Menu.Item key="1">
-            <NavLink to={AGENT_PROFILE_FAVORITE}>Favorite</NavLink>
+            <NavLink to={AGENT_PROFILE_FAVORITE}>Favoritos</NavLink>
           </Menu.Item>
           <Menu.Item key="2">
-            <NavLink to={AGENT_PROFILE_CONTACT}>Contact</NavLink>
+            <NavLink to={AGENT_PROFILE_CONTACT}>Contacto</NavLink>
           </Menu.Item>
         </Menu>
         {loggedIn && (
@@ -66,6 +65,7 @@ const ProfileNavigation = (props) => {
 
 const AgentProfileInfo = () => {
   const { data, loading } = useDataApi('/data/agent.json');
+  const { user } = useContext(AuthContext);
   if (isEmpty(data) || loading) return <Loader />;
   const {
     first_name,
@@ -75,8 +75,8 @@ const AgentProfileInfo = () => {
     cover_pic,
     social_profile,
   } = data[0];
-  const username = `${first_name} ${last_name}`;
-
+  const username = `${user.name} ${user.lastName}`;
+  console.log(user);
   return (
     <Fragment>
       <BannerSection>
@@ -85,45 +85,56 @@ const AgentProfileInfo = () => {
       <UserInfoArea>
         <Container fluid={true}>
           <ProfileImage>
-            {profile_pic ? (
-              <Image src={profile_pic.url} alt="Profile" />
-            ) : (
-              <ProfilePicLoader />
-            )}
+            <Image src={user.profilePicture} alt="Profile" />
           </ProfileImage>
           <ProfileInformationArea>
             <ProfileInformation>
               <Heading content={username} />
-              <Text content={content} />
+              <Text content={(user.description) ? user.description : "¡Hola, estoy usando la plataforma de Funservir!"} />
             </ProfileInformation>
             <SocialAccount>
-              <Popover content="Twitter">
-                <a
-                  href={social_profile.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <IoLogoTwitter className="twitter" />
-                </a>
-              </Popover>
-              <Popover content="Facebook">
-                <a
-                  href={social_profile.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <IoLogoFacebook className="facebook" />
-                </a>
-              </Popover>
-              <Popover content="Instagram">
-                <a
-                  href={social_profile.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <IoLogoInstagram className="instagram" />
-                </a>
-              </Popover>
+              {(user.socialTwitter) ? 
+                <Popover content="Ir a Twitter">
+                  <a
+                    href={user.socialTwitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <IoLogoTwitter className="twitter" />
+                  </a>
+                </Popover> :
+                <Popover content="Cuenta de Twitter sin configurar">
+                  <IoLogoTwitter className="socialNotDefined" />
+                </Popover>
+              }
+              {(user.socialFacebook) ? 
+                <Popover content="Facebook">
+                  <a
+                    href={user.socialFacebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <IoLogoFacebook className="facebook" />
+                  </a>
+                </Popover> :
+                <Popover content="Cuenta de Facebook sin configurar">
+                  <IoLogoFacebook className="socialNotDefined" />
+                </Popover>
+              }
+              {(user.socialInstagram) ? 
+                <Popover content="Instagram">
+                  <a
+                    href={user.socialInstagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <IoLogoInstagram className="instagram" />
+                  </a>
+                </Popover> :
+                <Popover content="Cuenta de Instagram sin configurar">
+                  <IoLogoInstagram className="socialNotDefined" />
+                </Popover>
+              }
             </SocialAccount>
           </ProfileInformationArea>
         </Container>
