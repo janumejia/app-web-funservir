@@ -1,10 +1,11 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Row, Col, Card } from 'antd';
+import { Input, Button, Row, Col, Card, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import { FormTitle } from './AccountSettings.style';
 import PasswordChecklist from "react-password-checklist"; // Sección donde se muestra que la contraseña ingresada cumple con lo requerido
 import validator from "validator";
+import axios from "../../../settings/axiosConfig"; // Para la petición de registro
 
 export default function ChangePassWord() {
   const {
@@ -15,9 +16,48 @@ export default function ChangePassWord() {
   } = useForm({
     mode: 'onChange',
   });
+
   const newPassword = watch('newPassword');
   const confirmPassword = watch('confirmPassword');
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = async (data) => {
+
+    try {
+      const modifiedData = {
+        oldPassword: data.oldPassword,
+        newPassword: data.newPassword
+      }
+
+      message.loading("Cargando", 0);
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/changePassword`, modifiedData);
+      message.destroy();
+      if (res) {
+        if (res.status === 200) {
+          message.success(res.data.message, 3);
+
+        } else message.warning("Respuesta del servidor desconocida", 3);
+      }
+    } catch (error) {
+      message.destroy();
+      if (!error.response || (error.response && typeof error.response.status === 'undefined')) {
+
+        message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+      } else {
+        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+
+          message.warning({ content: error.response.data.message, duration: 3 });
+        }
+        else if (error.response.status >= 500 && error.response.status <= 599) {
+
+          message.error({ content: error.response.data.message, duration: 3 });
+        } // Errores del servidor
+        else {
+          message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+        }
+      }
+    }
+
+  }
 
   return (
     <>
@@ -106,7 +146,7 @@ export default function ChangePassWord() {
               error={
                 confirmPassword &&
                 newPassword !== confirmPassword && (
-                  <span>Confirm password must be the same!</span>
+                  <span />
                 )
               }
             >
@@ -121,10 +161,10 @@ export default function ChangePassWord() {
                       onBlur={onBlur}
                       value={value}
                     />
-                    {/* <Card>
+                    <Card>
                       <PasswordChecklist
                         rules={["match"]}
-                        value={newPassword}
+                        value={newPassword ? newPassword : ""}
                         valueAgain={value}
                         messages={{
                           match: "Las contraseñas coinciden.",
@@ -132,7 +172,7 @@ export default function ChangePassWord() {
                         validColor={"#008489"}
                         invalidColor={"#eeeee4"}
                       />
-                    </Card> */}
+                    </Card>
                   </>
                 )}
               />

@@ -39,6 +39,7 @@ const AgentCreateOrUpdateForm = () => {
 
       data.dateOfBirth = data.dateOfBirth.$d;
 
+      message.loading("Cargando", 0);
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/updateUserInfo`, data);
       message.destroy();
       if (res) {
