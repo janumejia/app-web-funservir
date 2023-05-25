@@ -6,7 +6,7 @@ const moment = require('moment') // Para validar que el campo fecha realmente te
 const { ...regex } = require("../../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
 
-const updateUserInfo = async (req, res) => {
+const changePassword = async (req, res) => {
 
     const { ...inputs } = req.body;
 
@@ -16,18 +16,8 @@ const updateUserInfo = async (req, res) => {
     if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
 
     const dataArray = [
-        { input: 'name', dataType: 'string', regex: regex.nameUserRegex },
-        { input: 'lastName', dataType: 'string', regex: regex.lastNameUserRegex },
-        // { input: 'dateOfBirth', dataType: 'string', regex: regex.emailRegex }, // Se válida más abajo de otra forma
-        { input: 'gender', dataType: 'string', regex: regex.genderRegex },
-        { input: 'address', dataType: 'string', regex: regex.addressRegex },
-        { input: 'condition', dataType: 'array', regex: regex.conditionRegex },
-        { input: 'isCaregiver', dataType: 'string', regex: regex.isCaregiverRegex },
-        { input: 'institution', dataType: 'string', regex: regex.institutionRegex },
-        { input: 'describeYourself', dataType: 'string', regex: regex.describeYourselfRegex },
-        { input: 'socialInstagram', dataType: 'string', regex: regex.socialInstagramRegex },
-        { input: 'socialFacebook', dataType: 'string', regex: regex.socialFacebookRegex },
-        { input: 'socialTwitter', dataType: 'string', regex: regex.socialTwitterRegex },
+        { input: 'oldPassword', dataType: 'string', regex: new RegExp(/^.{1,100}$/) },
+        { input: 'newPassword', dataType: 'string', regex: new RegExp(/^.{1,100}$/) },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -58,37 +48,31 @@ const updateUserInfo = async (req, res) => {
         }
     }
 
-    // Validación de fecha de nacimiento
-    const isValidDateOfBirth = moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
-    if (isValidDateOfBirth === false) return res.status(422).json({ message: "Formato de fecha de nacimiento no es válido" });
+    // Validación de la contraseña nueva ingresada
+    const isValidNewPassword = validator.isStrongPassword(inputs.newPassword) ? true : false;
+    if (!isValidNewPassword) return res.status(422).json({ message: `El valor de la contraseña no es válido` });
 
     try {
-        let user = await User.findOne({ _id: decodedDataInToken._id }, { password: 0, email: 0, associatedSites: 0, profilePicture: 0, __v: 0 });
-        if (!user) {
-            return res.status(404).json({ message: "No se encontró el usuario a actualizar" });
-        }
+        const user = await User.findOne({ _id: decodedDataInToken._id })
 
-        user.name = inputs.name,
-        user.lastName = inputs.lastName,
-        user.dateOfBirth = inputs.dateOfBirth,
-        user.gender = inputs.gender,
-        user.address = inputs.address,
-        user.condition = inputs.condition,
-        user.isCaregiver = inputs.isCaregiver,
-        user.institution = inputs.institution,
-        user.describeYourself = inputs.describeYourself,
-        user.socialInstagram = inputs.socialInstagram,
-        user.socialFacebook = inputs.socialFacebook,
-        user.socialTwitter = inputs.socialTwitter,
+        if (!user) return res.status(401).json({ message: "No se encontró el usuario" })
 
+        /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
+        const isCorrect = await bcrypt.compare(inputs.oldPassword, user.password) // Retorna un booleano sobre si coincide la contraseña
+
+        if (!isCorrect) return res.status(401).json({ message: "La contraseña actual ingresada no coincide" })
+
+        // Sacamos el hash y lo guardamos
+        const hash = await bcrypt.hash(inputs.newPassword, parseInt(process.env.SALT_BCRYPT));
+        user.password = hash;
         await user.save();
 
-        return res.status(200).json({ message: "Usuario actualizado correctamente", data: user });
-    
+        res.status(200).json({ message: "Contraseña actualizada correctamente" })
+
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Error al actualizar usuario" });
+        return res.status(500).json({ message: "Error al actualizar contraseña" });
     }
 }
 
-module.exports = updateUserInfo
+module.exports = changePassword

@@ -10,6 +10,7 @@ const uniqueEmailValidator = require("./authentication/uniqueEmailValidator")
 const uniqueSitenameValidator = require("./authentication/uniqueSitenameValidator")
 const addSite = require("./authentication/authenticatedUser/addSite")
 const updateUserInfo = require("./authentication/authenticatedUser/updateUserInfo")
+const changePassword = require("./authentication/authenticatedUser/changePassword")
 
 module.exports = {
     registerUser,
@@ -24,4 +25,5 @@ module.exports = {
     uniqueSitenameValidator,
     addSite,
     updateUserInfo,
+    changePassword,
 }
