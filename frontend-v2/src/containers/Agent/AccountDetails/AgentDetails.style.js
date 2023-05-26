@@ -94,13 +94,18 @@ export const SocialAccount = styled.div`
   }
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
 
     fill: ${themeGet('color.6', '#273343')};
     cursor: pointer;
     transition: all 0.2s ease;
 
+    &.socialNotDefined{
+      fill: ${themeGet('color.5', '#55ADEE')};
+      cursor: not-allowed;
+      margin-right: 30px;
+    }
     &:first-child {
       margin-left: 0;
     }
