@@ -6,14 +6,7 @@ export default class ImageUploader extends React.Component {
   state = {
     previewVisible: false,
     previewImage: '',
-    fileList: [
-      {
-        uid: '-1',
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-    ],
+    fileList: [],
   };
 
   handleCancel = () => this.setState({ previewVisible: false });
@@ -25,10 +18,13 @@ export default class ImageUploader extends React.Component {
     });
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList });
+  handleChange = ({ fileList }) => {
+    this.props.setImage(fileList);
+    this.setState({ fileList });
+  }
 
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { previewVisible, previewImage } = this.state;
     const Dragger = Upload.Dragger;
 
     const uploadButton = (
@@ -36,20 +32,25 @@ export default class ImageUploader extends React.Component {
         <div className="image-drag-area">
           <FaCamera />
         </div>
-        <div className="ant-upload-text">Subir Imágenes</div>
+        {this.props.fileList && this.props.fileList.length >= 1
+          ? ( <div className="ant-upload-text">Cambiar Imagen</div> )
+          : ( <div className="ant-upload-text">Subir Imagen</div> )
+        }
       </ImageUpload>
     );
+
     return (
       <div className="clearfix">
         <Dragger
-          action="//jsonplaceholder.typicode.com/posts/"
+          beforeUpload={() => false}
           listType="picture-card"
           fileList={this.props.fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
           className="image_uploader"
+          maxCount={1}
         >
-          {fileList.length >= 4 ? null : uploadButton}
+          {uploadButton}
         </Dragger>
         <Modal
           visible={previewVisible}
