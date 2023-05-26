@@ -144,16 +144,22 @@ export default function ChangePassWord() {
               label="Confirmar nueva contraseña"
               htmlFor="confirmPassword"
               error={
-                confirmPassword &&
-                newPassword !== confirmPassword && (
+                errors.confirmPassword && errors.confirmPassword.type === "required" ? (
                   <span />
-                )
+                ) : errors.confirmPassword && errors.confirmPassword.type === "validate" ? (
+                  <span />
+                ) : null
               }
             >
               <Controller
                 name="confirmPassword"
                 defaultValue=""
                 control={control}
+                rules={{
+                  required: true,
+                  // pattern: /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  validate: (value) => newPassword && value === newPassword
+                }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <>
                     <Input.Password
