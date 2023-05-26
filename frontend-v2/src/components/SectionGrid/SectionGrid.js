@@ -79,7 +79,7 @@ export default function SectionGrid({
           ))}
       </Box>
 
-      {/* {showButton && (
+      {showButton && (
         <LoadMore
           showButton={showButton}
           handleLoadMore={handleLoadMore}
@@ -88,7 +88,7 @@ export default function SectionGrid({
           loadMoreComponent={loadMoreComponent}
           loadMoreStyle={loadMoreStyle}
         />
-      )} */}
+      )}
       {paginationComponent && (
         <Box className="pagination_wrapper">{paginationComponent}</Box>
       )}

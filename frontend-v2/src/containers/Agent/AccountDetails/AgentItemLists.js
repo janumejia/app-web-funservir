@@ -11,7 +11,7 @@ const AgentItemLists = () => {
   return (
     <SectionGrid
       link={SINGLE_POST_PAGE}
-      //data={listed_post}
+      data={listed_post}
       loading={loading}
       limit={8}
       totalItem={total.length}
