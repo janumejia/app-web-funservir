@@ -413,7 +413,7 @@ const AgentCreateOrUpdateForm = () => {
                 control={control}
                 rules={{
                   required: false,
-                  pattern: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$/,
+                  pattern: /^(?:https?:\/\/)(?:www\.)instagram\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -443,7 +443,7 @@ const AgentCreateOrUpdateForm = () => {
                 control={control}
                 rules={{
                   required: false,
-                  pattern: /^(?:https?:\/\/)?(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$/,
+                  pattern: /^(?:https?:\/\/)(?:www\.)facebook\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -473,7 +473,7 @@ const AgentCreateOrUpdateForm = () => {
                 control={control}
                 rules={{
                   required: false,
-                  pattern: /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/([a-zA-Z0-9_]){1,255}[\/]{0,1}$/,
+                  pattern: /^(?:https?:\/\/)(?:www\.)twitter\.com\/([a-zA-Z0-9_]){1,255}[\/]{0,1}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>

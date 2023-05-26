@@ -62,6 +62,8 @@ const changePassword = async (req, res) => {
 
         if (!isCorrect) return res.status(401).json({ message: "La contraseña actual ingresada no coincide" })
 
+        if (inputs.oldPassword === inputs.newPassword) return res.status(401).json({ message: "La nueva contraseña no puede ser igual a la anterior" })
+
         // Sacamos el hash y lo guardamos
         const hash = await bcrypt.hash(inputs.newPassword, parseInt(process.env.SALT_BCRYPT));
         user.password = hash;
