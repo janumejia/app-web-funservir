@@ -39,18 +39,28 @@ export default function AgentPictureChangeForm() {
       }
     };
 
+    console.log(user)
+    console.log(coverPicture)
+    console.log(profilePicture)
     initializeImages();
   }, [user]);
 
   const onSubmit = async () => {
     console.log(user)
+    console.log(coverPicture)
+    console.log(profilePicture)
     if (coverPicture[0] && coverPicture[0].url && profilePicture[0] && profilePicture[0].url) message.warning("Debes modificar alguna de las imágenes primero", 3);
     else {
 
       let data = {}
-      if (coverPicture[0] && !coverPicture[0].url) data["coverPicture"] = coverPicture[0].thumbUrl
-      if (profilePicture[0] && !profilePicture[0].url) data["profilePicture"] = profilePicture[0].thumbUrl
-  
+      if (coverPicture[0] && coverPicture[0].thumbUrl) data["coverPicture"] = coverPicture[0].thumbUrl // Se modifico la imagen que ya tenia
+      else if (coverPicture[0] && coverPicture[0].url) data["coverPicture"] = coverPicture[0].url // NO se modifico la imagen que ya tenia
+      else data["coverPicture"] = "" // Se quitó o no tenia una imagen
+
+      if (profilePicture[0] && profilePicture[0].thumbUrl) data["profilePicture"] = profilePicture[0].thumbUrl
+      else if (profilePicture[0] && profilePicture[0].url) data["profilePicture"] = profilePicture[0].url // NO se modifico la imagen que ya tenia
+      else data["profilePicture"] = "" // Se quitó o no tenia una imagen
+
       try {
         message.loading("Cargando", 0);
         const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/changePictures`, data);

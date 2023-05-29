@@ -8,15 +8,46 @@ var validator = require('validator');
 
 const changePictures = async (req, res) => {
 
-    const { ...inputs } = req.body;
-
-    const decodedDataInToken = req.decodedDataInToken;
-
-    // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
-    if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
-
     try {
-        if (!inputs.coverPicture && !inputs.profilePicture) return res.status(400).json({ message: "Debes modificar alguna de las imágenes primero" });
+        const { ...inputs } = req.body;
+
+        const decodedDataInToken = req.decodedDataInToken;
+
+        // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
+        if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
+
+        let dataArray = [
+            { input: 'coverPicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
+            { input: 'profilePicture', dataType: 'string', regex: regex.changePicturesImagesRegex }
+        ]
+
+        // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
+        // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
+        const validateInput = (input, dataName, dataType, regex) => {
+            if (dataType === 'string') {
+                return typeof input === 'string' && regex.test(input);
+            }
+            if (dataType === 'array') {
+                return Array.isArray(input) && input.every(element => regex.test(element)); // Método every para iterar sobre cada uno de los elementos del arreglo y comprobar si cada elemento cumple con la expresión regular
+            }
+            if (dataType === 'object') {
+                return typeof input === 'object' && input !== null &&
+                    dataArray.every(({ input: requiredInput, properties, regex: requiredRegex }) => {
+                        if (requiredInput !== dataName) return true;
+                        return properties.every(prop => input.hasOwnProperty(prop) && requiredRegex.test(input[prop]));
+                    });
+            }
+            return false;
+        };
+
+        // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
+        // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
+        for (const { input, dataType, regex } of dataArray) {
+            const inputValue = inputs[input];
+            if (!validateInput(inputValue, input, dataType, regex)) {
+                return res.status(422).json({ message: `El valor de ${input} no es válido` });
+            }
+        }
 
         // Validación de imagen enviada
         const isBase64 = (str) => {
@@ -54,34 +85,58 @@ const changePictures = async (req, res) => {
 
         // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
         // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
-        if (inputs.coverPicture && !validateImages([inputs.coverPicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
-        if (inputs.profilePicture && !validateImages([inputs.profilePicture])) return res.status(422).json({ message: `La imagen de perfil no es válida por su formato o tamaño` });
+        cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
 
-        let user = await User.findOne({ _id: decodedDataInToken._id });
+        // if (inputs.profilePicture && base64Regex.test(inputs.profilePicture)  && !validateImages([inputs.profilePicture])) return res.status(422).json({ message: `La imagen de perfil no es válida por su formato o tamaño` });
+        // if (inputs.coverPicture && base64Regex.test(inputs.coverPicture) && !validateImages([inputs.coverPicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
+
+        let user = await User.findOne({ _id: decodedDataInToken._id }, {coverPicture: 1, profilePicture: 1, gender: 1 });
         if (!user) {
             return res.status(404).json({ message: "No se encontró el usuario a actualizar" });
         }
-        console.log("bien user")
 
         let uploadedCoverPicture = {}
-        if (inputs.coverPicture) {
+        if (inputs.coverPicture === "") {
+            // Nothing
+            const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
+            const URL = `https://res.cloudinary.com/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+            user.coverPicture = URL;
+
+        } else if (cloudinaryUrlRegex.test(inputs.coverPicture)) {
+            // Hacer nada aquí
+        } else { // Si no es ninguna de las anteriores, entonces es de tipo base64
+            if (!validateImages([inputs.coverPicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
+
             uploadedCoverPicture = await cloudinary.uploader.upload(inputs.coverPicture, {
                 upload_preset: "profile_pictures",
+                public_id: inputs.email
             });
 
             user.coverPicture = uploadedCoverPicture.secure_url
         }
-        console.log("bien cover")
 
         let uploadedProfilePicture = {}
-        if (inputs.profilePicture) {
+        if (inputs.profilePicture === "") {
+            const prflPic = await randomAvatar(user.gender);
+            const uploadRes = await cloudinary.uploader.upload(prflPic, {
+                upload_preset: "profile_pictures",
+                public_id: inputs.email
+            })
+
+            user.profilePicture = uploadRes.secure_url
+
+        } else if (cloudinaryUrlRegex.test(inputs.profilePicture)) {
+            // Hacer nada aquí
+        } else { // Si no es ninguna de las anteriores, entonces es de tipo base64
+            if (!validateImages([inputs.profilePicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
+
             uploadedProfilePicture = await cloudinary.uploader.upload(inputs.profilePicture, {
                 upload_preset: "profile_pictures",
+                public_id: inputs.email
             });
 
             user.profilePicture = uploadedProfilePicture.secure_url
         }
-        console.log("bien profile")
 
         await user.save();
 
