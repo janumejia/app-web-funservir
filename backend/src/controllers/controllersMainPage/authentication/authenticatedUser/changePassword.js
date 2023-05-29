@@ -1,9 +1,5 @@
 const User = require("../../../../model/user")
-const cloudinary = require("../../../../middlewares/cloudinary");
 const bcrypt = require("bcryptjs")
-const { randomAvatar } = require("../../../../utils/avatarGenerator/RandomAvatarGenerator")
-const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
-const { ...regex } = require("../../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
 
 const changePassword = async (req, res) => {

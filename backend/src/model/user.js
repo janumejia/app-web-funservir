@@ -14,6 +14,7 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     userType: {type: String, required: true},
     associatedSites: [{ type: Schema.Types.ObjectId, ref: 'Site' }],
     profilePicture: {type: String, required: false},
+    coverPicture: {type: String, required: false},
     describeYourself: {type: String, required: false},
     socialInstagram: {type: String, required: false},
     socialFacebook: {type: String, required: false},
