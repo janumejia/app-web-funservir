@@ -78,6 +78,7 @@ app.get("/status", verifyToken, controllers.tokenStatus)
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/addSite", verifyToken, controllers.addSite)
 app.post("/updateUserInfo", verifyToken, controllers.updateUserInfo)
+app.post("/changePictures", verifyToken, controllers.changePictures)
 app.post("/changePassword", verifyToken, controllers.changePassword)
 
 // Busqueda de sitios

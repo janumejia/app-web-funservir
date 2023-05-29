@@ -11,6 +11,7 @@ const uniqueSitenameValidator = require("./authentication/uniqueSitenameValidato
 const addSite = require("./authentication/authenticatedUser/addSite")
 const updateUserInfo = require("./authentication/authenticatedUser/updateUserInfo")
 const changePassword = require("./authentication/authenticatedUser/changePassword")
+const changePictures = require("./authentication/authenticatedUser/changePictures")
 
 module.exports = {
     registerUser,
@@ -26,4 +27,5 @@ module.exports = {
     addSite,
     updateUserInfo,
     changePassword,
+    changePictures,
 }

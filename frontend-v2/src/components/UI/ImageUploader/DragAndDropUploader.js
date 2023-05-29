@@ -28,7 +28,7 @@ const { Dragger } = Upload;
 //   },
 // ];
 
-const DragAndDropUploader = ({value, onUploadChange}) => {
+const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
   let status = null;
   const beforeUpload = (file) => {
 
@@ -70,7 +70,7 @@ const DragAndDropUploader = ({value, onUploadChange}) => {
       className="uploader" 
       beforeUpload={beforeUpload} 
       multiple= {true}
-      maxCount={8}
+      maxCount={maxImgs ? maxImgs : 8}
       onChange={handleOnChange}
       defaultFileList={value}
       >

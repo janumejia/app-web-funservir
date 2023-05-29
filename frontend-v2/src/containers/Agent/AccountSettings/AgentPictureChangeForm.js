@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Divider } from 'antd';
+import { Button, Divider, message } from 'antd';
 import { useForm } from 'react-hook-form';
 import ImageUploader from 'components/UI/ImageUploader/ImageUploader';
 import Heading from 'components/UI/Heading/Heading';
 import { AgentPictureUploader, FormTitle } from './AccountSettings.style';
 import { AuthContext } from 'context/AuthProvider';
+import axios from "../../../settings/axiosConfig"; // Para la petición de registro
 
 export default function AgentPictureChangeForm() {
 
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [coverPicture, setCoverPicture] = useState([]);
   const [profilePicture, setProfilePicture] = useState([]);
@@ -42,8 +43,51 @@ export default function AgentPictureChangeForm() {
   }, [user]);
 
   const onSubmit = async () => {
-    console.log("data1: ", coverPicture)
-    console.log("data2: ", profilePicture)
+    console.log(user)
+    if (coverPicture[0] && coverPicture[0].url && profilePicture[0] && profilePicture[0].url) message.warning("Debes modificar alguna de las imágenes primero", 3);
+    else {
+
+      let data = {}
+      if (coverPicture[0] && !coverPicture[0].url) data["coverPicture"] = coverPicture[0].thumbUrl
+      if (profilePicture[0] && !profilePicture[0].url) data["profilePicture"] = profilePicture[0].thumbUrl
+  
+      try {
+        message.loading("Cargando", 0);
+        const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/changePictures`, data);
+        message.destroy();
+        if (res) {
+          if (res.status === 200) {
+            message.success(res.data.message, 3);
+  
+            let updatedUser = { // Poner los valores que tiene actualmente el usuario y agregar los que nos llega del back
+              ...user,
+              ...res.data.data
+            }
+            setUser(updatedUser);
+  
+          } else message.warning("Respuesta del servidor desconocida", 3);
+        }
+      } catch (error) {
+        message.destroy();
+        if (!error.response || (error.response && typeof error.response.status === 'undefined')) {
+  
+          message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+        } else {
+          if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+  
+            message.warning({ content: error.response.data.message, duration: 3 });
+          }
+          else if (error.response.status >= 500 && error.response.status <= 599) {
+  
+            message.error({ content: error.response.data.message, duration: 3 });
+          } // Errores del servidor
+          else {
+            message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+          }
+        }
+      }
+
+    }
   }
 
   return (
