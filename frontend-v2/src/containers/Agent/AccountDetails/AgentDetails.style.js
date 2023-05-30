@@ -48,6 +48,27 @@ export const ProfileImage = styled.div`
   }
 `;
 
+export const CircleProfileImage = styled.div`
+  width: 180px;
+  height: 180px;
+  border-radius: 50%; /* Forma circular */
+  overflow: hidden;
+  background-color: transparent; /* Cambia el color de fondo a transparente */;
+  border: none; /* Remover el borde */
+  box-shadow: 0 3px 6px ${themeGet('boxShadow.1', 'rgba(26, 68, 116, 0.16)')};
+  margin-bottom: 27px;
+  @media (max-width: 480px) {
+    width: 150px;
+    height: 150px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+`;
+
 export const ProfileInformationArea = styled.div`
   display: flex;
   align-items: flex-start;

@@ -42,10 +42,7 @@ export default function AgentPictureChangeForm() {
         ]);
       }
     };
-
-    console.log(user)
-    console.log(coverPicture)
-    console.log(profilePicture)
+    
     initializeImages();
   }, [user]);
 
@@ -95,9 +92,6 @@ export default function AgentPictureChangeForm() {
   }, [profilePicture]);
 
   const onSubmit = async () => {
-    console.log(user)
-    console.log(coverPicture)
-    console.log(profilePicture)
     if (coverPicture[0] && coverPicture[0].url && profilePicture[0] && profilePicture[0].url) message.warning("Debes modificar alguna de las imágenes primero", 3);
     else {
 
@@ -111,6 +105,7 @@ export default function AgentPictureChangeForm() {
       else data["profilePicture"] = "" // Se quitó o no tenia una imagen
 
       try {
+        message.destroy();
         message.loading("Cargando", 0);
         const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/changePictures`, data);
         message.destroy();
