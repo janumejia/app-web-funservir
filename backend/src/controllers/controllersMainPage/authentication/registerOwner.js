@@ -121,9 +121,10 @@ const addInclusiveSites = async (req, res) => {
 
         // Subir las imágenes a Cloudinary
         const uploadPromises = inputs.sitePhotos.map(img => {
-                return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
-            });
-            const uploadRes = await Promise.all(uploadPromises);    
+            return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
+        });
+        
+        const uploadRes = await Promise.all(uploadPromises);    
 
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({

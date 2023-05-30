@@ -99,7 +99,7 @@ const changePictures = async (req, res) => {
         if (inputs.coverPicture === "") {
             // Nothing
             const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
-            const URL = `https://res.cloudinary.com/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+            const URL = `https://res.cloudinary.com/pasantiafunservir/image/upload/c_fill,g_auto,h_250,w_970/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
             user.coverPicture = URL;
 
         } else if (cloudinaryUrlRegex.test(inputs.coverPicture)) {
@@ -112,7 +112,7 @@ const changePictures = async (req, res) => {
                 public_id: inputs.email
             });
 
-            user.coverPicture = uploadedCoverPicture.secure_url
+            user.coverPicture = uploadedCoverPicture.secure_url.replace("/upload/", `/upload/c_fill,g_auto,h_250,w_970/`);
         }
 
         let uploadedProfilePicture = {}
@@ -134,7 +134,7 @@ const changePictures = async (req, res) => {
                 upload_preset: "profile_pictures",
                 public_id: inputs.email
             });
-
+            
             user.profilePicture = uploadedProfilePicture.secure_url
         }
 
