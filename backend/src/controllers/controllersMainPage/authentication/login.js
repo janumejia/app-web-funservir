@@ -34,6 +34,7 @@ const login = async (req, res) => {
                             socialInstagram: user.socialInstagram,
                             socialFacebook: user.socialFacebook,
                             socialTwitter: user.socialTwitter,
+                            coverPicture: user.coverPicture,
                         };
                         
                         // Cambiar después de sameSite: "none" a sameSite: "strict"
