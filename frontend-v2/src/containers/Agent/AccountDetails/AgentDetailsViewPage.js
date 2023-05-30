@@ -25,6 +25,7 @@ import AgentDetailsPage, {
   BannerSection,
   UserInfoArea,
   ProfileImage,
+  CircleProfileImage,
   ProfileInformationArea,
   ProfileInformation,
   SocialAccount,
@@ -84,16 +85,16 @@ const AgentProfileInfo = () => {
       </BannerSection>
       <UserInfoArea>
         <Container fluid={true}>
-          <ProfileImage>
+          <CircleProfileImage>
             <Image src={user.profilePicture} alt="Profile" />
-          </ProfileImage>
+          </CircleProfileImage>
           <ProfileInformationArea>
             <ProfileInformation>
               <Heading content={username} />
               <Text content={(user.description) ? user.description : "¡Hola, estoy usando la plataforma de Funservir!"} />
             </ProfileInformation>
             <SocialAccount>
-              {(user.socialTwitter) ? 
+              {(user.socialTwitter) ?
                 <Popover content="Ir a Twitter">
                   <a
                     href={user.socialTwitter}
@@ -107,7 +108,7 @@ const AgentProfileInfo = () => {
                   <IoLogoTwitter className="socialNotDefined" />
                 </Popover>
               }
-              {(user.socialFacebook) ? 
+              {(user.socialFacebook) ?
                 <Popover content="Facebook">
                   <a
                     href={user.socialFacebook}
@@ -121,7 +122,7 @@ const AgentProfileInfo = () => {
                   <IoLogoFacebook className="socialNotDefined" />
                 </Popover>
               }
-              {(user.socialInstagram) ? 
+              {(user.socialInstagram) ?
                 <Popover content="Instagram">
                   <a
                     href={user.socialInstagram}
