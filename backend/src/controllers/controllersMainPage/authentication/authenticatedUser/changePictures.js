@@ -143,7 +143,8 @@ const changePictures = async (req, res) => {
         return res.status(200).json({ message: "Imágenes actualizadas correctamente", data: user });
 
     } catch (error) {
-        console.error(error);
+        console.log("pasó por aqui")
+        // console.error(error);
         return res.status(500).json({ message: "Error al actualizar imágenes" });
     }
 }
