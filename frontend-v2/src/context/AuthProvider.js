@@ -26,11 +26,15 @@ const AuthProvider = (props) => {
             setUser(...res.data.data);
             setLoggedIn(true);
   
-          } else message.warning(res.status + " - Respuesta del servidor desconocida");
+          } else message.warning("Respuesta del servidor desconocida");
         }
       } catch (error) {
-        setUser(null);
-        setLoggedIn(false);
+        if(error && error.response && error.response.status && error.response.status === 503) message.error({ content: error.response.data.message, duration: 3 });
+        else {
+          console.log("Haga esto")
+          setUser({});
+          setLoggedIn(false);
+        }
       }
     }
 
@@ -41,53 +45,92 @@ const AuthProvider = (props) => {
 
   const signIn = async (params) => {
     //console.log(params, 'sign in form Props');
-    await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
-      withCredentials: true
-    })
-      .then((response) => {
-        console.log("response: ", response);
-        if (response.status === 200) {
-          console.log("etoo: ", response.data.data)
-          setUser( response.data.data );
+    try {
+      message.destroy();
+      message.loading("Cargando", 0);
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
+        withCredentials: true
+      });
+
+      message.destroy();
+      if (res) {
+        if (res.status === 200) {
+          message.success(res.data.message, 3);
+          
+          setUser( res.data.data );
           setLoggedIn(true);
           navigate('/', { replace: true });
+
+        } else message.warning("Respuesta del servidor desconocida", 3);
+      }
+    } catch (error) {
+      message.destroy();
+      if (!error.response || (error.response && typeof error.response.status === 'undefined')) {
+        message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
+      } else {
+        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+
+          message.warning({ content: error.response.data.message, duration: 3 });
         }
+        else if (error.response.status >= 500 && error.response.status <= 599) {
 
-      })
-      .catch((error) => {
-        console.log(error)
-        if (error.response && error.response.status && error.response.status === 401) {
-
-          // En forma de notificación:
-          // notification.error({
-          //   message: error.response.data.message,
-          //   // description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-          //   placement: 'topLeft',
-          //   duration: 3,
-          //   // No funcionan bien los estilos de la notificación
-          //   // style: {
-          //     // top: '50%', // Centrado verticalmente
-          //     // left: '40%', // Centrado horizontalmente
-          //     // marginLeft: '-6.5em', // Desplazamiento horizontal negativo igual a la mitad del ancho de la notificación
-          //   // }
-          // });
-
-          // En forma de mensaje:
-          message.error(error.response.data.message, 3, undefined, {
-            style: {
-              marginTop: '10vh',
-            },
-          },);
-
-
-        } else {
-          message.error("Hubo un error", 3, undefined, {
-            style: {
-              marginTop: '10vh',
-            },
-          },);
+          message.error({ content: error.response.data.message, duration: 3 });
+        } // Errores del servidor
+        else {
+          message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
         }
-      })
+      }
+    }
+
+    // -----
+    
+    // await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
+    //   withCredentials: true
+    // })
+    //   .then((response) => {
+    //     console.log("response: ", response);
+    //     if (response.status === 200) {
+    //       console.log("etoo: ", response.data.data)
+    //       setUser( response.data.data );
+    //       setLoggedIn(true);
+    //       navigate('/', { replace: true });
+    //     }
+
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //     if (error.response && error.response.status && error.response.status === 401) {
+
+    //       // En forma de notificación:
+    //       // notification.error({
+    //       //   message: error.response.data.message,
+    //       //   // description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+    //       //   placement: 'topLeft',
+    //       //   duration: 3,
+    //       //   // No funcionan bien los estilos de la notificación
+    //       //   // style: {
+    //       //     // top: '50%', // Centrado verticalmente
+    //       //     // left: '40%', // Centrado horizontalmente
+    //       //     // marginLeft: '-6.5em', // Desplazamiento horizontal negativo igual a la mitad del ancho de la notificación
+    //       //   // }
+    //       // });
+
+    //       // En forma de mensaje:
+    //       message.error(error.response.data.message, 3, undefined, {
+    //         style: {
+    //           marginTop: '10vh',
+    //         },
+    //       },);
+
+
+    //     } else {
+    //       message.error("Hubo un error", 3, undefined, {
+    //         style: {
+    //           marginTop: '10vh',
+    //         },
+    //       },);
+    //     }
+    //   })
   };
 
   // Aquí recibimos los datos del registro
@@ -173,6 +216,7 @@ const AuthProvider = (props) => {
         signIn,
         // signUp,
         setUser,
+        setLoggedIn,
         user,
         admin,
       }}

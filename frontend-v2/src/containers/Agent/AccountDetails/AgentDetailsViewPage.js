@@ -67,7 +67,7 @@ const ProfileNavigation = (props) => {
 const AgentProfileInfo = () => {
   const { data, loading } = useDataApi('/data/agent.json');
   const { user } = useContext(AuthContext);
-  if (isEmpty(data) || loading) return <Loader />;
+  if (isEmpty(user) || loading) return <Loader />;
   const {
     first_name,
     last_name,

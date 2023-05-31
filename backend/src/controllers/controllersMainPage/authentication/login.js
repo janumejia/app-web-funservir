@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
     const { email, password } = req.body
     
-    User.findOne({ email }).then((user) => {
+    User.findOne({ email }).then(async (user) => {
         if (user) {
             /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
@@ -46,10 +46,15 @@ const login = async (req, res) => {
                         })
 
                     } else {
+                        const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 }); 
                         res.status(401).json({ message: "Correo y/o contraseña incorrecta", user:{}})
                     }
                 })
         }else{
+            // No usar esto. Solo es para evitar enumeración de usuarios debido al tiempo de respuesta
+            await bcrypt.compare("fakepassword", "$2b$10$abcdefghijklmnopqrstuv") // Simula comparación de la contraseña
+            const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 }); 
+
             res.status(401).json({ message: "Correo y/o contraseña incorrecta", user:{}})
         }
     })

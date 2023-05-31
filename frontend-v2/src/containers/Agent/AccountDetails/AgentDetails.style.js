@@ -55,7 +55,7 @@ export const CircleProfileImage = styled.div`
   overflow: hidden;
   background-color: transparent; /* Cambia el color de fondo a transparente */;
   border: none; /* Remover el borde */
-  box-shadow: 0 3px 6px ${themeGet('boxShadow.1', 'rgba(26, 68, 116, 0.16)')};
+  ${'' /* box-shadow: 0 3px 6px ${themeGet('boxShadow.1', 'rgba(26, 68, 116, 0.16)')}; */}
   margin-bottom: 27px;
   @media (max-width: 480px) {
     width: 150px;

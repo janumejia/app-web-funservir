@@ -3,6 +3,7 @@ const express = require("express")
 const cors = require("cors")
 const db = require("./database/db")
 const cookieParser = require("cookie-parser");
+const mongoose = require('mongoose');
 
 const controllers = require("./controllers/controllersMainPage") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
@@ -62,6 +63,12 @@ app.use((err, req, res, next) => {
     } else {
         next();
     }
+});
+
+// Para comprobar que el backend tiene conexión con la BD antes de seguir
+app.use((req, res, next) => {
+    if (mongoose.connection.readyState === 1) next();
+    else return res.status(503).json({ message: 'Error en el servidor. Inténtalo más tarde' });
 });
 
 /* Rutas de nuestra APP */
@@ -142,21 +149,22 @@ const host = process.env.BACKEND_HOST;
 const port = process.env.BACKEND_PORT
 
 // Para manejo de errores cuando no es posible conectarse con mongodb
-try {
-    db().then(() => {
-            app.listen(port, host, () => {
-                console.log(`Servidor funcionando en http://${host}:${port}`);
-            });
-        })
-        .catch((error) => {
-            console.error('Error al iniciar el servidor:', error);
-        });
-} catch (error) {
-    console.error('Error en la conexión con la base de datos:', error);
-
-    // Send an error response to the client
-    app.use((req, res, next) => {
-        res.status(500).json({ error: 'There was an error connecting to the database. Please try again later.' });
+// try {
+db().then(() => {
+    console.log("Ajustando conexión con el servidor...")
+    app.listen(port, host, () => {
+        console.log(`Servidor funcionando en http://${host}:${port}`);
     });
-}
+})
+    .catch((error) => {
+        console.error('Error al iniciar el servidor');
+    });
+// } catch (error) {
+//     console.error('Error en la conexión con la base de datos:', error);
+
+//     // Send an error response to the client
+//     app.use((req, res, next) => {
+//         res.status(500).json({ error: 'There was an error connecting to the database. Please try again later.' });
+//     });
+// }
 module.exports = app
