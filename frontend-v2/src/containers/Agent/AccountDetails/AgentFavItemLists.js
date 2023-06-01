@@ -11,14 +11,14 @@ const AgentFavItemLists = () => {
 
   return (
     <SectionGrid
-      link={SINGLE_POST_PAGE}
-      data={favourite_post}
-      loading={loading}
-      limit={6}
+      // link={SINGLE_POST_PAGE}
+      // data={favourite_post}
+      // loading={loading}
+      // limit={6}
       totalItem={favourite_post.length}
       columnWidth={[1 / 2, 1 / 2, 1 / 3, 1 / 4, 1 / 5, 1 / 6]}
       placeholder={<PostPlaceholder />}
-      handleLoadMore={loadMoreData}
+      // handleLoadMore={loadMoreData}
     />
   );
 };

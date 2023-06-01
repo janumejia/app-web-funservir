@@ -47,12 +47,12 @@ const ProfileNavigation = (props) => {
           >
             <NavLink to={path}>Sitios inclusivos</NavLink>
           </Menu.Item>
-          <Menu.Item key="1">
+          {/* <Menu.Item key="1">
             <NavLink to={AGENT_PROFILE_FAVORITE}>Favoritos</NavLink>
-          </Menu.Item>
-          <Menu.Item key="2">
+          </Menu.Item> */}
+          {/* <Menu.Item key="2">
             <NavLink to={AGENT_PROFILE_CONTACT}>Contacto</NavLink>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
         {loggedIn && (
           <Link className="add_card" to={ADD_SITE_PAGE}>
@@ -77,7 +77,7 @@ const AgentProfileInfo = () => {
     social_profile,
   } = data[0];
   const username = `${user.name} ${user.lastName}`;
-  console.log(user);
+  
   return (
     <Fragment>
       <BannerSection>

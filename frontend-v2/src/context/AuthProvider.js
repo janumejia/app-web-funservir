@@ -20,7 +20,7 @@ const AuthProvider = (props) => {
     const isLoggedIn = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`)
-
+        
         if (res) {
           if (res.status === 200) {
             setUser(...res.data.data);
@@ -45,9 +45,7 @@ const AuthProvider = (props) => {
       withCredentials: true
     })
       .then((response) => {
-        console.log("response: ", response);
         if (response.status === 200) {
-          console.log("etoo: ", response.data.data)
           setUser( response.data.data );
           setLoggedIn(true);
           navigate('/', { replace: true });
