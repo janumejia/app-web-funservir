@@ -29,6 +29,9 @@ const AddEditInclusiveSite = ({ site }) => {
 
     const updateInfoSite = async (row) => {
         try {
+
+            if(!row.inclusiveElements) row.inclusiveElements = [] 
+
             message.open({
                 key: 'key-loading',
                 type: 'loading',
@@ -240,7 +243,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     label="Elementos Inclusivos"
                     rules={[
                         {
-                            required: true,
+                            required: false,
                             message: `¡Seleccione al menos un elemento inclusivo!`,
                             // pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,100}$/,
                             // type: 'string'

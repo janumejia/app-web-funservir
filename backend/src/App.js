@@ -149,22 +149,14 @@ const host = process.env.BACKEND_HOST;
 const port = process.env.BACKEND_PORT
 
 // Para manejo de errores cuando no es posible conectarse con mongodb
-// try {
 db().then(() => {
-    console.log("Ajustando conexión con el servidor...")
-    app.listen(port, host, () => {
-        console.log(`Servidor funcionando en http://${host}:${port}`);
-    });
-})
+        console.log("Ajustando conexión con el servidor...")
+        app.listen(port, host, () => {
+            console.log(`Servidor funcionando en http://${host}:${port}`);
+        });
+    })
     .catch((error) => {
         console.error('Error al iniciar el servidor');
     });
-// } catch (error) {
-//     console.error('Error en la conexión con la base de datos:', error);
 
-//     // Send an error response to the client
-//     app.use((req, res, next) => {
-//         res.status(500).json({ error: 'There was an error connecting to the database. Please try again later.' });
-//     });
-// }
 module.exports = app
