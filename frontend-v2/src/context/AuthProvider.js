@@ -19,7 +19,11 @@ const AuthProvider = (props) => {
     // Para verificar si está logueado en el primer renderizado de la página
     const isLoggedIn = async () => {
       try {
+<<<<<<< HEAD
         const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`, { withCredentials: true })
+=======
+        const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`)
+>>>>>>> 0a533b2 (lista de sitios, debido al cambio de ref se debe hacer el cambio en el portal)
         
         if (res) {
           if (res.status === 200) {
@@ -44,6 +48,7 @@ const AuthProvider = (props) => {
 
   const signIn = async (params) => {
     //console.log(params, 'sign in form Props');
+<<<<<<< HEAD
     try {
       message.destroy();
       message.loading("Cargando", 0);
@@ -57,6 +62,14 @@ const AuthProvider = (props) => {
           message.success(res.data.message, 3);
           
           setUser( res.data.data );
+=======
+    await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
+      withCredentials: true
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setUser( response.data.data );
+>>>>>>> 0a533b2 (lista de sitios, debido al cambio de ref se debe hacer el cambio en el portal)
           setLoggedIn(true);
           navigate('/', { replace: true });
 
