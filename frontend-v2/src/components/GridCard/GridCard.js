@@ -35,6 +35,7 @@ const GridCard = ({
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
         <MetaWrapper className="meta_wrapper">
+<<<<<<< HEAD
           {inclusiveElements && inclusiveElements.length >= 1 ?
             <div >
               {console.log("inclusiveElements -> ", inclusiveElements)}
@@ -66,6 +67,25 @@ const GridCard = ({
           <div style={{ margin: '15px' }}></div>
           {viewDetailsBtn || editBtn ? (
             <ButtonGroup className="button_group" style={{ margin: '5px 0 0 0' }}>
+=======
+          {inclusiveElements.map((item) => {
+            return (
+                <img
+                  src={item.image.secure_url}
+                  alt={item.name}
+                  style={{
+                    width: '10%',
+                    height: 'auto',
+                    objectFit: 'scale-down',
+                  }}
+                />
+            )
+          })}
+          {rating && <RatingArea className="rating">{rating}</RatingArea>}
+          <div style={{margin:'10px'}}></div>
+          {viewDetailsBtn || editBtn ? (
+            <ButtonGroup className="button_group" style={{margin:'5px 0 0 0'}}>
+>>>>>>> 0a533b2 (lista de sitios, debido al cambio de ref se debe hacer el cambio en el portal)
               {viewDetailsBtn}
               {editBtn}
             </ButtonGroup>
