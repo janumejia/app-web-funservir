@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
     const { email, password } = req.body
     //Poner tambien que popule las imagenes
-    User.findOne({ email }).populate({path:'associatedSites', populate : {path:'inclusiveElements', model:'InclusiveElements'}}).then((user) => {
+    User.findOne({ email }).populate({path:'associatedSites', populate : {path:'inclusiveElements', model:'InclusiveElements'}}).then( async (user) => {
         if (user) {
             /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
