@@ -15,6 +15,7 @@ import GridCardWrapper, {
 
 const GridCard = ({
   className,
+  inclusiveElements,
   favorite,
   location,
   title,
@@ -32,22 +33,30 @@ const GridCard = ({
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
         <MetaWrapper className="meta_wrapper">
-
-          {/* {price && <PriceArea className="price">{price}</PriceArea>} */}
-
-          {/* Iconos inclusivos que aparecen en la vista previa del sitio */}
-          <FaWifi /> <FaCarAlt /> <FaAccessibleIcon/> <FaBlind />
-          
+          {inclusiveElements.map((item) => {
+            return (
+                <img
+                  src={item.image.secure_url}
+                  alt={item.name}
+                  style={{
+                    width: '10%',
+                    height: 'auto',
+                    objectFit: 'scale-down',
+                  }}
+                />
+            )
+          })}
           {rating && <RatingArea className="rating">{rating}</RatingArea>}
+          <div style={{margin:'10px'}}></div>
           {viewDetailsBtn || editBtn ? (
-            <ButtonGroup className="button_group">
+            <ButtonGroup className="button_group" style={{margin:'5px 0 0 0'}}>
               {viewDetailsBtn}
               {editBtn}
             </ButtonGroup>
           ) : null}
         </MetaWrapper>
       </ContentWrapper>
-      
+
       {/* Este es el corazón que aparece en el sitio */}
       {/* {favorite && <FavoriteIcon>{favorite}</FavoriteIcon>} */}
 

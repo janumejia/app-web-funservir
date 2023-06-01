@@ -5,8 +5,13 @@ const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
     const { email, password } = req.body
+<<<<<<< HEAD
     
     User.findOne({ email }).then(async (user) => {
+=======
+    //Poner tambien que popule las imagenes
+    User.findOne({ email }).populate({path:'associatedSites', populate : {path:'inclusiveElements', model:'InclusiveElements'}}).then((user) => {
+>>>>>>> 0a533b2 (lista de sitios, debido al cambio de ref se debe hacer el cambio en el portal)
         if (user) {
             /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
@@ -17,7 +22,6 @@ const login = async (req, res) => {
                         const token = jwt.sign({ _id, userType }, process.env.BACKEND_JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
-
                         const data = {
                             name: user.name,
                             lastName: user.lastName,
