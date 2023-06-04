@@ -33,7 +33,7 @@ const GridCard = ({
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
         <MetaWrapper className="meta_wrapper">
-          {inclusiveElements.map((item) => {
+          {inclusiveElements && inclusiveElements.map((item) => {
             return (
                 <img
                   src={item.image.secure_url}
