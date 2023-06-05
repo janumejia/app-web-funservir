@@ -100,42 +100,21 @@ const changePictures = async (req, res) => {
         if (inputs.coverPicture === "") {
             // Nothing
             const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
-            const URL = `https://res.cloudinary.com/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
-            const imageURL = cloudinary.url(`https://res.cloudinary.com/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`)
-            // const properties = await cloudinary.api.image.getInfo(URL);
-            // console.log(properties)
+            let UrlInfoImage = `https://res.cloudinary.com/pasantiafunservir/image/upload/fl_getinfo/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+            
 
-            // const options = {
-            //     hostname: 'https://res.cloudinary.com',
-            //     path: `/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`,
-            //     method: 'GET'
-            //   };
+            const response = await axios.get(UrlInfoImage);
+            
+            const width = response.data.input.width
+            const height = response.data.input.height
 
-            // const request = http.request(options, (response) => {
-            //     let data = '';
+            // Relación 1:4
+            const estimateHeight = response.data.input.width / 4;
+            const heightCover = estimateHeight <= response.data.input.height ? estimateHeight : response.data.input.height;
 
-            //     response.on('data', (chunk) => {
-            //         data += chunk;
-            //     });
+            imgURL = UrlInfoImage.replace("/upload/fl_getinfo/", `/upload/c_fill,g_auto,h_${heightCover},w_${response.data.input.width}/`);
 
-            //     response.on('end', () => {
-            //         res.send(data);
-            //     });
-            // });
-
-            // request.on('error', (error) => {
-            //     console.error('Error making HTTP request:', error);
-            //     res.status(500).send('Internal Server Error');
-            // });
-
-            // request.end();
-
-            const response = await axios.get(URL);
-            console.log(response)
-
-
-
-            user.coverPicture = URL;
+            user.coverPicture = imgURL;
 
         } else if (cloudinaryUrlRegex.test(inputs.coverPicture)) {
             // Hacer nada aquí
