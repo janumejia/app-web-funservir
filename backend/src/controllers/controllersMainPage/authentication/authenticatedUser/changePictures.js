@@ -109,12 +109,10 @@ const changePictures = async (req, res) => {
             const height = response.data.input.height
 
             // Relación 1:4
-            const estimateHeight = response.data.input.width / 4;
+            const estimateHeight = Math.floor(response.data.input.width / 4);
             const heightCover = estimateHeight <= response.data.input.height ? estimateHeight : response.data.input.height;
 
-            imgURL = UrlInfoImage.replace("/upload/fl_getinfo/", `/upload/c_fill,g_auto,h_${heightCover},w_${response.data.input.width}/`);
-
-            user.coverPicture = imgURL;
+            user.coverPicture = UrlInfoImage.replace("/upload/fl_getinfo/", `/upload/c_fill,g_auto,h_${heightCover},w_${response.data.input.width}/`);
 
         } else if (cloudinaryUrlRegex.test(inputs.coverPicture)) {
             // Hacer nada aquí
@@ -127,7 +125,7 @@ const changePictures = async (req, res) => {
             });
 
             // Relación 1:4
-            const estimateHeight = uploadedCoverPicture.width / 4;
+            const estimateHeight = Math.floor(uploadedCoverPicture.width / 4);
             const heightCover = estimateHeight <= uploadedCoverPicture.height ? estimateHeight : uploadedCoverPicture.height;
 
             user.coverPicture = uploadedCoverPicture.secure_url.replace("/upload/", `/upload/c_fill,g_auto,h_${heightCover},w_${uploadedCoverPicture.width}/`);
