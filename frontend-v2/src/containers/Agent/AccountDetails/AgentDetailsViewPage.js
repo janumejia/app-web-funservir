@@ -91,7 +91,7 @@ const AgentProfileInfo = () => {
           <ProfileInformationArea>
             <ProfileInformation>
               <Heading content={username} />
-              <Text content={(user.description) ? user.description : "¡Hola, estoy usando la plataforma de Funservir!"} />
+              <Text content={(user.describeYourself) ? user.describeYourself : "¡Hola, estoy usando la plataforma de Funservir!"} />
             </ProfileInformation>
             <SocialAccount>
               {(user.socialTwitter) ?
