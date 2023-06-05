@@ -91,6 +91,8 @@ const BasicInformationU = ({ setStep }) => {
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
                       if(e._d) handleOnChange('dateOfBirth', e._d);
+                      console.log(e._d)
+                      console.log(typeof(e._d))
                     }}
                     placeholder="Selecciona una fecha"
                     showToday={false}

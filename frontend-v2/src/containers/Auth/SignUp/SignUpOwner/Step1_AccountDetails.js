@@ -10,15 +10,15 @@ import validator from "validator";
 import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
 
 const emailVerification = async (email) => {
-    try {
-      await axios.post(`${process.env.REACT_APP_HOST_BACK}/uniqueEmailValidator`, { email: email });
-      // No se hace nada aquí, solo cuando el correo está repetido se informa
-    
-    } catch (error) {
-      if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
-    
-    }
-    return true; // Válido
+  try {
+    await axios.post(`${process.env.REACT_APP_HOST_BACK}/uniqueEmailValidator`, { email: email });
+    // No se hace nada aquí, solo cuando el correo está repetido se informa
+
+  } catch (error) {
+    if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
+
+  }
+  return true; // Válido
 }
 
 const AccountDetails = ({ setStep }) => {
@@ -48,12 +48,10 @@ const AccountDetails = ({ setStep }) => {
     setValue(key, event.target.value);
   };
 
-  console.log("state:", state)
-
   const onSubmit = (data) => {
     actions.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
     setStep(2); // Pasar a la siguiente página de registro
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -161,7 +159,7 @@ const AccountDetails = ({ setStep }) => {
             errors.email && errors.email.type === "required" ? (
               <span>¡Este campo es requerido!{console.log(errors.email)}</span>
             ) : errors.email && errors.email.type === "isEmailValid" ? (
-              <span> { errors.email.message } </span>
+              <span> {errors.email.message} </span>
             ) : null
           }
         >
@@ -210,6 +208,9 @@ const AccountDetails = ({ setStep }) => {
                 errors.password && errors.password.type === "required" ? (
                   // <span>¡Este campo es requerido!</span>
                   <span />
+                ) : errors.password && errors.password.type === "pattern" ? (
+                  // <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
+                  <span>Haz ingresado un carácter no permitido</span>
                 ) : errors.password && errors.password.type === "validate" ? (
                   // <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
                   <span />
@@ -222,7 +223,7 @@ const AccountDetails = ({ setStep }) => {
                 control={control}
                 rules={{
                   required: true,
-                  // pattern: /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  pattern: /^([a-zA-ZñÑáéíóúÁÉÍÓÚü0-9~`¿¡!#$%\^&*€£@+÷=\-\[\]\\';,/{}\(\)|\\":<>\?\.\_])*$/,
                   validate: (value) => validator.isStrongPassword(value)
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -253,26 +254,26 @@ const AccountDetails = ({ setStep }) => {
                 )}
               />
 
-              {/* Checklist donde se muestra que la contraseña ingresada cumple con lo requerido */}
-              <Card>
-                <PasswordChecklist
-                  rules={["minLength", "maxLength", "specialChar", "number", "capital", "lowercase"]}
-                  minLength={8}
-                  maxLength={70}
-                  value={password}
-                  messages={{
-                    minLength: "Mínimo 8 caracteres.",
-                    maxLength: "Máximo 70 caracteres.",
-                    specialChar: "Un carácter especial.",
-                    number: "Un número.",
-                    capital: "Una letra mayúscula.",
-                    lowercase: "Una letra minúscula.",
-                  }}
-                  validColor={"#008489"}
-                  invalidColor={"#eeeee4"}
-                />
-              </Card>
             </FormControl>
+            {/* Checklist donde se muestra que la contraseña ingresada cumple con lo requerido */}
+            <Card>
+              <PasswordChecklist
+                rules={["minLength", "maxLength", "specialChar", "number", "capital", "lowercase"]}
+                minLength={8}
+                maxLength={70}
+                value={password}
+                messages={{
+                  minLength: "Mínimo 8 caracteres.",
+                  maxLength: "Máximo 70 caracteres.",
+                  specialChar: "Un carácter especial.",
+                  number: "Un número.",
+                  capital: "Una letra mayúscula.",
+                  lowercase: "Una letra minúscula.",
+                }}
+                validColor={"#008489"}
+                invalidColor={"#eeeee4"}
+              />
+            </Card>
           </Col>
           <Col sm={12}>
             <FormControl
@@ -329,20 +330,20 @@ const AccountDetails = ({ setStep }) => {
                   />
                 )}
               />
-              <Card>
-                <PasswordChecklist
-                  rules={["match"]}
-                  value={password}
-                  valueAgain={confirmPassword}
-                  messages={{
-                    match: "Las contraseñas coinciden.",
-                  }}
-                  validColor={"#008489"}
-                  invalidColor={"#eeeee4"}
-                />
-              </Card>
 
             </FormControl>
+            <Card>
+              <PasswordChecklist
+                rules={["match"]}
+                value={password}
+                valueAgain={confirmPassword}
+                messages={{
+                  match: "Las contraseñas coinciden.",
+                }}
+                validColor={"#008489"}
+                invalidColor={"#eeeee4"}
+              />
+            </Card>
           </Col>
         </Row>
       </FormContent>

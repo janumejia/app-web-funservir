@@ -5,6 +5,7 @@ const { randomAvatar } = require("../../../../utils/avatarGenerator/RandomAvatar
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { ...regex } = require("../../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
+const axios = require('axios');
 
 const changePictures = async (req, res) => {
 
@@ -90,7 +91,7 @@ const changePictures = async (req, res) => {
         // if (inputs.profilePicture && base64Regex.test(inputs.profilePicture)  && !validateImages([inputs.profilePicture])) return res.status(422).json({ message: `La imagen de perfil no es válida por su formato o tamaño` });
         // if (inputs.coverPicture && base64Regex.test(inputs.coverPicture) && !validateImages([inputs.coverPicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
 
-        let user = await User.findOne({ _id: decodedDataInToken._id }, {coverPicture: 1, profilePicture: 1, gender: 1 });
+        let user = await User.findOne({ _id: decodedDataInToken._id }, { coverPicture: 1, profilePicture: 1, gender: 1 });
         if (!user) {
             return res.status(404).json({ message: "No se encontró el usuario a actualizar" });
         }
@@ -99,7 +100,41 @@ const changePictures = async (req, res) => {
         if (inputs.coverPicture === "") {
             // Nothing
             const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
-            const URL = `https://res.cloudinary.com/pasantiafunservir/image/upload/c_fill,g_auto,h_250,w_970/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+            const URL = `https://res.cloudinary.com/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+            const imageURL = cloudinary.url(`https://res.cloudinary.com/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`)
+            // const properties = await cloudinary.api.image.getInfo(URL);
+            // console.log(properties)
+
+            // const options = {
+            //     hostname: 'https://res.cloudinary.com',
+            //     path: `/pasantiafunservir/image/upload/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`,
+            //     method: 'GET'
+            //   };
+
+            // const request = http.request(options, (response) => {
+            //     let data = '';
+
+            //     response.on('data', (chunk) => {
+            //         data += chunk;
+            //     });
+
+            //     response.on('end', () => {
+            //         res.send(data);
+            //     });
+            // });
+
+            // request.on('error', (error) => {
+            //     console.error('Error making HTTP request:', error);
+            //     res.status(500).send('Internal Server Error');
+            // });
+
+            // request.end();
+
+            const response = await axios.get(URL);
+            console.log(response)
+
+
+
             user.coverPicture = URL;
 
         } else if (cloudinaryUrlRegex.test(inputs.coverPicture)) {
@@ -112,7 +147,11 @@ const changePictures = async (req, res) => {
                 public_id: inputs.email
             });
 
-            user.coverPicture = uploadedCoverPicture.secure_url.replace("/upload/", `/upload/c_fill,g_auto,h_250,w_970/`);
+            // Relación 1:4
+            const estimateHeight = uploadedCoverPicture.width / 4;
+            const heightCover = estimateHeight <= uploadedCoverPicture.height ? estimateHeight : uploadedCoverPicture.height;
+
+            user.coverPicture = uploadedCoverPicture.secure_url.replace("/upload/", `/upload/c_fill,g_auto,h_${heightCover},w_${uploadedCoverPicture.width}/`);
         }
 
         let uploadedProfilePicture = {}
@@ -134,7 +173,7 @@ const changePictures = async (req, res) => {
                 upload_preset: "profile_pictures",
                 public_id: inputs.email
             });
-            
+
             user.profilePicture = uploadedProfilePicture.secure_url
         }
 
@@ -143,8 +182,7 @@ const changePictures = async (req, res) => {
         return res.status(200).json({ message: "Imágenes actualizadas correctamente", data: user });
 
     } catch (error) {
-        console.log("pasó por aqui")
-        // console.error(error);
+        console.error(error);
         return res.status(500).json({ message: "Error al actualizar imágenes" });
     }
 }

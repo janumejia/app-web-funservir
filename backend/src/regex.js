@@ -46,7 +46,7 @@ module.exports = {
     institutionRegex: generalAlphanumeric(0,255),
     userTypeRegex: new RegExp(/^(Regular|Propietario|Administrador)$/),
     profilePictureRegex: new RegExp(/(^data:image\/(?:jpe?g|png|gif|bmp|webp|svg|ico|tiff?);base64,.*$)|(^$)/), // Vació es válido
-    describeYourselfRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$|^$/), // Acepta vacío también
+    describeYourselfRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,2000}$|^$/), // Acepta vacío también
     socialInstagramRegex: new RegExp(/^(?:https?:\/\/)(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$|^$/), // Acepta vacío también
     socialFacebookRegex: new RegExp(/^(?:https?:\/\/)(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$|^$/), // Acepta vacío también
     socialTwitterRegex: new RegExp(/^(?:https?:\/\/)(?:www\.)?twitter\.com\/([a-zA-Z0-9_]){1,255}[\/]{0,1}$|^$/), // Acepta vacío también
@@ -58,7 +58,7 @@ module.exports = {
 
     /* Elementos inclusivos */
     nameInclusiveElementRegex: generalAlphabetic(1,100),
-    imageRegex: new RegExp(/(^data:image\/(?:jpe?g|png|gif|bmp|webp|svg|ico|tiff?);base64,.*)/),
+    imageRegex: new RegExp(/(^data:image\/(?:jpe?g|png|svg);base64,.*)/),
     imageUrlRegex: new RegExp(/(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$)/),
 
 };

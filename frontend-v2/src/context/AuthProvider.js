@@ -20,7 +20,7 @@ const AuthProvider = (props) => {
     const isLoggedIn = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`)
-
+        
         if (res) {
           if (res.status === 200) {
             setUser(...res.data.data);

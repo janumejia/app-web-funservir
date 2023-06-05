@@ -93,8 +93,10 @@ export default function ChangePassWord() {
                 errors.newPassword && errors.newPassword.type === "required" ? (
                   // <span>¡Este campo es requerido!</span>
                   <span />
-                ) : errors.newPassword && errors.newPassword.type === "validate" ? (
+                ) : errors.newPassword && errors.newPassword.type === "pattern" ? (
                   // <span>La contraseña debe tener al menos 8 caracteres e incluir obligatoriamente 1 letra mayúscula, 1 letra minúscula, 1 número y 1 carácter especial.</span>
+                  <span>Haz ingresado un carácter no permitido</span>
+                ) : errors.newPassword && errors.newPassword.type === "validate" ? (
                   <span />
                 ) : null
               }
@@ -106,38 +108,47 @@ export default function ChangePassWord() {
                 rules={{
                   required: true,
                   // pattern: /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  pattern: /^([a-zA-ZñÑáéíóúÁÉÍÓÚü0-9~`¿¡!#$%\^&*€£@+÷=\-\[\]\\';,/{}\(\)|\\":<>\?\.\_])*$/,
                   validate: (value) => validator.isStrongPassword(value)
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <>
-
                     <Input.Password
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
                     />
-                    <Card>
-                      <PasswordChecklist
-                        rules={["minLength", "maxLength", "specialChar", "number", "capital", "lowercase"]}
-                        minLength={8}
-                        maxLength={70}
-                        value={value}
-                        messages={{
-                          minLength: "Mínimo 8 caracteres.",
-                          maxLength: "Máximo 70 caracteres.",
-                          specialChar: "Un carácter especial.",
-                          number: "Un número.",
-                          capital: "Una letra mayúscula.",
-                          lowercase: "Una letra minúscula.",
-                        }}
-                        validColor={"#008489"}
-                        invalidColor={"#eeeee4"}
-                      />
-                    </Card>
                   </>
                 )}
               />
             </FormControl>
+            <Card>
+              <PasswordChecklist
+                rules={
+                  [
+                    "minLength",
+                    "maxLength",
+                    "number",
+                    "capital",
+                    "lowercase",
+                    "specialChar",
+                  ]
+                }
+                minLength={8}
+                maxLength={70}
+                value={newPassword ? newPassword : ""}
+                messages={{
+                  minLength: "Mínimo 8 caracteres.",
+                  maxLength: "Máximo 70 caracteres.",
+                  specialChar: "Un carácter especial.",
+                  number: "Un número.",
+                  capital: "Una letra mayúscula.",
+                  lowercase: "Una letra minúscula.",
+                }}
+                validColor={"#008489"}
+                invalidColor={"#eeeee4"}
+              />
+            </Card>
           </Col>
           <Col lg={12}>
             <FormControl
@@ -157,7 +168,6 @@ export default function ChangePassWord() {
                 control={control}
                 rules={{
                   required: true,
-                  // pattern: /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
                   validate: (value) => newPassword && value === newPassword
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -167,22 +177,22 @@ export default function ChangePassWord() {
                       onBlur={onBlur}
                       value={value}
                     />
-                    <Card>
-                      <PasswordChecklist
-                        rules={["match"]}
-                        value={newPassword ? newPassword : ""}
-                        valueAgain={value}
-                        messages={{
-                          match: "Las contraseñas coinciden.",
-                        }}
-                        validColor={"#008489"}
-                        invalidColor={"#eeeee4"}
-                      />
-                    </Card>
                   </>
                 )}
               />
             </FormControl>
+            <Card>
+              <PasswordChecklist
+                rules={["match"]}
+                value={newPassword ? newPassword : ""}
+                valueAgain={confirmPassword}
+                messages={{
+                  match: "Las contraseñas coinciden.",
+                }}
+                validColor={"#008489"}
+                invalidColor={"#eeeee4"}
+              />
+            </Card>
           </Col>
           <Col lg={24}>
             <div className="submit-container">

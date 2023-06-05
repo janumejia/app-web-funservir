@@ -47,12 +47,12 @@ const ProfileNavigation = (props) => {
           >
             <NavLink to={path}>Sitios inclusivos</NavLink>
           </Menu.Item>
-          <Menu.Item key="1">
+          {/* <Menu.Item key="1">
             <NavLink to={AGENT_PROFILE_FAVORITE}>Favoritos</NavLink>
-          </Menu.Item>
-          <Menu.Item key="2">
+          </Menu.Item> */}
+          {/* <Menu.Item key="2">
             <NavLink to={AGENT_PROFILE_CONTACT}>Contacto</NavLink>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
         {loggedIn && (
           <Link className="add_card" to={ADD_SITE_PAGE}>
@@ -77,11 +77,11 @@ const AgentProfileInfo = () => {
     social_profile,
   } = data[0];
   const username = `${user.name} ${user.lastName}`;
-  console.log(user);
+  
   return (
     <Fragment>
       <BannerSection>
-        <Image className="absolute" src={cover_pic.url} alt="Profile cover" />
+        <Image className="absolute" src={user.coverPicture} alt="Profile cover" />
       </BannerSection>
       <UserInfoArea>
         <Container fluid={true}>
@@ -91,7 +91,7 @@ const AgentProfileInfo = () => {
           <ProfileInformationArea>
             <ProfileInformation>
               <Heading content={username} />
-              <Text content={(user.description) ? user.description : "¡Hola, estoy usando la plataforma de Funservir!"} />
+              <Text content={(user.describeYourself) ? user.describeYourself : "¡Hola, estoy usando la plataforma de Funservir!"} />
             </ProfileInformation>
             <SocialAccount>
               {(user.socialTwitter) ?
