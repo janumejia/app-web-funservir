@@ -58,7 +58,7 @@ module.exports = {
 
     /* Elementos inclusivos */
     nameInclusiveElementRegex: generalAlphabetic(1,100),
-    imageRegex: new RegExp(/(^data:image\/(?:jpe?g|png|gif|bmp|webp|svg|ico|tiff?);base64,.*)/),
+    imageRegex: new RegExp(/(^data:image\/(?:jpe?g|png|svg);base64,.*)/),
     imageUrlRegex: new RegExp(/(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$)/),
 
 };

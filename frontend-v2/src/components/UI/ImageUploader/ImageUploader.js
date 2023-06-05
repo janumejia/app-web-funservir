@@ -27,10 +27,10 @@ export default class ImageUploader extends React.Component {
     let status = null;
     const beforeUpload = (file) => {
       console.log("file: ", file)
-      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' ||  file.type === 'image/svg';
       const isLt5M = file.size / 1024 / 1024 < 5;
       if (!isJpgOrPng) {
-        message.error('¡Solo puedes subir archivos de tipo imagen (JPG/PNG)!');
+        message.error('¡Solo puedes subir archivos de tipo imagen (JPG/JPEG/PNG/SVG)!');
         file.status = 'error'
       } else if (!isLt5M) {
         message.error('¡La imagen debe pesar menos de 5MB!');
