@@ -25,7 +25,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
-        { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'locality', dataType: 'string', regex: localityRegex },
@@ -73,6 +73,10 @@ const addInclusiveSites = async (req, res) => {
             });
             const uploadRes = await Promise.all(uploadPromises);    
 
+        // Correccion en el campo de elementos inclusivos para que se guarde el objectID
+        let inclusiveElementsWithObjectId = []
+        inputs.inclusiveElements.forEach(element => inclusiveElementsWithObjectId.push(ObjectId(element)));
+
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({
             name: inputs.siteName,
@@ -80,7 +84,7 @@ const addInclusiveSites = async (req, res) => {
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
-            inclusiveElements: inputs.inclusiveElements,
+            inclusiveElements: inclusiveElementsWithObjectId,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,

@@ -1,10 +1,11 @@
-const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
+const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
 
 const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, conditionRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
+const axios = require('axios');
 
 const addUser = async (req, res) => {
     // Entradas: name, description, category, contactNumber, locality, neighborhood
@@ -51,26 +52,39 @@ const addUser = async (req, res) => {
             return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
-    
+
     // Validación del correo ingresado
     const isValidEmail = typeof inputs.email === 'string' && validator.isEmail(inputs.email) ? true : false;
-    if(!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
+    if (!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
 
     // Validación de la contraseña ingresada
     const isValidPassword = typeof inputs.password === 'string' && validator.isStrongPassword(inputs.password) ? true : false;
-    if(!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
-    
+    if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
+
     // Validación de la fecha ingresada
-    const isValidDateOfBirth = typeof inputs.dateOfBirth === 'string' && moment (inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid() ? true : false;
-    if(!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválida` });
+    const isValidDateOfBirth = typeof inputs.dateOfBirth === 'string' && moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid() ? true : false;
+    if (!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválida` });
 
     User.findOne({ 'email': inputs.email }).then((user) => {
         if (user) return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
 
-        bcrypt.hash(inputs.password, parseInt(process.env.BACKEND_SALT_BCRYPT), (err, hash) => {
+        bcrypt.hash(inputs.password, parseInt(process.env.BACKEND_SALT_BCRYPT), async (err, hash) => {
             if (err) return res.status(500).json({ error: err });
 
-            
+            // Implementación imagen aleatorio por defecto para el banner de perfil
+            const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
+            let UrlInfoImage = `https://res.cloudinary.com/pasantiafunservir/image/upload/fl_getinfo/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+
+            const response = await axios.get(UrlInfoImage);
+
+            // Relación 1:4
+            const estimateHeight = Math.floor(response.data.input.width / 4);
+            const heightCover = estimateHeight <= response.data.input.height ? estimateHeight : response.data.input.height;
+
+            const coverPicture = UrlInfoImage.replace("/upload/fl_getinfo/", `/upload/c_fill,g_auto,h_${heightCover},w_${response.data.input.width}/`);
+
+            // FIN Implementación imagen aleatorio por defecto para el banner de perfil
+
             const newUser = new User({
                 name: inputs.name,
                 lastName: inputs.lastName,
@@ -82,6 +96,7 @@ const addUser = async (req, res) => {
                 condition: inputs.condition,
                 isCaregiver: inputs.isCaregiver,
                 institution: inputs.institution,
+                coverPicture: coverPicture,
                 userType: "Regular", // Porque en este controlador solo se registra usuario normal
                 profilePicture: randomAvatar(inputs.gender)
             });

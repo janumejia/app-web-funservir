@@ -250,7 +250,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
               >
                 {availableElements.map(element => {
                   return (
-                    <Select.Option key={element.name} value={element.name}>{element.name}</Select.Option>
+                    <Select.Option key={element.name} value={element._id}>{element.name}</Select.Option>
                   )
                 })}
               </Select>

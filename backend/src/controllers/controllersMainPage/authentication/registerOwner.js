@@ -1,4 +1,4 @@
-const {randomAvatar} = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
+const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGenerator")
 const cloudinary = require("../../../middlewares/cloudinary");
 const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
@@ -7,6 +7,7 @@ const { ObjectId } = require('mongodb');
 var validator = require('validator');
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
+const axios = require('axios');
 
 const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
 
@@ -34,7 +35,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
-        { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
+        { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'locality', dataType: 'string', regex: localityRegex },
@@ -61,7 +62,7 @@ const addInclusiveSites = async (req, res) => {
         }
         return false;
     };
-    
+
     // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
     // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
     for (const { input, dataType, regex } of dataArray) {
@@ -70,7 +71,7 @@ const addInclusiveSites = async (req, res) => {
             return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
-    
+
     // Validación del correo ingresado
     const isValidEmail = typeof inputs.email === 'string' && validator.isEmail(inputs.email) ? true : false;
     if (!isValidEmail) return res.status(422).json({ message: `El valor del correo no es válido` });
@@ -78,11 +79,11 @@ const addInclusiveSites = async (req, res) => {
     // Validación de la contraseña ingresada
     const isValidPassword = typeof inputs.password === 'string' && validator.isStrongPassword(inputs.password) ? true : false;
     if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
-    
+
     // Validación de la fecha ingresada
     const isValidDateOfBirth = typeof inputs.dateOfBirth === 'string' && moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid() ? true : false;
     if (!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválida` });
-    
+
     try {
         // Verificar que el correo no ha sido previamente registrado
         const user = await User.findOne({ 'email': inputs.email });
@@ -96,8 +97,22 @@ const addInclusiveSites = async (req, res) => {
         const neighborhood = await Neighborhoods.findOne({ 'name': inputs.neighborhood, 'associatedLocality': inputs.locality });
         if (!neighborhood) return res.status(404).json({ message: "No existe el barrio o localidad ingresada" });
 
+        // Implementación imagen aleatorio por defecto para el banner de perfil
+        const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
+        let UrlInfoImage = `https://res.cloudinary.com/pasantiafunservir/image/upload/fl_getinfo/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+
+        const response = await axios.get(UrlInfoImage);
+
+        // Relación 1:4
+        const estimateHeight = Math.floor(response.data.input.width / 4);
+        const heightCover = estimateHeight <= response.data.input.height ? estimateHeight : response.data.input.height;
+
+        const coverPicture = UrlInfoImage.replace("/upload/fl_getinfo/", `/upload/c_fill,g_auto,h_${heightCover},w_${response.data.input.width}/`);
+
+        // FIN Implementación imagen aleatorio por defecto para el banner de perfil
+
         const hash = await bcrypt.hash(inputs.password, parseInt(process.env.BACKEND_SALT_BCRYPT)); // Hashear de la contraseña
-        
+
         const newUser = new User({
             name: inputs.name,
             lastName: inputs.lastName,
@@ -108,6 +123,7 @@ const addInclusiveSites = async (req, res) => {
             address: inputs.address,
             condition: inputs.condition,
             isCaregiver: inputs.isCaregiver,
+            coverPicture: coverPicture,
             institution: inputs.institution,
             userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
             profilePicture: randomAvatar(inputs.gender)
@@ -123,8 +139,13 @@ const addInclusiveSites = async (req, res) => {
         const uploadPromises = inputs.sitePhotos.map(img => {
             return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
         });
-        
-        const uploadRes = await Promise.all(uploadPromises);    
+
+        const uploadRes = await Promise.all(uploadPromises);
+
+
+        // Correccion en el campo de elementos inclusivos para que se guarde el objectID
+        let inclusiveElementsWithObjectId = []
+        inputs.inclusiveElements.forEach(element => inclusiveElementsWithObjectId.push(ObjectId(element)));
 
         // Crear objeto a agregar en mongodb
         const newInclusiveSites = new InclusiveSites({
@@ -133,7 +154,7 @@ const addInclusiveSites = async (req, res) => {
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
-            inclusiveElements: inputs.inclusiveElements,
+            inclusiveElements: inclusiveElementsWithObjectId,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
