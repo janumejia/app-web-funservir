@@ -1,8 +1,8 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, Select, Button, Checkbox, Divider, message } from 'antd';
+import { Row, Col, Input, Select, Button, Checkbox, Divider, message, DatePicker } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import DatePicker from 'components/UI/AntdDatePicker/AntdDatePicker';
+// import DatePicker from 'components/UI/AntdDatePicker/AntdDatePicker';
 import { FormTitle } from './AccountSettings.style';
 import {
   InstagramOutlined,
@@ -144,7 +144,7 @@ const AgentCreateOrUpdateForm = () => {
             >
               <Controller
                 name="dateOfBirth"
-                defaultValue=""
+                defaultValue={user && user.dateOfBirth ? moment(user.dateOfBirth.split("T")[0], 'YYYY-MM-DD') : ""}
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
