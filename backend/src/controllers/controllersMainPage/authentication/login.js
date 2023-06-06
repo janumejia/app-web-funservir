@@ -36,7 +36,7 @@ const login = async (req, res) => {
                             coverPicture: user.coverPicture,
                         };
 
-                        const regexToGetDomain = new RegExp(/^(?:http[s]?:\/\/)(.*?)(?:\:.*)$/);
+                        const regexToGetDomain = new RegExp(/^(?:http[s]?:\/\/)?(.*?)(?:\:.*)?$/);
                         const matchedDomain = req.headers["origin"].match(regexToGetDomain)
 
                         if (matchedDomain && matchedDomain.length >= 2) {
