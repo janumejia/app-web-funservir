@@ -48,10 +48,10 @@ export default function SearchForm() {
     //       lng: singleMapData ? singleMapData.lng.toFixed(3) : null,
     //     });
     //   });
-    console.log("tempLocation:******")
+    // console.log("tempLocation:******")
     console.log(tempLocation)
     const location = tempLocation ? tempLocation[1] : {};
-    console.log("////location/////")
+    // console.log("////location/////")
     console.log(location)
     const query = {
       // date_range: searchDate,
@@ -62,7 +62,7 @@ export default function SearchForm() {
     console.log(query)
     // const search = setStateToUrl(query);
     const search = "search=" + mapValue.name;
-    console.log(mapValue.name)
+    console.log("mapValue.name -> ", mapValue.name)
     navigate({
       pathname: LISTING_POSTS_PAGE,
       search: `?${createSearchParams(search)}`,
@@ -75,7 +75,7 @@ export default function SearchForm() {
 
       <ComponentWrapper>
         <FaMapMarkerAlt className="map-marker" />
-        <MapAutoComplete updateValue={(value) => updateValueFunc(value)} /> {/* Campo de búsqueda */}
+        <MapAutoComplete updateValue={(value) => {updateValueFunc(value); console.log("value --->", value) } }/> {/* Campo de búsqueda */}
       </ComponentWrapper>
 
       <Button

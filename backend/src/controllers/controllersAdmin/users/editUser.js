@@ -81,7 +81,7 @@ const editUser = async (req, res) => {
             public_id: inputs.email
         })
         if (doc.password !== inputs.password) {
-            bcrypt.hash(password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
+            bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
                 if (error) res.status(500).json({ message: "error" })
                 else {
                     doc.name = inputs.name;
@@ -116,6 +116,7 @@ const editUser = async (req, res) => {
         res.status(200).json({ message: "Usuario editado correctamente", doc });
     } catch (error) {
         res.status(500).json({ message: "error" })
+        console.log(error)
     }
 }
 

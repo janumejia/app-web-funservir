@@ -42,7 +42,6 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
     //let isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
-        console.log("record: ", record)
         // record.owner._id = data.owner._id
         editedObject = { ...record };
         setEditingKey(record._id);
@@ -132,7 +131,7 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             editable: true,
             render: (elements) => {
                 const aux = elements.map((element) => {
-                    return ( <Tag color={"blue"}>{element}</Tag>);
+                    return ( <Tag color={"blue"}>{element.name}</Tag>);
                 })
                 return aux;
             }

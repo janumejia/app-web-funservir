@@ -3,6 +3,7 @@ const Site = require("../../../model/site") // Traemos el esquema del sitio
 
 const searchSites = async (req, res) => {
 
+    console.log(req.params.patternToSearch)
     // Sanitizar las entradas:
     const patternToSearchV1 = req.params.patternToSearch.replace(/[á,à,ä,â]/g, 'a') // Para reemplazar las vocales con acentos por simplemente la vocal
         .replace(/[é,ë,è]/g, 'e')
@@ -36,7 +37,7 @@ const searchSites = async (req, res) => {
                 { "location.city": { $in: regexArray } },
                 { "location.formattedAddress": { $in: regexArray } }
             ]
-        })
+        }).populate("inclusiveElements")
         .then((dataFound) => {
             console.log("Encontrado:")
             console.log(dataFound)
