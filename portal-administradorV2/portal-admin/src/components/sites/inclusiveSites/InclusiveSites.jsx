@@ -132,7 +132,7 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             editable: true,
             render: (elements) => {
                 const aux = elements.map((element) => {
-                    return ( <Tag color={"blue"}>{element}</Tag>);
+                    return ( <Tag color={"blue"}>{element.name}</Tag>);
                 })
                 return aux;
             }
