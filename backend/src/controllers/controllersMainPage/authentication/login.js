@@ -36,13 +36,17 @@ const login = async (req, res) => {
                             coverPicture: user.coverPicture,
                         };
 
-                        const regexToGetDomain = new RegExp(/^(?:http[s]?:\/\/)?(.*?)(?:\:.*)?$/);
+                        // Para obtener el dominio
+                        const regexToGetDomain = new RegExp(/^(http[s]?:\/\/)(.*?)(?:\:.*)?$/);
                         const matchedDomain = req.headers["origin"].match(regexToGetDomain)
+
+                        // ver tipo de proyecto
+                        const secureCookie =  process.env.BACKEND_NODE_ENV === "development" ? false : true;
 
                         if (matchedDomain && matchedDomain.length >= 2) {
                             // Cambiar después de sameSite: "none" a sameSite: "strict"
                             res
-                                .cookie("AWFS-token", token, { httpOnly: true, sameSite: "Strict", domain: matchedDomain[1], hostOnly: false }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                                .cookie("AWFS-token", token, { httpOnly: true, sameSite: "None", domain: matchedDomain[2], hostOnly: false, secure: secureCookie }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
                                 .json({
                                     message: "Usuario autenticado correctamente",
                                     data: data
