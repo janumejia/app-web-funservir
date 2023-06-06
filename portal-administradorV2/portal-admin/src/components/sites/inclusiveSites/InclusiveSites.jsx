@@ -42,7 +42,6 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
     //let isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
-        console.log("record: ", record)
         // record.owner._id = data.owner._id
         editedObject = { ...record };
         setEditingKey(record._id);

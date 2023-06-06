@@ -27,13 +27,8 @@ export default function Listing() {
     url += location.search;
     url = url.replace('?','/');
   }
-  console.log("oxoxoxoxoxooxoxoxoxoxoxoxo")
-  console.log(url)
-  console.log("oxoxoxoxoxooxoxoxoxoxoxoxo")
+
   const { data, loading, loadMoreData, total, limit } = useDataApi(url);
-  console.log("prprrprrprpprprprpprprprppr")
-  console.log(data)
-  console.log("prprrprrprpprprprpprprprppr")
   
   let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5]; // Para que aparezcan 5 columnas de resultados (sin mapa abierto)
   

@@ -6,9 +6,15 @@ const getAllSites = async (req, res) => {
     // const { patternToSearch } = req.body
 
     // const dataFound = await Site.find({ $or:[{'title': patternToSearch}, {'propertyType': patternToSearch}] })
-    Site.find({}).then((dataFound) => {
+    try{
+        const dataFound = await Site.find({}).populate("inclusiveElements")
         return res.json( dataFound )
-    });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "Error al cargar sitio"})
+    }
+
 
     // const dataFound = await Site.find({})
 

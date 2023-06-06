@@ -150,8 +150,6 @@ const AddEditInclusiveSite = ({ site }) => {
         fetchData();
     }, [])
 
-    console.log("site: ", site)
-
     return (
         <>
             <Form
@@ -162,7 +160,7 @@ const AddEditInclusiveSite = ({ site }) => {
                     "description": site.description,
                     "category": site.category,
                     "contactNumber": site.contactNumber,
-                    "inclusiveElements": site.inclusiveElements,
+                    "inclusiveElements": site.inclusiveElements.map(obj => obj._id),
                     "moreInfoInclusivity": site.moreInfoInclusivity ? site.moreInfoInclusivity : "", 
                     "siteAddress": site.siteAddress,
                     "location": (site.location) ? site.location.lat + "," + site.location.lng : "",

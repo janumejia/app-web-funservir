@@ -85,7 +85,7 @@ const AdminLogin = () => {
 
     const googleFailure = (error) => {
         console.log("Inicio de sesión con Google no fue exitoso. Inténtalo más tarde");
-        console.log(error)
+        // console.log(error)
     }
 
     const login = useGoogleLogin({

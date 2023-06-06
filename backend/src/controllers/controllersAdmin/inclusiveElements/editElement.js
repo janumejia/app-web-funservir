@@ -77,6 +77,7 @@ const editElement = async (req, res) => {
             res.status(409).json({ message: "Ya existe un elemento inclusivo con este nombre" });
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Hubo un error al cargar el elemento inclusivo" });
     }
 }
