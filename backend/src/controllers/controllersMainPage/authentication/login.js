@@ -6,14 +6,14 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
     const { email, password } = req.body
     //Poner tambien que popule las imagenes
-    User.findOne({ email }).populate({path:'associatedSites', populate : {path:'inclusiveElements', model:'InclusiveElements'}}).then( async (user) => {
+    User.findOne({ email }).populate({ path: 'associatedSites', populate: { path: 'inclusiveElements', model: 'InclusiveElements' } }).then(async (user) => {
         if (user) {
             /* Vamos a comparar la contraseña del body con la contraseña que está en la BD */
             bcrypt.compare(password, user.password) // Retorna un booleano sobre si coincide la contraseña
                 .then((isCorrect) => {
                     if (isCorrect) {
                         const { _id, userType } = user
-                        
+
                         const token = jwt.sign({ _id, userType }, process.env.BACKEND_JWT_SECRET, { //revisar el método "sign"
                             expiresIn: 86400 /* 24hs */,
                         });
@@ -35,26 +35,34 @@ const login = async (req, res) => {
                             socialTwitter: user.socialTwitter,
                             coverPicture: user.coverPicture,
                         };
-                        
-                        // Cambiar después de sameSite: "none" a sameSite: "strict"
-                        res
-                        .cookie("AWFS-token", token, { httpOnly: true, sameSite: "Strict", domain: "localhost", hostOnly: false }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
-                        .json({
-                            message: "Usuario autenticado correctamente",
-                            data: data
-                        })
+
+                        const regexToGetDomain = new RegExp(/^(?:http[s]?:\/\/)(.*?)(?:\:.*)$/);
+                        const matchedDomain = req.headers["origin"].match(regexToGetDomain)
+
+                        if (matchedDomain && matchedDomain.length >= 2) {
+                            // Cambiar después de sameSite: "none" a sameSite: "strict"
+                            res
+                                .cookie("AWFS-token", token, { httpOnly: true, sameSite: "Strict", domain: matchedDomain[1], hostOnly: false }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                                .json({
+                                    message: "Usuario autenticado correctamente",
+                                    data: data
+                                })
+                        } else {
+                            return res.status(401).json({ message: "error en el encabezado origin", user: {} })
+
+                        }
 
                     } else {
-                        const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 }); 
-                        res.status(401).json({ message: "Correo y/o contraseña incorrecta", user:{}})
+                        const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
+                        res.status(401).json({ message: "Correo y/o contraseña incorrecta", user: {} })
                     }
                 })
-        }else{
+        } else {
             // No usar esto. Solo es para evitar enumeración de usuarios debido al tiempo de respuesta
             await bcrypt.compare("fakepassword", "$2b$10$abcdefghijklmnopqrstuv") // Simula comparación de la contraseña
-            const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 }); 
+            const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
 
-            res.status(401).json({ message: "Correo y/o contraseña incorrecta", user:{}})
+            res.status(401).json({ message: "Correo y/o contraseña incorrecta", user: {} })
         }
     })
 }
