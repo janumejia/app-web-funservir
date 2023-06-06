@@ -18,27 +18,11 @@ en este caso responde las peticiones desde cualquier origen (inseguro) */
 const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.use(cors({
+    // origin: req.method !== 'OPTIONS' && req.header('origin') && corsOrigins.includes(req.header('origin').toLowerCase()) ? req.header('origin') : corsOrigins[0],
     origin: corsOrigins,
     credentials: true, // Para permitir el envÃ­o de cookies
 }))
 
-// app.all('*', function (req, res, next) {
-//     try {
-//         res.header('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-//         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//         console.log("req.method: ", req.method)
-//         if (req.method === 'OPTIONS') {
-//             // Nada aquí
-//         } else { // Para métodos POST Y GET
-//             const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
-//             res.header("Access-Control-Allow-Origin", origin);
-//         }
-//         next();
-//     } catch (error) {
-//         console.error('Error setting CORS headers:', error);
-//         res.status(500).json({ message: "Hubo un problema al procesar CORS" });
-//     }
-// });
 
 app.use(cookieParser()); // Para ajustar la cookie de sesión
 
@@ -70,6 +54,29 @@ app.use((req, res, next) => {
     if (mongoose.connection.readyState === 1) next();
     else return res.status(503).json({ message: 'Error en el servidor. Inténtalo más tarde' });
 });
+
+
+// Middleware para ajustar CORS
+// app.all('*', function (req, res, next) {
+//     try {
+//         res.header('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+//         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//         console.log("req.method: ", req.method)
+//         console.log(corsOrigins)
+//         console.log(req.method)
+//         if (req.method === 'OPTIONS') {
+//             // Nada aquí
+//         } else { // Para métodos POST Y GET
+//             const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
+//             res.header("Access-Control-Allow-Origin", origin);
+//             console.log("entra")
+//         }
+//         next();
+//     } catch (error) {
+//         console.error('Error setting CORS headers:', error);
+//         res.status(500).json({ message: "Hubo un problema al procesar CORS" });
+//     }
+// });
 
 /* Rutas de nuestra APP */
 app.get('/', (req, res) => { res.json({ message: "¡Backend Funcionando!" }); });
@@ -150,11 +157,11 @@ const port = process.env.BACKEND_PORT
 
 // Para manejo de errores cuando no es posible conectarse con mongodb
 db().then(() => {
-        console.log("Ajustando conexión con el servidor...")
-        app.listen(port, host, () => {
-            console.log(`Servidor funcionando en http://${host}:${port}`);
-        });
-    })
+    console.log("Ajustando conexión con el servidor...")
+    app.listen(port, host, () => {
+        console.log(`Servidor funcionando en http://${host}:${port}`);
+    });
+})
     .catch((error) => {
         console.error('Error al iniciar el servidor');
     });
