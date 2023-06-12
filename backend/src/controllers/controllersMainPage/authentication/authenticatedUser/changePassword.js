@@ -1,6 +1,7 @@
 const User = require("../../../../model/user")
 const bcrypt = require("bcryptjs")
 var validator = require('validator');
+const { ...regex } = require("../../../../regex") // Importación de patrones de Regex
 
 const changePassword = async (req, res) => {
 
@@ -12,8 +13,8 @@ const changePassword = async (req, res) => {
     if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
 
     const dataArray = [
-        { input: 'oldPassword', dataType: 'string', regex: new RegExp(/^.{1,100}$/) },
-        { input: 'newPassword', dataType: 'string', regex: new RegExp(/^.{1,100}$/) },
+        { input: 'oldPassword', dataType: 'string', regex: regex.passwordRegex },
+        { input: 'newPassword', dataType: 'string', regex: regex.passwordRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.

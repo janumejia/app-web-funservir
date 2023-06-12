@@ -38,23 +38,26 @@ const login = async (req, res) => {
 
                         // Para obtener el dominio
                         const regexToGetDomain = new RegExp(/^(http[s]?:\/\/)(.*?)(?:\:.*)?$/);
-                        const matchedDomain = req.headers["origin"].match(regexToGetDomain)
+                        let matchedDomain = req.headers["origin"].match(regexToGetDomain);
+                        matchedDomain = matchedDomain[1].concat(matchedDomain[2])
 
                         // ver tipo de proyecto
                         const secureCookie =  process.env.BACKEND_NODE_ENV === "development" ? false : true;
 
-                        if (matchedDomain && matchedDomain.length >= 2) {
-                            // Cambiar después de sameSite: "none" a sameSite: "strict"
-                            res
-                                .cookie("AWFS-token", token, { httpOnly: true, sameSite: "None", domain: matchedDomain[2], hostOnly: false, secure: secureCookie }) // Enviamos el token como una cookie, y con la propiedad httpOnly. Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
-                                .json({
-                                    message: "Usuario autenticado correctamente",
-                                    data: data
+                        res
+                            .cookie("AWFS-token", token, // Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                                {
+                                    httpOnly: true, // True = no puede ser accedida a traves de JavaScript
+                                    secure: secureCookie, // True = solo puede se transportada por HTTPS, no http sin SSL
+                                    sameSite: "Strict", // La cookie solo podrá ser enviada al destino donde se genero lo cookie
+                                    // domain: matchedDomain[2],
+                                    maxAge: 7 * 24 * 60 * 60 * 1000, // La cookie durará 7 días (en milisegundos) 
                                 })
-                        } else {
-                            return res.status(401).json({ message: "error en el encabezado origin", user: {} })
+                            .json({
+                                message: "Usuario autenticado correctamente",
+                                data: data
+                            })
 
-                        }
 
                     } else {
                         const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
