@@ -19,7 +19,7 @@ const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.use(cors({
     // origin: req.method !== 'OPTIONS' && req.header('origin') && corsOrigins.includes(req.header('origin').toLowerCase()) ? req.header('origin') : corsOrigins[0],
-    origin: corsOrigins,
+    origin: corsOrigins[1],
     credentials: true, // Para permitir el envÃ­o de cookies
 }))
 
