@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const verifyToken = async (req, res, next) => {
     try {
         console.log("\n\n\n***************************************************************************\nCOOKIES CUERPO PETICIÓN\n***************************************************************************\n\n\n")
-        console.log(req.cookies)
+        console.log(req.headers)
         // console.log("Cookie recibida:")
         // console.log(req.cookies['AWFS-token'])
         const token = req.cookies['AWFS-token'];
