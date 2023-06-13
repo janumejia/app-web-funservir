@@ -13,6 +13,8 @@ const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el a
 const app = express();
 app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP está desarrollada con Express JS
 
+app.use(cookieParser()); // Para ajustar la cookie de sesión
+
 /* Los cors permiten configurar políticas de seguridad sobre que peticiones responder
 en este caso responde las peticiones desde cualquier origen (inseguro) */
 const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
@@ -22,9 +24,6 @@ app.use(cors({
     origin: corsOrigins[1],
     credentials: true, // Para permitir el envÃ­o de cookies
 }))
-
-
-app.use(cookieParser()); // Para ajustar la cookie de sesión
 
 /* Agregar encabezados de seguridad en la aplicación */
 // app.use((req, res, next) => {
