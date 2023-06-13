@@ -47,11 +47,11 @@ const login = async (req, res) => {
                         res
                             .cookie("AWFS-token", token, // Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
                                 {
-                                    httpOnly: true, // True = no puede ser accedida a traves de JavaScript
+                                    // httpOnly: true, // True = no puede ser accedida a traves de JavaScript
                                     secure: secureCookie, // True = solo puede se transportada por HTTPS, no http sin SSL
-                                    sameSite: "None", // La cookie solo podrá ser enviada al destino donde se genero lo cookie
+                                    // sameSite: "None", // La cookie solo podrá ser enviada al destino donde se genero lo cookie
                                     // domain: matchedDomain[2],
-                                    maxAge: 7 * 24 * 60 * 60 * 1000, // La cookie durará 7 días (en milisegundos) 
+                                    // maxAge: 7 * 24 * 60 * 60 * 1000, // La cookie durará 7 días (en milisegundos) 
                                 })
                             .json({
                                 message: "Usuario autenticado correctamente",
