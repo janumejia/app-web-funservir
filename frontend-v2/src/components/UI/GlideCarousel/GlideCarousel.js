@@ -63,10 +63,10 @@ const GlideCarousel = ({
           data-glide-el="controls"
         >
           <ButtonWrapper className="glide__prev--area" data-glide-dir="<">
-            {prevButton ? prevButton : <DefaultBtn>Prev</DefaultBtn>}
+            {prevButton ? prevButton : <></>}
           </ButtonWrapper>
           <ButtonWrapper className="glide__next--area" data-glide-dir=">">
-            {nextButton ? nextButton : <DefaultBtn>Next</DefaultBtn>}
+            {nextButton ? nextButton : <></>}
           </ButtonWrapper>
         </ButtonControlWrapper>
       )}

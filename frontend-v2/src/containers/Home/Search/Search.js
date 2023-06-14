@@ -23,16 +23,16 @@ const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
         <>
          {/* Las imágenes del carrusel de imágenes */}
           <GlideSlide>
-            <img src="/images/banner/1.jpg" alt="Banner 1" />
+            <img src="/images/banner/1.jpg" alt="" />
           </GlideSlide>
           <GlideSlide>
-            <img src="/images/banner/2.jpg" alt="Banner 2" />
+            <img src="/images/banner/2.jpg" alt="" />
           </GlideSlide>
           <GlideSlide>
-            <img src="/images/banner/3.jpg" alt="Banner 3" />
+            <img src="/images/banner/3.jpg" alt="" />
           </GlideSlide>
           <GlideSlide>
-            <img src="/images/banner/4.jpg" alt="Banner 4" />
+            <img src="/images/banner/4.jpg" alt="" />
           </GlideSlide>
         </>
       </GlideCarousel>
