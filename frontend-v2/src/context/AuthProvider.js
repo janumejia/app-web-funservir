@@ -19,7 +19,7 @@ const AuthProvider = (props) => {
     // Para verificar si está logueado en el primer renderizado de la página
     const isLoggedIn = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`)
+        const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`, { withCredentials: true })
         
         if (res) {
           if (res.status === 200) {
