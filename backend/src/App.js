@@ -3,6 +3,7 @@ const express = require("express")
 const cors = require("cors")
 const db = require("./database/db")
 const cookieParser = require("cookie-parser");
+// const cookie = require("cookie");
 const mongoose = require('mongoose');
 
 const controllers = require("./controllers/controllersMainPage") // No es necesario poner index.js, por defecto lo toma
@@ -21,7 +22,7 @@ const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.use(cors({
     // origin: req.method !== 'OPTIONS' && req.header('origin') && corsOrigins.includes(req.header('origin').toLowerCase()) ? req.header('origin') : corsOrigins[0],
-    origin: corsOrigins[1],
+    origin: "*",
     credentials: true, // Para permitir el envÃ­o de cookies
 }))
 
