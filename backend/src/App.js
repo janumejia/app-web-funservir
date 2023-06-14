@@ -5,6 +5,7 @@ const db = require("./database/db")
 const cookieParser = require("cookie-parser");
 // const cookie = require("cookie");
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 const controllers = require("./controllers/controllersMainPage") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
@@ -12,6 +13,19 @@ const verifyToken = require("./middlewares/verifyToken");
 const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el admin. Comprobamos que el token tenga tipo de usuario administrador
 
 const app = express();
+
+app.use(
+    helmet({
+        strictTransportSecurity: process.env.BACKEND_NODE_ENV !== "development",
+        xFrameOptions: { action: "deny" },
+        contentSecurityPolicy: false,
+        crossOriginOpenerPolicy: false,
+        crossOriginResourcePolicy: false,
+        xPermittedCrossDomainPolicies: false,
+        originAgentCluster: false,
+    })
+); // Importa encabezados de seguridad automáticamente: 
+
 app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP está desarrollada con Express JS
 
 app.use(cookieParser()); // Para ajustar la cookie de sesión
@@ -22,7 +36,7 @@ const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.use(cors({
     // origin: req.method !== 'OPTIONS' && req.header('origin') && corsOrigins.includes(req.header('origin').toLowerCase()) ? req.header('origin') : corsOrigins[0],
-    origin: "*",
+    origin: corsOrigins,
     credentials: true, // Para permitir el envÃ­o de cookies
 }))
 
