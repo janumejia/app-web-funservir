@@ -40,7 +40,7 @@ const SignIn = () => {
         </Text>
       </FormWrapper>
       <BannerWrapper> {/* Contenedor de la imagen de fondo de la página de inicio de sesión */}
-        <img src="/images/login-page-bg.jpg" alt="Imagen página autenticación" />
+        <img src="/images/login-page-bg.jpg" alt="" />
       </BannerWrapper>
     </Wrapper>
   );

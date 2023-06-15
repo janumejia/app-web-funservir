@@ -52,7 +52,7 @@ const SignUp = () => {
         </Text>
       </FormWrapper>
       <BannerWrapper>
-        <img src="/images/login-page-bg.jpg" alt="Imagen página autenticación" />
+        <img src="/images/login-page-bg.jpg" alt="" />
       </BannerWrapper>
     </Wrapper>
   )
