@@ -36,8 +36,7 @@ const AgentCreateOrUpdateForm = () => {
 
   const onSubmit = async (data) => {
     try {
-
-      data.dateOfBirth = data && data.dateOfBirth && data.dateOfBirth.$d ? data.dateOfBirth.$d : user.dateOfBirth;
+      data.dateOfBirth = data && data.dateOfBirth && data.dateOfBirth._d ? data.dateOfBirth._d : user.dateOfBirth;
 
       message.loading("Cargando", 0);
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/updateUserInfo`, data);
