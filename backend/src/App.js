@@ -63,11 +63,11 @@ app.use((err, req, res, next) => {
 });
 
 // Para comprobar que el backend tiene conexión con la BD antes de seguir
-app.use(async (req, res, next) => {
-    const readyState = await mongoose.connection.readyState;
-    if ( readyState === 1 ) next();
-    else return res.status(503).json({ message: 'Error en el servidor. Inténtalo más tarde' });
-});
+// app.use(async (req, res, next) => {
+//     const readyState = await mongoose.connection.readyState;
+//     if ( readyState === 1 ) next();
+//     else return res.status(503).json({ message: 'Error en el servidor. Inténtalo más tarde' });
+// });
 
 
 // Middleware para ajustar CORS
