@@ -47,7 +47,8 @@
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "clean": "rm -rf build",
-    "build": "npm run clean && react-app-rewired build"
+    "build": "npm run clean && react-app-rewired build",
+    "build-without-clean": "react-app-rewired build"
   },
   "eslintConfig": {
     "extends": "react-app"
