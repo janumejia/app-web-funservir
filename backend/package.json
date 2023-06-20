@@ -13,7 +13,8 @@
     "debug": "nodemon --inspect src/App.js",
     "clean": "rm -rf dist",
     "build": "npm run clean && babel ./src --out-dir dist --copy-files",
-    "prod": "node ./dist/App.js"
+    "prod": "node ./dist/App.js",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
