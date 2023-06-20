@@ -38,14 +38,13 @@ app.use(cors({
     // origin: req.method !== 'OPTIONS' && req.header('origin') && corsOrigins.includes(req.header('origin').toLowerCase()) ? req.header('origin') : corsOrigins[0],
     origin: corsOrigins,
     credentials: true, // Para permitir el envÃ­o de cookies
-    // allowedHeaders: 'Cookie', // Add the 'Cookie' header to the exposed headers list
 }))
 
 /* Agregar encabezados de seguridad en la aplicación */
-app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Headers', 'Cookie');
-    next();
-});
+// app.use((req, res, next) => {
+//     res.append('Access-Control-Allow-Headers', 'Cookie');
+//     next();
+// });
 
 // app.use(express.json()) // Nos permitirá ver el body que contiene las peticiones POST y PUT
 
