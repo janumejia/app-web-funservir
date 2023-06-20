@@ -50,7 +50,7 @@ const login = async (req, res) => {
                                     httpOnly: true, // True = no puede ser accedida a traves de JavaScript
                                     secure: secureCookie, // True = solo puede se transportada por HTTPS, no http sin SSL
                                     sameSite: "Strict", // La cookie solo podrá ser enviada al destino donde se genero lo cookie
-                                    domain: req.headers["host"],
+                                    domain: matchedDomain,
                                     // maxAge: 7 * 24 * 60 * 60 * 1000, // La cookie durará 7 días (en milisegundos) 
                                 })
                             .json({
