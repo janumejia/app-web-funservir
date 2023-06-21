@@ -14,17 +14,17 @@ const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el a
 
 const app = express();
 
-// app.use(
-//     helmet({
-//         strictTransportSecurity: process.env.BACKEND_NODE_ENV !== "development",
-//         xFrameOptions: { action: "deny" },
-//         contentSecurityPolicy: false,
-//         crossOriginOpenerPolicy: false,
-//         crossOriginResourcePolicy: false,
-//         xPermittedCrossDomainPolicies: false,
-//         originAgentCluster: false,
-//     })
-// ); // Importa encabezados de seguridad automáticamente: 
+app.use(
+    helmet({
+        strictTransportSecurity: process.env.BACKEND_NODE_ENV !== "development",
+        xFrameOptions: { action: "deny" },
+        contentSecurityPolicy: false,
+        crossOriginOpenerPolicy: false,
+        crossOriginResourcePolicy: false,
+        xPermittedCrossDomainPolicies: false,
+        originAgentCluster: false,
+    })
+); // Importa encabezados de seguridad automáticamente: 
 
 app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP está desarrollada con Express JS
 
