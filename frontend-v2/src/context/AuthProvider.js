@@ -31,7 +31,6 @@ const AuthProvider = (props) => {
       } catch (error) {
         if(error && error.response && error.response.status && error.response.status === 503) message.error({ content: error.response.data.message, duration: 3 });
         else {
-          console.log("Haga esto")
           setUser({});
           setLoggedIn(false);
         }
