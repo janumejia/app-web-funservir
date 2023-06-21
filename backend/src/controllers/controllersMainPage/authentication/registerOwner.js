@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const axios = require('axios');
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -22,7 +22,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'name', dataType: 'string', regex: nameUserRegex },
         { input: 'lastName', dataType: 'string', regex: lastNameUserRegex },
         // { input: 'email', dataType: 'string', regex: emailRegex }, // // Se hace más abajo de otra manera usando la librería validator
-        //{ input: 'password', dataType: 'string', regex: passwordRegex }, // Se hace más abajo de otra manera usando la librería validator
+        { input: 'password', dataType: 'string', regex: passwordRegex }, // Se hace más abajo de otra manera usando la librería validator
         // { input: 'dateOfBirth', dataType: 'string', regex: inclusiveElementsRegex }, // Se hace más abajo de otra manera
         { input: 'gender', dataType: 'string', regex: genderRegex },
         { input: 'address', dataType: 'string', regex: addressRegex },
