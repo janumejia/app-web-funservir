@@ -22,7 +22,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'name', dataType: 'string', regex: nameUserRegex },
         { input: 'lastName', dataType: 'string', regex: lastNameUserRegex },
         // { input: 'email', dataType: 'string', regex: emailRegex }, // // Se hace más abajo de otra manera usando la librería validator
-        { input: 'password', dataType: 'string', regex: passwordRegex }, // Se hace más abajo de otra manera usando la librería validator
+        //{ input: 'password', dataType: 'string', regex: passwordRegex }, // Se hace más abajo de otra manera usando la librería validator
         // { input: 'dateOfBirth', dataType: 'string', regex: inclusiveElementsRegex }, // Se hace más abajo de otra manera
         { input: 'gender', dataType: 'string', regex: genderRegex },
         { input: 'address', dataType: 'string', regex: addressRegex },

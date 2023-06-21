@@ -25,7 +25,8 @@ const SitePhotos = ({ setStep }) => {
 
 
   const onSubmit = (dataAddSite) => {
-    if(!dataAddSite.sitePhotos || dataAddSite.sitePhotos.length === 0){
+    if(!state.dataAddSite.sitePhotos || state.dataAddSite.sitePhotos.length === 0){
+      console.log(state);
       message.error('¡Debes subir al menos 1 foto del sitio!');
     }else{
       setStep(3);
