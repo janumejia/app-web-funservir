@@ -84,9 +84,9 @@ const PostGrid = ({
         sliderClass=""
         slidesToSlide={1}
       >
-        {(gallery)?gallery.map(({ url, title }, index) => (
+        {(gallery)?gallery.map(({ secure_url, title }, index) => (
           <img
-            src={url}
+            src={secure_url}
             alt={title}
             key={index}
             draggable={false}
