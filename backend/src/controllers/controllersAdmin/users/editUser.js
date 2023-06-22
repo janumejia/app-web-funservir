@@ -87,6 +87,7 @@ const editUser = async (req, res) => {
                     doc.name = inputs.name;
                     doc.lastName = inputs.lastName;
                     doc.email = inputs.email;
+                    doc.describeYourself = inputs.describeYourself;
                     doc.password = hashPassword;
                     doc.dateOfBirth = inputs.dateOfBirth;
                     doc.gender = inputs.gender;
@@ -96,6 +97,9 @@ const editUser = async (req, res) => {
                     doc.institution = inputs.institution;
                     doc.userType = inputs.userType;
                     doc.profilePicture = uploadRes.secure_url;
+                    doc.socialFacebook = inputs.socialFacebook;
+                    doc.socialInstagram = inputs.socialInstagram;
+                    doc.socialTwitter = inputs.socialTwitter;
                     await doc.save();
                 }
             })
@@ -104,6 +108,7 @@ const editUser = async (req, res) => {
             doc.lastName = inputs.lastName;
             doc.email = inputs.email;
             doc.dateOfBirth = inputs.dateOfBirth;
+            doc.describeYourself = inputs.describeYourself;
             doc.gender = inputs.gender;
             doc.address = inputs.address;
             doc.condition = inputs.condition;
@@ -111,6 +116,9 @@ const editUser = async (req, res) => {
             doc.institution = inputs.institution;
             doc.userType = inputs.userType;
             doc.profilePicture = uploadRes.secure_url;
+            doc.socialFacebook = inputs.socialFacebook;
+            doc.socialInstagram = inputs.socialInstagram;
+            doc.socialTwitter = inputs.socialTwitter;
             await doc.save();
         }
         res.status(200).json({ message: "Usuario editado correctamente", doc });
