@@ -172,8 +172,11 @@ const AuthProvider = (props) => {
   const logOut = async () => {
 
     try {
+      message.destroy();
+      message.loading("Cargando", 0);
       const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/logout`)
 
+      message.destroy();
       if (res) {
         if (res.status === 200) {
 
