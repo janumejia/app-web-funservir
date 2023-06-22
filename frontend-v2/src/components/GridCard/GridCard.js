@@ -60,7 +60,7 @@ const GridCard = ({
             :
             <Tooltip title="Este sitio no tiene elementos inclusivos">
               <p style={{ margin: '0px' }}>Sin elementos</p>
-            </Tooltip>
+          g </Tooltip>
           }
           {rating && <RatingArea className="rating">{rating}</RatingArea>}
           <div style={{ margin: '15px' }}></div>

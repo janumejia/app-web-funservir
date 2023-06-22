@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm } from 'react-hook-form';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import FormControl from 'components/UI/FormControl/FormControl';
 import AddOwnerAction from './AddOwnerAction';
@@ -16,7 +16,7 @@ const SitePhotos = ({ setStep }) => {
     setValue,
     handleSubmit,
   } = useForm({
-    defaultValues:  state?.data2?.sitePhotos 
+    defaultValues: state?.data2?.sitePhotos
   });
 
   useEffect(() => {
@@ -25,9 +25,13 @@ const SitePhotos = ({ setStep }) => {
 
 
   const onSubmit = (data2) => {
-    setStep(5);
+    if (!state.data2.sitePhotos || state.data2.sitePhotos.length === 0) {
+      message.error('¡Debes subir al menos 1 foto del sitio!');
+    } else {
+      setStep(5);
+    }
   };
-  
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -36,14 +40,14 @@ const SitePhotos = ({ setStep }) => {
           <Title>Paso 4 de 5: Fotos del sitio</Title>
         </FormHeader>
 
-          <DragAndDropUploader
-            name="sitePhotos"
-            value={state?.data2?.sitePhotos}
-            onUploadChange={(data2) => {
-              actions.AddOwnerAction({'sitePhotos': data2});
-              setValue('sitePhotos', data2)
-            }}
-          />
+        <DragAndDropUploader
+          name="sitePhotos"
+          value={state?.data2?.sitePhotos}
+          onUploadChange={(data2) => {
+            actions.AddOwnerAction({ 'sitePhotos': data2 });
+            setValue('sitePhotos', data2)
+          }}
+        />
 
       </FormContent>
       <FormAction>

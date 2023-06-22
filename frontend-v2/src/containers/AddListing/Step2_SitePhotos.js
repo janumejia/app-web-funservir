@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm } from 'react-hook-form';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import FormControl from 'components/UI/FormControl/FormControl';
 import AddListingAction from './AddListingAction';
@@ -25,7 +25,11 @@ const SitePhotos = ({ setStep }) => {
 
 
   const onSubmit = (dataAddSite) => {
-    setStep(3);
+    if(!state.dataAddSite.sitePhotos || state.dataAddSite.sitePhotos.length === 0){
+      message.error('¡Debes subir al menos 1 foto del sitio!');
+    }else{
+      setStep(3);
+    }
   };
   
 

@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const axios = require('axios');
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
