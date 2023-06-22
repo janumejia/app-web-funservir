@@ -55,21 +55,26 @@ const editElement = async (req, res) => {
             const query = { _id: inputs._id };
             let doc = await Elements.findOne(query);
 
-            if (doc.name !== name && doc.image.secure_url === imageUrl) {
+            if (doc.name.toUpperCase() !== name.toUpperCase() && doc.image.secure_url === imageUrl) {
                 const renameRes = await cloudinary.uploader.rename(`inclusiveElements/${doc.name}`, `inclusiveElements/${name}`);
                 doc.name = name;
                 doc.image = renameRes;
                 await doc.save();
             } else {
-                const uploadRes = await cloudinary.uploader.upload(imageUrl, {
-                    upload_preset: "inclusive_elements",
-                    public_id: name,
-                    invalidate: true
-                });
+                if (doc.image.secure_url !== imageUrl) {
+                    const uploadRes = await cloudinary.uploader.upload(imageUrl, {
+                        upload_preset: "inclusive_elements",
+                        public_id: name,
+                        invalidate: true
+                    });
+                    doc.name = name;
+                    doc.image = uploadRes;
+                    await doc.save();
+                }else{
+                    doc.name = name;
+                    await doc.save();
+                }
 
-                doc.name = name;
-                doc.image = uploadRes;
-                await doc.save();
             }
 
             res.json(doc);
