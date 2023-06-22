@@ -32,7 +32,7 @@ const AddOwner = () => {
         setAvailableElements(res.data);
       }).catch((error) => {
         // message.info({ content: blankMessage, duration: 5 });
-        message.error('No se pudieron cargar los elementos inclusivos disponibles', 5);
+        // message.error('No se pudieron cargar los elementos inclusivos disponibles', 5);
         // console.error(error)
       });
 
@@ -42,7 +42,7 @@ const AddOwner = () => {
         setAvailableLocalities(res.data);
       }).catch((error) => {
         // message.info({ content: blankMessage, duration: 5 });
-        message.error('No se pudieron cargar las localidades disponibles', 5);
+        // message.error('No se pudieron cargar las localidades disponibles', 5);
         // console.error(error);
       });
 
@@ -52,7 +52,7 @@ const AddOwner = () => {
         setAvailableNeighborhoods(res.data);
       }).catch((error) => {
         // message.info({ content: blankMessage, duration: 5 });
-        message.error('No se pudieron cargar los barrios disponibles', 5);
+        // message.error('No se pudieron cargar los barrios disponibles', 5);
         // console.error(error)
       });
 
@@ -61,7 +61,7 @@ const AddOwner = () => {
         setAvailableCategories(res.data);
       }).catch((error) => {
         // message.info({ content: blankMessage, duration: 5 });
-        message.error('No se pudieron cargar las categorías disponibles', 5);
+        // message.error('No se pudieron cargar las categorías disponibles', 5);
         // console.error(error)
       });
 
