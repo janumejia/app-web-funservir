@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 // const cookie = require("cookie");
 const mongoose = require('mongoose');
 const helmet = require('helmet');
+const compression = require('compression') // Para hacer que las peticiones pesen hasta 10 veces menos usando compresión gzip: https://stackabuse.com/6-easy-ways-to-speed-up-express/
 
 const controllers = require("./controllers/controllersMainPage") // No es necesario poner index.js, por defecto lo toma
 const controllersAdmin = require("./controllers/controllersAdmin")
@@ -13,6 +14,8 @@ const verifyToken = require("./middlewares/verifyToken");
 const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el admin. Comprobamos que el token tenga tipo de usuario administrador
 
 const app = express();
+
+app.use(compression())
 
 app.use(
     helmet({
