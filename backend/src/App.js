@@ -15,7 +15,7 @@ const verifyTokenAdmin = require("./middlewares/verifyTokenAdmin"); // Para el a
 
 const app = express();
 
-app.use(compression())
+// app.use(compression())
 
 // app.use(
 //     helmet({
