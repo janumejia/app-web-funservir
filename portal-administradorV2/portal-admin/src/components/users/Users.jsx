@@ -7,8 +7,10 @@ import esES from 'antd/es/date-picker/locale/es_ES';
 import moment from 'moment';
 import UploadComponent from './UploadComponent';
 import validator from "validator";
+import ExpandableText from './ExpandableText';
 
 const { Option } = Select;
+const { TextArea } = Input;
 const gender = [
     <Option key="Masculino" value="Masculino">Masculino</Option>,
     <Option key="Femenino" value="Femenino">Femenino</Option>,
@@ -105,7 +107,7 @@ const ManageUsers = () => {
         children,
         ...restProps
     }) => {
-        const inputNode = dataIndex === "password" ? <Input.Password /> : <Input />;
+        const inputNode = dataIndex === "password" ? <Input.Password /> : (dataIndex === "describeYourself")? <TextArea rows={4} maxLength={2000} />: <Input />;
         return (
             <td {...restProps}>
                 {editing ? (
@@ -162,7 +164,7 @@ const ManageUsers = () => {
                                 }}>
                                 <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} />
                             </Form.Item>
-                        ) : (
+                        ) :  (
                             <Form.Item
                                 name={dataIndex}
                                 style={{
@@ -170,28 +172,22 @@ const ManageUsers = () => {
                                 }}
                                 rules={[
                                     {
-                                        required: (title === 'Fundación') ? false : true,
+                                        required: (title === 'Fundación' || title === 'Facebook' || title === 'Instagram' || title === 'Twitter') ? false : true,
                                         message: `¡Introduzca un ${title} válido!`,
                                         pattern: rules(dataIndex),
                                         validator: async (_, value) => {
-                                                if (title === 'Email*'){
-                                                    const aux = validator.isEmail(value) ? Promise.resolve() : Promise.reject();
-                                                    return aux;
-                                                } else if(title === 'Contraseña*'){
-                                                    const aux = validator.isStrongPassword(value) ?  Promise.resolve() : Promise.reject();
-                                                    return aux;
-                                                }
-                                                return true;
+                                            if (title === 'Email*') {
+                                                const aux = validator.isEmail(value) ? Promise.resolve() : Promise.reject();
+                                                return aux;
+                                            } else if (title === 'Contraseña*') {
+                                                const aux = validator.isStrongPassword(value) ? Promise.resolve() : Promise.reject();
+                                                return aux;
+                                            }else if(dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter'){
+                                                const aux = (value==='')? true : (validator.isURL(value, {protocols: ['https']}) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject()) ;
+                                                return aux;
                                             }
-                                        // ({ getFieldValue }) => ({
-                                        //     validator(_, value) {
-                                        //         if (!value || getFieldValue('password') === value) {
-                                        //             return Promise.resolve();
-                                        //         }
-                                        //                     return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                        //         },
-                                        // }),
-
+                                            return true;
+                                        }
                                     },
                                 ]}
                             >
@@ -358,13 +354,14 @@ const ManageUsers = () => {
             title: 'Foto de perfil*',
             dataIndex: "profilePicture",
             key: "profilePicture",
-            width: "6%",
+            width: "4%",
             align: "left",
             editable: true,
         },
         {
             title: 'Nombre*',
             dataIndex: "name",
+            width: "6%",
             key: "name",
             editable: true,
             sorter: (a, b) => a.name.localeCompare(b.name),
@@ -380,6 +377,7 @@ const ManageUsers = () => {
         {
             title: 'Apellido*',
             dataIndex: "lastName",
+            width: "5%",
             key: "lastName",
             editable: true,
             sorter: (a, b) => a.lastName.localeCompare(b.lastName)
@@ -392,8 +390,16 @@ const ManageUsers = () => {
             sorter: (a, b) => a.email.localeCompare(b.email)
         },
         {
+            title: 'Descripción*',
+            dataIndex: "describeYourself",
+            key: "describeYourself",
+            editable: true,
+            render: (text) => <ExpandableText text={text} maxLength={256} />,
+        },
+        {
             title: 'Contraseña*',
             dataIndex: "password",
+            width: "4%",
             ellipsis: true,
             key: "password",
             editable: true,
@@ -401,12 +407,14 @@ const ManageUsers = () => {
         {
             title: 'Fecha de nacimiento*',
             dataIndex: "dateOfBirth",
+            width: "5%",
             key: "dateOfBirth",
             editable: true
         },
         {
             title: 'Sexo*',
             dataIndex: "gender",
+            width: "4%",
             key: "gender",
             editable: true,
             sorter: (a, b) => a.gender.localeCompare(b.gender)
@@ -421,11 +429,12 @@ const ManageUsers = () => {
         {
             title: 'Discapacidad',
             dataIndex: "condition",
+            width: "5%",
             key: "condition",
             editable: true,
             render: (elements) => {
                 const aux = elements.map((element) => {
-                    return ( <Tag>{element}</Tag>);
+                    return (<Tag>{element}</Tag>);
                 })
                 return aux;
             },
@@ -434,6 +443,7 @@ const ManageUsers = () => {
         {
             title: 'Tutor*',
             dataIndex: "isCaregiver",
+            width: "3%",
             key: "isCaregiver",
             editable: true,
             sorter: (a, b) => a.isCaregiver.localeCompare(b.isCaregiver)
@@ -441,6 +451,7 @@ const ManageUsers = () => {
         {
             title: 'Fundación',
             dataIndex: "institution",
+            width: "6%",
             key: "institution",
             editable: true,
             sorter: (a, b) => a.institution.localeCompare(b.institution)
@@ -448,6 +459,7 @@ const ManageUsers = () => {
         {
             title: 'Rol*',
             dataIndex: "userType",
+            width: "5%",
             key: "userType",
             editable: true,
             sorter: (a, b) => a.userType.localeCompare(b.userType)
@@ -455,39 +467,55 @@ const ManageUsers = () => {
         {
             title: 'Sitios asociados',
             dataIndex: "associatedSites",
+            width: "4%",
             key: "associatedSites",
             editable: false,
             render: (e) => {
                 let sites = '';
                 if (e) {
-                  sites = e.map((item) => (
-                    <Tooltip title={item.name} key={item.id}>
-                        <Tag key={item.id} color={"blue"} style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {item.name}
-                        </Tag>
-                    </Tooltip>
-                  ));
+                    sites = e.map((item) => (
+                        <Tooltip title={item.name} key={item.id}>
+                            <Tag key={item.id} color={"blue"} style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {item.name}
+                            </Tag>
+                        </Tooltip>
+                    ));
                 }
-              
+
                 return <div style={{ whiteSpace: 'pre-wrap' }}>{sites}</div>;
             }
+        },
+        {
+            title: 'Facebook',
+            dataIndex: "socialFacebook",
+            key: "socialFacebook",
+            editable: true
+        },
+        {
+            title: 'Instagram',
+            dataIndex: "socialInstagram",
+            key: "socialInstagram",
+            editable: true
+        },
+        {
+            title: 'Twitter',
+            dataIndex: "socialTwitter",
+            key: "socialTwitter",
+            editable: true
         },
         {
             title: 'Operación',
             dataIndex: 'operation',
             key: "operation",
-            width: "9%",
+            width: "5%",
             fixed: "right",
             render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (
-                    <span>
+                    <Space>
                         <Popconfirm title="¿Estás seguro?" cancelText="Seguir Editando" onConfirm={() => saveEdit(record._id)}>
                             <Typography.Link
                                 keyboard
-                                style={{
-                                    marginRight: 8,
-                                }}
                             >
                                 Guardar
                             </Typography.Link>
@@ -497,9 +525,9 @@ const ManageUsers = () => {
                                 Cancelar
                             </Typography.Link>
                         </Popconfirm>
-                    </span>
+                        </Space>
                 ) : (
-                    <Space size="middle">
+                    <Space>
                         <Typography.Link keyboard disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Editar
                         </Typography.Link>
@@ -606,7 +634,7 @@ const ManageUsers = () => {
                     onChange: cancel,
                     pageSize: 10
                 }}
-                scroll={{ x: 2150 }}
+                scroll={{ x: 3500 }}
             />
         </Form>
     );
