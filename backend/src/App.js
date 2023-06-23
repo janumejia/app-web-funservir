@@ -17,17 +17,17 @@ const app = express();
 
 app.use(compression())
 
-app.use(
-    helmet({
-        strictTransportSecurity: process.env.BACKEND_NODE_ENV !== "development",
-        xFrameOptions: { action: "deny" },
-        contentSecurityPolicy: false,
-        crossOriginOpenerPolicy: false,
-        crossOriginResourcePolicy: false,
-        xPermittedCrossDomainPolicies: false,
-        originAgentCluster: false,
-    })
-); // Importa encabezados de seguridad automáticamente: 
+// app.use(
+//     helmet({
+//         strictTransportSecurity: process.env.BACKEND_NODE_ENV !== "development",
+//         xFrameOptions: { action: "deny" },
+//         contentSecurityPolicy: false,
+//         crossOriginOpenerPolicy: false,
+//         crossOriginResourcePolicy: false,
+//         xPermittedCrossDomainPolicies: false,
+//         originAgentCluster: false,
+//     })
+// ); // Importa encabezados de seguridad automáticamente: 
 
 app.disable('x-powered-by'); // Para que no muestre en el encabezado que la APP está desarrollada con Express JS
 
@@ -52,8 +52,8 @@ app.use(cors({
 // app.use(express.json()) // Nos permitirá ver el body que contiene las peticiones POST y PUT
 
 // Para permitir el envió de archivos grandes en el JSON (necesario para las imágenes)
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb' }));
+app.use(express.json({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 /* Para mostrar un mensaje de error personalizado al usuario cuando envía un JSON malformado, en vez del mensaje de error real (puede generar fuga de información), en caso que suceda un error en el backend */
 app.use((err, req, res, next) => {
