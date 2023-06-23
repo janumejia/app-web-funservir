@@ -107,7 +107,7 @@ const ManageUsers = () => {
         children,
         ...restProps
     }) => {
-        const inputNode = dataIndex === "password" ? <Input.Password /> : (dataIndex === "describeYourself") ? <TextArea rows={4} maxLength={2000} /> : <Input />;
+        const inputNode = dataIndex === "password" ? <Input.Password /> : (dataIndex === "describeYourself")? <TextArea rows={4} maxLength={2000} />: <Input />;
         return (
             <td {...restProps}>
                 {editing ? (
@@ -164,7 +164,7 @@ const ManageUsers = () => {
                                 }}>
                                 <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} />
                             </Form.Item>
-                        ) : (
+                        ) :  (
                             <Form.Item
                                 name={dataIndex}
                                 style={{
@@ -182,25 +182,11 @@ const ManageUsers = () => {
                                             } else if (title === 'Contraseña*') {
                                                 const aux = validator.isStrongPassword(value) ? Promise.resolve() : Promise.reject();
                                                 return aux;
-                                            } else if (dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter') {
-                                                //const aux = (value==='')?true:validator.isURL(value, {protocols: ['https']}) ? Promise.resolve() : Promise.reject();
-                                                const aux = (value) => {
-                                                    if (value === '') {
-                                                        return true;
-                                                    }
-                                                    // Check if the URL is valid
-                                                    if (!validator.isURL(value, {protocols: ['https']})) {
-                                                        return false;
-                                                    }
-                                                    // Check if the URL starts with "https://"
-                                                    if (!value.startsWith('https://')) {
-                                                        return false;
-                                                    }
-                                                    return true;
-                                                }
-                                                aux(value);
+                                            }else if(dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter'){
+                                                const aux = (value==='')? true : (validator.isURL(value, {protocols: ['https']}) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject()) ;
+                                                return aux;
                                             }
-
+                                            return true;
                                         }
                                     },
                                 ]}
@@ -539,7 +525,7 @@ const ManageUsers = () => {
                                 Cancelar
                             </Typography.Link>
                         </Popconfirm>
-                    </Space>
+                        </Space>
                 ) : (
                     <Space>
                         <Typography.Link keyboard disabled={editingKey !== ''} onClick={() => edit(record)}>
