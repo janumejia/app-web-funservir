@@ -107,7 +107,7 @@ const ManageUsers = () => {
         children,
         ...restProps
     }) => {
-        const inputNode = dataIndex === "password" ? <Input.Password /> : (dataIndex === "describeYourself")? <TextArea rows={4} maxLength={2000} />: <Input />;
+        const inputNode = dataIndex === "password" ? <Input.Password maxLength={70}/> : (dataIndex === "describeYourself")? <TextArea rows={4} maxLength={2000} />: <Input/>;
         return (
             <td {...restProps}>
                 {editing ? (
@@ -197,7 +197,7 @@ const ManageUsers = () => {
 
                     </>
                 ) : (
-                    (inputType === 'object') ? <img src={record.profilePicture} alt='Foto de perfil' style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
+                    (inputType === 'object') ? <img src={record.profilePicture} alt={`${record.name}`} style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
                 )
                 }
             </td >
@@ -568,6 +568,7 @@ const ManageUsers = () => {
                 name: "",
                 lastName: "",
                 email: "",
+                describeYourself: "",
                 password: "",
                 dateOfBirth: new Date(),
                 gender: "",
@@ -577,7 +578,10 @@ const ManageUsers = () => {
                 institution: "",
                 userType: "",
                 associatedSites: [],
-                profilePicture: ""
+                profilePicture: "",
+                socialFacebook: "",
+                socialInstagram: "",
+                socialTwitter: ""
             };
             setData([...data, newUser]);
             edit(newUser);
