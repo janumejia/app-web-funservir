@@ -131,7 +131,7 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             editable: true,
             render: (elements) => {
                 const aux = elements.map((element) => {
-                    return ( <Tag color={"blue"}>{element.name}</Tag>);
+                    return ( <Tag key={element._id} color={"blue"}>{element.name}</Tag>);
                 })
                 return aux;
             }
@@ -156,8 +156,8 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             render: (schedule) => {
                 if (schedule) {
                     const aux = Object.entries(schedule).map(([day, times]) => {
-                        if(times.start && times.end ) return ( <Tag color={"green"}> {day.slice(0, 2)} {times.start}-{times.end}</Tag> );
-                        else return ( <Tag> {day.slice(0, 2)} Cerrado</Tag> );
+                        if(times.start && times.end ) return ( <Tag key={day} color={"green"}> {day.slice(0, 2)} {times.start}-{times.end}</Tag> );
+                        else return ( <Tag key={day}> {day.slice(0, 2)} Cerrado</Tag> );
                     })
                     return aux
 
@@ -250,7 +250,7 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
                 }
 
                 return (
-                    <Tag color={color}>
+                    <Tag key={color} color={color}>
                         {status}
                     </Tag>
                 )

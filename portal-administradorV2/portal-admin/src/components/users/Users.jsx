@@ -34,8 +34,8 @@ const rol = [
 ]
 
 const isCaregiver = [
-    <Select.Option key="Si" value="Si">Si</Select.Option>,
-    <Select.Option key="No" value="No">No</Select.Option>
+    <Option key="Si" value="Si">Si</Option>,
+    <Option key="No" value="No">No</Option>
 ]
 const options = (title) => {
     if (title === "Sexo*") {
@@ -107,7 +107,7 @@ const ManageUsers = () => {
         children,
         ...restProps
     }) => {
-        const inputNode = dataIndex === "password" ? <Input.Password /> : (dataIndex === "describeYourself")? <TextArea rows={4} maxLength={2000} />: <Input />;
+        const inputNode = dataIndex === "password" ? <Input.Password maxLength={70} /> : (dataIndex === "describeYourself") ? <TextArea rows={4} maxLength={2000} /> : <Input />;
         return (
             <td {...restProps}>
                 {editing ? (
@@ -164,7 +164,7 @@ const ManageUsers = () => {
                                 }}>
                                 <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} />
                             </Form.Item>
-                        ) :  (
+                        ) : (
                             <Form.Item
                                 name={dataIndex}
                                 style={{
@@ -182,8 +182,8 @@ const ManageUsers = () => {
                                             } else if (title === 'Contraseña*') {
                                                 const aux = validator.isStrongPassword(value) ? Promise.resolve() : Promise.reject();
                                                 return aux;
-                                            }else if(dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter'){
-                                                const aux = (value==='')? true : (validator.isURL(value, {protocols: ['https']}) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject()) ;
+                                            } else if (dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter') {
+                                                const aux = (value === '') ? true : (validator.isURL(value, { protocols: ['https'] }) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject());
                                                 return aux;
                                             }
                                             return true;
@@ -197,7 +197,7 @@ const ManageUsers = () => {
 
                     </>
                 ) : (
-                    (inputType === 'object') ? <img src={record.profilePicture} alt='Foto de perfil' style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
+                    (inputType === 'object') ? <img src={record.profilePicture} alt={`${record.name}`} style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
                 )
                 }
             </td >
@@ -434,7 +434,7 @@ const ManageUsers = () => {
             editable: true,
             render: (elements) => {
                 const aux = elements.map((element) => {
-                    return (<Tag>{element}</Tag>);
+                    return (<Tag key={element}>{element}</Tag>);
                 })
                 return aux;
             },
@@ -474,8 +474,8 @@ const ManageUsers = () => {
                 let sites = '';
                 if (e) {
                     sites = e.map((item) => (
-                        <Tooltip title={item.name} key={item.id}>
-                            <Tag key={item.id} color={"blue"} style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <Tooltip title={item.name} key={item._id}>
+                            <Tag key={item._id} color={"blue"} style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {item.name}
                             </Tag>
                         </Tooltip>
@@ -525,7 +525,7 @@ const ManageUsers = () => {
                                 Cancelar
                             </Typography.Link>
                         </Popconfirm>
-                        </Space>
+                    </Space>
                 ) : (
                     <Space>
                         <Typography.Link keyboard disabled={editingKey !== ''} onClick={() => edit(record)}>
@@ -568,6 +568,7 @@ const ManageUsers = () => {
                 name: "",
                 lastName: "",
                 email: "",
+                describeYourself: "",
                 password: "",
                 dateOfBirth: new Date(),
                 gender: "",
@@ -577,7 +578,10 @@ const ManageUsers = () => {
                 institution: "",
                 userType: "",
                 associatedSites: [],
-                profilePicture: ""
+                profilePicture: "",
+                socialFacebook: "",
+                socialInstagram: "",
+                socialTwitter: ""
             };
             setData([...data, newUser]);
             edit(newUser);
@@ -620,7 +624,6 @@ const ManageUsers = () => {
                     triggerAsc: 'Ordenar ascendiente',
                     cancelSort: 'Cancelar ordenamiento'
                 }}
-                rowKey={record => record._id}
                 components={{
                     body: {
                         cell: EditableCell,
@@ -628,6 +631,7 @@ const ManageUsers = () => {
                 }}
                 bordered
                 dataSource={data}
+                rowKey={record => record._id}
                 columns={mergedColumns}
                 rowClassName="editable-row"
                 pagination={{

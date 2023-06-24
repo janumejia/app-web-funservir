@@ -86,6 +86,7 @@ const addUser = async (req, res) => {
         const newUser = new User({
             name: inputs.name,
             lastName: inputs.lastName,
+            describeYourself: inputs.describeYourself,
             dateOfBirth: inputs.dateOfBirth,
             email: inputs.email,
             password: hash,
@@ -96,7 +97,10 @@ const addUser = async (req, res) => {
             institution: inputs.institution,
             userType: inputs.userType,
             associatedSites: [],
-            profilePicture: uploadRes.secure_url
+            profilePicture: uploadRes.secure_url,
+            socialFacebook: inputs.socialFacebook,
+            socialInstagram: inputs.socialInstagram,
+            socialTwitter: inputs.socialTwitter,
         });
 
         const savedUser = await newUser.save();
