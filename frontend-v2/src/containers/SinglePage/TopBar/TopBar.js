@@ -52,7 +52,7 @@ const SocialShareMenu = (props) => {
 const SideButtons = (props) => {
   return (
     <ButtonGroup>
-      {/* <Favorite className="ant-btn" content="Save" /> */}
+      <Favorite className="ant-btn" content="Guardar" />
       <Dropdown
         placement="bottomRight"
         overlay={() => <SocialShareMenu {...props} />}

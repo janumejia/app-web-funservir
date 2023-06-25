@@ -17,6 +17,8 @@ import SinglePageWrapper, { PostImage } from './SinglePageView.style';
 import PostImageGallery from './ImageGallery/ImageGallery';
 import useDataApi from 'library/hooks/useDataApi';
 import isEmpty from 'lodash/isEmpty';
+import { FaImages } from "react-icons/fa";
+import { size } from 'lodash';
 
 const SinglePage = () => {
   let { slug } = useParams();
@@ -45,17 +47,36 @@ const SinglePage = () => {
 
   return (
     <SinglePageWrapper>
-      <PostImage>
-        <img
-          className="absolute"
-          src="https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21"
-          alt="Listing details page banner"
-        />
+      <PostImage hasSecondAndThirdImage={true}>
+        <div
+          style={{ cursor: 'pointer' }}
+          onClick={() => setIsModalShowing(true)}
+        >
+          <img
+            className="main-image"
+            src="https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg"
+            alt="Listing details page banner"
+          />
+          <img
+            className="second-image"
+            src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/07/a9/20/a5.jpg"
+            alt="Listing details page banner"
+          />
+
+          <img
+            className="third-image"
+            src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/06/ec/f7/ae.jpg"
+            alt="Listing details page banner"
+          />
+        </div>
         <Button
           type="primary"
           onClick={() => setIsModalShowing(true)}
           className="image_gallery_button"
         >
+          <span class="button-icon">
+            <FaImages />
+          </span>
           Ver fotos
         </Button>
         <Modal
@@ -90,20 +111,21 @@ const SinglePage = () => {
 
       <TopBar title={title} shareURL={href} author={author} media={gallery} />
 
-      <Container>
+      <Container fullWidth={true}>
         <Row gutter={30} id="reviewSection" style={{ marginTop: 30 }}>
-          <Col xl={19}>
+          <Col xl={16}>
             <Description
               content={content}
               title={title}
               location={location}
               rating={rating}
               ratingCount={ratingCount}
+              // fontFamily="Arial" fontWeight="bold" textAlign="center" 
             />
             <Amenities amenities={amenities} />
             <Location location={data[0]} />
           </Col>
-          {/* <Col xl={8}>
+          <Col xl={8}>
             {width > 1200 ? (
               <Sticky
                 innerZ={999}
@@ -121,7 +143,7 @@ const SinglePage = () => {
                 ratingCount={ratingCount}
               />
             )}
-          </Col> */}
+          </Col>
         </Row>
         <Row gutter={30}>
           <Col xl={16}>
