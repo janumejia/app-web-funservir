@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Button } from 'antd';
 import HtmlLabel from 'components/UI/HtmlLabel/HtmlLabel';
 import DatePickerRange from 'components/UI/DatePicker/ReactDates';
@@ -10,6 +10,11 @@ import ReservationFormWrapper, {
   RoomGuestWrapper,
   ItemWrapper,
 } from './Reservation.style.js';
+import Heading from 'components/UI/Heading/Heading';
+import Text from 'components/UI/Text/Text';
+import { fontSize } from 'styled-system';
+import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react-icons/md";
+import { BsArrowUpRight } from "react-icons/bs";
 
 const RenderReservationForm = () => {
   const [formState, setFormState] = useState({
@@ -55,9 +60,27 @@ const RenderReservationForm = () => {
     );
   };
 
+  // const handleScrollUp = () => {
+  //   window.scrollTo({
+  //     top: window.pageYOffset - 30,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
+  const styleHeading = {
+    fontSize: "16px",
+    fontWeight: "bold",
+  }
+
+  const styleText1 = {
+    fontSize: "16px",
+    // fontWeight: "bold",
+  }
+
+
   return (
     <ReservationFormWrapper className="form-container" onSubmit={handleSubmit}>
-      <FieldWrapper>
+      {/*<FieldWrapper>
         <HtmlLabel htmlFor="dates" content="Dates" />
         <DatePickerRange
           startDateId="checkin-Id"
@@ -113,7 +136,56 @@ const RenderReservationForm = () => {
         <Button htmlType="submit" type="primary">
           Book Hotel
         </Button>
-      </FormActionArea>
+      </FormActionArea> */}
+      <Heading
+        className="titleBodyCard"
+        content={
+          "Ubicación e información de contacto"
+        }
+        {...styleHeading}
+      />
+      <a href="#ubicacion">
+        <img src={`https://maps.googleapis.com/maps/api/staticmap?center=4.6213454694986265,-74.07338428857892&zoom=17&size=600x250&&markers=4.6213454694986265,-74.07338428857892&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
+      </a>
+      <div className='location'>
+        <MdLocationOn style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
+        <Text content=
+          {<Fragment>
+            {"Cra. 18 #32a-18, Teusaquillo, Bogotá"}
+          </Fragment>}
+          {...styleText1}
+        />
+      </div>
+      <div className='telephone'>
+        <MdPhone style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
+        <Text content=
+          {<Fragment>
+            {"+57 3001234567"}
+          </Fragment>}
+          {...styleText1}
+        />
+      </div>
+      <div className='website'>
+        <MdOutlineLaptopChromebook style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
+        <Text content=
+          {<Fragment>
+            <a href="https://www.funservir.net" rel="noopener noreferrer" target="_blank">
+              https://www.funservir.net 
+              <BsArrowUpRight style={{ fontSize: '13px', margin: '0px 0 0 3px' }}/>
+            </a>
+          </Fragment>}
+          {...styleText1}
+        />
+      </div>
+      <div className='email'>
+        <MdEmail style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
+        <Text content=
+          {<Fragment>
+            {"funservir@gmail.com"}
+          </Fragment>}
+          {...styleText1}
+        />
+      </div>
     </ReservationFormWrapper>
   );
 };

@@ -729,6 +729,9 @@ const GlobalStyle = createGlobalStyle`
     header {
       padding-bottom: 27px;
       margin-bottom: 29px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 25px 30px 26px 30px;
       border-bottom: 1px solid ${themeGet('border.0', '#EBEBEB')};
       @media   (max-width: 375px) {
@@ -742,9 +745,10 @@ const GlobalStyle = createGlobalStyle`
     }
 
     p {
+      margin-right: 10px;
       color: ${themeGet('text.0', '#2C2C2C')};
-      font-size: 15px;
-      font-weight: 400;
+      ${'' /* font-size: 15px; */}
+      ${'' /* font-weight: 400; */}
       a {
         color: ${themeGet('primary.0', '#008489')};
         font-weight: 700;
@@ -759,6 +763,9 @@ const GlobalStyle = createGlobalStyle`
 
     footer {
       padding: 25px 30px 28px 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-top: 29px;
       border-top: 1px solid ${themeGet('border.0', '#EBEBEB')};
       @media   (max-width: 375px) {

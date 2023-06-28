@@ -23,7 +23,7 @@ export default function TopBar({ menu = [], other, height, className }) {
                 smooth={true}
                 hashSpy={true}
                 offset={-170}
-                duration={600}
+                duration={300}
                 isDynamic={true}
                 ignoreCancelEvents={false}
               >

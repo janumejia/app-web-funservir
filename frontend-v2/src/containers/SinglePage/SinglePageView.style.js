@@ -26,7 +26,7 @@ export const RatingMeta = styled.div`
   display: flex;
   align-items: center;
   color: ${themeGet('text.0', '#2C2C2C')};
-  font-size: 13px;
+  font-size: 14px;
   margin-top: 10px;
   margin-bottom: 27px;
   @media (max-width: 767px) {
@@ -82,14 +82,14 @@ export const TobBarWrapper = styled.div`
 
           a {
             color: ${themeGet('text.0', '#2C2C2C')};
-            font-size: 15px;
+            font-size: 16px;
             padding: 28px 20px;
             text-transform: capitalize;
             transition: color 0.2s ease-in-out;
 
-            &:first-child {
+            ${'' /* &:first-child {
               padding-left: 0;
-            }
+            } */}
 
             @media (max-width: 1200px) {
               padding: 18px 20px;
@@ -102,7 +102,7 @@ export const TobBarWrapper = styled.div`
             &.active {
               font-weight: 700;
               color: ${themeGet('primary.0', '#008489')};
-              border-bottom: 3px solid ${themeGet('primary.0', '#008489')};
+              border-bottom: 4px solid ${themeGet('primary.0', '#008489')};
             }
           }
         }
@@ -200,7 +200,8 @@ export const ButtonGroup = styled.div`
 `;
 
 export const PostImage = styled.div`
-  height: 683px;
+  ${'' /* height: 683px; */}
+  height: calc(100vh - 2 * 82px);
   position: relative;
 
   img.main-image {
@@ -273,11 +274,14 @@ export const PostImage = styled.div`
       margin-top: 3px;
     }
 
+    :hover {
+      border-color: black;
+    }
+
     :hover,
     :focus {
       background: ${themeGet('color.2', '#E6E6E6')};
       color: ${themeGet('text.0', '#2C2C2C')};
-      border-color: black;
     }
   }
 `;

@@ -9,6 +9,7 @@ import useWindowSize from 'library/hooks/useWindowSize';
 import Description from './Description/Description';
 import Amenities from './Amenities/Amenities';
 import Location from './Location/Location';
+import MoreAboutInclusivity from './MoreAboutInclusivity/MoreAboutInclusivity';
 import Review from './Review/Review';
 import Reservation from './Reservation/Reservation';
 import BottomReservation from './Reservation/BottomReservation';
@@ -19,6 +20,7 @@ import useDataApi from 'library/hooks/useDataApi';
 import isEmpty from 'lodash/isEmpty';
 import { FaImages } from "react-icons/fa";
 import { size } from 'lodash';
+import { bottom } from 'styled-system';
 
 const SinglePage = () => {
   let { slug } = useParams();
@@ -62,7 +64,6 @@ const SinglePage = () => {
             src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/07/a9/20/a5.jpg"
             alt="Listing details page banner"
           />
-
           <img
             className="third-image"
             src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/06/ec/f7/ae.jpg"
@@ -111,7 +112,7 @@ const SinglePage = () => {
 
       <TopBar title={title} shareURL={href} author={author} media={gallery} />
 
-      <Container fullWidth={true}>
+      <Container fullWidth={true} fluid={true}>
         <Row gutter={30} id="reviewSection" style={{ marginTop: 30 }}>
           <Col xl={16}>
             <Description
@@ -120,10 +121,42 @@ const SinglePage = () => {
               location={location}
               rating={rating}
               ratingCount={ratingCount}
-              // fontFamily="Arial" fontWeight="bold" textAlign="center" 
+              category={"Categoría: Restaurantes"}
+              categoryStyle={{
+                fontSize: "16px",
+                padding: "0px 0px 10px 0px",
+              }}
+              locationMetaStyle={{
+                fontSize: "16px",
+              }}
+              titleStyle={{
+                fontSize: "26px",
+                lineHeight: "2",
+              }}
+            // contentStyle={{
+            //   fontFamily: "Arial",
+            //   fontWeight: "bold",
+            //   textAlign: "center",
+            //   lineHeight: "1.5",
+            //   letterSpacing: "1px",
+            //   color: "blue",
+            //   fontSize: "16px",
+            //   margin: "10px",
+            //   padding: "20px",
+            // }}
+            // fontFamily="Arial" fontWeight="bold" textAlign="center" 
             />
             <Amenities amenities={amenities} />
-            <Location location={data[0]} />
+            {/* <MoreAboutInclusivity info={data[0]} /> */}
+            <Location
+              location={data[0]}
+              locationMetaStyle={{
+                fontSize: '16px',
+                fontWeight: '400',
+                color: '#909090',
+                mb: ['14px', '20px', '14px'],
+              }}
+            />
           </Col>
           <Col xl={8}>
             {width > 1200 ? (

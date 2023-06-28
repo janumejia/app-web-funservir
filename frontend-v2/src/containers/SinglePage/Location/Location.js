@@ -14,13 +14,13 @@ const Location = ({
   linkStyle,
   location,
 }) => {
-  const formattedAddress = location.formattedAddress;
+  const formattedAddress = location.location.formattedAddress;
   return (
-    <Element name="location" className="location">
+    <Element name="ubicacion" className="ubicacion">
       <LocationWrapper>
         <Heading as="h2" content="Ubicación" {...titleStyle} />
         <Text content={formattedAddress} {...locationMetaStyle} />
-        <Text
+        {/* <Text
           content="Queda a 5 minutos a pie desde la estación Usaquen. El barrio es tranquilo y perfecto para disfrutar del auténtico sabor de la vida romana, con tiendas, galerías de arte, restaurantes, bares y discotecas, todo cerca y listo para ser descubierto."
           {...contentStyle}
         />
@@ -29,7 +29,7 @@ const Location = ({
           {...contentStyle}
           {...boldContentStyle}
         />
-        <Text content="26 minutos en carro en promedio" {...contentStyle} />
+        <Text content="26 minutos en carro en promedio" {...contentStyle} /> */}
 
         <Map location={location} multiple={false} />
       </LocationWrapper>

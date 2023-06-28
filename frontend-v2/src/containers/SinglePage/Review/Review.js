@@ -57,7 +57,7 @@ const Review = (props) => {
   };
 
   return (
-    <Element name="reviews" className="reviews">
+    <Element name="opiniones" className="opiniones">
       <ReviewWrapper>
         <HeaderSection>
           <RatingStatus>
