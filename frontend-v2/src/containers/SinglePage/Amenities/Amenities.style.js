@@ -7,6 +7,11 @@ const AmenitiesWrapper = styled.div`
     margin-bottom: 30px;
   }
 
+  .inclusive_icon {
+    width: '24px';
+    height: '24px';
+  }
+
   a {
     &:hover {
       color: #31b8bd;

@@ -26,7 +26,7 @@ export const RatingMeta = styled.div`
   display: flex;
   align-items: center;
   color: ${themeGet('text.0', '#2C2C2C')};
-  font-size: 13px;
+  font-size: 14px;
   margin-top: 10px;
   margin-bottom: 27px;
   @media (max-width: 767px) {
@@ -82,14 +82,14 @@ export const TobBarWrapper = styled.div`
 
           a {
             color: ${themeGet('text.0', '#2C2C2C')};
-            font-size: 15px;
+            font-size: 16px;
             padding: 28px 20px;
             text-transform: capitalize;
             transition: color 0.2s ease-in-out;
 
-            &:first-child {
+            ${'' /* &:first-child {
               padding-left: 0;
-            }
+            } */}
 
             @media (max-width: 1200px) {
               padding: 18px 20px;
@@ -102,7 +102,7 @@ export const TobBarWrapper = styled.div`
             &.active {
               font-weight: 700;
               color: ${themeGet('primary.0', '#008489')};
-              border-bottom: 3px solid ${themeGet('primary.0', '#008489')};
+              border-bottom: 4px solid ${themeGet('primary.0', '#008489')};
             }
           }
         }
@@ -200,38 +200,87 @@ export const ButtonGroup = styled.div`
 `;
 
 export const PostImage = styled.div`
-  height: 600px;
+  ${'' /* height: 683px; */}
+  height: calc(100vh - 2 * 82px);
   position: relative;
 
-  @media (max-width: 767px) {
-    height: 406px;
-  }
-
-  img.absolute {
-    width: 100%;
+  img.main-image {
+    width: ${({ hasSecondAndThirdImage }) => (hasSecondAndThirdImage ? "66.6%" : "100%")};
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
     object-fit: cover;
+    border-top-right-radius: ${({ hasSecondAndThirdImage }) => (hasSecondAndThirdImage ? "8px" : "0px")}; /* Added border radius */
+    border-bottom-right-radius: ${({ hasSecondAndThirdImage }) => (hasSecondAndThirdImage ? "8px" : "0px")}; /* Added border radius */
+  }
+
+  .second-image,
+  .third-image {
+    position: absolute;
+    object-fit: cover;
+    border-top-left-radius: 8px; /* Added border radius */
+    border-bottom-left-radius: 8px; /* Added border radius */
+    display: ${({ hasSecondAndThirdImage }) => (hasSecondAndThirdImage ? "block" : "none")};
+  }
+
+  .second-image {
+    width: 33%;
+    height: 49.5%;
+    top: 0;
+    right: 0;
+  }
+
+  .third-image {
+    width: 33%;
+    height: 49.5%;
+    bottom: 0;
+    right: 0;
+  }
+
+  @media (max-width: 991px) {
+    height: 406px;
+
+    img.main-image {
+      width: 100%;
+      border-top-right-radius: 0px; /* Added border radius */
+      border-bottom-right-radius: 0px; /* Added border radius */
+    }
+
+    .second-image,
+    .third-image {
+      display: none;
+    }
+
   }
 
   .image_gallery_button {
     background: ${themeGet('color.1', '#ffffff')};
     border-radius: 3px;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     color: #2c2c2c;
-    border: 0;
+    border: 1px solid;
+    border-color: transparent;
     height: 37px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    ${'' /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16); */}
     position: absolute;
     bottom: 30px;
     right: 25px;
+    cursor: pointer;
 
-    &:hover,
-    &:focus {
-      background: ${themeGet('color.2', '#F7F7F7')};
+    .button-icon {
+      margin-right: 8px; /* Adjust the spacing between icon and text */
+      margin-top: 3px;
+    }
+
+    :hover {
+      border-color: black;
+    }
+
+    :hover,
+    :focus {
+      background: ${themeGet('color.2', '#E6E6E6')};
       color: ${themeGet('text.0', '#2C2C2C')};
     }
   }

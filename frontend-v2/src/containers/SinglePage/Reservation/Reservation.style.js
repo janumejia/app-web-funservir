@@ -5,6 +5,22 @@ const ReservationFormWrapper = styled.form`
   @media (max-width: 375px) {
     padding: 0 15px;
   }
+
+  .titleBodyCard {
+    margin-bottom: 10px;
+  }
+  
+  img {
+    margin: 5px 0 5px 0;
+  }
+
+  .location,
+  .telephone,
+  .website,
+  .email {
+    display: flex;
+    margin: 12px 0 12px 0;
+  }
 `;
 
 export const FieldWrapper = styled.div`
@@ -173,6 +189,60 @@ export const FormActionArea = styled.div`
     &:focus {
       outline: none;
       opacity: 0.93;
+    }
+  }
+`;
+
+export const SocialAccount = styled.div`
+  flex-shrink: 0;
+
+  a:not(:last-child) {
+    margin-right: 45px;
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
+
+    fill: ${themeGet('color.6', '#273343')};
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.socialNotDefined{
+      fill: ${themeGet('color.5', '#55ADEE')};
+      cursor: not-allowed;
+      margin-right: 30px;
+    }
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.whatsapp {
+      &:hover {
+        fill: #21b639;
+      }
+    }
+
+    &.twitter {
+      &:hover {
+        fill: ${themeGet('color.8', '#55ADEE')};
+      }
+    }
+
+    &.facebook {
+      &:hover {
+        fill: ${themeGet('color.7', '#3b5998')};
+      }
+    }
+
+    &.instagram {
+      &:hover {
+        fill: ${themeGet('color.12', '#e4405f')};
+      }
     }
   }
 `;

@@ -62,7 +62,7 @@ const PostGrid = ({
       rating={<Rating rating={rating} ratingCount={ratingCount} type="bulk" />}
       viewDetailsBtn={
         <TextLink
-          link={`${link}/${slug}`}
+          link={`/post/${slug}`}
           icon={<FiExternalLink />}
           content="Ver detalles"
         />

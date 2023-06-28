@@ -7,6 +7,7 @@ import Text from 'components/UI/Text/Text';
 import { Button } from 'antd';
 import DescriptionWrapper from './Description.style';
 import { RatingMeta, TextButton } from '../SinglePageView.style';
+import { Divider,  } from 'antd';
 
 const Description = ({
   title,
@@ -14,22 +15,26 @@ const Description = ({
   content,
   rating,
   ratingCount,
+  category,
+  categoryStyle,
   titleStyle,
   locationMetaStyle,
   contentStyle,
 }) => {
   return (
-    <Element name="overview" className="overview">
+    <Element name="general" className="general">
       <DescriptionWrapper>
         <Text content={location.formattedAddress} {...locationMetaStyle} />
         <Heading as="h2" content={title} {...titleStyle} />
         <RatingMeta>
           <Rating rating={rating} ratingCount={ratingCount} type="bulk" />
         </RatingMeta>
+        <Divider />
+        <Text content={category} {...categoryStyle} />
         <Text content={content} {...contentStyle} />
-        <TextButton>
+        {/* <TextButton>
           <Button>Leer más acerca del sitio</Button>
-        </TextButton>
+        </TextButton> */}
       </DescriptionWrapper>
     </Element>
   );

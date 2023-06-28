@@ -14,19 +14,19 @@ import { TobBarWrapper, ButtonGroup } from '../SinglePageView.style';
 const topBarMenu = [
   {
     name: 'General',
-    target: 'overview',
+    target: 'general',
   },
   {
-    name: 'Elementos inclusivos',
-    target: 'amenities',
+    name: 'Inclusividad',
+    target: 'inclusividad',
   },
   {
     name: 'Ubicación',
-    target: 'location',
+    target: 'ubicacion',
   },
   {
     name: 'Opiniones',
-    target: 'reviews',
+    target: 'opiniones',
   },
 ];
 
@@ -52,7 +52,7 @@ const SocialShareMenu = (props) => {
 const SideButtons = (props) => {
   return (
     <ButtonGroup>
-      {/* <Favorite className="ant-btn" content="Save" /> */}
+      <Favorite className="ant-btn" content="Guardar" />
       <Dropdown
         placement="bottomRight"
         overlay={() => <SocialShareMenu {...props} />}
