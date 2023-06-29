@@ -59,9 +59,17 @@ const rules = (dataIndex) => {
     } else if (dataIndex === 'password') {
         return (/^.*$/) // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords . Además, la segunda parte del regex hace match con el hash generado por bcrypt: https://stackoverflow.com/a/64636008/19294516
     } else if (dataIndex === 'institution') {
-        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){1,255}$/);
+        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü ]){0,255}$/);
     } else if (dataIndex === 'address') {
         return (/^[a-zA-Z0-9 #,.-]{5,255}$/);
+    } else if (dataIndex === 'describeYourself') {
+        return (/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,2000}$|^$/);
+    } else if (dataIndex === 'socialInstagram') {
+        return (/^(?:https:\/\/)(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$|^$/);
+    } else if (dataIndex === 'socialFacebook') {
+        return (/^(?:https:\/\/)(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$|^$/);
+    } else if (dataIndex === 'socialTwitter') {
+        return (/^(?:https:\/\/)(?:www\.)?twitter\.com\/([a-zA-Z0-9_]){1,255}[\/]{0,1}$|^$/);
     }
 };
 
@@ -182,9 +190,24 @@ const ManageUsers = () => {
                                             } else if (title === 'Contraseña*') {
                                                 const aux = validator.isStrongPassword(value) ? Promise.resolve() : Promise.reject();
                                                 return aux;
-                                            } else if (dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter') {
-                                                const aux = (value === '') ? true : (validator.isURL(value, { protocols: ['https'] }) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject());
+                                            } else if (title === 'Fundación') {
+                                                const aux = rules("institution").test(value) ? Promise.resolve() : Promise.reject();
                                                 return aux;
+                                            } else if (title === 'Descripción*') {
+                                                const aux = (rules("describeYourself").test(value) ? Promise.resolve() : Promise.reject());
+                                                return aux;
+                                            } else if (title === 'Facebook') {
+                                                const aux = (value === '') ? true : (rules("socialFacebook").test(value) ? Promise.resolve() : Promise.reject());
+                                                return aux;
+                                            } else if (title === 'Instagram') {
+                                                const aux = (value === '') ? true : (rules("socialInstagram").test(value) ? Promise.resolve() : Promise.reject());
+                                                return aux;
+                                            } else if (title === 'Twitter') {
+                                                const aux = (value === '') ? true : (rules("socialTwitter").test(value) ? Promise.resolve() : Promise.reject());
+                                                return aux;
+                                            // } else if (dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter') {
+                                            //     const aux = (value === '') ? true : (validator.isURL(value, { protocols: ['https'] }) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject());
+                                            //     return aux;
                                             }
                                             return true;
                                         }
@@ -247,6 +270,13 @@ const ManageUsers = () => {
         try {
 
             const row = await form.validateFields();
+            
+            if (!row.describeYourself) row.describeYourself = "";
+
+            if (!row.socialInstagram) row.socialInstagram = "";
+            if (!row.socialFacebook) row.socialFacebook = "";
+            if (!row.socialTwitter) row.socialTwitter = "";
+
             const newData = [...data];
             const index = newData.findIndex((item) => key === item._id);
             const item = newData[index];
@@ -258,6 +288,7 @@ const ManageUsers = () => {
                     lastName: row.lastName,
                     email: row.email,
                     password: row.password,
+                    describeYourself: row.describeYourself,
                     dateOfBirth: row.dateOfBirth,
                     gender: row["gender"],
                     address: row.address,
@@ -266,7 +297,10 @@ const ManageUsers = () => {
                     institution: row.institution,
                     userType: row["userType"],
                     associatedSites: [],
-                    profilePicture: imageUrl
+                    profilePicture: imageUrl,
+                    socialInstagram: row.socialInstagram,
+                    socialFacebook: row.socialFacebook,
+                    socialTwitter: row.socialTwitter,
                 }
 
                 axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
