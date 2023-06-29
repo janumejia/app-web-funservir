@@ -26,6 +26,10 @@ const addUser = async (req, res) => {
         { input: 'institution', dataType: 'string', regex: regex.institutionRegex },
         { input: 'userType', dataType: 'string', regex: regex.userTypeRegex },
         { input: 'profilePicture', dataType: 'string', regex: regex.profilePictureRegex },
+        { input: 'describeYourself', dataType: 'string', regex: regex.describeYourselfRegex },
+        { input: 'socialInstagram', dataType: 'string', regex: regex.socialInstagramRegex },
+        { input: 'socialFacebook', dataType: 'string', regex: regex.socialFacebookRegex },
+        { input: 'socialTwitter', dataType: 'string', regex: regex.socialTwitterRegex },
 
     ]
 

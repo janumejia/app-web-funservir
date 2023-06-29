@@ -28,6 +28,10 @@ const editUser = async (req, res) => {
         { input: 'userType', dataType: 'string', regex: regex.userTypeRegex },
         // { input: 'profilePicture', dataType: 'string', regex: regex.profilePictureRegex },
         { input: 'imageUrl', dataType: 'string', regex: new RegExp(`(${regex.profilePictureRegex.source}|${regex.imageUrlRegex.source})`) },
+        { input: 'describeYourself', dataType: 'string', regex: regex.describeYourselfRegex },
+        { input: 'socialInstagram', dataType: 'string', regex: regex.socialInstagramRegex },
+        { input: 'socialFacebook', dataType: 'string', regex: regex.socialFacebookRegex },
+        { input: 'socialTwitter', dataType: 'string', regex: regex.socialTwitterRegex },
 
     ]
 
