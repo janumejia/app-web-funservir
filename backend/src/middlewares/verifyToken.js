@@ -3,13 +3,13 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = async (req, res, next) => {
     try {
-        console.log("\n\n\n***************************************************************************\nCOOKIES CUERPO PETICIÓN\n***************************************************************************\n\n\n")
-        // console.log(req)
-        console.log(req.headers)
-        console.log("\n-----------------------\n")
-        console.log(req.cookies)
-        console.log("\n-----------------------\n")
-        console.log(req.cookies['AWFS-token'])
+        // console.log("\n\n\n***************************************************************************\nCOOKIES CUERPO PETICIÓN\n***************************************************************************\n\n\n")
+        // // console.log(req)
+        // console.log(req.headers)
+        // console.log("\n-----------------------\n")
+        // console.log(req.cookies)
+        // console.log("\n-----------------------\n")
+        // console.log(req.cookies['AWFS-token'])
 
         const token = req.cookies['AWFS-token'];
         if (!token) {

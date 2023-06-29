@@ -10,7 +10,7 @@ const AgentItemLists = () => {
   //const listed_post = data[0] && data[0].listed_post ? data[0].listed_post : [];
   const { user } = useContext(AuthContext);
   const listed_post = user.associatedSites? user.associatedSites : [];
-  console.log(user);
+  
   return (
     <SectionGrid
       link={SINGLE_POST_PAGE}

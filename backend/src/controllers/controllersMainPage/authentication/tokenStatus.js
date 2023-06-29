@@ -48,9 +48,9 @@ const tokenStatus = async (req, res) => {
         
         if (userInfo) {
             // Para remover el elemento _id en la respuesta del JSON, ya que se debe utilizar el _id de la cookie de sesión
-            let objAux = { ...userInfo[0]._doc };
-            delete objAux["_id"];
-            userInfo[0] = objAux;
+            // let objAux = { ...userInfo[0]._doc };
+            // delete objAux["_id"];
+            // userInfo[0] = objAux;
 
             return res.status(200).json({ message: 'Token válido', data: userInfo });
         }
