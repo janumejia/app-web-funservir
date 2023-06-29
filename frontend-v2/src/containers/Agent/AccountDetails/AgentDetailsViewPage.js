@@ -21,6 +21,7 @@ import {
   AGENT_PROFILE_FAVORITE,
   AGENT_PROFILE_CONTACT,
 } from 'settings/constant';
+
 import AgentDetailsPage, {
   BannerSection,
   UserInfoArea,
@@ -31,6 +32,8 @@ import AgentDetailsPage, {
   SocialAccount,
   NavigationArea,
 } from './AgentDetails.style';
+
+import { useParams } from 'react-router-dom';
 
 const ProfileNavigation = (props) => {
   let location = useLocation();
@@ -145,6 +148,8 @@ const AgentProfileInfo = () => {
 };
 
 export default function AgentDetailsViewPage(props) {
+  const { userId } = useParams();
+  
   return (
     <AgentDetailsPage>
       <AuthProvider>

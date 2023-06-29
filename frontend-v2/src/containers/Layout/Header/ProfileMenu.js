@@ -11,7 +11,7 @@ import {
 
 export default function ProfileMenu({ avatar }) {
   let navigate = useNavigate();
-  const { logOut } = useContext(AuthContext);
+  const { logOut, user } = useContext(AuthContext);
   const [state, setState] = useState(false);
   const handleDropdown = () => {
     setState(!state);
@@ -33,7 +33,7 @@ export default function ProfileMenu({ avatar }) {
       </div>
       <Menu className={`dropdown-menu ${state ? 'active' : 'hide'}`}>
         <Menu.Item onClick={closeDropdown} key="0">
-          <NavLink to={AGENT_PROFILE_PAGE}>Ver perfil</NavLink>
+          <NavLink to={`profile/${user._id}`}>Ver perfil</NavLink>
         </Menu.Item>
         <Menu.Item onClick={closeDropdown} key="1">
           <NavLink to={ADD_SITE_PAGE}>Crear sitio</NavLink>

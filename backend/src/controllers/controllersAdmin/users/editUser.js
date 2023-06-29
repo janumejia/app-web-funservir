@@ -128,7 +128,6 @@ const editUser = async (req, res) => {
         res.status(200).json({ message: "Usuario editado correctamente", doc });
     } catch (error) {
         res.status(500).json({ message: "error" })
-        console.log(error)
     }
 }
 
