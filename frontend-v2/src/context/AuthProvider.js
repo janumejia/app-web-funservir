@@ -178,12 +178,10 @@ const AuthProvider = (props) => {
       message.destroy();
       if (res) {
         if (res.status === 200) {
-
-
-          setUser(null);
-          setLoggedIn(false);
-          message.success(res.data.message, 5);
           navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+          setLoggedIn(false);
+          setUser(null);
+          message.success(res.data.message, 5);
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
