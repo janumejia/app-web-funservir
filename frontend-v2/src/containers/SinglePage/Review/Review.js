@@ -62,7 +62,7 @@ const Review = (props) => {
         <HeaderSection>
           <RatingStatus>
             <Heading
-              content={`3 Opiniones`}
+              content={`35 Opiniones`}
               {...statusHeadingStyle}
             />
             <IoIosStar />

@@ -49,10 +49,10 @@ const Map = (props) => {
             height: '400px',
             width: '100%',
           }}
-          zoom={11} // Tamaño del zoom del mapa de google maps en la página del sitio abierto
+          zoom={15} // Tamaño del zoom del mapa de google maps en la página del sitio abierto
           center={{ // Ubicación por defecto del mapa cuando es cargado
-            lat: 4.646321,
-            lng: -74.118711,
+            lat: location && location.location && location.location.lat ? location.location.lat : 4.646321,
+            lng: location && location.location && location.location.lng ? location.location.lng : -74.118711,
           }}
         >
           <HotelMapMarkerSingle location={location} />
