@@ -732,7 +732,7 @@ const GlobalStyle = createGlobalStyle`
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 25px 30px 26px 30px;
+      padding: 20px 30px 20px 30px;
       border-bottom: 1px solid ${themeGet('border.0', '#EBEBEB')};
       @media   (max-width: 375px) {
         padding: 25px 15px 26px 15px;
@@ -762,7 +762,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     footer {
-      padding: 25px 30px 28px 30px;
+      padding: 20px 30px 20px 30px;
       display: flex;
       justify-content: center;
       align-items: center;

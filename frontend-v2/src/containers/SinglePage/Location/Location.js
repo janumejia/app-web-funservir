@@ -7,13 +7,17 @@ import Map from 'components/Map/Map';
 import { Element } from 'react-scroll';
 
 const Location = ({
-  titleStyle,
+  // titleStyle,
   locationMetaStyle,
   contentStyle,
   boldContentStyle,
   linkStyle,
   location,
 }) => {
+  const titleStyle = {
+    fontSize: '25px',
+    // mb: ['14px', '20px', '14px']
+  }
   const formattedAddress = location.location.formattedAddress;
   return (
     <Element name="ubicacion" className="ubicacion">

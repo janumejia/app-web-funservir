@@ -9,6 +9,7 @@ import useWindowSize from 'library/hooks/useWindowSize';
 import Description from './Description/Description';
 import Amenities from './Amenities/Amenities';
 import Location from './Location/Location';
+import Owner from './Owner/Owner';
 import MoreAboutInclusivity from './MoreAboutInclusivity/MoreAboutInclusivity';
 import Review from './Review/Review';
 import Reservation from './Reservation/Reservation';
@@ -45,6 +46,7 @@ const SinglePage = () => {
     content,
     amenities,
     author,
+    owner,
   } = data[0];
 
   return (
@@ -157,6 +159,9 @@ const SinglePage = () => {
                 mb: ['14px', '20px', '14px'],
               }}
             />
+            <Owner 
+              owner={owner}
+            />
           </Col>
           <Col xl={8}>
             {width > 1200 ? (
@@ -184,6 +189,7 @@ const SinglePage = () => {
               reviews={reviews}
               ratingCount={ratingCount}
               rating={rating}
+              owner={owner}
             />
           </Col>
           <Col xl={8} />
