@@ -123,7 +123,7 @@ const SinglePage = () => {
               location={location}
               rating={rating}
               ratingCount={ratingCount}
-              category={"Categoría: Restaurantes"}
+              category={"Restaurantes"}
               categoryStyle={{
                 fontSize: "16px",
                 padding: "0px 0px 10px 0px",

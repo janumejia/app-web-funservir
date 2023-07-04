@@ -22,13 +22,13 @@ const CommentBox = (props) => {
   const { reviews } = props;
   return reviews && reviews.length !== 0
     ? reviews.map((singleReview, i) => {
-        return (
-          <Fragment key={i}>
-            {/* <Divider /> */}
-            <CommentCard singleReview={singleReview} />
-          </Fragment>
-        );
-      })
+      return (
+        <Fragment key={i}>
+          <Divider />
+          <CommentCard singleReview={singleReview} />
+        </Fragment>
+      );
+    })
     : 'No Review Found';
 };
 
@@ -92,7 +92,70 @@ const Review = (props) => {
             </Modal>
           </RatingSearch>
         </HeaderSection>
-       
+        <Row gutter={20}>
+          <Col sm={12} lg={9}>
+            <Heading content="Calificaciones de los usuarios" {...filterHeadingStyle} />
+            <FilterElement>
+              <Checkbox onChange={onChange}>
+                <Text content="Excelente" as="span" {...ratingLabelStyle} />
+                <RatingWrapper>
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStar />
+                  <Text content="172" as="span" {...ratingCountStyle} />
+                </RatingWrapper>
+              </Checkbox>
+            </FilterElement>
+            {/* End of Filter Element */}
+
+            <FilterElement>
+              <Checkbox onChange={onChange}>
+                <Text content="Muy bien" as="span" {...ratingLabelStyle} />
+                <RatingWrapper>
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStarOutline />
+                  <Text content="92" as="span" {...ratingCountStyle} />
+                </RatingWrapper>
+              </Checkbox>
+            </FilterElement>
+            {/* End of Filter Element */}
+
+            <FilterElement>
+              <Checkbox onChange={onChange}>
+                <Text content="Regular" as="span" {...ratingLabelStyle} />
+                <RatingWrapper>
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStarOutline />
+                  <IoIosStarOutline />
+                  <Text content="34" as="span" {...ratingCountStyle} />
+                </RatingWrapper>
+              </Checkbox>
+            </FilterElement>
+            {/* End of Filter Element */}
+
+            <FilterElement>
+              <Checkbox onChange={onChange}>
+                <Text content="Malo" as="span" {...ratingLabelStyle} />
+                <RatingWrapper>
+                  <IoIosStar />
+                  <IoIosStar />
+                  <IoIosStarOutline />
+                  <IoIosStarOutline />
+                  <IoIosStarOutline />
+                  <Text content="11" as="span" {...ratingCountStyle} />
+                </RatingWrapper>
+              </Checkbox>
+            </FilterElement>
+            {/* End of Filter Element */}
+          </Col>
+        </Row>
         <CommentBox reviews={reviews} />
       </ReviewWrapper>
     </Element>

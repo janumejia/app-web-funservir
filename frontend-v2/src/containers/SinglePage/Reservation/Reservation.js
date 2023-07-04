@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import Card from 'components/UI/Card/Card';
 import Heading from 'components/UI/Heading/Heading';
 import Text from 'components/UI/Text/Text';
 import TextLink from 'components/UI/TextLink/TextLink';
 import RenderReservationForm from './RenderReservationForm';
-import { AiOutlineClockCircle, AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import {
   IoLogoWhatsapp,
   IoLogoTwitter,
@@ -13,10 +13,70 @@ import {
   IoLogoInstagram,
   IoIosAdd,
 } from 'react-icons/io';
-import { Popover } from 'antd';
+import { Button, Popover } from 'antd';
 import { SocialAccount } from './Reservation.style.js';
 
 const CardHeader = ({ availabilityStyle, pricePeriodStyle, linkStyle }) => {
+
+  const [clicked, setClicked] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const hide = () => {
+    setClicked(false);
+    setHovered(false);
+  };
+  const handleClickChange = (open) => {
+    setHovered(false);
+    setClicked(open);
+  };
+
+  const contentInfo = (
+    <div style={{ fontSize: "16px" }}>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Lunes:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 8:00 p.m.</div>
+        </div>
+      </div>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Martes:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 8:00 p.m.</div>
+        </div>
+      </div>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Miércoles:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 8:00 p.m.</div>
+        </div>
+      </div>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Jueves:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 8:00 p.m.</div>
+        </div>
+      </div>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Viernes:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 8:00 p.m.</div>
+        </div>
+      </div>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Sábado:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 11:00 p.m.</div>
+        </div>
+      </div>
+      <div style={{ marginBottom: "15px" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "1 1 33.33%" }}>Domingo:</div>
+          <div style={{ flex: "1 1 66.67%" }}>10:00 a.m - 11:00 p.m.</div>
+        </div>
+      </div>
+    </div>
+  )
+
   const styleText1 = {
     fontSize: "16px",
     fontWeight: "bold",
@@ -39,7 +99,36 @@ const CardHeader = ({ availabilityStyle, pricePeriodStyle, linkStyle }) => {
         }
         {...styleText2}
       />
-      <AiOutlineInfoCircle style={{ fontSize: '20px', margin: '3px 0 0 0' }} />
+
+      <Popover
+        placement="bottomRight"
+        content={contentInfo}
+        title={<h3 style={{ "text-align": "center", "fontWeight": "bold", "margin": "5px 0 5px 0" }} > Horario </h3>}
+        trigger="click"
+        open={clicked}
+        onOpenChange={handleClickChange}
+        overlayStyle={{ width: 300 }}
+      >
+        <Button
+          style={{
+            border: "0",
+            // width: "100%",
+            display: "flex",
+            // padding: "0 25px",
+            // fontSize: "15px",
+            // fontWeight: 400,
+            // minHeight: "54px",
+            borderRadius: "3px",
+            alignItems: "center",
+            justifyContent: "space-between",
+            color: "#2C2C2C",
+            backgroundColor: "#F7F7F7",
+          }}
+        >
+          <AiOutlineInfoCircle style={{ fontSize: '20px', margin: '1px 0 0 0' }} />
+        </Button>
+      </Popover>
+
 
       {/* <Heading
         content={

@@ -60,7 +60,7 @@ export const Text = styled.p`
 `;
 
 export const TextButton = styled.div`
-  margin: 30px 0 0;
+  margin: 30px 0 30px;
   @media (max-width: 767px) {
     margin-top: 19px;
   }
