@@ -9,13 +9,13 @@ import MoreAboutInclusivityWrapper from './MoreAboutInclusivity.style';
 import Text from 'components/UI/Text/Text';
 import { TextButton } from '../SinglePageView.style';
 import { Element } from 'react-scroll';
-import { Row, Col } from 'antd';
+import { Row, Col, Button } from 'antd';
 
 const Amenities = ({ titleStyle, titleStyle2, linkStyle, contentStyle }) => {
   return (
     <Element name="inclusividad" className="inclusividad">
       <AmenitiesWrapper>
-        <Heading as="h2" content="Elementos inclusivos" {...titleStyle} />
+        <Heading as="h2" content="Elementos inclusivos: 8" {...titleStyle} />
         {/* <Row gutter={[16, 24]}>
           <Col span={8} key={"hola"}>
             <img
@@ -73,10 +73,23 @@ const Amenities = ({ titleStyle, titleStyle2, linkStyle, contentStyle }) => {
           <IconCard icon={<FaCarAlt />} title="Parqueadero para personas con discapacidad" />
           <IconCard icon={<FaWheelchair />} title="Accesible para personas en silla de ruedas" />
           <IconCard icon={<FaBlind />} title="Accesible para invidente" />
+          <IconCard icon={<FaBlind />} title="Accesible para invidente" />
+          <IconCard icon={<FaWifi />} title="Wifi" />
+          <IconCard icon={<FaCarAlt />} title="Parqueadero para personas con discapacidad" />
+          <IconCard icon={<FaWheelchair />} title="Accesible para personas en silla de ruedas" />
         </AmenitiesArea>
-        {/* <TextButton>
-          <TextLink link="#1" content="Show all amenities" {...linkStyle} />
-        </TextButton> */}
+        <TextButton>
+          {/* <TextLink link="#1" content="Mostrar todos los elementos" {...linkStyle} /> */}
+          <Button onClick={console.log("más")} style={{
+            fontSize: '15px',
+            fontWeight: '700',
+            color: '#008489',
+            border: '1px solid',
+            borderColor: '#E6E6E6', /* Replace "red" with the desired color */
+          }}>
+            {"Mostrar todos los elementos"}
+          </Button>
+        </TextButton>
         <MoreAboutInclusivityWrapper>
           <Heading as="h2" content="Información adicional sobre inclusividad" {...titleStyle2} />
           <Text
@@ -105,12 +118,14 @@ Amenities.defaultProps = {
     color: '#2C2C2C',
     fontSize: ['17px', '20px', '25px'],
     lineHeight: ['1.15', '1.2', '1.36'],
-    mb: '4px',
+    mb: ['4px', '20px'],
   },
   linkStyle: {
     fontSize: '15px',
     fontWeight: '700',
     color: '#008489',
+    borderColor: 'red', /* Replace "red" with the desired color */
+    // border: '0',
   },
 };
 

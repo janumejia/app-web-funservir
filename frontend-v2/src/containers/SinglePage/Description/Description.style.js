@@ -23,6 +23,15 @@ const DescriptionWrapper = styled.div`
       content: none;
     }
   }
+
+  .tag-class {
+    margin: 0 0 0 7px;
+    fontSize: '36px';
+  }
+
+  .divider-class {
+    margin: 15px 0;
+  }
 `;
 
 export default DescriptionWrapper;
