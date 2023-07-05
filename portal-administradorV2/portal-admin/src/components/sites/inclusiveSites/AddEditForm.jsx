@@ -263,7 +263,7 @@ const AddEditInclusiveSite = ({ site }) => {
                         {
                             // required: true,
                             message: `¡Introduzca un texto válido!`,
-                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,255}$/,
+                            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,500}$/,
                             type: 'string'
                         }
                     ]}

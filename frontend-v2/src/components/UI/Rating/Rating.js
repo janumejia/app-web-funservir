@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
+import { IoIosStar, IoIosStarOutline, IoIosStarHalf } from 'react-icons/io';
 
 const Rating = (props) => {
   const { rating, ratingCount, type, ratingFieldName } = props;
@@ -12,20 +12,21 @@ const Rating = (props) => {
       if (i < floorValue) {
         ratingView.push(<IoIosStar key={i} />);
       } else {
-        ratingView.push(<IoIosStarOutline key={i} />);
+        if (Math.round(rating) === floorValue) ratingView.push(<IoIosStarOutline key={i} />);
+        else ratingView.push(<IoIosStarHalf key={i} />)
       }
     }
   }
   let listingCondition;
-  if (rating && rating === 5) {
+  if (rating && 4.9 <= rating && rating <= 5) {
     listingCondition = 'Excelente';
-  } else if (4 <= rating && rating < 5) {
-    listingCondition = 'Bueno';
-  } else if (3 <= rating && rating < 4) {
+  } else if (rating && 4 <= rating && rating < 4.9) {
+    listingCondition = 'Muy bueno';
+  } else if (rating && 3 <= rating && rating < 4) {
     listingCondition = 'Regular';
-  } else if (2 <= rating && rating < 3) {
+  } else if (rating && 2 <= rating && rating < 3) {
     listingCondition = 'Malo';
-  } else if (rating >= 1) {
+  } else if (rating && rating >= 1) {
     listingCondition = 'Terrible';
   } else {
     listingCondition = '';
@@ -33,7 +34,7 @@ const Rating = (props) => {
 
   let showRatingCount;
   if (ratingCount) {
-    showRatingCount = `(` + ratingCount + `)`;
+    showRatingCount = `(` + ratingCount + ` calificaciones)`;
   } else {
     showRatingCount = '';
   }
@@ -44,7 +45,10 @@ const Rating = (props) => {
         <>
           <span>{ratingView}</span>
           <strong>
-            {` ${listingCondition}`} {`${showRatingCount}`}
+            {`${rating}`}
+          </strong>
+          <strong>
+            {`${showRatingCount}`}
           </strong>
         </>
       ) : (
