@@ -34,6 +34,7 @@ import AgentDetailsPage, {
 } from './AgentDetails.style';
 
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const ProfileNavigation = (props) => {
   let location = useLocation();
@@ -67,7 +68,7 @@ const ProfileNavigation = (props) => {
   );
 };
 
-const AgentProfileInfo = () => {
+const AgentProfileInfo = (props) => {
   const { data, loading } = useDataApi('/data/agent.json');
   const { user } = useContext(AuthContext);
   if (isEmpty(user) || loading) return <Loader />;
@@ -79,6 +80,7 @@ const AgentProfileInfo = () => {
     cover_pic,
     social_profile,
   } = data[0];
+
   const username = `${user.name} ${user.lastName}`;
   
   return (
@@ -153,10 +155,10 @@ export default function AgentDetailsViewPage(props) {
   return (
     <AgentDetailsPage>
       <AuthProvider>
-        <AgentProfileInfo />
+        <AgentProfileInfo _id={userId}/>
         <ProfileNavigation path={AGENT_PROFILE_PAGE} {...props} />
         <Container fluid={true}>
-          <Outlet />
+          <Outlet/>
         </Container>
       </AuthProvider>
     </AgentDetailsPage>
