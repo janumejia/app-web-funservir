@@ -18,12 +18,11 @@ const Location = ({
     fontSize: '25px',
     // mb: ['14px', '20px', '14px']
   }
-  const formattedAddress = location.location.formattedAddress;
   return (
     <Element name="ubicacion" className="ubicacion">
       <LocationWrapper>
         <Heading as="h2" content="Ubicación" {...titleStyle} />
-        <Text content={formattedAddress} {...locationMetaStyle} />
+        <Text content={location.siteAddress + ", " + location.neighborhood + ", " + location.locality} {...locationMetaStyle} />
         {/* <Text
           content="Queda a 5 minutos a pie desde la estación Usaquen. El barrio es tranquilo y perfecto para disfrutar del auténtico sabor de la vida romana, con tiendas, galerías de arte, restaurantes, bares y discotecas, todo cerca y listo para ser descubierto."
           {...contentStyle}

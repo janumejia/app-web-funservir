@@ -14,6 +14,16 @@ const IconCardWrapper = styled.div`
 `;
 
 export const IconWrapper = styled.div`
+  img {
+    width: 80px;
+    height: auto;
+    fill: ${themeGet('primary.0', '#008489')};
+
+    @media (max-width: 767px) {
+      width: 50px;
+    }
+  }
+  
   svg {
     width: 80px;
     height: auto;

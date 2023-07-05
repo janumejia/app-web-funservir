@@ -13,7 +13,12 @@ const IconCard = ({ icon, title, align, className }) => {
 
   return (
     <IconCardWrapper className={addAllClasses.join(' ')} align={align}>
-      {icon && <IconWrapper>{icon}</IconWrapper>}
+      {icon && <IconWrapper>{
+        <img
+          src={icon}
+          alt={"img"}
+        />
+      }</IconWrapper>}
       {title && <TitleArea>{title}</TitleArea>}
     </IconCardWrapper>
   );

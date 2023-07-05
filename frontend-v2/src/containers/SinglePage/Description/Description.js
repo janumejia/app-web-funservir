@@ -52,12 +52,12 @@ const Description = ({
     setTruncated(!truncated);
   };
 
-  const truncatedContent = truncated ? content.slice(0, 380) + "... " : content;
+  const truncatedContent = truncated ? content.slice(0, 500) + "... " : content + " ";
 
   return (
     <Element name="general" className="general">
       <DescriptionWrapper>
-        <Text content={location.formattedAddress} {...locationMetaStyle} />
+        <Text content={location} {...locationMetaStyle} />
         <Heading as="h2" content={title} {...titleStyle} />
         <RatingMeta>
           <Rating rating={rating} ratingCount={ratingCount} type="bulk" />
@@ -73,8 +73,8 @@ const Description = ({
         } {...categoryStyle} />
         <Text content={
           <>
-            {truncatedContent}
-            {truncated && <Button onClick={handleToggle}>{' leer más'}</Button>}
+            {content.length > 500 ? truncatedContent : content}
+            {content.length > 500 && (truncated ? <Button onClick={handleToggle}>{' leer más'}</Button> : <Button onClick={handleToggle}>{' leer menos'}</Button>)}
           </>
 
         } {...contentStyle} />

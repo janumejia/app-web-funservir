@@ -36,15 +36,20 @@ const SinglePage = () => {
   const { data, loading } = useDataApi(url);
   if (isEmpty(data) || loading) return <Loader />;
   const {
+    name,
+    description,
+    category,
     reviews,
     rating,
     ratingCount,
     price,
-    title,
     gallery,
+    siteAddress,
+    locality,
+    neighborhood,
+    moreInfoInclusivity,
     location,
-    content,
-    amenities,
+    inclusiveElements,
     author,
     owner,
   } = data[0];
@@ -112,18 +117,18 @@ const SinglePage = () => {
         </Modal>
       </PostImage>
 
-      <TopBar title={title} shareURL={href} author={author} media={gallery} />
+      <TopBar title={name} shareURL={href} author={author} media={gallery} />
 
       <Container fullWidth={true} fluid={true}>
         <Row gutter={30} id="reviewSection" style={{ marginTop: 30 }}>
           <Col xl={16}>
             <Description
-              content={content}
-              title={title}
-              location={location}
+              content={description}
+              title={name}
+              location={siteAddress + ", " + neighborhood + ", " + locality}
               rating={rating}
               ratingCount={ratingCount}
-              category={"Restaurantes"}
+              category={category}
               categoryStyle={{
                 fontSize: "16px",
                 padding: "0px 0px 10px 0px",
@@ -148,7 +153,7 @@ const SinglePage = () => {
             // }}
             // fontFamily="Arial" fontWeight="bold" textAlign="center" 
             />
-            <Amenities amenities={amenities} />
+            <Amenities inclusiveElements={inclusiveElements} moreInfoInclusivity={moreInfoInclusivity} />
             {/* <MoreAboutInclusivity info={data[0]} /> */}
             <Location
               location={data[0]}
@@ -175,7 +180,7 @@ const SinglePage = () => {
               </Sticky>
             ) : (
               <BottomReservation
-                title={title}
+                title={name}
                 price={price}
                 rating={rating}
                 ratingCount={ratingCount}

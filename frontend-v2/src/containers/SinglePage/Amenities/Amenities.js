@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'components/UI/Heading/Heading';
 import TextLink from 'components/UI/TextLink/TextLink';
@@ -11,89 +11,58 @@ import { TextButton } from '../SinglePageView.style';
 import { Element } from 'react-scroll';
 import { Row, Col, Button } from 'antd';
 
-const Amenities = ({ titleStyle, titleStyle2, linkStyle, contentStyle }) => {
+const Amenities = ({ titleStyle, titleStyle2, linkStyle, contentStyle, inclusiveElements, moreInfoInclusivity }) => {
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const [seeMore, setSeeMore] = useState(false)
+
+  let firstElements = windowDimensions.width > 766 ? 8 : (windowDimensions.width > 580 ? 6 : 4);
+
   return (
     <Element name="inclusividad" className="inclusividad">
       <AmenitiesWrapper>
-        <Heading as="h2" content="Elementos inclusivos: 8" {...titleStyle} />
-        {/* <Row gutter={[16, 24]}>
-          <Col span={8} key={"hola"}>
-            <img
-              className="inclusive_icon"
-              src="https://res.cloudinary.com/pasantiafunservir/image/upload/v1686071873/inclusiveElements/Estacionamiento%20para%20personas%20con%20movilidad%20reducida.png"
-              alt="Listing details page banner"
-            />
-            <p>
-              hola
-            </p>
-          </Col>
-          <Col span={8} key={"hola"}>
-            <img
-              className="third-image"
-              src="https://res.cloudinary.com/pasantiafunservir/image/upload/v1686071873/inclusiveElements/Estacionamiento%20para%20personas%20con%20movilidad%20reducida.png"
-              alt="Listing details page banner"
-            />
-            <p>
-              {"hola"}
-            </p>
-          </Col>
-          <Col span={8} key={"hola"}>
-            <img
-              className="third-image"
-              src="https://res.cloudinary.com/pasantiafunservir/image/upload/v1686071873/inclusiveElements/Estacionamiento%20para%20personas%20con%20movilidad%20reducida.png"
-              alt="Listing details page banner"
-            />
-            <p>
-              {"hola"}
-            </p>
-          </Col>
-          <Col span={8} key={"hola"}>
-            <img
-              className="third-image"
-              src="https://res.cloudinary.com/pasantiafunservir/image/upload/v1686071873/inclusiveElements/Estacionamiento%20para%20personas%20con%20movilidad%20reducida.png"
-              alt="Listing details page banner"
-            />
-            <p>
-              {"hola"}
-            </p>
-          </Col>
-          <Col span={8} key={"hola"}>
-            <img
-              className="third-image"
-              src="https://res.cloudinary.com/pasantiafunservir/image/upload/v1686071873/inclusiveElements/Estacionamiento%20para%20personas%20con%20movilidad%20reducida.png"
-              alt="Listing details page banner"
-            />
-            <p>
-              {"hola"}
-            </p>
-          </Col>
-        </Row> */}
+        <Heading as="h2" content={"Elementos inclusivos: " + (inclusiveElements ? inclusiveElements.length : "0")} {...titleStyle} />
         <AmenitiesArea>
-          <IconCard icon={<FaWifi />} title="Wifi" />
-          <IconCard icon={<FaCarAlt />} title="Parqueadero para personas con discapacidad" />
-          <IconCard icon={<FaWheelchair />} title="Accesible para personas en silla de ruedas" />
-          <IconCard icon={<FaBlind />} title="Accesible para invidente" />
-          <IconCard icon={<FaBlind />} title="Accesible para invidente" />
-          <IconCard icon={<FaWifi />} title="Wifi" />
-          <IconCard icon={<FaCarAlt />} title="Parqueadero para personas con discapacidad" />
-          <IconCard icon={<FaWheelchair />} title="Accesible para personas en silla de ruedas" />
+          {inclusiveElements.slice(0, seeMore === false ? firstElements : inclusiveElements.length).map((element) => {
+            return <IconCard icon={element.image.secure_url} title={element.name} />
+          })}
         </AmenitiesArea>
-        <TextButton>
-          {/* <TextLink link="#1" content="Mostrar todos los elementos" {...linkStyle} /> */}
-          <Button onClick={console.log("más")} style={{
-            fontSize: '15px',
-            fontWeight: '700',
-            color: '#008489',
-            border: '1px solid',
-            borderColor: '#E6E6E6', /* Replace "red" with the desired color */
-          }}>
-            {"Mostrar todos los elementos"}
-          </Button>
-        </TextButton>
+        {firstElements < inclusiveElements.length &&
+          <TextButton>
+            {/* <TextLink link="#1" content="Mostrar todos los elementos" {...linkStyle} /> */}
+            <Button onClick={() => setSeeMore(!seeMore)} style={{
+              fontSize: '15px',
+              fontWeight: '700',
+              color: '#008489',
+              border: '1px solid',
+              borderColor: '#E6E6E6', /* Replace "red" with the desired color */
+            }}>
+              {seeMore ? "- Mostrar menos elementos" : "+ Mostrar todos los elementos"}
+            </Button>
+          </TextButton>
+        }
         <MoreAboutInclusivityWrapper>
           <Heading as="h2" content="Información adicional sobre inclusividad" {...titleStyle2} />
           <Text
-            content={"Queda a 5 minutos a pie desde la estación Usaquen. El barrio es tranquilo y perfecto para disfrutar del auténtico sabor de la vida romana, con tiendas, galerías de arte, restaurantes, bares y discotecas, todo cerca y listo para ser descubierto."}
+            content={moreInfoInclusivity}
             {...contentStyle}
           />
         </MoreAboutInclusivityWrapper>

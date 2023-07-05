@@ -19,7 +19,7 @@ module.exports = {
     ratingCountRegex: new RegExp(/^\d{1,10}$/),
     contactNumberRegex: new RegExp(/^\d{10}$/), // Deben ser +57
     inclusiveElementsRegex: generalAlphanumeric(1,100),
-    moreInfoInclusivityRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,255}$/),
+    moreInfoInclusivityRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,500}$/),
     locationRegex: new RegExp(/^[-]{0,1}\d{1,4}\.\d{1,20}$/),
     localityRegex: generalAlphanumeric(1,100),
     neighborhoodRegex: generalAlphanumeric(1,100),
