@@ -160,7 +160,6 @@ const AgentProfileInfo = (props) => {
 
 export default function AgentDetailsViewPage(props) {
   const { userId } = useParams();
-
   return (
     <AgentDetailsPage>
       <AuthProvider>
