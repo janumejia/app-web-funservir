@@ -12,6 +12,7 @@ const AuthProvider = (props) => {
   let navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const [profileData, setProfileData] = useState({});
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
@@ -219,6 +220,8 @@ const AuthProvider = (props) => {
         setLoggedIn,
         user,
         admin,
+        profileData,
+        setProfileData
       }}
     >
       <>{props.children}</>

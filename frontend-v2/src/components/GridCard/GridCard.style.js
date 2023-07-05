@@ -165,6 +165,12 @@ export const FavoriteIcon = styled.div`
   top: 10px;
   right: 8px;
   z-index: 9;
+  font-size: 190%;
+  color: white;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 export const ContentWrapper = styled.div`

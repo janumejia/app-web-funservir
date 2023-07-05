@@ -1,5 +1,3 @@
-import { AutoComplete } from 'antd';
-import { Input } from 'antd';
 import React, { useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 
@@ -103,7 +101,7 @@ const SearchInput = (props) => {
   }
 
   const eventEnter = (e) => {
-    if (e.key == "Enter") {
+    if (e.key === "Enter") {
       var split = e.target.value.split('-');
       var neighborhood = {
         neighborhood: split[0].trim(),

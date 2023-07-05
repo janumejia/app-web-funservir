@@ -8,7 +8,6 @@ import GridCardWrapper, {
   ContentWrapper,
   LocationArea,
   TitleArea,
-  PriceArea,
   RatingArea,
   MetaWrapper,
   ButtonGroup,
@@ -25,11 +24,13 @@ const GridCard = ({
   editBtn,
   viewDetailsBtn,
   children,
+  myProfile
 }) => {
   let classes = viewDetailsBtn || editBtn ? `has_btn ${className}` : className;
   return (
     <GridCardWrapper className={`grid_card ${classes}`.trim()}>
       <ImageWrapper className="media_wrapper">{children}</ImageWrapper>
+      {myProfile && favorite && <FavoriteIcon>{favorite}</FavoriteIcon>}
       <ContentWrapper className="content_wrapper">
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
@@ -70,9 +71,6 @@ const GridCard = ({
           ) : null}
         </MetaWrapper>
       </ContentWrapper>
-
-      {/* Este es el corazón que aparece en el sitio */}
-      {/* {favorite && <FavoriteIcon>{favorite}</FavoriteIcon>} */}
 
     </GridCardWrapper >
   );

@@ -42,6 +42,7 @@ export default function SectionGrid({
   columnStyle,
   loadMoreStyle,
   link,
+  myProfile
 }) {
   const n = limit ? Number(limit) : 1;
   const limits = Array(n).fill(0);
@@ -60,7 +61,7 @@ export default function SectionGrid({
                   key={item.id}
                   {...columnStyle}
                 >
-                  <ProductCard {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
+                  <ProductCard myProfile={myProfile} {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
                 </Box>
               );
             })
