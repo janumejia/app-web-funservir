@@ -118,9 +118,9 @@ export default function AppRoutes() {
           path={AGENT_PROFILE_PAGE}
           element={
             <React.Suspense fallback={<Loader />}>
-             <RequireAuth>
+             
               <AgentDetailsViewPage />
-              </RequireAuth>
+              
             </React.Suspense>
           }
         >

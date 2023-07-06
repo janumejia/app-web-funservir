@@ -1,4 +1,4 @@
-import React, { useContext, Fragment } from 'react';
+import React, { useContext, Fragment, useEffect } from 'react';
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import {
@@ -21,6 +21,7 @@ import {
   AGENT_PROFILE_FAVORITE,
   AGENT_PROFILE_CONTACT,
 } from 'settings/constant';
+
 import AgentDetailsPage, {
   BannerSection,
   UserInfoArea,
@@ -32,10 +33,13 @@ import AgentDetailsPage, {
   NavigationArea,
 } from './AgentDetails.style';
 
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
 const ProfileNavigation = (props) => {
   let location = useLocation();
   const { path, className } = props;
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, user } = useContext(AuthContext);
 
   return (
     <NavigationArea>
@@ -54,7 +58,7 @@ const ProfileNavigation = (props) => {
             <NavLink to={AGENT_PROFILE_CONTACT}>Contacto</NavLink>
           </Menu.Item> */}
         </Menu>
-        {loggedIn && (
+        {props._id===user._id && loggedIn && (
           <Link className="add_card" to={ADD_SITE_PAGE}>
             <IoIosAdd /> Crear sitio
           </Link>
@@ -64,40 +68,50 @@ const ProfileNavigation = (props) => {
   );
 };
 
-const AgentProfileInfo = () => {
+const AgentProfileInfo = (props) => {
   const { data, loading } = useDataApi('/data/agent.json');
-  const { user } = useContext(AuthContext);
-  if (isEmpty(user) || loading) return <Loader />;
-  const {
-    first_name,
-    last_name,
-    content,
-    profile_pic,
-    cover_pic,
-    social_profile,
-  } = data[0];
-  const username = `${user.name} ${user.lastName}`;
+  const { user, setProfileData, profileData } = useContext(AuthContext);
+  useEffect(() => {
+      async function profileData(){
+      await axios.get(`http://localhost:4000/profile/${props._id}`, { headers: { 'token': localStorage.getItem("token") } }).then((res) => setProfileData(res.data));
+    }
+    profileData();
+  }, [setProfileData, props._id])
+
+
+  if (isEmpty(user) || isEmpty(profileData) || loading) return <Loader />;
+  // const {
+  //   first_name,
+  //   last_name,
+  //   content,
+  //   profile_pic,
+  //   cover_pic,
+  //   social_profile,
+  // } = data[0];
+
+
+  const username = `${profileData.name} ${profileData.lastName}`;
   
   return (
     <Fragment>
       <BannerSection>
-        <Image className="absolute" src={user.coverPicture} alt="" />
+        <Image className="absolute" src={profileData.coverPicture} alt="" />
       </BannerSection>
       <UserInfoArea>
         <Container fluid={true}>
           <CircleProfileImage>
-            <Image src={user.profilePicture} alt="Profile" />
+            <Image src={profileData.profilePicture} alt="Profile" />
           </CircleProfileImage>
           <ProfileInformationArea>
             <ProfileInformation>
               <Heading content={username} />
-              <Text content={(user.describeYourself) ? user.describeYourself : "¡Hola, estoy usando la plataforma de Funservir!"} />
+              <Text content={(profileData.describeYourself) ? profileData.describeYourself : "¡Hola, estoy usando la plataforma de Funservir!"} />
             </ProfileInformation>
             <SocialAccount>
-              {(user.socialTwitter) ?
+              {(profileData.socialTwitter) ?
                 <Popover content="Ir a Twitter">
                   <a
-                    href={user.socialTwitter}
+                    href={profileData.socialTwitter}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -108,10 +122,10 @@ const AgentProfileInfo = () => {
                   <IoLogoTwitter className="socialNotDefined" />
                 </Popover>
               }
-              {(user.socialFacebook) ?
+              {(profileData.socialFacebook) ?
                 <Popover content="Facebook">
                   <a
-                    href={user.socialFacebook}
+                    href={profileData.socialFacebook}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -122,10 +136,10 @@ const AgentProfileInfo = () => {
                   <IoLogoFacebook className="socialNotDefined" />
                 </Popover>
               }
-              {(user.socialInstagram) ?
+              {(profileData.socialInstagram) ?
                 <Popover content="Instagram">
                   <a
-                    href={user.socialInstagram}
+                    href={profileData.socialInstagram}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -145,11 +159,12 @@ const AgentProfileInfo = () => {
 };
 
 export default function AgentDetailsViewPage(props) {
+  const { userId } = useParams();
   return (
     <AgentDetailsPage>
       <AuthProvider>
-        <AgentProfileInfo />
-        <ProfileNavigation path={AGENT_PROFILE_PAGE} {...props} />
+        <AgentProfileInfo _id={userId} />
+        <ProfileNavigation path={AGENT_PROFILE_PAGE} _id={userId} {...props} />
         <Container fluid={true}>
           <Outlet />
         </Container>

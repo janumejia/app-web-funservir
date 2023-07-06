@@ -12,6 +12,7 @@ const AuthProvider = (props) => {
   let navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const [profileData, setProfileData] = useState({});
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
@@ -20,7 +21,6 @@ const AuthProvider = (props) => {
     const isLoggedIn = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`, { withCredentials: true })
-        
         if (res) {
           if (res.status === 200) {
             setUser(...res.data.data);
@@ -179,12 +179,10 @@ const AuthProvider = (props) => {
       message.destroy();
       if (res) {
         if (res.status === 200) {
-
-
-          setUser(null);
-          setLoggedIn(false);
-          message.success(res.data.message, 5);
           navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+          setLoggedIn(false);
+          setUser(null);
+          message.success(res.data.message, 5);
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
@@ -222,6 +220,8 @@ const AuthProvider = (props) => {
         setLoggedIn,
         user,
         admin,
+        profileData,
+        setProfileData
       }}
     >
       <>{props.children}</>

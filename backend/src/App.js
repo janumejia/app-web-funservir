@@ -161,10 +161,15 @@ app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighb
 //Notificaciones
 app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)
 
+//Obtener el perfil de un usuario
+app.get("/profile/:userId", controllers.getUserProfileInfo)
+
 // custom 404
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Upss, ruta no encontrada' });
 })
+
+
 
 /* Fin rutas de nuestra APP */
 

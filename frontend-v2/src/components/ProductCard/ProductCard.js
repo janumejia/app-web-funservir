@@ -2,11 +2,13 @@ import React from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import TextLink from 'components/UI/TextLink/TextLink';
 import Rating from 'components/UI/Rating/Rating';
-import Favourite from 'components/UI/Favorite/Favorite';
+import { FormOutlined } from '@ant-design/icons';
 import Carousel from 'react-multi-carousel'; // Documentación: https://www.npmjs.com/package/react-multi-carousel
 import 'react-multi-carousel/lib/styles.css';
 import GridCard from '../GridCard/GridCard';
-
+import { background } from 'styled-system';
+import { useNavigate } from 'react-router-dom';
+import { ADD_SITE_PAGE} from 'settings/constant';
 const responsive = {
   desktop: {
     breakpoint: {
@@ -43,18 +45,21 @@ const PostGrid = ({
   gallery,
   slug,
   link,
-  inclusiveElements
+  inclusiveElements,
+  myProfile
 }) => {
+  let navigate = useNavigate();
   return (
     <GridCard
       isCarousel={true}
-      // favorite={
-      //   <Favourite
-      //     onClick={(event) => {
-      //       console.log(event);
-      //     }}
-      //   />
-      // }
+      myProfile={myProfile}
+      favorite={
+        <FormOutlined
+          onClick={() => {
+            navigate(ADD_SITE_PAGE);
+          }}
+        />
+      }
       location={siteAddress}
       inclusiveElements={inclusiveElements}
       title={<TextLink link={`${link}/${slug}`} content={name} />}

@@ -18,6 +18,7 @@ const login = async (req, res) => {
                             expiresIn: 86400 /* 24hs */,
                         });
                         const data = {
+                            _id: user._id,
                             name: user.name,
                             lastName: user.lastName,
                             email: user.email,
