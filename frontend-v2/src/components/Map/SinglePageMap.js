@@ -14,8 +14,8 @@ const SingleMapDisplay = ({ location }) => {
   };
 
   hotelData.push({
-    lat: location?.location.lat,
-    lng: location?.location.lng,
+    lat: location && location.location && location.location.lat && (typeof location.location.lat === 'string' ? parseFloat(location.location.lat) : location.location.lat) ,
+    lng: location && location.location && location.location.lng && (typeof location.location.lng === 'string' ? parseFloat(location.location.lng) : location.location.lng) ,
     id: location?.id,
     title: location?.title,
     thumbUrl: location?.gallery[0],

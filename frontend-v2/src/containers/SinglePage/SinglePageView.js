@@ -29,8 +29,8 @@ const SinglePage = () => {
   const [isModalShowing, setIsModalShowing] = useState(false);
   const { width } = useWindowSize();
 
-  let url = '/data/hotel-single.json';
-  if (!slug) {
+  let url = `${process.env.REACT_APP_HOST_BACK}/sites/`;
+  if (slug) {
     url += slug;
   }
   const { data, loading } = useDataApi(url);
@@ -52,29 +52,37 @@ const SinglePage = () => {
     inclusiveElements,
     author,
     owner,
+    schedule,
+    contactNumber,
+    webpage,
+    email,
+    socialFacebook,
+    socialInstagram,
+    socialTwitter,
+    socialWhatsapp
   } = data[0];
 
   return (
     <SinglePageWrapper>
-      <PostImage hasSecondAndThirdImage={true}>
+      <PostImage hasSecondAndThirdImage={gallery[1] && gallery[2]}>
         <div
           style={{ cursor: 'pointer' }}
           onClick={() => setIsModalShowing(true)}
         >
           <img
             className="main-image"
-            src="https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg"
-            alt="Listing details page banner"
+            src={gallery[0].secure_url}
+            alt="img 1 banner"
           />
           <img
             className="second-image"
-            src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/07/a9/20/a5.jpg"
-            alt="Listing details page banner"
+            src={gallery[1] && gallery[1].secure_url && gallery[1].secure_url}
+            alt="img 2 banner"
           />
           <img
             className="third-image"
-            src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/06/ec/f7/ae.jpg"
-            alt="Listing details page banner"
+            src={gallery[2] && gallery[2].secure_url && gallery[1].secure_url}
+            alt="img 3 banner"
           />
         </div>
         <Button
@@ -99,7 +107,7 @@ const SinglePage = () => {
           closable={false}
         >
           <Fragment>
-            <PostImageGallery />
+            <PostImageGallery gallery={gallery} />
             <Button
               onClick={() => setIsModalShowing(false)}
               className="image_gallery_close"
@@ -176,7 +184,18 @@ const SinglePage = () => {
                 top={202}
                 bottomBoundary="#reviewSection"
               >
-                <Reservation />
+                <Reservation
+                  schedule={schedule}
+                  location={location}
+                  completeAddress={siteAddress + ", " + neighborhood + ", " + locality}
+                  contactNumber={contactNumber}
+                  webpage={webpage}
+                  email={email}
+                  socialFacebook={socialFacebook}
+                  socialInstagram={socialInstagram}
+                  socialTwitter={socialTwitter}
+                  socialWhatsapp={socialWhatsapp}
+                />
               </Sticky>
             ) : (
               <BottomReservation

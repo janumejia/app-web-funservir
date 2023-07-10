@@ -59,13 +59,15 @@ const Amenities = ({ titleStyle, titleStyle2, linkStyle, contentStyle, inclusive
             </Button>
           </TextButton>
         }
-        <MoreAboutInclusivityWrapper>
-          <Heading as="h2" content="Información adicional sobre inclusividad" {...titleStyle2} />
-          <Text
-            content={moreInfoInclusivity}
-            {...contentStyle}
-          />
-        </MoreAboutInclusivityWrapper>
+        {moreInfoInclusivity &&
+          <MoreAboutInclusivityWrapper>
+            <Heading as="h2" content="Información adicional sobre inclusividad" {...titleStyle2} />
+            <Text
+              content={moreInfoInclusivity}
+              {...contentStyle}
+            />
+          </MoreAboutInclusivityWrapper>
+        }
       </AmenitiesWrapper>
     </Element>
   );

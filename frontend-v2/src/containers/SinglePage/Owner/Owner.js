@@ -18,10 +18,10 @@ const Owner = ({
 }) => {
 
   useEffect(() => {
-    if (owner && owner.fullName && owner.id && owner.ownerAvatar) {
-      fullName = owner.fullName;
-      id = owner.id;
-      ownerAvatar = owner.ownerAvatar;
+    if (owner && owner.name && owner.lastName && owner._id && owner.profilePicture) {
+      fullName = owner.name + " " + owner.lastName;
+      id = owner._id;
+      ownerAvatar = owner.profilePicture;
       hasOwner = true;
     }
   }, [owner])
@@ -30,7 +30,7 @@ const Owner = ({
     // <Element name="Dueño del sitio" className="ownerclass">
     <OwnerWrapper>
       {hasOwner ? (
-        <Link to="/profile">
+        <Link to={"/profile/" + id}>
           <Heading as="h2" content="Propietario" />
           <div className="avatar-area">
             <div className="author-avatar">

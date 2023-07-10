@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import ImageGalleryWrapper from './ImageGallery.style';
 
-const images = [
+let images = [
   {
     original: 'https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21',
     thumbnail: 'https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21 ',
@@ -18,7 +18,15 @@ const images = [
   },
 ];
 
-const PostImageGallery = () => {
+const PostImageGallery = ({ gallery }) => {
+  
+  useEffect(() => {
+    images = gallery.map((img) => {
+      return {"original": img.secure_url, "thumbnail": img.secure_url}
+    })
+
+  }, [gallery])
+
   return (
     <ImageGalleryWrapper>
       <ImageGallery
