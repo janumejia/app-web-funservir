@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MarkerClusterer } from '@react-google-maps/api';
 import MapWrapper from './MapWrapper';
 import HotelMapMarkerCluster from './ListingPageMap';
@@ -8,10 +8,7 @@ import HotelMapMarkerSingle from './SinglePageMap';
 // Componente para configurar el despliegue del mapa de google maps en la pantalla: Zoom del mismo, puntos en el mapa, etc.
 const Map = (props) => {
   const { multiple, location } = props;
-  console.log("location:")
-  console.log(location)
-  console.log("multiple:")
-  console.log(multiple)
+
   const handleClustererClick = (data) => {
     const markerClusterer = data.getMarkers();
     console.log(`Current clicked markers length: ${markerClusterer.length}`);
@@ -51,8 +48,8 @@ const Map = (props) => {
           }}
           zoom={15} // Tamaño del zoom del mapa de google maps en la página del sitio abierto
           center={{ // Ubicación por defecto del mapa cuando es cargado
-            lat: location && location.location && location.location.lat ? location.location.lat : 4.646321,
-            lng: location && location.location && location.location.lng ? location.location.lng : -74.118711,
+            lat: location && location.location && location.location.lat ? parseFloat(location.location.lat) : 4.646321,
+            lng: location && location.location && location.location.lng ? parseFloat(location.location.lng) : -74.118711,
           }}
         >
           <HotelMapMarkerSingle location={location} />

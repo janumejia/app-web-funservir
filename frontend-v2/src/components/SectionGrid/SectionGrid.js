@@ -61,7 +61,7 @@ export default function SectionGrid({
                   key={item.id}
                   {...columnStyle}
                 >
-                  <ProductCard myProfile={myProfile} {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
+                  <ProductCard myProfile={myProfile} slug={item.name}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
                 </Box>
               );
             })

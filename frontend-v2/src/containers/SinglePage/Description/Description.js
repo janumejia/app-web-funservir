@@ -59,9 +59,13 @@ const Description = ({
       <DescriptionWrapper>
         <Text content={location} {...locationMetaStyle} />
         <Heading as="h2" content={title} {...titleStyle} />
-        <RatingMeta>
-          <Rating rating={rating} ratingCount={ratingCount} type="bulk" />
-        </RatingMeta>
+        {rating && ratingCount
+          ? (
+            <RatingMeta>
+              <Rating rating={rating} ratingCount={ratingCount} type="bulk" />
+            </RatingMeta>
+          ) : <Text content={"Sin calificaciones"} />
+        }
         <Divider className="divider-class" />
         <Text content={
           <>

@@ -39,6 +39,7 @@ const OwnerWrapper = styled.div`
         font-size: 15px;
         font-weight: 700;
         line-height: 18px;
+        margin: 0 0 0 0;
         @media (max-width: 480px) {
           margin: 0 0 6px;
         }

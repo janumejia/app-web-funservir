@@ -42,7 +42,7 @@ export default function Listing() {
   }
   const handleMapToggle = () => { // Al oprimir el botón de "ver mapa": aparece/desaparece
     setShowMap((showMap) => !showMap);
-    console.log(data)
+    console.log("data: ", data)
   };
 
   return (

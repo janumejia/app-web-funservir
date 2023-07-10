@@ -16,7 +16,7 @@ import { fontSize } from 'styled-system';
 import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react-icons/md";
 import { BsArrowUpRight } from "react-icons/bs";
 
-const RenderReservationForm = () => {
+const RenderReservationForm = ({ location, completeAddress, contactNumber, webpage, email }) => {
   const [formState, setFormState] = useState({
     startDate: null,
     endDate: null,
@@ -145,13 +145,13 @@ const RenderReservationForm = () => {
         {...styleHeading}
       />
       <a href="#ubicacion">
-        <img src={`https://maps.googleapis.com/maps/api/staticmap?center=4.6213454694986265,-74.07338428857892&zoom=17&size=600x250&&markers=4.6213454694986265,-74.07338428857892&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
+        <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=17&size=600x250&&markers=${location.lat},${location.lng}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
       </a>
       <div className='location'>
         <MdLocationOn style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
         <Text content=
           {<Fragment>
-            {"Cra. 18 #32a-18, Teusaquillo, Bogotá"}
+            {completeAddress}
           </Fragment>}
           {...styleText1}
         />
@@ -160,32 +160,36 @@ const RenderReservationForm = () => {
         <MdPhone style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
         <Text content=
           {<Fragment>
-            {"+57 3001234567"}
+            {"+57 " + contactNumber}
           </Fragment>}
           {...styleText1}
         />
       </div>
-      <div className='website'>
-        <MdOutlineLaptopChromebook style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
-        <Text content=
-          {<Fragment>
-            <a href="https://www.funservir.net" rel="noopener noreferrer" target="_blank">
-              https://www.funservir.net 
-              <BsArrowUpRight style={{ fontSize: '13px', margin: '0px 0 0 3px' }}/>
-            </a>
-          </Fragment>}
-          {...styleText1}
-        />
-      </div>
-      <div className='email'>
-        <MdEmail style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
-        <Text content=
-          {<Fragment>
-            {"funservir@gmail.com"}
-          </Fragment>}
-          {...styleText1}
-        />
-      </div>
+      {webpage &&
+        <div className='website'>
+          <MdOutlineLaptopChromebook style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
+          <Text content=
+            {<Fragment>
+              <a href={webpage} rel="noopener noreferrer" target="_blank">
+                {webpage}
+                <BsArrowUpRight style={{ fontSize: '13px', margin: '0px 0 0 3px' }} />
+              </a>
+            </Fragment>}
+            {...styleText1}
+          />
+        </div>
+      }
+      {email &&
+        <div className='email'>
+          <MdEmail style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
+          <Text content=
+            {<Fragment>
+              {email}
+            </Fragment>}
+            {...styleText1}
+          />
+        </div>
+      }
     </ReservationFormWrapper>
   );
 };
