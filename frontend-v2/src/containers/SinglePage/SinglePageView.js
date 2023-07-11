@@ -20,6 +20,7 @@ import PostImageGallery from './ImageGallery/ImageGallery';
 import useDataApi from 'library/hooks/useDataApi';
 import isEmpty from 'lodash/isEmpty';
 import { FaImages } from "react-icons/fa";
+import { GrClose } from "react-icons/gr";
 import { size } from 'lodash';
 import { bottom } from 'styled-system';
 
@@ -89,11 +90,11 @@ const SinglePage = () => {
           type="primary"
           onClick={() => setIsModalShowing(true)}
           className="image_gallery_button"
+          icon={<FaImages />}
         >
-          <span class="button-icon">
-            <FaImages />
+          <span style={{ "margin": "0 0 0 9px" }}>
+            Ver fotos
           </span>
-          Ver fotos
         </Button>
         <Modal
           visible={isModalShowing}

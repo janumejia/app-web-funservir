@@ -38,18 +38,9 @@ en este caso responde las peticiones desde cualquier origen (inseguro) */
 const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
 app.use(cors({
-    // origin: req.method !== 'OPTIONS' && req.header('origin') && corsOrigins.includes(req.header('origin').toLowerCase()) ? req.header('origin') : corsOrigins[0],
     origin: corsOrigins,
     credentials: true, // Para permitir el envÃ­o de cookies
 }))
-
-/* Agregar encabezados de seguridad en la aplicación */
-// app.use((req, res, next) => {
-//     res.append('Access-Control-Allow-Headers', 'Cookie');
-//     next();
-// });
-
-// app.use(express.json()) // Nos permitirá ver el body que contiene las peticiones POST y PUT
 
 // Para permitir el envió de archivos grandes en el JSON (necesario para las imágenes)
 app.use(express.json({ limit: '50mb', extended: true }));
@@ -63,36 +54,6 @@ app.use((err, req, res, next) => {
         next();
     }
 });
-
-// Para comprobar que el backend tiene conexión con la BD antes de seguir
-// app.use(async (req, res, next) => {
-//     const readyState = await mongoose.connection.readyState;
-//     if ( readyState === 1 ) next();
-//     else return res.status(503).json({ message: 'Error en el servidor. Inténtalo más tarde' });
-// });
-
-
-// Middleware para ajustar CORS
-// app.all('*', function (req, res, next) {
-//     try {
-//         res.header('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-//         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//         console.log("req.method: ", req.method)
-//         console.log(corsOrigins)
-//         console.log(req.method)
-//         if (req.method === 'OPTIONS') {
-//             // Nada aquí
-//         } else { // Para métodos POST Y GET
-//             const origin = corsOrigins.includes(req.header('origin').toLowerCase()) ? req.headers.origin : corsOrigins[0];
-//             res.header("Access-Control-Allow-Origin", origin);
-//             console.log("entra")
-//         }
-//         next();
-//     } catch (error) {
-//         console.error('Error setting CORS headers:', error);
-//         res.status(500).json({ message: "Hubo un problema al procesar CORS" });
-//     }
-// });
 
 /* Rutas de nuestra APP */
 app.get('/', (req, res) => { res.json({ message: "¡Backend Funcionando!"}); });
@@ -170,9 +131,8 @@ app.use((req, res, next) => {
     res.status(404).json({ message: 'Upss, ruta no encontrada' });
 })
 
-
-
 /* Fin rutas de nuestra APP */
+
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.BACKEND_HOST;
