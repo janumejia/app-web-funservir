@@ -1,30 +1,22 @@
-import React, { useEffect } from 'react';
-import ImageGallery from 'react-image-gallery';
+import React, { useEffect, useState } from 'react';
+import ImageGallery, { Fullscreen } from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import ImageGalleryWrapper from './ImageGallery.style';
-
-let images = [
-  {
-    original: 'https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21',
-    thumbnail: 'https://img.lalr.co/cms/2018/08/21143425/Fundacion-Manuelita.jpg?size=xl&ratio=r40_21 ',
-  },
-  {
-    original: 'https://casadecolombia.co/wp-content/uploads/2018/10/foto-casa-de-colombia-fundacion-2.jpg',
-    thumbnail: 'https://casadecolombia.co/wp-content/uploads/2018/10/foto-casa-de-colombia-fundacion-2.jpg',
-  },
-  {
-    original: 'https://dps2018.prosperidadsocial.gov.co/SiteCollectionImages/Noticias/2018-Abr-25-Alianzas%20por%20lo%20social.jpeg',
-    thumbnail: 'https://dps2018.prosperidadsocial.gov.co/SiteCollectionImages/Noticias/2018-Abr-25-Alianzas%20por%20lo%20social.jpeg',
-  },
-];
+import { BsArrowsFullscreen } from "react-icons/bs";
 
 const PostImageGallery = ({ gallery }) => {
-  
-  useEffect(() => {
-    images = gallery.map((img) => {
-      return {"original": img.secure_url, "thumbnail": img.secure_url}
-    })
+  const [images, setImages] = useState([]);
 
+  useEffect(() => {
+    const asyncFunction = async () => {
+      let auxImages = [];
+      auxImages = await gallery.map((img) => {
+        return { "original": img.secure_url, "thumbnail": img.secure_url }
+      })
+      setImages(auxImages)
+    }
+
+    asyncFunction();
   }, [gallery])
 
   return (
@@ -32,10 +24,14 @@ const PostImageGallery = ({ gallery }) => {
       <ImageGallery
         items={images}
         showPlayButton={false}
-        showFullscreenButton={false}
+        // renderFullscreenButton={(onClick, isFullscreen) => (
+        //   <div className="fullscreen-button-container">
+        //     {!isFullscreen && <BsArrowsFullscreen onClick={onClick} style={{ width: '30px', height: '30px' }}/>}
+        //   </div>
+        // )}
         showIndex={true}
         lazyLoad={true}
-        slideDuration={550}
+        slideDuration={350}
       />
     </ImageGalleryWrapper>
   );

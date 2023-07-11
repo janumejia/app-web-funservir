@@ -496,7 +496,7 @@ const GlobalStyle = createGlobalStyle`
             svg {
               path {
                 opacity: 0.8;
-                fill: ${themeGet('color.1', '#ffffff')};
+                ${'' /* fill: ${themeGet('color.1', '#ffffff')}; */} //No se veía el botón
                 transition: all 0.3s ease;
               }
             }
