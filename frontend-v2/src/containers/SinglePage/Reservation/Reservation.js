@@ -44,7 +44,7 @@ const CardHeader = ({ schedule }) => {
   const isOpenOrNot = () => {
     if (schedule12HourFormat && !(Object.keys(schedule12HourFormat).length === 0)) {
       const currentDate = new Date();
-      let presentDay = currentDate.toLocaleDateString('es-US', { weekday: 'long' }); // Dia de la semana. Ej. jueves
+      let presentDay = currentDate.toLocaleDateString('es-US', { weekday: 'long' }).normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Dia de la semana. Ej. jueves
       const presentHour = currentDate.getHours();
       const presentMinute = currentDate.getMinutes();
 
@@ -296,7 +296,7 @@ export default function Reservation({ schedule, location, completeAddress, conta
   return (
     <Card
       className="reservation_sidebar"
-      header={<CardHeader schedule={schedule ? schedule : defaultSchedule} />}
+      header={<CardHeader schedule={typeof schedule === 'undefined' ? defaultSchedule : schedule} />}
       content={<RenderReservationForm location={location} completeAddress={completeAddress} contactNumber={contactNumber} webpage={webpage} email={email} />}
       footer={
         <>
