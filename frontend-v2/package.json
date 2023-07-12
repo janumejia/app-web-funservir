@@ -31,7 +31,7 @@
     "react-image-gallery": "^1.2.7",
     "react-multi-carousel": "^2.6.5",
     "react-password-checklist": "^1.4.3",
-    "react-router-dom": "^6.0.2",
+    "react-router-dom": "^6.14.1",
     "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.4",
     "react-share": "^4.4.0",

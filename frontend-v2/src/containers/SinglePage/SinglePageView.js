@@ -82,7 +82,7 @@ const SinglePage = () => {
           />
           <img
             className="third-image"
-            src={gallery[2] && gallery[2].secure_url && gallery[1].secure_url}
+            src={gallery[2] && gallery[2].secure_url && gallery[2].secure_url}
             alt="img 3 banner"
           />
         </div>

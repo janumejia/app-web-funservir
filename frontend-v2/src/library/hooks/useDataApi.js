@@ -1,4 +1,5 @@
 import { useState, useReducer, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // Aquí hacemos la solicitud a nuestra API (backend) usando Fetch API. Info sobre Fetch API: https://www.escuelafrontend.com/articulos/data-fetching-con-react
 async function SuperFetch(
@@ -16,18 +17,26 @@ async function SuperFetch(
   };
   if (method === 'POST' || method === 'PUT') options = { ...options, body };
 
-  return fetch(url, options) // ⬅️ 1) llamada a la API, el resultado es una Promise
-    .then((res) => { 
-      return Promise.resolve(res.json()); // ⬅️ 2) cuando la petición finalice, transformamos la respuesta a JSON (res.json() también es una Promise)
-    })
-    .catch((error) => Promise.reject(error));  // La promesa fallará solo si hay fallos de red o si algo impidió completar la solicitud.
+  try {
+    const res = await fetch(url, options);  // ⬅️ 1) llamada a la API, el resultado es una Promise
+    
+    if (res.status === 404) {
+      throw new Error('Page not found'); // Throw an error for a 404 response
+    }
+
+    const data = await res.json(); // ⬅️ 2) cuando la petición finalice, transformamos la respuesta a JSON (res.json() también es una Promise)
+    return Promise.resolve(data); // Return the result
+
+  } catch (error) {
+    return Promise.reject(error); // La promesa fallará solo si hay fallos de red o si algo impidió completar la solicitud.
+  }
 }
 
 // Reducer (describe como una action transforma el state)
 // Este reducer es para los diferentes estados de la página durante una solicitud a la API: Cargado página - Cargado exitoso de la página - Error en la recuperación de los datos
 function dataFetchReducer(state, action) {
   switch (action.type) {
-    
+
     // Para que aparezca cargado la página, inmediatamente después que se hace la petición a la API
     case 'FETCH_INIT':
       return {
@@ -35,7 +44,7 @@ function dataFetchReducer(state, action) {
         loading: true,
         error: false,
       };
-    
+
     // En caso de respuesta exitosa. Ya no aparecerá cargando la página
     case 'FETCH_SUCCESS':
       return {
@@ -53,9 +62,9 @@ function dataFetchReducer(state, action) {
         loading: false,
         error: true,
       };
-    
+
     // Para cargar más (botón "Cargar más" de la parte inferior) sitios en la página de resultados: 10, 20, 30, etc.
-      case 'LOAD_MORE':
+    case 'LOAD_MORE':
       return {
         ...state,
         data: [
@@ -76,6 +85,8 @@ function dataFetchReducer(state, action) {
 // Aquí llega la URL a la cual le haremos la petición a la API para traer los sitios de interés
 const useDataApi = (initialUrl, limit = 10, initialData = []) => {
   const [url, setUrl] = useState(initialUrl);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Para usar redux. El dispatch es como si fuera "setState"
   const [state, dispatch] = useReducer(dataFetchReducer, {
@@ -99,7 +110,9 @@ const useDataApi = (initialUrl, limit = 10, initialData = []) => {
           dispatch({ type: 'FETCH_SUCCESS', payload: result }); // OK
         }
       } catch (error) { // NO OK
-        if (!didCancel) {
+        if (error.message === 'Page not found') {
+          navigate('/404', { replace: true }); // Redirect to 404 page on a 404 response
+        } else if (!didCancel) {
           dispatch({ type: 'FETCH_FAILURE' });
         }
       }

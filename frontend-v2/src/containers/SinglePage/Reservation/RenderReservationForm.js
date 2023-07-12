@@ -15,6 +15,7 @@ import Text from 'components/UI/Text/Text';
 import { fontSize } from 'styled-system';
 import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react-icons/md";
 import { BsArrowUpRight } from "react-icons/bs";
+import { Link } from 'react-scroll';
 
 const RenderReservationForm = ({ location, completeAddress, contactNumber, webpage, email }) => {
   const [formState, setFormState] = useState({
@@ -144,9 +145,25 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, webpa
         }
         {...styleHeading}
       />
-      <a href="#ubicacion">
+      {/* <a href="#ubicacion"> */}
+      <Link
+                key={'ubicacion'}
+                className="linkItem"
+                activeClass="active"
+                to={'ubicacion'}
+                spy={true}
+                smooth={true}
+                hashSpy={true}
+                offset={-140}
+                duration={300}
+                isDynamic={true}
+                ignoreCancelEvents={false}
+              >
+
+
         <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=17&size=600x250&&markers=${location.lat},${location.lng}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
-      </a>
+      </Link>
+      {/* </a> */}
       <div className='location'>
         <MdLocationOn style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
         <Text content=
