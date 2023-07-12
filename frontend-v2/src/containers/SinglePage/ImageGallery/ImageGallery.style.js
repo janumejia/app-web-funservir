@@ -14,7 +14,7 @@ const ImageGalleryWrapper = styled.div`
 
   .image-gallery-slide {
     .image-gallery-image {
-      height: ${props => getWindowSize().height - 229}px;
+      height: ${props => getWindowSize().height - 190}px;
       width: auto;
     }
   }
@@ -35,7 +35,7 @@ const ImageGalleryWrapper = styled.div`
     font-size: 16px;
     font-weight: 700;
     position: static;
-    margin: 15px 0 0 0;
+    margin: 10px 0 0 0;
     background-color: transparent;
     color: ${themeGet('text.0', '#2C2C2C')};
 
@@ -49,10 +49,12 @@ const ImageGalleryWrapper = styled.div`
   .image-gallery-thumbnails-wrapper {
     .image-gallery-thumbnails {
       padding: 0;
+      align-items: flex-start; 
 
       .image-gallery-thumbnail {
-        width: 125px;
-        padding: 0;
+        /* width: 125px; */
+        /* height: 80px; */
+        padding: 0 0 0 0;
         margin: 0 20px 0 0;
         border: 0;
         border-radius: 3px;

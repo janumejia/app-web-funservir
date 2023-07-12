@@ -29,6 +29,7 @@ const PostImageGallery = ({ gallery }) => {
         //     {!isFullscreen && <BsArrowsFullscreen onClick={onClick} style={{ width: '30px', height: '30px' }}/>}
         //   </div>
         // )}
+        showFullscreenButton={false}
         showIndex={true}
         lazyLoad={true}
         slideDuration={350}
