@@ -4,6 +4,8 @@ import { Button } from 'antd';
 import Box from 'components/UI/Box/Box';
 import Text from 'components/UI/Text/Text';
 import ProductCard from '../ProductCard/ProductCard';
+import { createStore, StateMachineProvider } from 'little-state-machine';
+
 const LoadMore = ({
   handleLoadMore,
   showButton,
@@ -46,11 +48,12 @@ export default function SectionGrid({
 }) {
   const n = limit ? Number(limit) : 1;
   const limits = Array(n).fill(0);
-  
+  createStore({});
   let showButton = data.length < totalItem;
   
   return (
     <>
+    <StateMachineProvider>
       <Box className="grid_wrapper" {...rowStyle}>
         {data && data.length
           ? data.map((item) => {
@@ -63,6 +66,7 @@ export default function SectionGrid({
                 >
                   <ProductCard myProfile={myProfile} slug={item.name}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
                 </Box>
+                
               );
             })
           : null}
@@ -79,7 +83,7 @@ export default function SectionGrid({
             </Box>
           ))}
       </Box>
-
+      </StateMachineProvider>
       {showButton && (
         <LoadMore
           showButton={showButton}

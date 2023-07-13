@@ -41,7 +41,7 @@ const uniqueSitenameValidator = async (req, res) => {
     try {
         // Verificar que el nombre de sitio no ha sido previamente registrado
         const site = await InclusiveSites.findOne({ 'name': inputs.siteName });
-        if (site) return res.status(409).json({ message: "Ya existe un sitio con ese nombre" });
+        if (site && site._id.toString() !== inputs._id) return res.status(409).json({ message: "Ya existe un sitio con ese nombre" });
         else return res.status(200).json({ message: "OK" });
     } catch (error) {
         return res.status(500).json({ message: "Error del servidor" });; // Errores en el servidor

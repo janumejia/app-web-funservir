@@ -62,11 +62,16 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       message.error(`${info.file.name} ha sido eliminada.`);
     }
   }
-
+  const thumbnail = (value) =>{
+    const pics = value.map((picture)=>{
+      return picture.secure_url;
+    })
+  }
   return (
     <DraggerWrapper className="drag_and_drop_uploader">
       <Dragger
       name = "file"
+      listType='picture'
       className="uploader" 
       beforeUpload={beforeUpload} 
       multiple= {true}

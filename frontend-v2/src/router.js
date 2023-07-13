@@ -21,6 +21,7 @@ import {
   REGISTRATION_SITE_OWNER_PAGE, // Importación ruta dueño de sitio
   FORGET_PASSWORD_PAGE,
   ADD_SITE_PAGE,
+  EDIT_SITE_PAGE,
   AGENT_IMAGE_EDIT_PAGE,
   AGENT_PASSWORD_CHANGE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
@@ -71,6 +72,9 @@ const NotFound = React.lazy(() => import('containers/404/404'));
 // protected route
 const AddListingPage = React.lazy(() =>
   import('containers/AddListing/AddListing')
+);
+const EditListingPage = React.lazy(() =>
+  import('containers/EditListing/EditListing')
 );
 const AgentAccountSettingsPage = React.lazy(() =>
   import('containers/Agent/AccountSettings/AgentAccountSettingsPage')
@@ -255,6 +259,16 @@ export default function AppRoutes() {
             <React.Suspense fallback={<Loader />}>
               <RequireAuth>
                 <AddListingPage />
+              </RequireAuth>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path={EDIT_SITE_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <RequireAuth>
+                <EditListingPage />
               </RequireAuth>
             </React.Suspense>
           }
