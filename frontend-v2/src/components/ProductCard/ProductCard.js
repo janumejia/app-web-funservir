@@ -6,9 +6,10 @@ import { FormOutlined } from '@ant-design/icons';
 import Carousel from 'react-multi-carousel'; // Documentación: https://www.npmjs.com/package/react-multi-carousel
 import 'react-multi-carousel/lib/styles.css';
 import GridCard from '../GridCard/GridCard';
-import { background } from 'styled-system';
 import { useNavigate } from 'react-router-dom';
-import { ADD_SITE_PAGE} from 'settings/constant';
+import { EDIT_SITE_PAGE } from 'settings/constant';
+import editDataAction from '../../containers/EditListing/EditListingAction';
+import { useStateMachine } from 'little-state-machine';
 const responsive = {
   desktop: {
     breakpoint: {
@@ -37,28 +38,49 @@ const responsive = {
 };
 
 const PostGrid = ({
+  _id,
   name,
-  rating,
+  description,
+  category,
+  contactNumber,
+  inclusiveElements,
+  gallery,
   siteAddress,
+  locality,
+  neighborhood,
+  rating,
   price,
   ratingCount,
-  gallery,
   slug,
   link,
-  inclusiveElements,
   myProfile
 }) => {
   let navigate = useNavigate();
+  
+  const { actions } = useStateMachine({ editDataAction })
   return (
     <GridCard
       isCarousel={true}
       myProfile={myProfile}
       favorite={
-        <FormOutlined
-          onClick={() => {
-            navigate(ADD_SITE_PAGE);
-          }}
-        />
+        
+          <FormOutlined
+            onClick={() => {
+              actions.editDataAction({ _id: _id });
+              actions.editDataAction({ siteName: name });
+              actions.editDataAction({ description: description });
+              actions.editDataAction({ category: category });
+              actions.editDataAction({ contactNumber: contactNumber });
+              const inclusiveElementsAux = inclusiveElements.map((element)=>{
+                  return element._id;
+                });
+              actions.editDataAction({ inclusiveElements: inclusiveElementsAux });
+              actions.editDataAction({ sitePhotos: gallery });
+              
+              navigate(EDIT_SITE_PAGE);
+            }}
+          />
+
       }
       location={siteAddress}
       inclusiveElements={inclusiveElements}
@@ -89,7 +111,7 @@ const PostGrid = ({
         sliderClass=""
         slidesToSlide={1}
       >
-        {(gallery)?gallery.map(({ secure_url, title }, index) => (
+        {(gallery) ? gallery.map(({ secure_url, title }, index) => (
           <img
             src={secure_url}
             alt={title}
@@ -102,7 +124,7 @@ const PostGrid = ({
               position: 'relative',
             }}
           />
-        )):[]}
+        )) : []}
       </Carousel>
     </GridCard>
   );

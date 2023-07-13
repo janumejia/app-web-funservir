@@ -1,28 +1,24 @@
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { IoIosArrowBack } from 'react-icons/io';
-import { Row, Col, Input, Button, Select, InputNumber } from 'antd';
+import { Row, Col, Input, Button, Select } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addDataAction from './AddListingAction';
-import { FormHeader, Title, Description, FormContent, FormAction, StyledInputNumber, ColombiaFlag } from './AddListing.style';
+import EditDataAction from './EditListingAction';
+import { FormHeader, Title, Description, FormContent, FormAction, ColombiaFlag } from './EditListing.style';
 import axios from "../../settings/axiosConfig"; // Para la petición de registro
 
-const { Option } = Select;
 
-const inclusiveSiteNameVerification = async (siteName) => {
-  try {
-    await axios.post(`${process.env.REACT_APP_HOST_BACK}/uniqueSiteNameValidator`, { siteName: siteName });
-    // No se hace nada aquí, solo cuando el nombre está repetido se informa
-  
-  } catch (error) {
-    if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
-  
-  }
-  return true; // Válido
-}
 
 const AccountDetails = ({ setStep, availableCategories, availableElements }) => {
-  const { actions, state } = useStateMachine({ addDataAction }); // Usamos el estado global de StateMachine
+  const { actions, state } = useStateMachine({ EditDataAction }); // Usamos el estado global de StateMachine
+
+  const inclusiveSiteNameVerification = async (siteName) => {
+    try {
+      await axios.post(`${process.env.REACT_APP_HOST_BACK}/uniqueSiteNameValidator`, { siteName: siteName, _id: state.dataEditSite._id });
+    } catch (error) {
+      if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
+    }
+  return true; // Válido
+}
 
   const {
     control,
@@ -32,23 +28,23 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
-      siteName: state?.dataAddSite?.sitesitesiteName,
-      description: state?.dataAddSite?.description,
-      contactNumber: state?.dataAddSite?.contactNumber,
-      category: state?.dataAddSite?.category,
-      inclusiveElements: state?.dataAddSite?.inclusiveElements
+      siteName: state?.dataEditSite?.sitesitesiteName,
+      description: state?.dataEditSite?.description,
+      contactNumber: state?.dataEditSite?.contactNumber,
+      category: state?.dataEditSite?.category,
+      inclusiveElements: state?.dataEditSite?.inclusiveElements
     },
   });
 
   const handleOnChange = (key, event) => {
-    actions.addDataAction({ [key]: (key === "category" || key === "inclusiveElements" ? event : event.target.value) });
+    actions.EditDataAction({ [key]: (key === "category" || key === "inclusiveElements" ? event : event.target.value) });
     setValue(key, (key === "category" || key === "inclusiveElements" ? event : event.target.value));
   };
 
   // console.log("state:", state)
 
-  const onSubmit = (dataAddSite) => {
-    actions.addDataAction(dataAddSite); // Guardar la información ingresada en el estado de StateMachine
+  const onSubmit = (dataEditSite) => {
+    actions.EditDataAction(dataEditSite); // Guardar la información ingresada en el estado de StateMachine
     setStep(2); // Pasar a la siguiente página de registro
   };
 
@@ -58,7 +54,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         <FormHeader>
           <Title>Paso 1 de 3: Datos del sitio de interés</Title>
           <Description>
-            Completa los datos de tu cuenta para iniciar sesión en la aplicación.
+            Actualiza los datos asociados a tu sitio.
           </Description>
         </FormHeader>
         <FormControl
@@ -67,14 +63,14 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           error={
             errors.siteName && errors.siteName.type === "required" ? (
               <span>¡Este campo es requerido!</span>
-              ) : errors.siteName && errors.siteName.type === "isSiteNameValid" ? (
-              <span> { errors.siteName.message } </span>
+            ) : errors.siteName && errors.siteName.type === "isSiteNameValid" ? (
+              <span> {errors.siteName.message} </span>
             ) : null
           }
         >
           <Controller
             name="siteName"
-            defaultValue={state?.dataAddSite?.siteName}
+            defaultValue={state?.dataEditSite?.siteName}
             control={control}
             rules={{
               required: true,
@@ -118,7 +114,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="description"
-            defaultValue={state?.dataAddSite?.description}
+            defaultValue={state?.dataEditSite?.description}
             control={control}
             rules={{
               required: true,
@@ -155,7 +151,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             >
               <Controller
                 name="contactNumber"
-                defaultValue={state?.dataAddSite?.contactNumber}
+                defaultValue={state?.dataEditSite?.contactNumber}
                 control={control}
                 rules={{
                   required: true,
@@ -193,7 +189,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             >
               <Controller
                 name="category"
-                defaultValue={state?.dataAddSite?.category}
+                defaultValue={state?.dataEditSite?.category}
                 control={control}
                 rules={{
                   required: true
@@ -228,7 +224,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="inclusiveElements"
-            defaultValue={ state && state.dataAddSite && state.dataAddSite.inclusiveElements ? state.dataAddSite.inclusiveElements : []}
+            defaultValue={state && state.dataEditSite && state.dataEditSite.inclusiveElements ? state.dataEditSite.inclusiveElements : []}
             control={control}
             // rules={{
             //   required: true,

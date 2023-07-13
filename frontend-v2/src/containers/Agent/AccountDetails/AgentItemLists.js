@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import AuthProvider, { AuthContext } from 'context/AuthProvider';
+import { AuthContext } from 'context/AuthProvider';
 import SectionGrid from 'components/SectionGrid/SectionGrid';
 import { PostPlaceholder } from 'components/UI/ContentLoader/ContentLoader';
 import useDataApi from 'library/hooks/useDataApi';
