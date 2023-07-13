@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { IoIosStar, IoIosStarOutline, IoIosArrowDown } from 'react-icons/io';
 import { Row, Col, Button, Input, Checkbox, Divider, Modal } from 'antd';
@@ -16,6 +16,8 @@ import ReviewWrapper, {
   ModalTitle,
 } from './Review.style';
 import { Element } from 'react-scroll';
+import { AuthContext } from 'context/AuthProvider';
+import { Popover } from 'antd';
 
 const Search = Input.Search;
 const CommentBox = (props) => {
@@ -41,6 +43,8 @@ const Review = (props) => {
     ratingLabelStyle,
     ratingCountStyle,
   } = props;
+
+  const { loggedIn } = useContext(AuthContext);
 
   const [state, setState] = useState({
     review: false,
@@ -76,9 +80,20 @@ const Review = (props) => {
               placeholder="Search reviews"
               onSearch={(value) => console.log(value)}
             /> */}
-            <Button type="primary" onClick={() => handleModalOpen('review')}>
-              Escribir opinión
-            </Button>
+            {!loggedIn ?
+              <Popover
+                content={"Debes iniciar sesión primero"}
+                trigger="hover"
+              >
+                <Button type="primary">
+                  Escribir opinión
+                </Button>
+              </Popover>
+              :
+              <Button type="primary" onClick={() => handleModalOpen('review')}>
+                Escribir opinión
+              </Button>
+            }
             <Modal
               visible={state.review}
               onCancel={() => handleModalClose('review')}
@@ -87,7 +102,7 @@ const Review = (props) => {
               maskStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
               wrapClassName="review_modal"
             >
-              <ModalTitle>Write your review here</ModalTitle>
+              <ModalTitle>Escribe tu opinión aquí</ModalTitle>
               <ReviewForm />
             </Modal>
           </RatingSearch>

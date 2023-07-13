@@ -46,9 +46,9 @@ export default function ReviewForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
-        label="Overall Rating"
+        label="Calificación general"
         htmlFor="ratings"
-        error={errors.ratings && <span>This field is required!</span>}
+        error={errors.ratings && <span>¡Este campo es requerido!</span>}
       >
         <Controller
           name="ratings"
@@ -61,9 +61,9 @@ export default function ReviewForm() {
         />
       </FormControl>
       <FormControl
-        label="Title of your review"
+        label="Titulo de la opinión"
         htmlFor="reviewTitle"
-        error={errors.reviewTitle && <span>This field is required!</span>}
+        error={errors.reviewTitle && <span>¡Este campo es requerido!</span>}
       >
         <Controller
           name="reviewTitle"
@@ -75,15 +75,15 @@ export default function ReviewForm() {
               onChange={onChange}
               onBlur={onBlur}
               value={value}
-              placeholder="Summarize your visit  or highlight an interesting details"
+              placeholder="Resuma su visita o resalte un detalle interesante"
             />
           )}
         />
       </FormControl>
       <FormControl
-        label="Details of your review"
+        label="Detalles de tu opinión"
         htmlFor="reviewDetails"
-        error={errors.reviewDetails && <span>This field is required!</span>}
+        error={errors.reviewDetails && <span>¡Este campo es requerido!</span>}
       >
         <Controller
           name="reviewDetails"
@@ -96,12 +96,12 @@ export default function ReviewForm() {
               onChange={onChange}
               onBlur={onBlur}
               value={value}
-              placeholder="Tell people about your experience: your room, location, amenities?"
+              placeholder="Cuéntale a la gente sobre tu experiencia en este sitio: ¿cuenta con lo que dice la página?, ubicación, comodidades"
             />
           )}
         />
       </FormControl>
-      <FormControl
+      {/* <FormControl
         label="What Sort of trip was this?"
         htmlFor="tripType"
         error={errors.tripType && <span>This field is required!</span>}
@@ -348,27 +348,26 @@ export default function ReviewForm() {
           name="reviewPhotos"
           onUploadChange={(data) => setValue('reviewPhotos', data)}
         />
-      </FormControl>
-      <FormControl>
+      </FormControl> */}
+      <FormControl
+        htmlFor="termsAndCondition"
+        error={errors.termsAndCondition && <span>¡Debes aceptar los términos y condiciones antes de continuar!</span>}
+      >
         <Controller
           control={control}
           name="termsAndCondition"
           defaultValue={false}
+          rules={{ required: true }}
           render={({ field: { onChange, value } }) => (
             <Checkbox onChange={onChange} checked={value}>
-              I certify that this review is based on my own experience and is my
-              genuine opinion of this hotel, and that I have no personal or
-              business relationship with this establishment, and have not been
-              offered any incentive or payment originating from the
-              establishment to write this review. I understand that TripFinder
-              has a zero-tolerance policy on fake reviews.
+              Declaro que esta opinión está basada en mi propia experiencia personal con este establecimiento y refleja mi opinión sincera sobre este establecimiento. No tengo ninguna relación personal o comercial con este establecimiento, al igual que este establecimiento no me ha ofrecido ningún incentivo o pago para escribir esta opinión. Entiendo que esta página tiene una política de tolerancia cero con las reseñas falsas.
             </Checkbox>
           )}
         />
       </FormControl>
       <FormControl className="submit-container">
         <Button htmlType="submit" type="primary" size="large">
-          Submit Your Review
+          Publicar opinión
         </Button>
       </FormControl>
     </Form>
