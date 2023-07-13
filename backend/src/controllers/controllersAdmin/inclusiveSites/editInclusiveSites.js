@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 // Crea un objeto ClamAV para verificación de imágenes libres de virus
 // const clam = new NodeClam().init();
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imageRegex, _idMongooseRegexOrEmpty, imgToDeleteRegex, siteStatusRegex, moreInfoInclusivityRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imageRegex, _idMongooseRegexOrEmpty, imgToDeleteRegex, siteStatusRegex, moreInfoInclusivityRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -25,6 +25,7 @@ const editInclusiveSites = async (req, res) => {
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumberRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
         { input: 'moreInfoInclusivity', dataType: 'string', regex: moreInfoInclusivityRegex },
         // schedule se verifica más abajo
@@ -35,7 +36,12 @@ const editInclusiveSites = async (req, res) => {
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         { input: 'imgToDelete', dataType: 'array', regex: imgToDeleteRegex },
         { input: 'owner', dataType: 'string', regex: _idMongooseRegexOrEmpty },
-        { input: 'status', dataType: 'string', regex: siteStatusRegex }
+        { input: 'status', dataType: 'string', regex: siteStatusRegex },
+        { input: 'socialWhatsapp', dataType: 'string', regex: socialWhatsappRegex },
+        { input: 'socialInstagram', dataType: 'string', regex: socialInstagramRegex },
+        { input: 'socialFacebook', dataType: 'string', regex: socialFacebookRegex },
+        { input: 'socialTwitter', dataType: 'string', regex: socialTwitterRegex },
+        { input: 'webpage', dataType: 'string', regex: webpageRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -164,6 +170,7 @@ const editInclusiveSites = async (req, res) => {
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
+            contactNumber2: inputs.contactNumber2,
             inclusiveElements: inputs.inclusiveElements,
             moreInfoInclusivity: inputs.moreInfoInclusivity,
             schedule: inputs.schedule,
@@ -171,6 +178,11 @@ const editInclusiveSites = async (req, res) => {
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
+            socialWhatsapp: inputs.socialWhatsapp,
+            socialInstagram: inputs.socialInstagram,
+            socialFacebook: inputs.socialFacebook,
+            socialTwitter: inputs.socialTwitter,
+            webpage: inputs.webpage,
             $push: { gallery: { $each: uploadRes } },
             // owner: (inputs.owner === "") ? ObjectId(inputs.owner) : ObjectId(inputs.owner), // Aquí va el _id del dueño del sitio
         }

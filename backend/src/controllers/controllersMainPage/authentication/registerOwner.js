@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const axios = require('axios');
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -34,6 +34,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'siteName', dataType: 'string', regex: siteNameRegex },
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumberRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
@@ -42,6 +43,11 @@ const addInclusiveSites = async (req, res) => {
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         // { input: 'imgToDelete', dataType: 'string', regex: _idMongooseRegex },
+        { input: 'socialWhatsapp', dataType: 'string', regex: socialWhatsappRegex },
+        { input: 'socialInstagram', dataType: 'string', regex: socialInstagramRegex },
+        { input: 'socialFacebook', dataType: 'string', regex: socialFacebookRegex },
+        { input: 'socialTwitter', dataType: 'string', regex: socialTwitterRegex },
+        { input: 'webpage', dataType: 'string', regex: webpageRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -154,6 +160,7 @@ const addInclusiveSites = async (req, res) => {
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
+            contactNumber2: inputs.contactNumber2,
             inclusiveElements: inclusiveElementsWithObjectId,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
@@ -161,6 +168,11 @@ const addInclusiveSites = async (req, res) => {
             neighborhood: inputs.neighborhood,
             gallery: uploadRes,
             owner: ObjectId(savedNewUser._id),
+            socialWhatsapp: inputs.socialWhatsapp,
+            socialInstagram: inputs.socialInstagram,
+            socialFacebook: inputs.socialFacebook,
+            socialTwitter: inputs.socialTwitter,
+            webpage: inputs.webpage,
         });
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente

@@ -17,7 +17,7 @@ import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react
 import { BsArrowUpRight } from "react-icons/bs";
 import { Link } from 'react-scroll';
 
-const RenderReservationForm = ({ location, completeAddress, contactNumber, webpage, email }) => {
+const RenderReservationForm = ({ location, completeAddress, contactNumber, contactNumber2, webpage, email }) => {
   const [formState, setFormState] = useState({
     startDate: null,
     endDate: null,
@@ -177,7 +177,7 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, webpa
         <MdPhone style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
         <Text content=
           {<Fragment>
-            {"+57 " + contactNumber}
+            {"+57 " + contactNumber + (contactNumber2 ? (" - +57 " + contactNumber2) : "")}
           </Fragment>}
           {...styleText1}
         />

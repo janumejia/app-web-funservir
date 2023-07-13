@@ -276,19 +276,19 @@ const defaultSchedule = {
                           }
                         }
 
-export default function Reservation({ schedule, location, completeAddress, contactNumber, webpage, email, socialFacebook, socialInstagram, socialTwitter, socialWhatsapp }) {
+export default function Reservation({ schedule, location, completeAddress, contactNumber, contactNumber2, webpage, email, socialFacebook, socialInstagram, socialTwitter, socialWhatsapp }) {
   return (
     <Card
       className="reservation_sidebar"
       header={<CardHeader schedule={typeof schedule === 'undefined' ? defaultSchedule : schedule} />}
-      content={<RenderReservationForm location={location} completeAddress={completeAddress} contactNumber={contactNumber} webpage={webpage} email={email} />}
+      content={<RenderReservationForm location={location} completeAddress={completeAddress} contactNumber={contactNumber} contactNumber2={contactNumber2} webpage={webpage} email={email} />}
       footer={
         <>
           <SocialAccount>
             {socialWhatsapp &&
               <Popover content="Ir a WhatsApp">
                 <a
-                  href={"/#1"}
+                  href={"https://api.whatsapp.com/send?phone=57" + socialWhatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -299,7 +299,7 @@ export default function Reservation({ schedule, location, completeAddress, conta
             {socialTwitter &&
               <Popover content="Ir a Twitter">
                 <a
-                  href={"/#1"}
+                  href={socialTwitter}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -310,7 +310,7 @@ export default function Reservation({ schedule, location, completeAddress, conta
             {socialFacebook &&
               <Popover content="Ir a Facebook">
                 <a
-                  href={"/#1"}
+                  href={socialFacebook}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -321,7 +321,7 @@ export default function Reservation({ schedule, location, completeAddress, conta
             {socialInstagram &&
               <Popover content="Ir a Instagram">
                 <a
-                  href={"/#1"}
+                  href={socialInstagram}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
