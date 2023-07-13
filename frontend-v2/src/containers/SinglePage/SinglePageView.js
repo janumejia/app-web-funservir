@@ -173,14 +173,14 @@ const SinglePage = () => {
                 mb: ['14px', '20px', '14px'],
               }}
             />
-            <Owner 
+            <Owner
               owner={owner}
             />
           </Col>
           <Col xl={8}>
             {width > 1200 ? (
               <Sticky
-                innerZ={999}
+                innerZ={1}
                 activeClass="isSticky"
                 top={202}
                 bottomBoundary="#reviewSection"
@@ -201,9 +201,18 @@ const SinglePage = () => {
             ) : (
               <BottomReservation
                 title={name}
-                price={price}
                 rating={rating}
                 ratingCount={ratingCount}
+                schedule={schedule}
+                location={location}
+                completeAddress={siteAddress + ", " + neighborhood + ", " + locality}
+                contactNumber={contactNumber}
+                webpage={webpage}
+                email={email}
+                socialFacebook={socialFacebook}
+                socialInstagram={socialInstagram}
+                socialTwitter={socialTwitter}
+                socialWhatsapp={socialWhatsapp}
               />
             )}
           </Col>

@@ -201,6 +201,10 @@ const CardHeader = ({ schedule }) => {
     fontSize: "16px",
   }
 
+  const getPopupContainer = (triggerNode) => {
+    return triggerNode.parentNode;
+  };
+
   return (
     <Popover
       className="popover-schedule"
@@ -209,6 +213,7 @@ const CardHeader = ({ schedule }) => {
       title={<h3 style={{ "text-align": "center", "fontWeight": "bold", "margin": "5px 0 5px 0" }} > Horario </h3>}
       trigger="click"
       open={true}
+      getPopupContainer={getPopupContainer} // Add this line to make the popover follow the button
       // onOpenChange={handleClickChange}
       overlayStyle={{ width: 300 }}
     >
@@ -236,27 +241,6 @@ const CardHeader = ({ schedule }) => {
           </Button>
         </Fragment>
       </div>
-
-
-      {/* <Heading
-        content={
-          <Fragment>
-            Abierto ahora <Text as="span" content="/ night" {...pricePeriodStyle} />
-          </Fragment>
-        }
-        {...priceStyle}
-      /> */}
-      {/* <TextLink link="/#1" content="Contact Hotel" {...linkStyle} /> */}
-      {/* <Heading
-        content={
-          <Fragment>
-            $162 <Text as="span" content="/ night" {...pricePeriodStyle} />
-          </Fragment>
-        }
-        {...priceStyle}
-      />
-      <TextLink link="/#1" content="Contact Hotel" {...linkStyle} /> */}
-
     </Popover>
   );
 };

@@ -23,32 +23,15 @@ const StickyBooking = ({ logo, title, price, rating, action, className }) => {
   return (
     <StickyBookingWrapper className={addAllClasses.join(' ')}>
       <HotelInfo className="hotel_info">
-        {windowInnerWidth > 767 && (
-          <>{logo && <Logo src={logo} alt={title} />}</>
-        )}
+        <InfoArea>
+          <>{title && <Title>{title}</Title>}</>
+          {/* {console.log("rating: ", rating.props.rating)} */}
+          {(typeof rating.props.rating === 'undefined') ? (<HotelRating>Sin calificaciones</HotelRating>) : (<HotelRating>{rating}</HotelRating>)}
+        </InfoArea>
 
-        {title || rating || price ? (
-          <InfoArea>
-            {windowInnerWidth > 767 ? (
-              <>{title && <Title>{title}</Title>}</>
-            ) : (
-              <Price>
-                <span>${price}</span> / Night
-              </Price>
-            )}
-            {rating && <HotelRating>{rating}</HotelRating>}
-          </InfoArea>
-        ) : (
-          ''
-        )}
       </HotelInfo>
 
       <HotelAction className="hotel_action">
-        {windowInnerWidth > 767 && (
-          <Price>
-            <span>${price}</span> / Night
-          </Price>
-        )}
         <ActionBtn>{action}</ActionBtn>
       </HotelAction>
     </StickyBookingWrapper>

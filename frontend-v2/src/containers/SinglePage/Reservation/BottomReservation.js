@@ -5,7 +5,7 @@ import { Button, Modal } from 'antd';
 import StickyBooking from 'components/StickyBooking/StickyBooking';
 import Reservation from './Reservation';
 
-const BottomReservation = ({ title, price, rating, ratingCount }) => {
+const BottomReservation = ({ title, price, rating, ratingCount, schedule, location, completeAddress, contactNumber, webpage, email, socialFacebook, socialInstagram, socialTwitter, socialWhatsapp }) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ const BottomReservation = ({ title, price, rating, ratingCount }) => {
         }
         action={
           <Button type="primary" onClick={() => setVisible(true)}>
-            Book
+             Información de contacto
           </Button>
         }
       />
@@ -34,7 +34,19 @@ const BottomReservation = ({ title, price, rating, ratingCount }) => {
         wrapClassName="reservation_modal"
         closable={false}
       >
-        <Reservation />
+        <Reservation
+          schedule={schedule}
+          location={location}
+          completeAddress={completeAddress}
+          contactNumber={contactNumber}
+          webpage={webpage}
+          email={email}
+          socialFacebook={socialFacebook}
+          socialInstagram={socialInstagram}
+          socialTwitter={socialTwitter}
+          socialWhatsapp={socialWhatsapp}
+
+        />
         <Button onClick={() => setVisible(false)} className="close">
           <IoIosClose />
         </Button>
