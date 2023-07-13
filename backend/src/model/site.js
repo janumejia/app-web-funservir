@@ -14,6 +14,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     rating: { type: Schema.Types.Mixed },
     ratingCount: { type: Number },
     contactNumber: { type: String },
+    contactNumber2: { type: String },
     inclusiveElements: [{ type: Schema.Types.ObjectId, ref: 'InclusiveElements' }],
     moreInfoInclusivity: { type: String },
     // image: {
@@ -69,8 +70,12 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     neighborhood: { type: String },
     siteAddress: { type: String },
     gallery: [],
-    owner: { type: Schema.Types.ObjectId, ref: 'User' }
-
+    owner: { type: Schema.Types.ObjectId, ref: 'User' },
+    socialWhatsapp: { type: String, required: false },
+    socialInstagram: {type: String, required: false},
+    socialFacebook: {type: String, required: false},
+    socialTwitter: {type: String, required: false},
+    webpage: {type: String, required: false},
 },
     { timestamps: true })
 

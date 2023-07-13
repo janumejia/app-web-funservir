@@ -55,6 +55,7 @@ const SinglePage = () => {
     owner,
     schedule,
     contactNumber,
+    contactNumber2,
     webpage,
     email,
     socialFacebook,
@@ -190,6 +191,7 @@ const SinglePage = () => {
                   location={location}
                   completeAddress={siteAddress + ", " + neighborhood + ", " + locality}
                   contactNumber={contactNumber}
+                  contactNumber2={contactNumber2}
                   webpage={webpage}
                   email={email}
                   socialFacebook={socialFacebook}
@@ -207,6 +209,7 @@ const SinglePage = () => {
                 location={location}
                 completeAddress={siteAddress + ", " + neighborhood + ", " + locality}
                 contactNumber={contactNumber}
+                contactNumber2={contactNumber2}
                 webpage={webpage}
                 email={email}
                 socialFacebook={socialFacebook}
