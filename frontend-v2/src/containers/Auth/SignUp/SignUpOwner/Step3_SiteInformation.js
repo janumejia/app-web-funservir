@@ -108,7 +108,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                   onBlur();
                 }}
                 value={value}
-                placeholder="Escribe tu nombre aquí"
+                placeholder="Escribe el nombre aquí"
               />
             )}
           />
@@ -273,7 +273,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                       }}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="Escribe el número telefónico principal aquí"
+                      placeholder="Número telefónico principal"
                     />
                   </div>
                 )}
@@ -313,7 +313,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                       }}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="Escribe el número telefónico secundario aquí (opcional)"
+                      placeholder="Número telefónico secundario (opcional)"
                     />
                   </div>
                 )}
@@ -478,7 +478,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           </Col>
           <Col sm={12}>
             <FormControl
-              label="Página Web (opcional)"
+              label="Página web (opcional)"
               htmlFor="webpage"
               error={
                 errors.webpage && errors.webpage.type === "required" ? (
@@ -509,7 +509,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                       }}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="Página Web"
+                      placeholder="Página web"
                     />
                   </div>
                 )}
