@@ -47,14 +47,16 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const aux1 = [];
   const imgsCloudinary = state?.dataEditSite?.sitePhotos?.map(async (img) => {
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(img.originFileObj);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    }).then(result=>{
-      aux1.push(result);
-    });
+    if (img.thumbUrl) {
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(img.originFileObj);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      }).then(result => {
+        aux1.push(result);
+      });
+    }
   });
 
   const onSubmit = async (data) => {
@@ -62,9 +64,9 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     const formData = { ...state.dataEditSite, ...data, sitePhotos: aux1 };
 
     message.loading("Subiendo registro, por favor espera", 0)
-    
+
     try {
-      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addSite`, formData);
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/editSite`, formData);
       message.destroy();
       if (res) {
         if (res.status === 200) {

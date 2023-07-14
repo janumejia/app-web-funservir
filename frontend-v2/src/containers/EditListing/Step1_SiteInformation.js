@@ -28,7 +28,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
-      siteName: state?.dataEditSite?.sitesitesiteName,
+      siteName: state?.dataEditSite?.siteName,
       description: state?.dataEditSite?.description,
       contactNumber: state?.dataEditSite?.contactNumber,
       category: state?.dataEditSite?.category,

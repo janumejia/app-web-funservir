@@ -14,6 +14,7 @@ const changePassword = require("./authentication/authenticatedUser/changePasswor
 const changePictures = require("./authentication/authenticatedUser/changePictures")
 const getUserProfileInfo = require("./authentication/getUserProfile")
 const getSingleSite = require("./sites/getSingleSite")
+const editSite = require("./authentication/authenticatedUser/editSite")
 
 module.exports = {
     registerUser,
@@ -32,4 +33,5 @@ module.exports = {
     changePictures,
     getUserProfileInfo,
     getSingleSite,
+    editSite
 }

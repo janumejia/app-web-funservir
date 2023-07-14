@@ -76,6 +76,9 @@ const PostGrid = ({
                 });
               actions.editDataAction({ inclusiveElements: inclusiveElementsAux });
               actions.editDataAction({ sitePhotos: gallery });
+              actions.editDataAction({ locality: locality });
+              actions.editDataAction({ neighborhood: neighborhood });
+              actions.editDataAction({ siteAddress: siteAddress });
               
               navigate(EDIT_SITE_PAGE);
             }}
