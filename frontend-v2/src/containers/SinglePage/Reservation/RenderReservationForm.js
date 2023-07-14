@@ -147,18 +147,18 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, conta
       />
       {/* <a href="#ubicacion"> */}
       <Link
-                key={'ubicacion'}
-                className="linkItem"
-                activeClass="active"
-                to={'ubicacion'}
-                spy={true}
-                smooth={true}
-                hashSpy={true}
-                offset={-140}
-                duration={300}
-                isDynamic={true}
-                ignoreCancelEvents={false}
-              >
+        key={'ubicacion'}
+        className="linkItem"
+        activeClass="active"
+        to={'ubicacion'}
+        spy={true}
+        smooth={true}
+        hashSpy={true}
+        offset={-140}
+        duration={300}
+        isDynamic={true}
+        ignoreCancelEvents={false}
+      >
 
 
         <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=17&size=600x250&&markers=${location.lat},${location.lng}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
@@ -177,7 +177,15 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, conta
         <MdPhone style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
         <Text content=
           {<Fragment>
-            {"+57 " + contactNumber + (contactNumber2 ? (" - +57 " + contactNumber2) : "")}
+            <div style={{ "display": "flex" }}>
+              <a href={"tel:+57" + contactNumber} style={{ "margin-right": "10px" }}>+57 {contactNumber}</a>
+              {contactNumber2 &&
+                <div style={{ "display": "flex" }}>
+                  <div style={{ "margin-right": "10px"  }}>-</div>
+                  <a href={"tel:+57" + contactNumber2}>+57 {contactNumber2}</a>
+                </div>
+              }
+            </div>
           </Fragment>}
           {...styleText1}
         />
