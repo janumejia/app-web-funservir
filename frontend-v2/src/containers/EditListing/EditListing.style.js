@@ -135,8 +135,6 @@ export const FormContent = styled.div`
     .ant-upload-list {
       padding-top: 15px;
       .ant-upload-list-item {
-        height: 40px;
-        margin-top: 0;
         line-height: 50px;
         &.ant-upload-list-item-done {
           .ant-upload-list-item-info {

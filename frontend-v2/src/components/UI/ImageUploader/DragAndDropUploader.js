@@ -2,7 +2,6 @@ import React from 'react';
 import { IoIosCloudUpload } from 'react-icons/io';
 import { Upload, message } from 'antd';
 import styled from 'styled-components';
-
 const DraggerWrapper = styled.div``;
 
 const { Dragger } = Upload;
@@ -62,22 +61,29 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       message.error(`${info.file.name} ha sido eliminada.`);
     }
   }
-  const thumbnail = (value) =>{
-    const pics = value.map((picture)=>{
-      return picture.secure_url;
+  const list = (value)=>{
+    const list = value.map((element)=>{
+      return {
+        uid: element.asset_id,
+        name: element.public_id,
+        url: element.url,
+        thumbUrl: element.thumbUrl
+      }
     })
+    return list;
   }
+  
   return (
     <DraggerWrapper className="drag_and_drop_uploader">
       <Dragger
       name = "file"
-      listType='picture'
-      className="uploader" 
+      listType='picture-card'
+      className="upload-list-inline"
       beforeUpload={beforeUpload} 
       multiple= {true}
       maxCount={maxImgs ? maxImgs : 8}
       onChange={handleOnChange}
-      defaultFileList={value}
+      defaultFileList={list(value)}
       >
         <div className="ant-upload-drag-icon">
           <IoIosCloudUpload />
