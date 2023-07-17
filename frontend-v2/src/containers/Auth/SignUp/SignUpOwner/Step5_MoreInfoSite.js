@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Select, message, Row, Col, TimePicker, Switch, Popover } from 'antd';
+import { Input, Button, Select, message, Row, Col, TimePicker, Switch, Popover, Typography } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction, { addDataResetAction } from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
@@ -15,16 +15,26 @@ import moment from 'moment';
 import { GrMultiple } from "react-icons/gr";
 
 const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+const initialIsClose = {
+  Lunes: true,
+  Martes: true,
+  Miercoles: true,
+  Jueves: true,
+  Viernes: true,
+  Sabado: true,
+  Domingo: true,
+}
 
 const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
   const {
     control,
     register,
-    formState: { errors },
+    formState: { errors }, // isSubmitted
     setValue,
     trigger,
     handleSubmit,
     watch,
+    // setError, // Destructure the setError function
   } = useForm({
     mode: 'onChange',
   });
@@ -44,31 +54,54 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   //   Domingo: state.data2.schedule && state.data2.schedule["Domingo"] ? state.data2.schedule["Domingo"] : { start: null, end: null },
   // });
 
-  const [isClose, setIsClose] = useState(); // Para el botón de Abierto/cerrado del horario
+  const [isClose, setIsClose] = useState(initialIsClose); // Para el botón de Abierto/cerrado del horario
 
   useEffect(() => {
-    const updateIsClose = () => {
-      setIsClose(state && state.data2 && state.data2.isClose ?
-        (state.data2.isClose) :
-        {
-          Lunes: state?.data2?.isClose?.Lunes?.start || state?.data2?.schedule?.Lunes?.[0] ? false : true,
-          Martes: state?.data2?.schedule?.Martes?.start || state?.data2?.schedule?.Martes?.[0] ? false : true,
-          Miercoles: state?.data2?.schedule?.Miercoles?.start || state?.data2?.schedule?.Miercoles?.[0] ? false : true,
-          Jueves: state?.data2?.schedule?.Jueves?.start || state?.data2?.schedule?.Jueves?.[0] ? false : true,
-          Viernes: state?.data2?.schedule?.Viernes?.start || state?.data2?.schedule?.Viernes?.[0] ? false : true,
-          Sabado: state?.data2?.schedule?.Sabado?.start || state?.data2?.schedule?.Sabado?.[0] ? false : true,
-          Domingo: state?.data2?.schedule?.Domingo?.start || state?.data2?.schedule?.Domingo?.[0] ? false : true,
-        }
-      )
-    }
+    if (state?.data2?.isClose) setIsClose(state.data2.isClose);
 
-    updateIsClose();
   }, [])
 
   useEffect(() => {
     actionsUpdate.addDataAction({ 'isClose': isClose });
-    // setValue('isClose', isClose);
+
   }, [isClose])
+
+  const setSameScheduleToall = ( day ) => {
+    let auxIsClose = isClose;
+
+    for (let key in auxIsClose) {
+      if (auxIsClose.hasOwnProperty(key)) {
+        auxIsClose[key] = isClose[day];
+      }
+    }
+
+    setIsClose(auxIsClose);
+
+    let dataInSelectedDay = { ...state.data2.schedule[day] }
+    console.log("state.data2.schedule  -> ", state.data2.schedule)
+    console.log(`state.data2.schedule[${day}]  -> `, state.data2.schedule[day])
+    
+    let auxSchedule = {}
+    for (let d of daysOfTheWeek){
+      auxSchedule[d] = dataInSelectedDay;
+    }
+    
+    let fieldSustitution = [ moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") ];
+    let storedScheduleSustitution = { start: moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , end: moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") };
+    for(let d of daysOfTheWeek){
+      // handleOnChange(`schedule.${d}`, storedScheduleSustitution);
+      console.log("evento: ", moment(dataInSelectedDay, "HH:mm") );
+      setValue(`schedule.${d}`, dataInSelectedDay);
+      // trigger(`schedule.${day}`);
+    }
+    actionsUpdate.addDataAction({ 'schedule': auxSchedule });
+  }
+
+  // useEffect(() => {
+  //   if(isSubmitted && )
+  //   setError('schedule', { type: 'required' })
+    
+  // },[isSubmitted])
 
   const handleOnChange = (key, event) => {
     console.log("key: ", key);
@@ -179,65 +212,75 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           label="Horario"
           htmlFor="schedule"
           error={
-            errors.siteAddress && errors.siteAddress.type === "required" ? (
-              <span>¡Este campo es requerido!</span>
-            ) : errors.siteAddress && errors.siteAddress.type === "pattern" ? (
-              <span>¡La dirección está en un formato no válido!</span>
+            errors.schedule && errors.schedule.type === "required" ? (
+              <span />
             ) : null
           }
         >
           {
             daysOfTheWeek.map((day, index) => {
               return (
-                <Row
-                  gutter={0}
-                  key={day}
-                  style={{
-                    marginBottom: '10px',
-                    backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff',
-                  }}>
-                  <Col span={5} style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ marginLeft: '20px' }}>
-                      {day}:
-                    </div>
-                  </Col>
-                  <Col span={5} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Switch checked={!isClose?.[day]} checkedChildren="Abierto" unCheckedChildren="Cerrado" onChange={() => { setIsClose({ ...isClose, [day]: !isClose[day] }); }} />
-                  </Col>
-                  <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Controller
-                      name={`schedule.${day}`}
-                      control={control}
-                      defaultValue={[
-                        // state?.data2?.schedule?.[day]?.start ? moment(state.data2.schedule[day].start, "HH:mm") : (state.data2.schedule[day]?.[0] && moment(state.data2.schedule[day][0], "HH:mm")),
-                        // state?.data2?.schedule?.[day]?.end ? moment(state.data2.schedule[day].end, "HH:mm") : (state.data2.schedule[day]?.[1] && moment(state.data2.schedule[day][1], "HH:mm")),
-                      ]}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <TimePicker.RangePicker
-                          format="HH:mm"
-                          onChange={(e) => { // Cuando el usuario cambia el valor del campo
-                            onChange(e);
-                            handleOnChange(`schedule.${day}`, e);
-                            trigger(`schedule.${day}`);
-                          }}
-                          minuteStep={5}
-                          onBlur={() => { // Cuando el usuario quita el focus del campo
-                            trigger(`schedule.${day}`);
-                            onBlur();
-                          }}
-                          value={!isClose?.[day] ? value : null}
-                          placeholder={['Apertura', 'Cierre']}
-                          disabled={isClose?.[day]}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col span={2}>
-                    <Popover content="Ajustar este horario para los demás días">
-                      <Button icon={<GrMultiple />} style={{ width: '100%', height: '100%' }} />
-                    </Popover>
-                  </Col>
-                </Row>
+                <>
+                  <Row
+                    gutter={0}
+                    key={day}
+                    style={{
+                      marginTop: '10px',
+                      backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff',
+                    }}>
+                    <Col span={5} style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ marginLeft: '20px' }}>
+                        {day}:
+                      </div>
+                    </Col>
+                    <Col span={5} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Switch checked={!isClose[day]} checkedChildren="Abierto" unCheckedChildren="Cerrado" onChange={() => { setIsClose({ ...isClose, [day]: !isClose[day] }); }} />
+                    </Col>
+                    <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Controller
+                        name={`schedule.${day}`}
+                        control={control}
+                        defaultValue={[
+                          state?.data2?.schedule?.[day]?.start ? moment(state.data2.schedule[day].start, "HH:mm") : (state?.data2?.schedule?.[day]?.[0] && moment(state.data2.schedule[day][0], "HH:mm")),
+                          state?.data2?.schedule?.[day]?.end ? moment(state.data2.schedule[day].end, "HH:mm") : (state?.data2?.schedule?.[day]?.[1] && moment(state.data2.schedule[day][1], "HH:mm")),
+                        ]}
+                        required={!isClose[day]}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <TimePicker.RangePicker
+                            format="HH:mm"
+                            onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                            console.log(e);
+                              onChange(e);
+                              handleOnChange(`schedule.${day}`, e);
+                              trigger(`schedule.${day}`);
+                            }}
+                            minuteStep={5}
+                            onBlur={() => { // Cuando el usuario quita el focus del campo
+                              trigger(`schedule.${day}`);
+                              onBlur();
+                            }}
+                            value={!isClose[day] ? value : null}
+                            placeholder={['Apertura', 'Cierre']}
+                            disabled={isClose[day]}
+                          // required={!isClose[day]} // Add the required attribute when isClose[day] is true
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={2}>
+                      <Popover content="Ajustar este horario para los demás días">
+                        <Button onClick={() => setSameScheduleToall(day)} icon={<GrMultiple />} style={{ width: '100%', height: '100%' }} />
+                      </Popover>
+                    </Col>
+                  </Row>
+                  {/* {!isClose[day] && !(state?.data2?.schedule?.[day]?.start || state?.data2?.schedule?.[day]?.[0]) && isSubmitted && (
+                    <>
+                      {setError('schedule', { type: 'required' })}
+                      <Typography.Text type="danger">¡Falta ajusta el horario para este día! De lo contrario, marcalo como cerrado</Typography.Text>
+                    </>
+                  )
+                  } */}
+                </>
               );
             })
           }
