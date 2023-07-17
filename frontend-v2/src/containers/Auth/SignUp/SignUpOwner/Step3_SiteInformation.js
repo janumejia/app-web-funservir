@@ -294,7 +294,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             >
               <Controller
                 name="contactNumber2"
-                defaultValue={state?.data2?.contactNumber2}
+                defaultValue={state && state.data2 && state.data2.contactNumber2 ? state.data2.contactNumber2 : ""}
                 control={control}
                 rules={{
                   required: false,

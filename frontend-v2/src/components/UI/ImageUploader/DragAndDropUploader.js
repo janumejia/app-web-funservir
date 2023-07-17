@@ -62,7 +62,7 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
     }
   }
   const list = (value)=>{
-    const list = value.map((element)=>{
+    const list = value?.map((element)=>{
       return {
         uid: element.asset_id,
         name: element.public_id,
