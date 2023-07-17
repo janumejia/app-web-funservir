@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Select, message } from 'antd';
+import { Input, Button, Select, message, Row, Col, TimePicker, Switch, Popover } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction, { addDataResetAction } from './AddOwnerAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
@@ -10,7 +10,11 @@ import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
 import MapWithSearchBox from 'components/Map/MapSearchBox';
 import { mapDataHelper } from 'components/Map/mapDataHelper';
 import axios from "../../../../settings/axiosConfig"; // Para la petición de registro
-import { useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import { GrMultiple } from "react-icons/gr";
+
+const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 
 const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
   const {
@@ -30,12 +34,75 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const navigate = useNavigate();
 
+  // const [schedule, setSchedule] = useState({
+  //   Lunes: state.data2.schedule && state.data2.schedule["Lunes"] ? state.data2.schedule["Lunes"] : { start: null, end: null },
+  //   Martes: state.data2.schedule && state.data2.schedule["Martes"] ? state.data2.schedule["Martes"] : { start: null, end: null },
+  //   Miercoles: state.data2.schedule && state.data2.schedule["Miercoles"] ? state.data2.schedule["Miercoles"] : { start: null, end: null },
+  //   Jueves: state.data2.schedule && state.data2.schedule["Jueves"] ? state.data2.schedule["Jueves"] : { start: null, end: null },
+  //   Viernes: state.data2.schedule && state.data2.schedule["Viernes"] ? state.data2.schedule["Viernes"] : { start: null, end: null },
+  //   Sabado: state.data2.schedule && state.data2.schedule["Sabado"] ? state.data2.schedule["Sabado"] : { start: null, end: null },
+  //   Domingo: state.data2.schedule && state.data2.schedule["Domingo"] ? state.data2.schedule["Domingo"] : { start: null, end: null },
+  // });
+
+  const [isClose, setIsClose] = useState(); // Para el botón de Abierto/cerrado del horario
+
+  useEffect(() => {
+    const updateIsClose = () => {
+      setIsClose(state && state.data2 && state.data2.isClose ?
+        (state.data2.isClose) :
+        {
+          Lunes: state?.data2?.isClose?.Lunes?.start || state?.data2?.schedule?.Lunes?.[0] ? false : true,
+          Martes: state?.data2?.schedule?.Martes?.start || state?.data2?.schedule?.Martes?.[0] ? false : true,
+          Miercoles: state?.data2?.schedule?.Miercoles?.start || state?.data2?.schedule?.Miercoles?.[0] ? false : true,
+          Jueves: state?.data2?.schedule?.Jueves?.start || state?.data2?.schedule?.Jueves?.[0] ? false : true,
+          Viernes: state?.data2?.schedule?.Viernes?.start || state?.data2?.schedule?.Viernes?.[0] ? false : true,
+          Sabado: state?.data2?.schedule?.Sabado?.start || state?.data2?.schedule?.Sabado?.[0] ? false : true,
+          Domingo: state?.data2?.schedule?.Domingo?.start || state?.data2?.schedule?.Domingo?.[0] ? false : true,
+        }
+      )
+    }
+
+    updateIsClose();
+  }, [])
+
+  useEffect(() => {
+    actionsUpdate.addDataAction({ 'isClose': isClose });
+    // setValue('isClose', isClose);
+  }, [isClose])
+
   const handleOnChange = (key, event) => {
-    actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value) });
-    setValue(key, (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value));
-    if (key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
-      setValue("neighborhood", "")
-      actionsUpdate.addDataAction({ "neighborhood": "" });
+    console.log("key: ", key);
+    console.log("event: ", event);
+    if (key.startsWith("schedule.")) {
+      // console.log("start ", event[0] && event[0]);
+      // console.log("end ", event[1] && event[1]);
+      let auxSchedule = state?.data2?.schedule ? state.data2.schedule : {}; // Si no se ha inicializado el horario en el LSM
+      let day = key.split(".")[1];
+
+      if (!auxSchedule[day]) {
+        auxSchedule[day] = {}; // Initialize the schedule for the specific day if it doesn't exist
+      }
+
+      if (!event && Array.isArray(auxSchedule[day])) { // Para resolver problema. 
+        auxSchedule[day][0] = null;
+        auxSchedule[day][1] = null;
+      }
+      else {
+        auxSchedule[day].start = event?.[0]?._d ?? null;
+        auxSchedule[day].end = event?.[1]?._d ?? null;
+      }
+
+      console.log(auxSchedule)
+
+      actionsUpdate.addDataAction({ 'schedule': auxSchedule });
+      setValue('schedule', auxSchedule);
+    } else {
+      actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value) });
+      setValue(key, (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value));
+      if (key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
+        setValue("neighborhood", "")
+        actionsUpdate.addDataAction({ "neighborhood": "" });
+      }
     }
   };
 
@@ -53,7 +120,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
       reader.readAsDataURL(img.originFileObj);
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
-    }).then(result=>{
+    }).then(result => {
       aux1.push(result);
     });
   });
@@ -63,7 +130,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     const formData = { ...state.data2, ...data, sitePhotos: aux1 };
 
     message.loading("Subiendo registro, por favor espera", 0)
-    
+
     try {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);
       message.destroy();
@@ -105,8 +172,77 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 5 de 5: Ubicación del sitio</Title>
+          <Title>Paso 5 de 5: Horario y ubicación del sitio</Title>
         </FormHeader>
+
+        <FormControl
+          label="Horario"
+          htmlFor="schedule"
+          error={
+            errors.siteAddress && errors.siteAddress.type === "required" ? (
+              <span>¡Este campo es requerido!</span>
+            ) : errors.siteAddress && errors.siteAddress.type === "pattern" ? (
+              <span>¡La dirección está en un formato no válido!</span>
+            ) : null
+          }
+        >
+          {
+            daysOfTheWeek.map((day, index) => {
+              return (
+                <Row
+                  gutter={0}
+                  key={day}
+                  style={{
+                    marginBottom: '10px',
+                    backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff',
+                  }}>
+                  <Col span={5} style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ marginLeft: '20px' }}>
+                      {day}:
+                    </div>
+                  </Col>
+                  <Col span={5} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Switch checked={!isClose?.[day]} checkedChildren="Abierto" unCheckedChildren="Cerrado" onChange={() => { setIsClose({ ...isClose, [day]: !isClose[day] }); }} />
+                  </Col>
+                  <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Controller
+                      name={`schedule.${day}`}
+                      control={control}
+                      defaultValue={[
+                        // state?.data2?.schedule?.[day]?.start ? moment(state.data2.schedule[day].start, "HH:mm") : (state.data2.schedule[day]?.[0] && moment(state.data2.schedule[day][0], "HH:mm")),
+                        // state?.data2?.schedule?.[day]?.end ? moment(state.data2.schedule[day].end, "HH:mm") : (state.data2.schedule[day]?.[1] && moment(state.data2.schedule[day][1], "HH:mm")),
+                      ]}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <TimePicker.RangePicker
+                          format="HH:mm"
+                          onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                            onChange(e);
+                            handleOnChange(`schedule.${day}`, e);
+                            trigger(`schedule.${day}`);
+                          }}
+                          minuteStep={5}
+                          onBlur={() => { // Cuando el usuario quita el focus del campo
+                            trigger(`schedule.${day}`);
+                            onBlur();
+                          }}
+                          value={!isClose?.[day] ? value : null}
+                          placeholder={['Apertura', 'Cierre']}
+                          disabled={isClose?.[day]}
+                        />
+                      )}
+                    />
+                  </Col>
+                  <Col span={2}>
+                    <Popover content="Ajustar este horario para los demás días">
+                      <Button icon={<GrMultiple />} style={{ width: '100%', height: '100%' }} />
+                    </Popover>
+                  </Col>
+                </Row>
+              );
+            })
+          }
+        </FormControl>
+
         <FormControl
           label="Dirección"
           htmlFor="siteAddress"
@@ -238,7 +374,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
             }}
           />
         </FormControl>
-      </FormContent >
+      </FormContent>
       <FormAction>
         <div className="inner-wrapper">
           <Button
@@ -253,7 +389,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           </Button>
         </div>
       </FormAction>
-    </form >
+    </form>
   );
 };
 
