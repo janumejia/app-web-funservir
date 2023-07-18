@@ -47,6 +47,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const aux1 = [];
   const imgsCloudinary = state?.dataEditSite?.sitePhotos?.map(async (img) => {
+    console.log(img);
     if (img.thumbUrl) {
       new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -61,7 +62,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const onSubmit = async (data) => {
 
-    const formData = { ...state.dataEditSite, ...data, sitePhotos: aux1 };
+    const formData = { ...state.dataEditSite, ...data, addedPhotos: aux1 };
 
     message.loading("Subiendo registro, por favor espera", 0)
 
