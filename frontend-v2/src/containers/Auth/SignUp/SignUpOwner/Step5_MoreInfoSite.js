@@ -14,7 +14,7 @@ import { Form, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { GrMultiple } from "react-icons/gr";
 
-const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo", "SolucionBug"]; // No borrar elemento "SolucionBug"
 const initialIsClose = {
   Lunes: true,
   Martes: true,
@@ -58,6 +58,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   useEffect(() => {
     if (state?.data2?.isClose) setIsClose(state.data2.isClose);
+    handleOnChange(`schedule.SolucionBug`, null); // No borrar linea
 
   }, [])
 
@@ -67,6 +68,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   }, [isClose])
 
   const setSameScheduleToall = ( day ) => {
+    console.log("Inicio setSameScheduleToall");
     let auxIsClose = isClose;
 
     for (let key in auxIsClose) {
@@ -77,20 +79,32 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
     setIsClose(auxIsClose);
 
-    let dataInSelectedDay = { ...state.data2.schedule[day] }
-    console.log("state.data2.schedule  -> ", state.data2.schedule)
-    console.log(`state.data2.schedule[${day}]  -> `, state.data2.schedule[day])
+    let dataInSelectedDay = state.data2.schedule[day]
+    // console.log("state.data2.schedule  -> ", state.data2.schedule)
+    console.log(`state.data2.schedule[${day}]: `)
+
+    if (dataInSelectedDay.hasOwnProperty('start')) {
+      delete dataInSelectedDay['start'];
+    }
+  
+    if (dataInSelectedDay.hasOwnProperty('end')) {
+      delete dataInSelectedDay['end'];
+    }
+
+    Object.keys(dataInSelectedDay).forEach(key => {
+      console.log(key + ': ' + dataInSelectedDay[key]);
+    });
     
     let auxSchedule = {}
     for (let d of daysOfTheWeek){
       auxSchedule[d] = dataInSelectedDay;
     }
     
-    let fieldSustitution = [ moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") ];
+    let fieldSustitution = [ moment(state?.data2?.schedule?.[day]?.start, "HH:mm") , moment(state?.data2?.schedule?.[day]?.end, "HH:mm") ];
     let storedScheduleSustitution = { start: moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , end: moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") };
     for(let d of daysOfTheWeek){
       // handleOnChange(`schedule.${d}`, storedScheduleSustitution);
-      console.log("evento: ", moment(dataInSelectedDay, "HH:mm") );
+      console.log("evento: ", dataInSelectedDay, "HH:mm" );
       setValue(`schedule.${d}`, dataInSelectedDay);
       // trigger(`schedule.${day}`);
     }
@@ -218,7 +232,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           }
         >
           {
-            daysOfTheWeek.map((day, index) => {
+            daysOfTheWeek.slice(0, -1).map((day, index) => {
               return (
                 <>
                   <Row
