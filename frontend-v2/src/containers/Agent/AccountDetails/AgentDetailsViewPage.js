@@ -73,7 +73,7 @@ const AgentProfileInfo = (props) => {
   const { user, setProfileData, profileData } = useContext(AuthContext);
   useEffect(() => {
       async function profileData(){
-      await axios.get(`http://localhost:4000/profile/${props._id}`, { headers: { 'token': localStorage.getItem("token") } }).then((res) => setProfileData(res.data));
+      await axios.get(`${process.env.REACT_APP_HOST_BACK}/profile/${props._id}`).then((res) => setProfileData(res.data));
     }
     profileData();
   }, [setProfileData, props._id])
