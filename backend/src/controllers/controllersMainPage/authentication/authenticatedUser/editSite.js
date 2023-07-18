@@ -12,7 +12,7 @@ const editInclusiveSite = async (req, res) => {
 
     // Entradas: name, description, category, contactNumber, locality, neighborhood
     const { ...inputs } = req.body;
-    console.log(inputs);
+    
     const decodedDataInToken = req.decodedDataInToken;
 
     // Declaración de matriz de objetos, donde cada objeto representa un campo que se espera en el JSON de entrada
@@ -99,7 +99,7 @@ const editInclusiveSite = async (req, res) => {
             },{
                 new: true
               });
-            console.log(uploadRes);
+            
             savedSite.gallery.push(...uploadRes);
             savedSite.save();
 
