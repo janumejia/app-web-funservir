@@ -107,8 +107,6 @@ const addInclusiveSites = async (req, res) => {
     const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
     if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
 
-    console.log("inputs.schedule: ", inputs.schedule);
-    // res.status(500).json({ message: "Hubo un error en la solicitud de registro." });
     try {
         // Verificar que el correo no ha sido previamente registrado
         const user = await User.findOne({ 'email': inputs.email });

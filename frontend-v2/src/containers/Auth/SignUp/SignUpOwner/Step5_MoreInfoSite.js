@@ -44,16 +44,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const navigate = useNavigate();
 
-  // const [schedule, setSchedule] = useState({
-  //   Lunes: state.data2.schedule && state.data2.schedule["Lunes"] ? state.data2.schedule["Lunes"] : { start: null, end: null },
-  //   Martes: state.data2.schedule && state.data2.schedule["Martes"] ? state.data2.schedule["Martes"] : { start: null, end: null },
-  //   Miercoles: state.data2.schedule && state.data2.schedule["Miercoles"] ? state.data2.schedule["Miercoles"] : { start: null, end: null },
-  //   Jueves: state.data2.schedule && state.data2.schedule["Jueves"] ? state.data2.schedule["Jueves"] : { start: null, end: null },
-  //   Viernes: state.data2.schedule && state.data2.schedule["Viernes"] ? state.data2.schedule["Viernes"] : { start: null, end: null },
-  //   Sabado: state.data2.schedule && state.data2.schedule["Sabado"] ? state.data2.schedule["Sabado"] : { start: null, end: null },
-  //   Domingo: state.data2.schedule && state.data2.schedule["Domingo"] ? state.data2.schedule["Domingo"] : { start: null, end: null },
-  // });
-
   const [isClose, setIsClose] = useState(initialIsClose); // Para el botón de Abierto/cerrado del horario
 
   useEffect(() => {
@@ -181,10 +171,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     delete formData.schedule['SolucionBug'];
 
     Object.keys(formData.schedule).forEach((key) => {
-      // const allElementsAreNullOrEmpty = formData.schedule[key].every(element => element === null || element === '');
       if (!Array.isArray(formData.schedule[key]) || isClose[key]) formData.schedule[key] = [null, null];
-      // console.log(key + ': ' + formData.schedule[key]);
-      // console.log(key + ': ' + Array.isArray(formData.schedule[key]));
     });
 
     const convertedObj = {};
