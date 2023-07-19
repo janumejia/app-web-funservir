@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Select, message } from 'antd';
+import { Input, Button, Select, message, Row, Col, Switch, TimePicker } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction, { addDataResetAction } from './AddListingAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddListing.style';
@@ -11,6 +11,18 @@ import MapWithSearchBox from 'components/Map/MapSearchBox';
 import { mapDataHelper } from 'components/Map/mapDataHelper';
 import axios from "../../settings/axiosConfig"; // Para la petición de registro
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+
+const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo", "SolucionBug"]; // No borrar elemento "SolucionBug"
+const initialIsClose = {
+  Lunes: true,
+  Martes: true,
+  Miercoles: true,
+  Jueves: true,
+  Viernes: true,
+  Sabado: true,
+  Domingo: true,
+}
 
 const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) => {
   const {
@@ -30,12 +42,51 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const navigate = useNavigate();
 
+  const [isClose, setIsClose] = useState(initialIsClose); // Para el botón de Abierto/cerrado del horario
+
+  useEffect(() => {
+    if (state?.dataAddSite?.isClose) setIsClose(state.dataAddSite.isClose);
+    handleOnChange(`schedule.SolucionBug`, null); // No borrar linea
+
+  }, [])
+
+  useEffect(() => {
+    actionsUpdate.addDataAction({ 'isClose': isClose });
+
+  }, [isClose])
+
   const handleOnChange = (key, event) => {
-    actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value) });
-    setValue(key, (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value));
-    if (key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
-      setValue("neighborhood", "")
-      actionsUpdate.addDataAction({ "neighborhood": "" });
+
+    if (key.startsWith("schedule.")) {
+      // console.log("start ", event[0] && event[0]);
+      // console.log("end ", event[1] && event[1]);
+      let auxSchedule = state?.dataAddSite?.schedule ? state.dataAddSite.schedule : {}; // Si no se ha inicializado el horario en el LSM
+      let day = key.split(".")[1];
+
+      if (!auxSchedule[day]) {
+        auxSchedule[day] = {}; // Initialize the schedule for the specific day if it doesn't exist
+      }
+
+      if (!event && Array.isArray(auxSchedule[day])) { // Para resolver problema. 
+        auxSchedule[day][0] = null;
+        auxSchedule[day][1] = null;
+      }
+      else {
+        auxSchedule[day].start = event?.[0]?._d ?? null;
+        auxSchedule[day].end = event?.[1]?._d ?? null;
+      }
+
+      console.log(auxSchedule)
+
+      actionsUpdate.addDataAction({ 'schedule': auxSchedule });
+      setValue('schedule', auxSchedule);
+    } else {
+      actionsUpdate.addDataAction({ [key]: (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value) });
+      setValue(key, (key === "locality" || key === "neighborhood" || key === "location" ? event : event.target.value));
+      if (key === "locality") { // Cuando cambie la localidad ponga en blanco el campo de barrio
+        setValue("neighborhood", "")
+        actionsUpdate.addDataAction({ "neighborhood": "" });
+      }
     }
   };
 
@@ -53,7 +104,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
       reader.readAsDataURL(img.originFileObj);
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
-    }).then(result=>{
+    }).then(result => {
       aux1.push(result);
     });
   });
@@ -62,10 +113,32 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
     const formData = { ...state.dataAddSite, ...data, sitePhotos: aux1 };
 
+    // Eliminar propiedades innecesarias creadas para el horario
+    delete formData.schedule['SolucionBug'];
+
+    Object.keys(formData.schedule).forEach((key) => {
+      if (!Array.isArray(formData.schedule[key]) || isClose[key]) formData.schedule[key] = [null, null];
+    });
+
+    const convertedObj = {};
+
+    for (const key in formData.schedule) {
+      if (formData.schedule.hasOwnProperty(key)) {
+        const { start, end } = formData.schedule[key];
+        const convertedHours = {
+          start: start ? moment.utc(start, 'HH:mm').utcOffset('-05:00').format('HH:mm') : null,
+          end: end ? moment.utc(end, 'HH:mm').utcOffset('-05:00').format('HH:mm') : null
+        };
+        convertedObj[key] = convertedHours;
+      }
+    }
+
+    delete formData['isClose'];
+
     message.loading("Subiendo registro, por favor espera", 0)
-    
+
     try {
-      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addSite`, formData);
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addSite`, { ...formData, schedule: convertedObj });
       message.destroy();
       if (res) {
         if (res.status === 200) {
@@ -105,8 +178,90 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 3 de 3: Ubicación del sitio</Title>
+          <Title>Paso 5 de 5: Horario y ubicación del sitio</Title>
         </FormHeader>
+
+        <FormControl
+          label="Horario"
+          htmlFor="schedule"
+          error={
+            errors.schedule && errors.schedule.type === "required" ? (
+              <span />
+            ) : null
+          }
+        >
+          {
+            daysOfTheWeek.slice(0, -1).map((day, index) => {
+              return (
+                <>
+                  <Row
+                    gutter={0}
+                    key={day}
+                    style={{
+                      marginTop: '10px',
+                      backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff',
+                    }}>
+                    <Col span={6} style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ marginLeft: '20px' }}>
+                        {day}:
+                      </div>
+                    </Col>
+                    <Col span={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Switch checked={!isClose[day]} checkedChildren="Abierto" unCheckedChildren="Cerrado" onChange={() => { setIsClose({ ...isClose, [day]: !isClose[day] }); }} />
+                    </Col>
+                    <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Controller
+                        name={`schedule.${day}`}
+                        control={control}
+                        defaultValue={[
+                          state?.dataAddSite?.schedule?.[day]?.start ? moment(state.dataAddSite.schedule[day].start, "HH:mm") : (state?.dataAddSite?.schedule?.[day]?.[0] && moment(state.dataAddSite.schedule[day][0], "HH:mm")),
+                          state?.dataAddSite?.schedule?.[day]?.end ? moment(state.dataAddSite.schedule[day].end, "HH:mm") : (state?.dataAddSite?.schedule?.[day]?.[1] && moment(state.dataAddSite.schedule[day][1], "HH:mm")),
+                        ]}
+                        required={!isClose[day]}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <TimePicker.RangePicker
+                            format="HH:mm"
+                            onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                              console.log(e);
+                              onChange(e);
+                              handleOnChange(`schedule.${day}`, e);
+                              trigger(`schedule.${day}`);
+                            }}
+                            minuteStep={5}
+                            onBlur={() => { // Cuando el usuario quita el focus del campo
+                              trigger(`schedule.${day}`);
+                              onBlur();
+                            }}
+                            value={!isClose[day] ? value : null}
+                            placeholder={['Apertura', 'Cierre']}
+                            disabled={isClose[day]}
+                          // required={!isClose[day]} // Add the required attribute when isClose[day] is true
+                          />
+                        )}
+                      />
+                    </Col>
+
+                    {/* Boton de agregar el mismo horario a todos los dias, pero no logre solucionar un bug */}
+                    {/* <Col span={2}>
+                      <Popover content="Ajustar este horario para los demás días">
+                        <Button onClick={() => setSameScheduleToall(day)} icon={<GrMultiple />} style={{ width: '100%', height: '100%' }} />
+                      </Popover>
+                    </Col> */}
+
+                  </Row>
+                  {/* {!isClose[day] && !(state?.dataAddSite?.schedule?.[day]?.start || state?.dataAddSite?.schedule?.[day]?.[0]) && isSubmitted && (
+                    <>
+                      {setError('schedule', { type: 'required' })}
+                      <Typography.Text type="danger">¡Falta ajusta el horario para este día! De lo contrario, marcalo como cerrado</Typography.Text>
+                    </>
+                  )
+                  } */}
+                </>
+              );
+            })
+          }
+        </FormControl>
+
         <FormControl
           label="Dirección"
           htmlFor="siteAddress"
@@ -238,7 +393,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
             }}
           />
         </FormControl>
-      </FormContent >
+      </FormContent>
       <FormAction>
         <div className="inner-wrapper">
           <Button
