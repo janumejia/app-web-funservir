@@ -13,6 +13,7 @@ import {
   IoLogoInstagram,
 } from 'react-icons/io';
 import { AiOutlineLaptop } from "react-icons/ai";
+import { useState } from 'react';
 
 const { Option } = Select;
 
@@ -37,6 +38,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     formState: { errors },
     handleSubmit,
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
+    watch,
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
       siteName: state?.data2?.sitesitesiteName,
@@ -53,10 +55,9 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     setValue(key, (key === "category" || key === "inclusiveElements" ? event : event.target.value));
   };
 
-  console.log("state:", state)
+  const watchcontactNumber = watch("contactNumber", ""); // Valor por defecto es vacío
 
   const onSubmit = (data2) => {
-    console.log(data2);
     actions.addDataAction(data2); // Guardar la información ingresada en el estado de StateMachine
     setStep(4); // Pasar a la siguiente página de registro
   };
@@ -203,7 +204,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="inclusiveElements"
-            defaultValue={typeof state.data2.inclusiveElements === "undefined" ? [] : state?.data2?.inclusiveElements}
+            defaultValue={state && state.data2 && state.data2.inclusiveElements ? state.data2.inclusiveElements : []}
             control={control}
             // rules={{
             //   required: true,
@@ -289,6 +290,8 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                   <span>¡Este campo es requerido!</span>
                 ) : errors.contactNumber2 && errors.contactNumber2.type === "pattern" ? (
                   <span>¡El teléfono debe tener 10 dígitos numéricos!</span>
+                ) : errors.contactNumber2 && errors.contactNumber2.type === "validate" ? (
+                  <span>¡Los números telefónicos no deben ser iguales!</span>
                 ) : null
               }
             >
@@ -298,7 +301,10 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 control={control}
                 rules={{
                   required: false,
-                  pattern: /^\d{10}$|^$/ // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  pattern: /^\d{10}$|^$/, // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
+                  validate: (value) => 
+                    value !== watchcontactNumber || false,
+                  
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -484,7 +490,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 errors.webpage && errors.webpage.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.webpage && errors.webpage.type === "pattern" ? (
-                  <span>¡Formato de red social no valido!</span>
+                  <span>¡Formato de página web no valido!</span>
                 ) : null
               }
             >
@@ -509,7 +515,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                       }}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="Página web"
+                      placeholder="Ejemplo: https://funservir.vercel.app"
                     />
                   </div>
                 )}
@@ -532,7 +538,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           </Button>
         </div>
       </FormAction>
-    </form >
+    </form>
   );
 };
 

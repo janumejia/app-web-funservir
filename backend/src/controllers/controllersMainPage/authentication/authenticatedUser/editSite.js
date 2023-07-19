@@ -4,7 +4,7 @@ const InclusiveSites = require("../../../../model/site")
 const User = require("../../../../model/user")
 const { ObjectId } = require('mongodb');
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSite = async (req, res) => {
 
@@ -12,7 +12,7 @@ const editInclusiveSite = async (req, res) => {
 
     // Entradas: name, description, category, contactNumber, locality, neighborhood
     const { ...inputs } = req.body;
-    
+
     const decodedDataInToken = req.decodedDataInToken;
 
     // Declaración de matriz de objetos, donde cada objeto representa un campo que se espera en el JSON de entrada
@@ -21,12 +21,18 @@ const editInclusiveSite = async (req, res) => {
         { input: 'siteName', dataType: 'string', regex: siteNameRegex },
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
-        { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] }
+        { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
+        { input: 'socialWhatsapp', dataType: 'string', regex: socialWhatsappRegex },
+        { input: 'socialInstagram', dataType: 'string', regex: socialInstagramRegex },
+        { input: 'socialFacebook', dataType: 'string', regex: socialFacebookRegex },
+        { input: 'socialTwitter', dataType: 'string', regex: socialTwitterRegex },
+        { input: 'webpage', dataType: 'string', regex: webpageRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -57,6 +63,24 @@ const editInclusiveSite = async (req, res) => {
         }
     }
 
+    // Validación de horario del sitio
+    function validateSchedule(obj) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const { start, end } = obj[key];
+                if ((start !== null && !/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/.test(start)) ||
+                    (end !== null && !/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/.test(end))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    console.log("inputs.schedule: ", inputs.schedule)
+    const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
+    if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
+
     try {
         // Validar que el _id del dueño de sitio exista
         const userExist = await User.findOne({ '_id': decodedDataInToken._id });
@@ -79,12 +103,18 @@ const editInclusiveSite = async (req, res) => {
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
+            contactNumber2: inputs.contactNumber2,
             inclusiveElements: inclusiveElementsWithObjectId,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
             owner: ObjectId(decodedDataInToken._id),
+            socialInstagram: inputs.socialInstagram,
+            socialFacebook: inputs.socialFacebook,
+            socialTwitter: inputs.socialTwitter,
+            webpage: inputs.webpage,
+            schedule: inputs.schedule
         };
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente
@@ -96,10 +126,10 @@ const editInclusiveSite = async (req, res) => {
             const savedSite = await InclusiveSites.findOneAndUpdate({ _id: inputs._id }, {
                 $set: editedSite,
                 $pull: { gallery: { asset_id: { $in: picsIds } } },
-            },{
+            }, {
                 new: true
-              });
-            
+            });
+
             savedSite.gallery.push(...uploadRes);
             savedSite.save();
 

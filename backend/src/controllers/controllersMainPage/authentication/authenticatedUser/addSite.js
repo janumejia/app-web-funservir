@@ -1,4 +1,4 @@
-const {randomAvatar} = require("../../../../utils/avatarGenerator/RandomAvatarGenerator")
+const { randomAvatar } = require("../../../../utils/avatarGenerator/RandomAvatarGenerator")
 const cloudinary = require("../../../../middlewares/cloudinary");
 const Neighborhoods = require("../../../../model/neighborhoods")
 const InclusiveSites = require("../../../../model/site")
@@ -8,7 +8,7 @@ var validator = require('validator');
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex } = require("../../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -24,6 +24,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'siteName', dataType: 'string', regex: siteNameRegex },
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
@@ -32,6 +33,11 @@ const addInclusiveSites = async (req, res) => {
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
         { input: 'location', dataType: 'object', regex: locationRegex, properties: ['lat', 'lng'] },
         // { input: 'imgToDelete', dataType: 'string', regex: _idMongooseRegex },
+        { input: 'socialWhatsapp', dataType: 'string', regex: socialWhatsappRegex },
+        { input: 'socialInstagram', dataType: 'string', regex: socialInstagramRegex },
+        { input: 'socialFacebook', dataType: 'string', regex: socialFacebookRegex },
+        { input: 'socialTwitter', dataType: 'string', regex: socialTwitterRegex },
+        { input: 'webpage', dataType: 'string', regex: webpageRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -52,7 +58,7 @@ const addInclusiveSites = async (req, res) => {
         }
         return false;
     };
-    
+
     // El ciclo recorre cada elemento de la matriz dataArray y llama a validateInput con el valor correspondiente del campo del objeto JSON, el tipo de datos y la expresión regular.
     // Si el valor del campo no es válido según los criterios especificados, se devuelve un mensaje de error.
     for (const { input, dataType, regex } of dataArray) {
@@ -61,7 +67,25 @@ const addInclusiveSites = async (req, res) => {
             return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
-    
+
+    // Validación de horario del sitio
+    function validateSchedule(obj) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const { start, end } = obj[key];
+                if ((start !== null && !/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/.test(start)) ||
+                    (end !== null && !/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/.test(end))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
+    if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
+
+
     try {
         // Validar que el _id del dueño de sitio exista
         const userExist = await User.findOne({ '_id': decodedDataInToken._id });
@@ -69,9 +93,9 @@ const addInclusiveSites = async (req, res) => {
 
         // Subir las imágenes a Cloudinary
         const uploadPromises = inputs.sitePhotos.map(img => {
-                return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
-            });
-            const uploadRes = await Promise.all(uploadPromises);    
+            return cloudinary.uploader.upload(img, { upload_preset: "sites_pictures" });
+        });
+        const uploadRes = await Promise.all(uploadPromises);
 
         // Correccion en el campo de elementos inclusivos para que se guarde el objectID
         let inclusiveElementsWithObjectId = []
@@ -84,6 +108,7 @@ const addInclusiveSites = async (req, res) => {
             description: inputs.description,
             category: inputs.category,
             contactNumber: inputs.contactNumber,
+            contactNumber2: inputs.contactNumber2,
             inclusiveElements: inclusiveElementsWithObjectId,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
@@ -91,6 +116,11 @@ const addInclusiveSites = async (req, res) => {
             neighborhood: inputs.neighborhood,
             gallery: uploadRes,
             owner: ObjectId(decodedDataInToken._id),
+            socialInstagram: inputs.socialInstagram,
+            socialFacebook: inputs.socialFacebook,
+            socialTwitter: inputs.socialTwitter,
+            webpage: inputs.webpage,
+            schedule: inputs.schedule
         });
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente

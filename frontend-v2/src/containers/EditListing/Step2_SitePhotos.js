@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Button, message } from 'antd';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import EditDataAction from './EditListingAction';
-import { FormHeader, Title, FormContent, FormAction } from './EditListing.style';
+import { FormHeader, Title, FormContent, FormAction, Description } from './EditListing.style';
 
 const SitePhotos = ({ setStep }) => {
   const { actions, state } = useStateMachine({ EditDataAction });
@@ -38,6 +38,9 @@ const SitePhotos = ({ setStep }) => {
       <FormContent>
         <FormHeader>
           <Title>Paso 2 de 3: Fotos del sitio</Title>
+          <Description>
+            Sube imágenes del sitio que muestren claramente los elementos inclusivos disponibles en este lugar.
+          </Description>
         </FormHeader>
 
           <DragAndDropUploader

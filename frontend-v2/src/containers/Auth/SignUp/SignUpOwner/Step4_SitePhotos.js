@@ -6,7 +6,7 @@ import { Button, message } from 'antd';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import FormControl from 'components/UI/FormControl/FormControl';
 import AddOwnerAction from './AddOwnerAction';
-import { FormHeader, Title, FormContent, FormAction } from './AddOwner.style';
+import { FormHeader, Title, FormContent, FormAction, Description } from './AddOwner.style';
 
 const SitePhotos = ({ setStep }) => {
   const { actions, state } = useStateMachine({ AddOwnerAction });
@@ -38,6 +38,9 @@ const SitePhotos = ({ setStep }) => {
       <FormContent>
         <FormHeader>
           <Title>Paso 4 de 5: Fotos del sitio</Title>
+          <Description>
+            Sube imágenes del sitio que muestren claramente los elementos inclusivos disponibles en este lugar.
+          </Description>
         </FormHeader>
 
         <DragAndDropUploader
