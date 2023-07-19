@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const axios = require('axios');
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -34,7 +34,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'siteName', dataType: 'string', regex: siteNameRegex },
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
-        { input: 'contactNumber2', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
@@ -90,6 +90,25 @@ const addInclusiveSites = async (req, res) => {
     const isValidDateOfBirth = typeof inputs.dateOfBirth === 'string' && moment(inputs.dateOfBirth, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid() ? true : false;
     if (!isValidDateOfBirth) return res.status(422).json({ message: `El valor de la fecha es inválida` });
 
+    // Validación de horario del sitio
+    function validateSchedule(obj) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const { start, end } = obj[key];
+                if ((start !== null && !/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/.test(start)) ||
+                    (end !== null && !/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/.test(end))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
+    if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
+
+    console.log("inputs.schedule: ", inputs.schedule);
+    // res.status(500).json({ message: "Hubo un error en la solicitud de registro." });
     try {
         // Verificar que el correo no ha sido previamente registrado
         const user = await User.findOne({ 'email': inputs.email });
@@ -173,6 +192,7 @@ const addInclusiveSites = async (req, res) => {
             socialFacebook: inputs.socialFacebook,
             socialTwitter: inputs.socialTwitter,
             webpage: inputs.webpage,
+            schedule: inputs.schedule
         });
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente

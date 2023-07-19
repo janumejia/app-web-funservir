@@ -490,7 +490,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             >
               <Controller
                 name="webpage"
-                defaultValue={state?.data2?.webpage}
+                defaultValue={state && state.data2 && state.data2.webpage ? state.data2.webpage : ""}
                 control={control}
                 rules={{
                   required: false,

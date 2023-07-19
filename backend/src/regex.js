@@ -18,6 +18,7 @@ module.exports = {
     ratingRegex: new RegExp(/^([1-5].[0-9])$/),
     ratingCountRegex: new RegExp(/^\d{1,10}$/),
     contactNumberRegex: new RegExp(/^\d{10}$/), // Deben ser +57
+    contactNumber2Regex: new RegExp(/^\d{10}$|^$/), // Similar al anterior pero permite vació
     inclusiveElementsRegex: generalAlphanumeric(1,100),
     moreInfoInclusivityRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,500}$/),
     locationRegex: new RegExp(/^[-]{0,1}\d{1,4}\.\d{1,20}$/),
@@ -26,8 +27,8 @@ module.exports = {
     timeRegex: new RegExp(/^([01]\d|2[0-3]):([0-5]\d)$/),
     imgToDeleteRegex: new RegExp(/^[a-zA-Z0-9_.\/-]+$/),
     siteStatusRegex: new RegExp(/^(Pendiente|Aprobado|Rechazado)$/),
-    socialWhatsappRegex: new RegExp(/^\d{10}$/), // Igual que el regex de numero telefónico, y se le debe agregar +57
-    webpageRegex: new RegExp(/^(https:\/\/)[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$/),
+    socialWhatsappRegex: new RegExp(/^\d{10}$|^$/), // Igual que el regex de numero telefónico, y se le debe agregar +57
+    webpageRegex: new RegExp(/(^(https:\/\/)[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$)|(^$)/),
 
     /* Localidades */
     nameLocationRegex: generalAlphanumeric(1,100),
