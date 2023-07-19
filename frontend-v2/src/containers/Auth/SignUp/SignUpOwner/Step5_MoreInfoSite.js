@@ -67,54 +67,55 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   }, [isClose])
 
-  const setSameScheduleToall = ( day ) => {
-    console.log("Inicio setSameScheduleToall");
-    let auxIsClose = isClose;
+  // Función para poner el mismo horario para todos los dias
+  // const setSameScheduleToall = ( day ) => {
+  //   console.log("Inicio setSameScheduleToall");
+  //   let auxIsClose = isClose;
 
-    for (let key in auxIsClose) {
-      if (auxIsClose.hasOwnProperty(key)) {
-        auxIsClose[key] = isClose[day];
-      }
-    }
+  //   for (let key in auxIsClose) {
+  //     if (auxIsClose.hasOwnProperty(key)) {
+  //       auxIsClose[key] = isClose[day];
+  //     }
+  //   }
 
-    setIsClose(auxIsClose);
+  //   setIsClose(auxIsClose);
 
-    let dataInSelectedDay = state.data2.schedule[day]
-    // console.log("state.data2.schedule  -> ", state.data2.schedule)
-    console.log(`state.data2.schedule[${day}]: `)
+  //   let dataInSelectedDay = state.data2.schedule[day]
+  //   // console.log("state.data2.schedule  -> ", state.data2.schedule)
+  //   console.log(`state.data2.schedule[${day}]: `)
 
-    if (dataInSelectedDay.hasOwnProperty('start')) {
-      delete dataInSelectedDay['start'];
-    }
-  
-    if (dataInSelectedDay.hasOwnProperty('end')) {
-      delete dataInSelectedDay['end'];
-    }
+  //   if (dataInSelectedDay.hasOwnProperty('start')) {
+  //     delete dataInSelectedDay['start'];
+  //   }
 
-    Object.keys(dataInSelectedDay).forEach(key => {
-      console.log(key + ': ' + dataInSelectedDay[key]);
-    });
-    
-    let auxSchedule = {}
-    for (let d of daysOfTheWeek){
-      auxSchedule[d] = dataInSelectedDay;
-    }
-    
-    let fieldSustitution = [ moment(state?.data2?.schedule?.[day]?.start, "HH:mm") , moment(state?.data2?.schedule?.[day]?.end, "HH:mm") ];
-    let storedScheduleSustitution = { start: moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , end: moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") };
-    for(let d of daysOfTheWeek){
-      // handleOnChange(`schedule.${d}`, storedScheduleSustitution);
-      console.log("evento: ", dataInSelectedDay, "HH:mm" );
-      setValue(`schedule.${d}`, dataInSelectedDay);
-      // trigger(`schedule.${day}`);
-    }
-    actionsUpdate.addDataAction({ 'schedule': auxSchedule });
-  }
+  //   if (dataInSelectedDay.hasOwnProperty('end')) {
+  //     delete dataInSelectedDay['end'];
+  //   }
+
+  //   Object.keys(dataInSelectedDay).forEach(key => {
+  //     console.log(key + ': ' + dataInSelectedDay[key]);
+  //   });
+
+  //   let auxSchedule = {}
+  //   for (let d of daysOfTheWeek){
+  //     auxSchedule[d] = dataInSelectedDay;
+  //   }
+
+  //   let fieldSustitution = [ moment(state?.data2?.schedule?.[day]?.start, "HH:mm") , moment(state?.data2?.schedule?.[day]?.end, "HH:mm") ];
+  //   let storedScheduleSustitution = { start: moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , end: moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") };
+  //   for(let d of daysOfTheWeek){
+  //     // handleOnChange(`schedule.${d}`, storedScheduleSustitution);
+  //     console.log("evento: ", dataInSelectedDay, "HH:mm" );
+  //     setValue(`schedule.${d}`, dataInSelectedDay);
+  //     // trigger(`schedule.${day}`);
+  //   }
+  //   actionsUpdate.addDataAction({ 'schedule': auxSchedule });
+  // }
 
   // useEffect(() => {
   //   if(isSubmitted && )
   //   setError('schedule', { type: 'required' })
-    
+
   // },[isSubmitted])
 
   const handleOnChange = (key, event) => {
@@ -176,10 +177,35 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
     const formData = { ...state.data2, ...data, sitePhotos: aux1 };
 
+    // Eliminar propiedades innecesarias creadas para el horario
+    delete formData.schedule['SolucionBug'];
+
+    Object.keys(formData.schedule).forEach((key) => {
+      // const allElementsAreNullOrEmpty = formData.schedule[key].every(element => element === null || element === '');
+      if (!Array.isArray(formData.schedule[key]) || isClose[key]) formData.schedule[key] = [null, null];
+      // console.log(key + ': ' + formData.schedule[key]);
+      // console.log(key + ': ' + Array.isArray(formData.schedule[key]));
+    });
+
+    const convertedObj = {};
+
+    for (const key in formData.schedule) {
+      if (formData.schedule.hasOwnProperty(key)) {
+        const { start, end } = formData.schedule[key];
+        const convertedHours = {
+          start: start ? moment.utc(start, 'HH:mm').utcOffset('-05:00').format('HH:mm') : null,
+          end: end ? moment.utc(end, 'HH:mm').utcOffset('-05:00').format('HH:mm') : null
+        };
+        convertedObj[key] = convertedHours;
+      }
+    }
+
+    delete formData['isClose'];
+
     message.loading("Subiendo registro, por favor espera", 0)
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, formData);
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerOwner`, { ...formData, schedule: convertedObj });
       message.destroy();
       if (res) {
         if (res.status === 200) {
@@ -242,12 +268,12 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
                       marginTop: '10px',
                       backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff',
                     }}>
-                    <Col span={5} style={{ display: 'flex', alignItems: 'center' }}>
+                    <Col span={6} style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{ marginLeft: '20px' }}>
                         {day}:
                       </div>
                     </Col>
-                    <Col span={5} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Col span={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Switch checked={!isClose[day]} checkedChildren="Abierto" unCheckedChildren="Cerrado" onChange={() => { setIsClose({ ...isClose, [day]: !isClose[day] }); }} />
                     </Col>
                     <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -263,7 +289,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
                           <TimePicker.RangePicker
                             format="HH:mm"
                             onChange={(e) => { // Cuando el usuario cambia el valor del campo
-                            console.log(e);
+                              console.log(e);
                               onChange(e);
                               handleOnChange(`schedule.${day}`, e);
                               trigger(`schedule.${day}`);
@@ -281,11 +307,14 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
                         )}
                       />
                     </Col>
-                    <Col span={2}>
+
+                    {/* Boton de agregar el mismo horario a todos los dias, pero no logre solucionar un bug */}
+                    {/* <Col span={2}>
                       <Popover content="Ajustar este horario para los demás días">
                         <Button onClick={() => setSameScheduleToall(day)} icon={<GrMultiple />} style={{ width: '100%', height: '100%' }} />
                       </Popover>
-                    </Col>
+                    </Col> */}
+
                   </Row>
                   {/* {!isClose[day] && !(state?.data2?.schedule?.[day]?.start || state?.data2?.schedule?.[day]?.[0]) && isSubmitted && (
                     <>
