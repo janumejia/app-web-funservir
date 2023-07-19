@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import { FormHeader, Title, FormContent, FormAction } from './EditListing.style'
 
 const SitePhotos = ({ setStep }) => {
   const { actions, state } = useStateMachine({ EditDataAction });
+  const [deletedPics, setDeletedPics] = useState();
   const {
     register,
     setValue,
@@ -26,6 +27,7 @@ const SitePhotos = ({ setStep }) => {
     if(!state.dataEditSite.sitePhotos || state.dataEditSite.sitePhotos.length === 0){
       message.error('¡Debes subir al menos 1 foto del sitio!');
     }else{
+      actions.EditDataAction({'picsToDelete': deletedPics});
       setStep(3);
     }
   };
@@ -41,9 +43,10 @@ const SitePhotos = ({ setStep }) => {
           <DragAndDropUploader
             name="sitePhotos"
             value={state?.dataEditSite?.sitePhotos}
-            onUploadChange={(dataEditSite) => {
-              actions.EditDataAction({'sitePhotos': dataEditSite});
-              setValue('sitePhotos', dataEditSite)
+            onUploadChange={(dataEditSite, deletedPicture) => {
+              actions.EditDataAction({'sitePhotos': dataEditSite});    
+              if(deletedPicture) setDeletedPics((deletedPics) ? [...deletedPics, deletedPicture] : [deletedPicture]);
+              setValue('sitePhotos', dataEditSite);
             }}
           />
 

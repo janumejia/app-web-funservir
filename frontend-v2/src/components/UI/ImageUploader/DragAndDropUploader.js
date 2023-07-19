@@ -57,12 +57,17 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       message.success(`¡${info.file.name} ha sido subida correctamente!.`);
       status = null;
     } else if(info.file.status === 'removed'){
-      onUploadChange(info.fileList);
+      if(info.file.url){
+        onUploadChange(info.fileList, info.file);
+      }else{
+        onUploadChange(info.fileList);
+      }
+      
       message.error(`${info.file.name} ha sido eliminada.`);
     }
   }
   const list = (value)=>{
-    const list = value?.map((element)=>{
+    const listResult = value?.map((element)=>{
       return {
         uid: element.asset_id,
         name: element.public_id,
@@ -70,7 +75,7 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
         thumbUrl: element.thumbUrl
       }
     })
-    return list;
+    return listResult;
   }
   
   return (

@@ -4,7 +4,6 @@ import { useStateMachine } from 'little-state-machine';
 import { useForm } from 'react-hook-form';
 import { Button, message } from 'antd';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
-import FormControl from 'components/UI/FormControl/FormControl';
 import AddListingAction from './AddListingAction';
 import { FormHeader, Title, FormContent, FormAction } from './AddListing.style';
 
