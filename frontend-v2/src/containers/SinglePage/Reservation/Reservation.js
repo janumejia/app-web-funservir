@@ -329,7 +329,7 @@ export default function Reservation({ schedule, location, completeAddress, conta
                 </a>
               </Popover>
             }
-            {!(socialWhatsapp && socialTwitter && socialFacebook && socialInstagram) && <span>Sin redes sociales registradas</span>}
+            {!(socialWhatsapp || socialTwitter || socialFacebook || socialInstagram) && <span>Sin redes sociales registradas</span>}
           </SocialAccount>
         </>
       }
