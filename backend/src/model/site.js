@@ -76,6 +76,10 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     socialFacebook: {type: String, required: false},
     socialTwitter: {type: String, required: false},
     webpage: {type: String, required: false},
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+      }],
 },
     { timestamps: true })
 
