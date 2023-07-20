@@ -17,7 +17,8 @@ import ReviewWrapper, {
 } from './Review.style';
 import { Element } from 'react-scroll';
 import { AuthContext } from 'context/AuthProvider';
-import { Popover } from 'antd';
+import { Popover, Typography } from 'antd';
+const { Title } = Typography;
 
 const Search = Input.Search;
 const CommentBox = (props) => {
@@ -31,7 +32,7 @@ const CommentBox = (props) => {
         </Fragment>
       );
     })
-    : 'No Review Found';
+    : <Title style={{marginTop:'2rem'}} level={4}>Nadie ha comentado aún... ¡Sé el primero en comentar!</Title>
 };
 
 const Review = (props) => {
@@ -111,7 +112,6 @@ const Review = (props) => {
           <Col sm={12} lg={9}>
             <Heading content="Calificaciones de los usuarios" {...filterHeadingStyle} />
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Excelente" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -121,12 +121,10 @@ const Review = (props) => {
                   <IoIosStar />
                   <Text content="172" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Muy bien" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -136,12 +134,10 @@ const Review = (props) => {
                   <IoIosStarOutline />
                   <Text content="92" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Regular" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -151,12 +147,10 @@ const Review = (props) => {
                   <IoIosStarOutline />
                   <Text content="34" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Malo" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -166,7 +160,6 @@ const Review = (props) => {
                   <IoIosStarOutline />
                   <Text content="11" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
           </Col>

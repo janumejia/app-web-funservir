@@ -77,7 +77,6 @@ const editInclusiveSite = async (req, res) => {
         return true;
     }
 
-    console.log("inputs.schedule: ", inputs.schedule)
     const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
     if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
 
