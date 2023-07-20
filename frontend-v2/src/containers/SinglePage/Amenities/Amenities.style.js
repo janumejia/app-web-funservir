@@ -23,7 +23,7 @@ export const AmenitiesArea = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: -15px;
 
   > div {
@@ -38,6 +38,8 @@ export const AmenitiesArea = styled.div`
       width: calc(100% / 2 - 10px);
       margin-bottom: 20px;
     }
+    
+    margin-right: 10px; /* Add space between elements */
   }
 `;
 
