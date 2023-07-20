@@ -181,7 +181,7 @@ const SinglePage = () => {
           <Col xl={8}>
             {width > 1200 ? (
               <Sticky
-                innerZ={1}
+                innerZ={0}
                 activeClass="isSticky"
                 top={202}
                 bottomBoundary="#reviewSection"
