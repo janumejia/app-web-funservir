@@ -411,7 +411,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
               error={
                 errors.socialFacebook && errors.socialFacebook.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
-                ) : errors.socialFacebook && errors.csocialFacebook.type === "pattern" ? (
+                ) : errors.socialFacebook && errors.socialFacebook.type === "pattern" ? (
                   <span>¡El teléfono debe tener 10 dígitos numéricos!</span>
                 ) : null
               }

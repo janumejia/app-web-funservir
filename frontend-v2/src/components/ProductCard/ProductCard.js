@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import TextLink from 'components/UI/TextLink/TextLink';
 import Rating from 'components/UI/Rating/Rating';
@@ -37,12 +37,15 @@ const responsive = {
   },
 };
 
+const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+
 const PostGrid = ({
   _id,
   name,
   description,
   category,
   contactNumber,
+  contactNumber2,
   inclusiveElements,
   gallery,
   siteAddress,
@@ -53,36 +56,73 @@ const PostGrid = ({
   ratingCount,
   slug,
   link,
-  myProfile
+  myProfile,
+  socialWhatsapp,
+  socialInstagram,
+  socialFacebook,
+  socialTwitter,
+  webpage,
+  schedule,
 }) => {
   let navigate = useNavigate();
-  
+
   const { actions } = useStateMachine({ editDataAction })
+
+  const [isClose, setIsClose] = useState();
+
+  useEffect(() => {
+    const changeIsClose = () => {
+
+      const daysOfWeek = Object.keys(schedule);
+      const result = {};
+
+      daysOfWeek.forEach((day) => {
+        const { start, end } = schedule[day];
+        const auxIsclose = start === null || end === null;
+        result[day] = auxIsclose;
+      });
+
+      setIsClose(result);
+    }
+
+    if(schedule) changeIsClose();
+
+  }, [])
+
+
   return (
     <GridCard
       isCarousel={true}
       myProfile={myProfile}
       favorite={
-        
-          <FormOutlined
-            onClick={() => {
-              actions.editDataAction({ _id: _id });
-              actions.editDataAction({ siteName: name });
-              actions.editDataAction({ description: description });
-              actions.editDataAction({ category: category });
-              actions.editDataAction({ contactNumber: contactNumber });
-              const inclusiveElementsAux = inclusiveElements.map((element)=>{
-                  return element._id;
-                });
-              actions.editDataAction({ inclusiveElements: inclusiveElementsAux });
-              actions.editDataAction({ sitePhotos: gallery });
-              actions.editDataAction({ locality: locality });
-              actions.editDataAction({ neighborhood: neighborhood });
-              actions.editDataAction({ siteAddress: siteAddress });
-              
-              navigate(EDIT_SITE_PAGE);
-            }}
-          />
+
+        <FormOutlined
+          onClick={() => {
+            actions.editDataAction({ _id: _id });
+            actions.editDataAction({ siteName: name });
+            actions.editDataAction({ description: description });
+            actions.editDataAction({ category: category });
+            actions.editDataAction({ contactNumber: contactNumber });
+            actions.editDataAction({ contactNumber2: contactNumber2 });
+            const inclusiveElementsAux = inclusiveElements.map((element) => {
+              return element._id;
+            });
+            actions.editDataAction({ inclusiveElements: inclusiveElementsAux });
+            actions.editDataAction({ socialWhatsapp: socialWhatsapp });
+            actions.editDataAction({ socialInstagram: socialInstagram });
+            actions.editDataAction({ socialFacebook: socialFacebook });
+            actions.editDataAction({ socialTwitter: socialTwitter });
+            actions.editDataAction({ webpage: webpage });
+            actions.editDataAction({ sitePhotos: gallery });
+            actions.editDataAction({ schedule: schedule });
+            actions.editDataAction({ isClose: isClose });
+            actions.editDataAction({ locality: locality });
+            actions.editDataAction({ neighborhood: neighborhood });
+            actions.editDataAction({ siteAddress: siteAddress });
+
+            navigate(EDIT_SITE_PAGE);
+          }}
+        />
 
       }
       location={siteAddress}

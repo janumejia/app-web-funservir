@@ -124,6 +124,8 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
     const convertedObj = {};
 
+    console.log("Antes: ", formData.schedule)
+
     for (const key in formData.schedule) {
       if (formData.schedule.hasOwnProperty(key)) {
         const { start, end } = formData.schedule[key];
@@ -134,6 +136,8 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
         convertedObj[key] = convertedHours;
       }
     }
+
+    console.log("Despues: ", convertedObj)
 
     delete formData['isClose'];
 
@@ -395,7 +399,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
             }}
           />
         </FormControl>
-      </FormContent >
+      </FormContent>
       <FormAction>
         <div className="inner-wrapper">
           <Button
@@ -410,7 +414,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
           </Button>
         </div>
       </FormAction>
-    </form >
+    </form>
   );
 };
 
