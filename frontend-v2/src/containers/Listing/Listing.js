@@ -47,7 +47,7 @@ export default function Listing() {
 
   return (
     <ListingWrapper>
-      <Sticky top={82} innerZ={999} activeClass="isHeaderSticky">
+      <Sticky top={82} innerZ={1} activeClass="isHeaderSticky">
         <Toolbar
           left={
             width > 991 ? (

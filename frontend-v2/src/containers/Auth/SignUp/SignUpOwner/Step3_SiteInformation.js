@@ -249,7 +249,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 errors.contactNumber && errors.contactNumber.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.contactNumber && errors.contactNumber.type === "pattern" ? (
-                  <span>¡El teléfono debe tener 10 dígitos numéricos!</span>
+                  <span>¡El teléfono debe tener 10 dígitos!</span>
                 ) : null
               }
             >
@@ -289,7 +289,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 errors.contactNumber2 && errors.contactNumber2.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.contactNumber2 && errors.contactNumber2.type === "pattern" ? (
-                  <span>¡El teléfono debe tener 10 dígitos numéricos!</span>
+                  <span>¡El teléfono debe tener 10 dígitos!</span>
                 ) : errors.contactNumber2 && errors.contactNumber2.type === "validate" ? (
                   <span>¡Los números telefónicos no deben ser iguales!</span>
                 ) : null
@@ -412,7 +412,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 errors.socialFacebook && errors.socialFacebook.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.socialFacebook && errors.socialFacebook.type === "pattern" ? (
-                  <span>¡El teléfono debe tener 10 dígitos numéricos!</span>
+                  <span>¡Formato de red social no valido!</span>
                 ) : null
               }
             >
@@ -450,7 +450,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 errors.socialInstagram && errors.socialInstagram.type === "required" ? (
                   <span>¡Este campo es requerido!</span>
                 ) : errors.socialInstagram && errors.socialInstagram.type === "pattern" ? (
-                  <span>¡El teléfono debe tener 10 dígitos numéricos!</span>
+                  <span>¡Formato de red social no valido!</span>
                 ) : null
               }
             >
