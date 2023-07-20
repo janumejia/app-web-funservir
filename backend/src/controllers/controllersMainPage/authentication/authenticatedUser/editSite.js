@@ -110,6 +110,7 @@ const editInclusiveSite = async (req, res) => {
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
             owner: ObjectId(decodedDataInToken._id),
+            socialWhatsapp: inputs.socialWhatsapp,
             socialInstagram: inputs.socialInstagram,
             socialFacebook: inputs.socialFacebook,
             socialTwitter: inputs.socialTwitter,
