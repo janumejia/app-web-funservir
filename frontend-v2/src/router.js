@@ -14,11 +14,11 @@ import {
   PRIVACY_PAGE,
   LOGIN_PAGE,
   REGISTRATION_PAGE,
-  REGISTRATION_PART_2_PROFILE_PAGE, // Importación ruta agregar más info - editar perfil
-  REGISTRATION_PART_2_IMAGE_EDIT_PAGE, // Importación ruta agregar más info - editar imagen perfil
-  REGISTRATION_PART_2_PASSWORD_CHANGE_PAGE, // Importación ruta agregar más info - cambiar password
-  REGISTRATION_PART_2_ACCOUNT_SETTINGS_PAGE, // Importación ruta agregar más info - banner lado izquierdo
-  REGISTRATION_SITE_OWNER_PAGE, // Importación ruta dueño de sitio
+  // REGISTRATION_PART_2_PROFILE_PAGE, // Importación ruta agregar más info - editar perfil
+  // REGISTRATION_PART_2_IMAGE_EDIT_PAGE, // Importación ruta agregar más info - editar imagen perfil
+  // REGISTRATION_PART_2_PASSWORD_CHANGE_PAGE, // Importación ruta agregar más info - cambiar password
+  // REGISTRATION_PART_2_ACCOUNT_SETTINGS_PAGE, // Importación ruta agregar más info - banner lado izquierdo
+  // REGISTRATION_SITE_OWNER_PAGE, // Importación ruta dueño de sitio
   FORGET_PASSWORD_PAGE,
   ADD_SITE_PAGE,
   EDIT_SITE_PAGE,
