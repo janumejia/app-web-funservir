@@ -46,7 +46,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   useEffect(() => {
     if (state?.dataEditSite?.isClose) setIsClose(state.dataEditSite.isClose);
     handleOnChange(`schedule.SolucionBug`, null); // No borrar linea
-
   }, [])
 
   useEffect(() => {
@@ -98,7 +97,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const aux1 = [];
   const imgsCloudinary = state?.dataEditSite?.sitePhotos?.map(async (img) => {
-    console.log(img);
     if (img.thumbUrl) {
       new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -124,20 +122,14 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
     const convertedObj = {};
 
-    console.log("Antes: ", formData.schedule)
-
     for (const key in formData.schedule) {
-      if (formData.schedule.hasOwnProperty(key)) {
-        const { start, end } = formData.schedule[key];
-        const convertedHours = {
-          start: start ? moment.utc(start, 'HH:mm').utcOffset('-05:00').format('HH:mm') : null,
-          end: end ? moment.utc(end, 'HH:mm').utcOffset('-05:00').format('HH:mm') : null
-        };
-        convertedObj[key] = convertedHours;
-      }
+      const daySchedule = formData.schedule[key];
+      const convertedHours = {
+        start: daySchedule[0] ? moment.utc(daySchedule[0], 'HH:mm').utcOffset('-05:00').format("HH:mm") : null,
+        end: daySchedule[1] ? moment.utc(daySchedule[1], 'HH:mm').utcOffset('-05:00').format("HH:mm") : null
+      };
+      convertedObj[key] = convertedHours;
     }
-
-    console.log("Despues: ", convertedObj)
 
     delete formData['isClose'];
 
@@ -176,15 +168,13 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
         }
       }
     }
-
-
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 5 de 5: Horario y ubicación del sitio</Title>
+          <Title>Paso 3 de 3: Horario y ubicación del sitio</Title>
         </FormHeader>
 
         <FormControl
@@ -220,8 +210,8 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
                         name={`schedule.${day}`}
                         control={control}
                         defaultValue={[
-                          state?.dataEditSite?.schedule?.[day]?.start ? moment(state.dataEditSite.schedule[day].start, "HH:mm") : (state?.dataEditSite?.schedule?.[day]?.[0] && moment(state.dataEditSite.schedule[day][0], "HH:mm")),
-                          state?.dataEditSite?.schedule?.[day]?.end ? moment(state.dataEditSite.schedule[day].end, "HH:mm") : (state?.dataEditSite?.schedule?.[day]?.[1] && moment(state.dataEditSite.schedule[day][1], "HH:mm")),
+                          state?.dataEditSite?.schedule?.[day]?.start ? moment(state.dataEditSite.schedule[day].start, "HH:mm") : (state?.dataEditSite?.schedule?.[day]?.[0] && moment(state.dataEditSite.schedule[day][0])),
+                          state?.dataEditSite?.schedule?.[day]?.end ? moment(state.dataEditSite.schedule[day].end, "HH:mm") : (state?.dataEditSite?.schedule?.[day]?.[1] && moment(state.dataEditSite.schedule[day][1])),
                         ]}
                         required={!isClose[day]}
                         render={({ field: { onChange, onBlur, value } }) => (

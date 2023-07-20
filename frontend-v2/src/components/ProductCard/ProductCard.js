@@ -37,7 +37,7 @@ const responsive = {
   },
 };
 
-const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+// const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 
 const PostGrid = ({
   _id,
@@ -69,10 +69,49 @@ const PostGrid = ({
   const { actions } = useStateMachine({ editDataAction })
 
   const [isClose, setIsClose] = useState();
+  const [scheduleWithDate, setScheduleWithDate] = useState();
 
+  
   useEffect(() => {
-    const changeIsClose = () => {
+    // Función para convertir cadena en objeto de fecha
+    const convertTimeToDate = (timeString) => {
+      const [hours, minutes] = timeString.split(':').map(Number);
+  
+      // Get the current date in UTC
+      const currentDate = new Date();
+  
+      // Set the hours and minutes in UTC (adjusting for UTC-5 timezone offset)
+      currentDate.setUTCHours(hours + 5);
+      currentDate.setUTCMinutes(minutes);
+  
+      // Return the date string in "YYYY-MM-DDTHH:mm:ss.sssZ" format
+      return currentDate.toISOString();
+    }
+  
+    // Cambiar el formato de la hora de HH:mm a YYYY-MM-DDTHH:mm:ss.sssZ
+    const convertSchedule = () => {
+      const updatedSchedule = {};
 
+      for (const day in schedule) {
+        if (Object.hasOwnProperty.call(schedule, day)) {
+          const { start, end } = schedule[day];
+  
+          // Check if start and end are null and handle them accordingly
+          if (start === null || end === null) {
+            updatedSchedule[day] = [start, end];
+          } else {
+            updatedSchedule[day] = [
+              convertTimeToDate(start),
+              convertTimeToDate(end),
+            ];
+          }
+        }
+      }
+  
+      return updatedSchedule;
+    }
+
+    const buildIsClose = () => {
       const daysOfWeek = Object.keys(schedule);
       const result = {};
 
@@ -82,10 +121,13 @@ const PostGrid = ({
         result[day] = auxIsclose;
       });
 
-      setIsClose(result);
+      return (result);
     }
 
-    if(schedule) changeIsClose();
+    if(schedule) { 
+      setIsClose(buildIsClose());
+      setScheduleWithDate(convertSchedule());
+    }
 
   }, [])
 
@@ -114,8 +156,8 @@ const PostGrid = ({
             actions.editDataAction({ socialTwitter: socialTwitter });
             actions.editDataAction({ webpage: webpage });
             actions.editDataAction({ sitePhotos: gallery });
-            actions.editDataAction({ schedule: schedule });
-            actions.editDataAction({ isClose: isClose });
+            schedule && actions.editDataAction({ schedule: scheduleWithDate });
+            schedule && actions.editDataAction({ isClose: isClose });
             actions.editDataAction({ locality: locality });
             actions.editDataAction({ neighborhood: neighborhood });
             actions.editDataAction({ siteAddress: siteAddress });

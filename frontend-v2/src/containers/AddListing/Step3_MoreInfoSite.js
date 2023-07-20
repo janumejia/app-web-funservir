@@ -58,8 +58,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
   const handleOnChange = (key, event) => {
 
     if (key.startsWith("schedule.")) {
-      // console.log("start ", event[0] && event[0]);
-      // console.log("end ", event[1] && event[1]);
       let auxSchedule = state?.dataAddSite?.schedule ? state.dataAddSite.schedule : {}; // Si no se ha inicializado el horario en el LSM
       let day = key.split(".")[1];
 
@@ -75,8 +73,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
         auxSchedule[day].start = event?.[0]?._d ?? null;
         auxSchedule[day].end = event?.[1]?._d ?? null;
       }
-
-      console.log(auxSchedule)
 
       actionsUpdate.addDataAction({ 'schedule': auxSchedule });
       setValue('schedule', auxSchedule);
@@ -222,7 +218,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
                           <TimePicker.RangePicker
                             format="HH:mm"
                             onChange={(e) => { // Cuando el usuario cambia el valor del campo
-                              console.log(e);
                               onChange(e);
                               handleOnChange(`schedule.${day}`, e);
                               trigger(`schedule.${day}`);

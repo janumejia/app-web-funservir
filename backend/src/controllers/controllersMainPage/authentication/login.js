@@ -67,7 +67,9 @@ const login = async (req, res) => {
                     }
                 })
         } else {
-            // No usar esto. Solo es para evitar enumeración de usuarios debido al tiempo de respuesta
+            // Para evitar enumeración de usuarios debido al tiempo de respuesta
+            await User.findOne({ }).populate({ path: 'associatedSites', populate: { path: 'inclusiveElements', model: 'InclusiveElements' } });
+            
             await bcrypt.compare("fakepassword", "$2b$10$abcdefghijklmnopqrstuv") // Simula comparación de la contraseña
             const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
 
