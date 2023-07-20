@@ -174,7 +174,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormContent>
         <FormHeader>
-          <Title>Paso 5 de 5: Horario y ubicación del sitio</Title>
+          <Title>Paso 3 de 3: Horario y ubicación del sitio</Title>
         </FormHeader>
 
         <FormControl
