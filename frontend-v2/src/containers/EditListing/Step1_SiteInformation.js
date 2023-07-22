@@ -1,6 +1,6 @@
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, Button, Select } from 'antd';
+import { Row, Col, Input, Button, Select, Tooltip } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import EditDataAction from './EditListingAction';
 import { FormHeader, Title, Description, FormContent, FormAction, ColombiaFlag } from './EditListing.style';
@@ -12,7 +12,11 @@ import {
   IoLogoInstagram,
 } from 'react-icons/io';
 import { AiOutlineLaptop } from "react-icons/ai";
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
+const infoInToolTip = {
+  "inclusiveElements": "Los elementos inclusivos son características que un sitio puede ofrecer para facilitar el acceso a personas con discapacidades. Ejemplos de estos elementos incluyen rampas para sillas de ruedas, lenguaje en braille y pasamanos.",
+}
 
 const AccountDetails = ({ setStep, availableCategories, availableElements }) => {
   const { actions, state } = useStateMachine({ EditDataAction }); // Usamos el estado global de StateMachine
@@ -23,8 +27,8 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     } catch (error) {
       if (typeof error.response.status !== 'undefined' && error.response.status === 409) return false; // Invalido
     }
-  return true; // Válido
-}
+    return true; // Válido
+  }
 
   const {
     control,
@@ -187,7 +191,14 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         </FormControl>
 
         <FormControl
-          label="Elementos inclusivos"
+          label={
+            <Tooltip placement="topLeft" color={'black'} overlayStyle={{ maxWidth: '400px', fontSize: '14px', fontWeight: '500' }} title={infoInToolTip.inclusiveElements}>
+              <div style={{ display: 'inline', alignItems: 'center' }}>
+                <span style={{ verticalAlign: 'middle' }}>Elementos inclusivos</span>
+                <BsFillInfoCircleFill style={{ marginLeft: '5px', fontSize: '16px', verticalAlign: 'middle' }} />
+              </div>
+            </Tooltip>
+          }
           htmlFor="inclusiveElements"
         // error={
         //   errors.inclusiveElements && errors.inclusiveElements.type === "required" ? (
@@ -233,10 +244,47 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             }}
           />
         </FormControl>
+        <FormControl
+          label={
+            <div>
+              Más información sobre inclusividad del sitio
+              <div style={{ marginLeft: '4px', display: 'inline', opacity: 0.5 }}>(opcional)</div>
+            </div>
+          }
+          htmlFor="moreInfoInclusivity"
+          error={
+            errors.moreInfoInclusivity && errors.moreInfoInclusivity.type === "pattern" ? (
+              <span>¡La información ingresada no está en un formato válido!</span>
+            ) : null
+          }
+        >
+          <Controller
+            name="moreInfoInclusivity"
+            defaultValue={state && state.dataEditSite && state.dataEditSite.moreInfoInclusivity ? state.dataEditSite.moreInfoInclusivity : ""}
+            control={control}
+            rules={{
+              required: false,
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,500}$/
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input.TextArea
+                rows={2}
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('moreInfoInclusivity', e);
+                  trigger("moreInfoInclusivity");
+                }}
+                onBlur={onBlur}
+                value={value}
+                placeholder="Proporciona más detalles acerca de la inclusividad que ofrece el sitio."
+              />
+            )}
+          />
+        </FormControl>
         <Row gutter={30}>
           <Col sm={12}>
             <FormControl
-              label="Números telefónicos"
+              label="Teléfono principal"
               htmlFor="contactNumber"
               error={
                 errors.contactNumber && errors.contactNumber.type === "required" ? (
@@ -276,7 +324,12 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           </Col>
           <Col sm={12}>
             <FormControl
-              label="&nbsp;"
+              label={
+                <div>
+                  Teléfono secundario
+                  <div style={{ marginLeft: '4px', display: 'inline', opacity: 0.5 }}>(opcional)</div>
+                </div>
+              }
               htmlFor="contactNumber2"
               error={
                 errors.contactNumber2 && errors.contactNumber2.type === "required" ? (
@@ -295,9 +348,8 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                 rules={{
                   required: false,
                   pattern: /^\d{10}$|^$/, // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
-                  validate: (value) => 
-                    value !== watchcontactNumber || false,
-                  
+                  validate: (value) =>
+                    (value !== watchcontactNumber || watchcontactNumber === "") || false,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -312,7 +364,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
                       }}
                       onBlur={onBlur}
                       value={value}
-                      placeholder="Número telefónico secundario (opcional)"
+                      placeholder="Número telefónico secundario"
                     />
                   </div>
                 )}
@@ -323,7 +375,12 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         <Row gutter={30}>
           <Col sm={12}>
             <FormControl
-              label="Redes sociales (opcional)"
+              label={
+                <div>
+                  Redes sociales
+                  <div style={{ marginLeft: '4px', display: 'inline', opacity: 0.5 }}>(opcional)</div>
+                </div>
+              }
               htmlFor="socialWhatsapp"
               error={
                 errors.socialWhatsapp && errors.socialWhatsapp.type === "required" ? (
@@ -477,7 +534,12 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           </Col>
           <Col sm={12}>
             <FormControl
-              label="Página web (opcional)"
+              label={
+                <div>
+                  Página web
+                  <div style={{ marginLeft: '4px', display: 'inline', opacity: 0.5 }}>(opcional)</div>
+                </div>
+              }
               htmlFor="webpage"
               error={
                 errors.webpage && errors.webpage.type === "required" ? (

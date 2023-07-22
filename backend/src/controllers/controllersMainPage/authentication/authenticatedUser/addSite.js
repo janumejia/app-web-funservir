@@ -8,7 +8,7 @@ var validator = require('validator');
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex, moreInfoInclusivityRegex } = require("../../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -27,6 +27,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
+        { input: 'moreInfoInclusivity', dataType: 'string', regex: moreInfoInclusivityRegex },
         // { input: 'imgToAdd', dataType: 'array', regex: imgRegex },
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'locality', dataType: 'string', regex: localityRegex },
@@ -110,12 +111,14 @@ const addInclusiveSites = async (req, res) => {
             contactNumber: inputs.contactNumber,
             contactNumber2: inputs.contactNumber2,
             inclusiveElements: inclusiveElementsWithObjectId,
+            moreInfoInclusivity: inputs.moreInfoInclusivity,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
             neighborhood: inputs.neighborhood,
             gallery: uploadRes,
             owner: ObjectId(decodedDataInToken._id),
+            socialWhatsapp: inputs.socialWhatsapp,
             socialInstagram: inputs.socialInstagram,
             socialFacebook: inputs.socialFacebook,
             socialTwitter: inputs.socialTwitter,

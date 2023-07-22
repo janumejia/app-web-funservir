@@ -47,6 +47,7 @@ const PostGrid = ({
   contactNumber,
   contactNumber2,
   inclusiveElements,
+  moreInfoInclusivity,
   gallery,
   siteAddress,
   locality,
@@ -149,7 +150,8 @@ const PostGrid = ({
             const inclusiveElementsAux = inclusiveElements.map((element) => {
               return element._id;
             });
-            actions.editDataAction({ inclusiveElements: inclusiveElementsAux });
+            moreInfoInclusivity && actions.editDataAction({ moreInfoInclusivity: moreInfoInclusivity });
+            actions.editDataAction({ socialInstagram: socialInstagram });
             actions.editDataAction({ socialWhatsapp: socialWhatsapp });
             actions.editDataAction({ socialInstagram: socialInstagram });
             actions.editDataAction({ socialFacebook: socialFacebook });

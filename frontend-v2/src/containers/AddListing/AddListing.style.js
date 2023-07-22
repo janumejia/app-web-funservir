@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
 import { InputNumber } from 'antd';
+import { Tooltip } from 'antd';
 
 const Stepper = styled.div`
   display: flex;
