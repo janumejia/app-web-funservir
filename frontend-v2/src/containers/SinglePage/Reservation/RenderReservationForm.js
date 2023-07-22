@@ -164,7 +164,7 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, conta
         <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=17&size=600x250&&markers=${location.lat},${location.lng}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
       </Link>
       {/* </a> */}
-      <div className='location'>
+      <div className='location' style={{ wordBreak: 'break-all' }}>
         <MdLocationOn style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
         <Text content=
           {<Fragment>
@@ -191,7 +191,7 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, conta
         />
       </div>
       {webpage &&
-        <div className='website'>
+        <div className='website' style={{ wordBreak: 'break-all' }}>
           <MdOutlineLaptopChromebook style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
           <Text content=
             {<Fragment>

@@ -4,7 +4,7 @@ const InclusiveSites = require("../../../../model/site")
 const User = require("../../../../model/user")
 const { ObjectId } = require('mongodb');
 
-const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex, moreInfoInclusivityRegex } = require("../../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSite = async (req, res) => {
 
@@ -24,6 +24,7 @@ const editInclusiveSite = async (req, res) => {
         { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'inclusiveElements', dataType: 'array', regex: _idMongooseRegex },
+        { input: 'moreInfoInclusivity', dataType: 'string', regex: moreInfoInclusivityRegex },
         { input: 'siteAddress', dataType: 'string', regex: addressRegex },
         { input: 'locality', dataType: 'string', regex: localityRegex },
         { input: 'neighborhood', dataType: 'string', regex: neighborhoodRegex },
@@ -77,7 +78,6 @@ const editInclusiveSite = async (req, res) => {
         return true;
     }
 
-    console.log("inputs.schedule: ", inputs.schedule)
     const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
     if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
 
@@ -105,6 +105,7 @@ const editInclusiveSite = async (req, res) => {
             contactNumber: inputs.contactNumber,
             contactNumber2: inputs.contactNumber2,
             inclusiveElements: inclusiveElementsWithObjectId,
+            moreInfoInclusivity: inputs.moreInfoInclusivity,
             siteAddress: inputs.siteAddress,
             location: inputs.location,
             locality: inputs.locality,
