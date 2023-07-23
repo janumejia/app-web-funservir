@@ -6,6 +6,13 @@ import GalleryVisualizationMode from './GalleryVisualizationMode';
 import AddEditInclusiveSite from './AddEditForm';
 import { Form, Input, Popconfirm, Table, Typography, Button, Space, message, AutoComplete, Tag } from 'antd';
 import ExpandableText from './ExpandableText'; // La componente de abreviar texto
+import {
+    IoLogoWhatsapp,
+    IoLogoTwitter,
+    IoLogoFacebook,
+    IoLogoInstagram,
+} from 'react-icons/io';
+
 const { Link } = Typography;
 
 const rules = (dataIndex) => {
@@ -23,7 +30,7 @@ const rules = (dataIndex) => {
 };
 
 let editedObject = {};
-const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
+const ManageInclusiveSites = ({ isAnySitePending, setIsAnySitePending }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState("");
@@ -31,14 +38,14 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
     const [searchedText, setSearchedText] = useState("");
 
     useEffect(() => {
-        
+
         axios.get('/getInclusiveSites', { headers: { 'token': localStorage.getItem("token") } })
             .then((res) => {
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
-            if(isAnySitePending === true) setSearchedText('Pendiente');
+        if (isAnySitePending === true) setSearchedText('Pendiente');
     }, [])
-    
+
     //let isEditing = (record) => record._id === editingKey;
 
     const edit = (record) => {
@@ -125,13 +132,20 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             sorter: (a, b) => a.contactNumber.localeCompare(b.contactNumber)
         },
         {
+            title: 'Segundo número de contacto',
+            dataIndex: "contactNumber2",
+            key: "contactNumber2",
+            editable: true,
+            sorter: (a, b) => a.contactNumber2.localeCompare(b.contactNumber2)
+        },
+        {
             title: 'Elementos inclusivos*',
             dataIndex: "inclusiveElements",
             key: "inclusiveElements",
             editable: true,
             render: (elements) => {
                 const aux = elements.map((element) => {
-                    return ( <Tag key={element._id} color={"blue"}>{element.name}</Tag>);
+                    return (<Tag key={element._id} color={"blue"}>{element.name}</Tag>);
                 })
                 return aux;
             }
@@ -156,8 +170,8 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             render: (schedule) => {
                 if (schedule) {
                     const aux = Object.entries(schedule).map(([day, times]) => {
-                        if(times.start && times.end ) return ( <Tag key={day} color={"green"}> {day.slice(0, 2)} {times.start}-{times.end}</Tag> );
-                        else return ( <Tag key={day}> {day.slice(0, 2)} Cerrado</Tag> );
+                        if (times.start && times.end) return (<Tag key={day} color={"green"}> {day.slice(0, 2)} {times.start}-{times.end}</Tag>);
+                        else return (<Tag key={day}> {day.slice(0, 2)} Cerrado</Tag>);
                     })
                     return aux
 
@@ -171,6 +185,88 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
             dataIndex: "siteAddress",
             key: "siteAddress",
             editable: true,
+
+        },
+        {
+            title: 'Redes sociales y página web',
+            dataIndex: "socialNetworksAndWebpage",
+            key: "socialNetworksAndWebpage",
+            editable: true,
+            render: (_, record) => {
+                let dataInRecord = record
+
+                console.log("dataInRecord: ", dataInRecord);
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        {/* First row of social network icons */}
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            {record?.socialWhatsapp && (
+                                <a
+                                    key="whatsapp"
+                                    href={"https://api.whatsapp.com/send?phone=57" + record.socialWhatsapp}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="WhatsApp"
+                                >
+                                    <IoLogoWhatsapp style={{ fill: "#21b639", fontSize: "22px" }} />
+                                </a>
+                            )}
+                            {record?.socialTwitter && (
+                                <a
+                                    key="twitter"
+                                    href={record.socialTwitter}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="Twitter"
+                                >
+                                    <IoLogoTwitter style={{ fill: "#55ADEE", fontSize: "22px" }} />
+                                </a>
+                            )}
+                        </div>
+
+                        {/* Second row of social network icons */}
+                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                            {record?.socialFacebook && (
+                                <a
+                                    key="facebook"
+                                    href={record.socialFacebook}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="Facebook"
+                                >
+                                    <IoLogoFacebook style={{ fill: "#3b5998", fontSize: "22px" }} />
+                                </a>
+                            )}
+                            {record?.socialInstagram && (
+                                <a
+                                    key="instagram"
+                                    href={record.socialInstagram}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="Instagram"
+                                >
+                                    <IoLogoInstagram style={{ fill: "#e4405f", fontSize: "22px" }} />
+                                </a>
+                            )}
+                        </div>
+
+                        {/* Web page button */}
+                        {record?.webpage && (
+                            <div style={{ marginTop: '10px' }}>
+                                <a
+                                    key="webpage"
+                                    href={record.webpage}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="Página web"
+                                >
+                                    <Button>Página web</Button>
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                );
+            }
         },
         {
             title: 'Localidad*',
@@ -310,7 +406,14 @@ const ManageInclusiveSites = ({isAnySitePending, setIsAnySitePending}) => {
                 description: "",
                 category: "",
                 contactNumber: "",
+                contactNumber2: "",
                 inclusiveElements: [],
+                moreInfoInclusivity: "",
+                socialWhatsapp: "",
+                socialInstagram: "",
+                socialFacebook: "",
+                socialTwitter: "",
+                webpage: "",
                 siteAddress: "",
                 location: { "lat": "", "lng": "" },
                 locality: "",

@@ -86,6 +86,9 @@ const addInclusiveSites = async (req, res) => {
     const isValidSchedule = typeof inputs.schedule === 'object' && validateSchedule(inputs.schedule);
     if (!isValidSchedule) return res.status(422).json({ message: `El valor de horario no es valido` });
 
+    const isValidSecondNumber = typeof inputs.contactNumber === 'string' && typeof inputs.contactNumber2 === 'string' && inputs.contactNumber !== inputs.contactNumber2;
+    if (!isValidSecondNumber) return res.status(422).json({ message: `Los números telefónicos no pueden ser iguales` });
+
 
     try {
         // Validar que el _id del dueño de sitio exista

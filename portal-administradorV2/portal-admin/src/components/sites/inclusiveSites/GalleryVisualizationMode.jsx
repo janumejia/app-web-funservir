@@ -20,7 +20,7 @@ const GalleryVisualizationMode = ({ urlArray, myKey }) => {
             {...props}
             defaultFileList={[...urlArray]}
         >
-        </Upload >
+        </Upload>
 
     )
 }
