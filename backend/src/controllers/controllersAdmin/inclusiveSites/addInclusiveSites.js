@@ -5,7 +5,7 @@ const User = require("../../../model/user")
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imageRegex, moreInfoInclusivityRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, inclusiveElementsRegex, imageRegex, moreInfoInclusivityRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../regex") // Importación de patrones de Regex
 
 const addInclusiveSites = async (req, res) => {
 
@@ -21,7 +21,7 @@ const addInclusiveSites = async (req, res) => {
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
-        { input: 'contactNumber2', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
         { input: 'moreInfoInclusivity', dataType: 'string', regex: moreInfoInclusivityRegex },
         // schedule se verifica más abajo
@@ -66,6 +66,9 @@ const addInclusiveSites = async (req, res) => {
             return res.status(422).json({ message: `El valor de ${input} no es válido` });
         }
     }
+
+    const isValidSecondNumber = typeof inputs.contactNumber === 'string' && typeof inputs.contactNumber2 === 'string' && inputs.contactNumber !== inputs.contactNumber2;
+    if (!isValidSecondNumber) return res.status(422).json({ message: `Los números telefónicos no pueden ser iguales` });
 
     // Verificación de schedule
     const validateTime = (schedule) => {

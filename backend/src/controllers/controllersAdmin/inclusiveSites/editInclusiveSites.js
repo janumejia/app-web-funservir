@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 // Crea un objeto ClamAV para verificación de imágenes libres de virus
 // const clam = new NodeClam().init();
 
-const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imageRegex, _idMongooseRegexOrEmpty, imgToDeleteRegex, siteStatusRegex, moreInfoInclusivityRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex } = require("../../../regex") // Importación de patrones de Regex
+const { _idMongooseRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, inclusiveElementsRegex, addressRegex, locationRegex, localityRegex, neighborhoodRegex, imageRegex, _idMongooseRegexOrEmpty, imgToDeleteRegex, siteStatusRegex, moreInfoInclusivityRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex } = require("../../../regex") // Importación de patrones de Regex
 
 const editInclusiveSites = async (req, res) => {
 
@@ -25,7 +25,7 @@ const editInclusiveSites = async (req, res) => {
         { input: 'description', dataType: 'string', regex: descriptionRegex },
         { input: 'category', dataType: 'string', regex: categoryRegex },
         { input: 'contactNumber', dataType: 'string', regex: contactNumberRegex },
-        { input: 'contactNumber2', dataType: 'string', regex: contactNumberRegex },
+        { input: 'contactNumber2', dataType: 'string', regex: contactNumber2Regex },
         { input: 'inclusiveElements', dataType: 'array', regex: inclusiveElementsRegex },
         { input: 'moreInfoInclusivity', dataType: 'string', regex: moreInfoInclusivityRegex },
         // schedule se verifica más abajo
@@ -73,6 +73,9 @@ const editInclusiveSites = async (req, res) => {
         }
     }
 
+    const isValidSecondNumber = typeof inputs.contactNumber === 'string' && typeof inputs.contactNumber2 === 'string' && inputs.contactNumber !== inputs.contactNumber2;
+    if (!isValidSecondNumber) return res.status(422).json({ message: `Los números telefónicos no pueden ser iguales` });
+
     // Verificación de schedule
     const validateTime = (schedule) => {
         const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -85,6 +88,7 @@ const editInclusiveSites = async (req, res) => {
         }
         return true;
     }
+    
 
     if (!validateTime(inputs.schedule)) return res.status(422).json({ message: `El valor de la fecha no es válido` });
 
@@ -125,7 +129,7 @@ const editInclusiveSites = async (req, res) => {
     // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
     // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
     if (!validateImages(inputs.imgToAdd)) return res.status(422).json({ message: `La imagen no es válida por su formato o tamaño` });
-
+    
     try {
         // Validar que el _id del dueño de sitio exista
         if (inputs.owner !== "") {

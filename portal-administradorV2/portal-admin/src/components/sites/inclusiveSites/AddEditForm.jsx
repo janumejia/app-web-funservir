@@ -7,6 +7,12 @@ import UploadImage from './UploadImage';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import UncheckedSitesContext from "../../../context/UncheckedSitesProvider";
+import {
+    IoLogoWhatsapp,
+    IoLogoTwitter,
+    IoLogoFacebook,
+    IoLogoInstagram,
+} from 'react-icons/io';
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -30,7 +36,7 @@ const AddEditInclusiveSite = ({ site }) => {
     const updateInfoSite = async (row) => {
         try {
 
-            if(!row.inclusiveElements) row.inclusiveElements = [] 
+            if (!row.inclusiveElements) row.inclusiveElements = []
 
             message.open({
                 key: 'key-loading',
@@ -160,8 +166,14 @@ const AddEditInclusiveSite = ({ site }) => {
                     "description": site.description,
                     "category": site.category,
                     "contactNumber": site.contactNumber,
+                    "contactNumber2": site?.contactNumber2 ?? "",
                     "inclusiveElements": site.inclusiveElements.map(obj => obj._id),
-                    "moreInfoInclusivity": site.moreInfoInclusivity ? site.moreInfoInclusivity : "", 
+                    "moreInfoInclusivity": site.moreInfoInclusivity ? site.moreInfoInclusivity : "",
+                    "socialWhatsapp": site?.socialWhatsapp ?? "",
+                    "socialTwitter": site?.socialTwitter ?? "",
+                    "socialFacebook": site?.socialFacebook ?? "",
+                    "socialInstagram": site?.socialInstagram ?? "",
+                    "webpage": site?.webpage ?? "",
                     "siteAddress": site.siteAddress,
                     "location": (site.location) ? site.location.lat + "," + site.location.lng : "",
                     "locality": site.locality,
@@ -234,7 +246,21 @@ const AddEditInclusiveSite = ({ site }) => {
                         }
                     ]}
                 >
-                    <Input contactnumber="contactNumber" placeholder="Ingrese el número de contacto del sitio" />
+                    <Input addonBefore="+57" contactnumber="contactNumber" placeholder="Ingrese el número de contacto del sitio" />
+                </Form.Item>
+                <Form.Item
+                    name="contactNumber2"
+                    label="Segundo número de contacto"
+                    rules={[
+                        {
+                            required: false,
+                            message: `¡Introduzca un número de contacto válido!`,
+                            pattern: /^\d{10}$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input addonBefore="+57" contactnumber2="contactNumber2" placeholder="Ingrese el segundo número de contacto del sitio" />
                 </Form.Item>
                 <Form.Item
                     name="inclusiveElements"
@@ -306,6 +332,82 @@ const AddEditInclusiveSite = ({ site }) => {
                             </Col>
                         </Row>
                     ))}
+                </Form.Item>
+
+                <Form.Item
+                    name="socialWhatsapp"
+                    label="WhatsApp"
+                    rules={[
+                        {
+                            message: `¡Introduzca un número válido!`,
+                            pattern: /^\d{10}$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input
+                        addonBefore={
+                            (<div style={{ display: 'flex', alignItems: 'center' }}>
+                                <IoLogoWhatsapp style={{ fill: "#21b639", verticalAlign: 'middle' }} />
+                                <div style={{ verticalAlign: 'middle', marginLeft: '5px' }}>+57</div>
+                            </div>)
+                        }
+                        socialWhatsapp="socialWhatsapp"
+                        placeholder="Ingrese la dirección del sitio"
+
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="socialTwitter"
+                    label="Twitter"
+                    rules={[
+                        {
+                            message: `¡Formato de red social no valido!`,
+                            pattern: /^(?:https:\/\/)(?:www\.)?twitter\.com\/([a-zA-Z0-9_]){1,255}[\/]{0,1}$|^$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input addonBefore={(<IoLogoTwitter style={{ fill: "#55ADEE" }} />)} socialTwitter="socialTwitter" placeholder="Ingrese la URL de la red social" />
+                </Form.Item>
+                <Form.Item
+                    name="socialFacebook"
+                    label="Facebook"
+                    rules={[
+                        {
+                            message: `¡Formato de red social no valido!`,
+                            pattern: /^(?:https:\/\/)(?:www\.)?facebook\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$|^$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input addonBefore={(<IoLogoFacebook style={{ fill: "#3b5998" }} />)} socialFacebook="socialFacebook" placeholder="Ingrese la URL de la red social" />
+                </Form.Item>
+                <Form.Item
+                    name="socialInstagram"
+                    label="Instagram"
+                    rules={[
+                        {
+                            message: `¡Formato de red social no valido!`,
+                            pattern: /^(?:https:\/\/)(?:www\.)?instagram\.com\/([a-zA-Z0-9_\.]){1,255}[\/]{0,1}$|^$/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input addonBefore={(<IoLogoInstagram style={{ fill: "#e4405f" }} />)} socialInstagram="socialInstagram" placeholder="Ingrese la URL de la red social" />
+                </Form.Item>
+                <Form.Item
+                    name="webpage"
+                    label="Página web"
+                    rules={[
+                        {
+                            message: `¡Introduzca una URL válida!`,
+                            pattern: /(^(https:\/\/)[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$)|(^$)/,
+                            type: 'string'
+                        }
+                    ]}
+                >
+                    <Input webpage="webpage" placeholder="Ingrese la URL del sitio web" />
                 </Form.Item>
                 <Form.Item
                     name="siteAddress"
