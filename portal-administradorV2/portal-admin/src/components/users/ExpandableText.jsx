@@ -11,7 +11,7 @@ const longText = 'Texto muy largo...';
 // vista del usuario.
 
 const ShortenedText = ({ text, maxLength, setShowFullText }) => {
-  if (text.length <= maxLength) {
+  if (!text?.length || text.length <= maxLength) {
     return text;
   }
   const shortened = text.substr(0, maxLength) + '...';
