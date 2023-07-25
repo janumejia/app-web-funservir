@@ -5,6 +5,7 @@ const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGen
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { ...regex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
+const axios = require('axios');
 
 const addUser = async (req, res) => {
 
@@ -30,7 +31,8 @@ const addUser = async (req, res) => {
         { input: 'socialInstagram', dataType: 'string', regex: regex.socialInstagramRegex },
         { input: 'socialFacebook', dataType: 'string', regex: regex.socialFacebookRegex },
         { input: 'socialTwitter', dataType: 'string', regex: regex.socialTwitterRegex },
-
+        { input: 'profilePicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
+        { input: 'coverPicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -74,17 +76,100 @@ const addUser = async (req, res) => {
     if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
     /* Fin sanitización entradas */
 
+    // Validación de imagen enviada
+    const isBase64 = (str) => {
+        try {
+            return Buffer.from(str, 'base64').toString('base64') === str;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    const isImageValid = (base64Image) => {
+        const maxSize = 5 * 1024 * 1024; // 5 MB
+        if (!isBase64(base64Image)) {
+            return false;
+        }
+        const sizeInBytes = Buffer.byteLength(base64Image, 'base64');
+        return sizeInBytes <= maxSize;
+    }
+
+
+    const validateImages = (images) => {
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            if (!regex.imageRegex.test(image)) {
+                return false;
+            }
+            const base64Image = image.split(",")[1];
+            if (!isImageValid(base64Image)) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
+    // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
+    const cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
+
     try {
         const user = await User.findOne({ email: inputs.email });
         if (user) {
             return res.status(409).json({ message: "Ya existe un usuario con ese correo" });
         }
 
-        const prflPic = (!inputs.profilePicture) ? randomAvatar(inputs.gender) : inputs.profilePicture;
+        // Subir imagen de perfil
+        let prflPic = "";
+        if (!inputs.profilePicture) { 
+            prflPic = randomAvatar(inputs.gender)
+        } else {
+            if (!validateImages([inputs.profilePicture])) return res.status(422).json({ message: `La imagen de perfil no es válida por su formato o tamaño` });
+            prflPic = inputs.profilePicture;
+        }
         const uploadRes = await cloudinary.uploader.upload(prflPic, {
             upload_preset: "profile_pictures",
             public_id: inputs.email
         });
+
+
+        // Subir imagen del banner
+        let uploadedCoverPicture = {}
+        let savedCoverPictureUrl = "";
+        if (inputs.coverPicture === "") {
+            // Nothing
+            const randomNumber = Math.floor(Math.random() * 10); // Genera un numero aleatorio entre el 0 y 9
+            let UrlInfoImage = `https://res.cloudinary.com/pasantiafunservir/image/upload/fl_getinfo/v1685387081/coverPictures/cover-image-${randomNumber}.jpg`;
+
+
+            const response = await axios.get(UrlInfoImage);
+
+            const width = response.data.input.width
+            const height = response.data.input.height
+
+            // Relación 1:4
+            const estimateHeight = Math.floor(response.data.input.width / 4);
+            const heightCover = estimateHeight <= response.data.input.height ? estimateHeight : response.data.input.height;
+
+            savedCoverPictureUrl = UrlInfoImage.replace("/upload/fl_getinfo/", `/upload/c_fill,g_auto,h_${heightCover},w_${response.data.input.width}/`);
+
+        } else if (cloudinaryUrlRegex.test(inputs.coverPicture)) {
+            // Hacer nada aquí
+        } else { // Si no es ninguna de las anteriores, entonces es de tipo base64
+            if (!validateImages([inputs.coverPicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
+
+            uploadedCoverPicture = await cloudinary.uploader.upload(inputs.coverPicture, {
+                upload_preset: "profile_pictures",
+                public_id: inputs.email + "_coverImg"
+            });
+
+            // Relación 1:4
+            const estimateHeight = Math.floor(uploadedCoverPicture.width / 4);
+            const heightCover = estimateHeight <= uploadedCoverPicture.height ? estimateHeight : uploadedCoverPicture.height;
+
+            savedCoverPictureUrl = uploadedCoverPicture.secure_url.replace("/upload/", `/upload/c_fill,g_auto,h_${heightCover},w_${uploadedCoverPicture.width}/`);
+        }
 
         const hash = await bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT));
         const newUser = new User({
@@ -102,6 +187,7 @@ const addUser = async (req, res) => {
             userType: inputs.userType,
             associatedSites: [],
             profilePicture: uploadRes.secure_url,
+            coverPicture: savedCoverPictureUrl,
             socialFacebook: inputs.socialFacebook,
             socialInstagram: inputs.socialInstagram,
             socialTwitter: inputs.socialTwitter,

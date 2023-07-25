@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const { ...regex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
+const axios = require('axios');
 
 const editUser = async (req, res) => {
 
@@ -27,12 +28,14 @@ const editUser = async (req, res) => {
         { input: 'institution', dataType: 'string', regex: regex.institutionRegex },
         { input: 'userType', dataType: 'string', regex: regex.userTypeRegex },
         // { input: 'profilePicture', dataType: 'string', regex: regex.profilePictureRegex },
-        { input: 'imageUrl', dataType: 'string', regex: new RegExp(`(${regex.profilePictureRegex.source}|${regex.imageUrlRegex.source})`) },
+        { input: 'imageUrl', dataType: 'string', regex: new RegExp(`(${regex.profilePictureRegex.source}|^$)`) },
+        { input: 'coverImageUrl', dataType: 'string', regex: new RegExp(`(${regex.profilePictureRegex.source}|^$)`) },
         { input: 'describeYourself', dataType: 'string', regex: regex.describeYourselfRegex },
         { input: 'socialInstagram', dataType: 'string', regex: regex.socialInstagramRegex },
         { input: 'socialFacebook', dataType: 'string', regex: regex.socialFacebookRegex },
         { input: 'socialTwitter', dataType: 'string', regex: regex.socialTwitterRegex },
-
+        // { input: 'profilePicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
+        { input: 'coverPicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -76,14 +79,79 @@ const editUser = async (req, res) => {
     if (!isValidPassword) return res.status(422).json({ message: `El valor de la contraseña es inválida` });
     /* Fin sanitización entradas */
 
+
+    // Validación de imagen enviada
+    const isBase64 = (str) => {
+        try {
+            return Buffer.from(str, 'base64').toString('base64') === str;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    const isImageValid = (base64Image) => {
+        const maxSize = 5 * 1024 * 1024; // 5 MB
+        if (!isBase64(base64Image)) {
+            return false;
+        }
+        const sizeInBytes = Buffer.byteLength(base64Image, 'base64');
+        return sizeInBytes <= maxSize;
+    }
+
+
+    const validateImages = (images) => {
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            if (!regex.imageRegex.test(image)) {
+                return false;
+            }
+            const base64Image = image.split(",")[1];
+            if (!isImageValid(base64Image)) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
+    // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
+    const cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
+
+
     const query = { _id: inputs._id };
     let doc = await User.findOne(query).populate('associatedSites', { name: 1, _id: 0 });
     try {
-        const prflPic = (!inputs.imageUrl) ? randomAvatar(inputs.gender) : inputs.imageUrl;
-        const uploadRes = await cloudinary.uploader.upload(prflPic, {
-            upload_preset: "profile_pictures",
-            public_id: inputs.email
-        })
+        // Subir imagen de perfil
+        let uploadRes = "";
+        if (inputs.imageUrl !== "") {
+            if (!validateImages([inputs.imageUrl])) return res.status(422).json({ message: `La imagen de perfil no es válida por su formato o tamaño` });
+            let prflPic = inputs.imageUrl;
+
+            uploadRes = await cloudinary.uploader.upload(prflPic, {
+                upload_preset: "profile_pictures",
+                public_id: inputs.email
+            })
+        }
+
+        // Subir imagen del banner
+        let uploadedCoverPicture = {}
+        let savedCoverPictureUrl = "";
+        if (inputs.coverImageUrl !== "") { // Si no es ninguna de las anteriores, entonces es de tipo base64
+            if (!validateImages([inputs.coverImageUrl])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });
+
+            uploadedCoverPicture = await cloudinary.uploader.upload(inputs.coverImageUrl, {
+                upload_preset: "profile_pictures",
+                public_id: inputs.email + "_coverImg"
+            });
+
+            // Relación 1:4
+            const estimateHeight = Math.floor(uploadedCoverPicture.width / 4);
+            const heightCover = estimateHeight <= uploadedCoverPicture.height ? estimateHeight : uploadedCoverPicture.height;
+
+            savedCoverPictureUrl = uploadedCoverPicture.secure_url.replace("/upload/", `/upload/c_fill,g_auto,h_${heightCover},w_${uploadedCoverPicture.width}/`);
+        }
+
         if (doc.password !== inputs.password) {
             bcrypt.hash(inputs.password, parseInt(process.env.SALT_BCRYPT), async (error, hashPassword) => { // Genera el hash de la contraseña ingresada
                 if (error) res.status(500).json({ message: "error" })
@@ -100,7 +168,8 @@ const editUser = async (req, res) => {
                     doc.isCaregiver = inputs.isCaregiver;
                     doc.institution = inputs.institution;
                     doc.userType = inputs.userType;
-                    doc.profilePicture = uploadRes.secure_url;
+                    if (inputs.imageUrl !== "") doc.profilePicture = uploadRes.secure_url;
+                    if (inputs.coverImageUrl !== "") doc.coverPicture = savedCoverPictureUrl;
                     doc.socialFacebook = inputs.socialFacebook;
                     doc.socialInstagram = inputs.socialInstagram;
                     doc.socialTwitter = inputs.socialTwitter;
@@ -119,7 +188,8 @@ const editUser = async (req, res) => {
             doc.isCaregiver = inputs.isCaregiver;
             doc.institution = inputs.institution;
             doc.userType = inputs.userType;
-            doc.profilePicture = uploadRes.secure_url;
+            if (inputs.imageUrl !== "") doc.profilePicture = uploadRes.secure_url;
+            if (inputs.coverImageUrl !== "") doc.coverPicture = savedCoverPictureUrl;
             doc.socialFacebook = inputs.socialFacebook;
             doc.socialInstagram = inputs.socialInstagram;
             doc.socialTwitter = inputs.socialTwitter;

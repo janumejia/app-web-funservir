@@ -2,7 +2,7 @@ import { Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 
-const UploadComponent = (({ loading, handleChange, imageUrl }) => {
+const UploadComponent = (({ loading, handleChange, imageUrl, whichImg }) => {
     const uploadButton = (
         <div>
             {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -37,7 +37,7 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
                     return false;
                 }
             }}
-            onChange={handleChange}
+            onChange={(info) => handleChange(info, whichImg)}
         >
             {imageUrl ? (
                 <img
@@ -46,7 +46,7 @@ const UploadComponent = (({ loading, handleChange, imageUrl }) => {
                     style={{
                         height: '100%',
                         width: '100%',
-                        borderRadius: '50%',
+                        borderRadius: (whichImg === "Perfil" ) && '50%',
                         objectFit: 'contain'
                     }}
                 />
