@@ -14,6 +14,7 @@ const Map = (props) => {
     console.log(`Current clicked markers length: ${markerClusterer.length}`);
     console.log(markerClusterer);
   };
+  
   return (
     <>
       {multiple ? (

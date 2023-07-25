@@ -72,7 +72,7 @@ const GridCard = ({
         </MetaWrapper>
       </ContentWrapper>
 
-    </GridCardWrapper >
+    </GridCardWrapper>
   );
 };
 
