@@ -86,7 +86,7 @@ const changePictures = async (req, res) => {
 
         // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
         // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
-        cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
+        const cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
 
         // if (inputs.profilePicture && base64Regex.test(inputs.profilePicture)  && !validateImages([inputs.profilePicture])) return res.status(422).json({ message: `La imagen de perfil no es válida por su formato o tamaño` });
         // if (inputs.coverPicture && base64Regex.test(inputs.coverPicture) && !validateImages([inputs.coverPicture])) return res.status(422).json({ message: `La imagen de portada no es válida por su formato o tamaño` });

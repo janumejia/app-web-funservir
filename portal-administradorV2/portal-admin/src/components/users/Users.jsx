@@ -84,6 +84,7 @@ const ManageUsers = () => {
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
+    const [coverImageUrl, setCoverImageUrl] = useState();
 
 
     const getBase64 = (file) =>
@@ -98,9 +99,23 @@ const ManageUsers = () => {
             reader.onerror = (error) => reject(error);
         });
 
-    const handleChange = async (info) => {
+    const coverGetBase64 = (file) =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                setCoverImageUrl(reader.result);
+                setLoading(false);
+                resolve(reader.result);
+            }
+            reader.onerror = (error) => reject(error);
+        });
+
+    const handleChange = async ( info, whichImg ) => {
+        console.log("hadleChange info: ", info, " whichImg: ", whichImg)
         if (info.file.type === 'image/jpeg' || info.file.type === 'image/png' || info.file.type === 'image/jpg') {
-            await getBase64(info.file);
+            if(whichImg === "Perfil") await getBase64(info.file);
+            else if (whichImg === "Banner") await coverGetBase64(info.file);
         }
     };
 
@@ -170,7 +185,15 @@ const ManageUsers = () => {
                                 style={{
                                     margin: 0,
                                 }}>
-                                <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} />
+                                <UploadComponent loading={loading} handleChange={handleChange} imageUrl={imageUrl} whichImg={"Perfil"} />
+                            </Form.Item>
+                        ) : ((title === 'Foto de banner') ? (
+                            <Form.Item
+                                name={dataIndex}
+                                style={{
+                                    margin: 0,
+                                }}>
+                                <UploadComponent loading={loading} handleChange={handleChange} imageUrl={coverImageUrl} whichImg={"Banner"}/>
                             </Form.Item>
                         ) : (
                             <Form.Item
@@ -205,9 +228,9 @@ const ManageUsers = () => {
                                             } else if (title === 'Twitter') {
                                                 const aux = (value === '') ? true : (rules("socialTwitter").test(value) ? Promise.resolve() : Promise.reject());
                                                 return aux;
-                                            // } else if (dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter') {
-                                            //     const aux = (value === '') ? true : (validator.isURL(value, { protocols: ['https'] }) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject());
-                                            //     return aux;
+                                                // } else if (dataIndex === 'socialFacebook' || dataIndex === 'socialInstagram' || dataIndex === 'socialTwitter') {
+                                                //     const aux = (value === '') ? true : (validator.isURL(value, { protocols: ['https'] }) && (value.startsWith('https://')) ? Promise.resolve() : Promise.reject());
+                                                //     return aux;
                                             }
                                             return true;
                                         }
@@ -216,14 +239,14 @@ const ManageUsers = () => {
                             >
                                 {inputNode}
                             </Form.Item>
-                        )))}
+                        ))))}
 
                     </>
                 ) : (
                     (inputType === 'object') ? <img src={record.profilePicture} alt={`${record.name}`} style={{ width: 'auto', height: '70px', borderRadius: '50%' }} /> : children
                 )
                 }
-            </td >
+            </td>
         );
     };
 
@@ -258,19 +281,21 @@ const ManageUsers = () => {
             ...record
         });
         setEditingKey(record._id);
-        setImageUrl(record.profilePicture)
+        setImageUrl(record.profilePicture);
+        setCoverImageUrl(record.coverPicture);
     };
 
     const cancel = () => {
         setEditingKey('');
         setImageUrl('');
+        setCoverImageUrl('');
     };
 
     const saveEdit = async (key) => {
         try {
 
             const row = await form.validateFields();
-            
+
             if (!row.describeYourself) row.describeYourself = "";
 
             if (!row.socialInstagram) row.socialInstagram = "";
@@ -298,6 +323,7 @@ const ManageUsers = () => {
                     userType: row["userType"],
                     associatedSites: [],
                     profilePicture: imageUrl,
+                    coverPicture: coverImageUrl,
                     socialInstagram: row.socialInstagram,
                     socialFacebook: row.socialFacebook,
                     socialTwitter: row.socialTwitter,
@@ -317,6 +343,7 @@ const ManageUsers = () => {
                             setData(newData);
                             setEditingKey('');
                             setImageUrl("");
+                            setCoverImageUrl("");
                             message.success(res.data.message);
                         } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
@@ -327,7 +354,17 @@ const ManageUsers = () => {
                     });
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
-                axios.post('/editUser', { ...item, ...row, imageUrl }, { headers: { 'token': localStorage.getItem("token") } })
+                let imageUrlToBeSend = imageUrl;
+                if(!RegExp(/^data:image.*/).test(imageUrl)) {
+                    imageUrlToBeSend = "";
+                }
+
+                let coverImageUrlToBeSend = coverImageUrl;
+                if (!RegExp(/^data:image.*/).test(coverImageUrl)) {
+                    coverImageUrlToBeSend = "";
+                }
+
+                axios.post('/editUser', { ...item, ...row, imageUrl: imageUrlToBeSend, coverImageUrl: coverImageUrlToBeSend }, { headers: { 'token': localStorage.getItem("token") } })
                     .then((res) => { // Aquí se manejan los códigos de respuesta buenas (200 - 399)
 
                         if (res.status === 200) {
@@ -341,6 +378,7 @@ const ManageUsers = () => {
                             setData(newData);
                             setEditingKey('');
                             setImageUrl("");
+                            setCoverImageUrl("");
                             message.success(res.data.message);
                         } else message.warning(res.status + " - Respuesta del servidor desconocida");
                     })
@@ -354,7 +392,7 @@ const ManageUsers = () => {
             }
         } catch (errInfo) {
             message.warning('¡Debes completar todos los campos en un formato válido!');
-            // console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
+            console.log('Validate Failed:', errInfo); //Modificar esto, no puede ser por consola.
         }
     };
 
@@ -391,6 +429,19 @@ const ManageUsers = () => {
             width: "4%",
             align: "left",
             editable: true,
+        },
+        {
+            title: 'Foto de banner',
+            dataIndex: "coverPicture",
+            key: "coverPicture",
+            width: "4%",
+            align: "left",
+            editable: true,
+            render: (element) => {
+                if(element) return <img src={element} alt={``} style={{ width: '110px', height: 'auto' }} />
+                else return <></>
+                
+            }
         },
         {
             title: 'Nombre*',
@@ -613,6 +664,7 @@ const ManageUsers = () => {
                 userType: "",
                 associatedSites: [],
                 profilePicture: "",
+                coverPicture: "",
                 socialFacebook: "",
                 socialInstagram: "",
                 socialTwitter: ""
