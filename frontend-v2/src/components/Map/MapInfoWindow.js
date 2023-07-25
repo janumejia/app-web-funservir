@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { InfoWindow } from '@react-google-maps/api';
 import Rating from 'components/UI/Rating/Rating';
 import GridCard from '../GridCard/GridCard';
 
 const MapInfoWindow = ({ data, onCloseClick }) => {
-  const position = { lat: data?.lat, lng: data?.lng };
 
   return (
     <InfoWindow
-      position={position}
+      position={{ lat: parseFloat(data.location.lat), lng: parseFloat(data.location.lng) }}
       options={{ pixelOffset: new window.google.maps.Size(0, -85) }}
       id={data?.id}
       onCloseClick={onCloseClick}
     >
       <GridCard
         className="info_window_card"
-        location={data?.formattedAddress}
-        title={data?.title}
-        price={`$${data?.price}/Night - Free Cancellation`}
+        location={data?.siteAddress}
+        title={data?.name}
+        // price={`$${data?.price}/Night - Free Cancellation`}
         rating={
           <Rating
             rating={data?.rating}
@@ -26,7 +25,7 @@ const MapInfoWindow = ({ data, onCloseClick }) => {
           />
         }
       >
-        <img src={data?.thumbUrl} alt={data?.title} />
+        <img src={data?.thumbUrl} alt={data?.name} />
       </GridCard>
     </InfoWindow>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Marker } from '@react-google-maps/api';
 import HotelInfoWindow from './MapInfoWindow';
 import MakerImage from './hotelMapMarker.png';
@@ -10,40 +10,47 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
   console.log(clusterer)
   const [isOpen, setIsOpen] = useState(false);
   const [markerIndex, setMarkerIndex] = useState(0);
-  let hotelData = [];
+  const [siteData, setSiteData] = useState([]);
 
   const infoWindowToggle = (index) => {
     setIsOpen(!isOpen);
     setMarkerIndex(index);
   };
 
-  location &&
-    location.forEach((item) => {
-      console.log("item:")
-      console.log(item)
-      hotelData.push({
-        id: item.id,
-        lat: parseFloat(item.location.lat),
-        lng: parseFloat(item.location.lng),
-        title: item.title,
-        thumbUrl: item.gallery[0],
-        formattedAddress: item.location.formattedAddress,
-        price: item.price,
-        rating: item.rating,
-        ratingCount: item.ratingCount,
+  useEffect(() => {
+
+    const updateSiteData = async () => {
+      let auxSiteData = [];
+
+      await location.forEach((item) => {
+        auxSiteData.push({
+          id: item._id,
+          name: item.name,
+          location: item.location,
+          siteAddress: item.siteAddress          ,
+          thumbUrl: item.gallery[0].secure_url,
+          // title: item.title,
+          // price: item.price,
+          rating: 5.0,
+          ratingCount: 15,
+        });
       });
-      console.log("hotelData:")
-      console.log(hotelData)
 
-    });
+      setSiteData(auxSiteData);
+    }
 
-  return hotelData.map((singlePostLocation, index) => {
+    if (location) updateSiteData();
+
+  }, [location])
+
+
+  return siteData.map((singlePostLocation, index) => {
     return (
       <Marker
         key={index}
         icon={MakerImage}
         clusterer={clusterer}
-        position={singlePostLocation}
+        position={{ lat: parseFloat(singlePostLocation.location.lat), lng: parseFloat(singlePostLocation.location.lng) }}
         onClick={() => infoWindowToggle(singlePostLocation.id)}
       >
         {isOpen && markerIndex === singlePostLocation.id ? (
