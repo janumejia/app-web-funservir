@@ -21,7 +21,7 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
 
     const updateSiteData = async () => {
       let auxSiteData = [];
-
+      
       await location.forEach((item) => {
         auxSiteData.push({
           id: item._id,
