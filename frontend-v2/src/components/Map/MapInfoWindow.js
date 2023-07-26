@@ -8,7 +8,7 @@ const MapInfoWindow = ({ data, onCloseClick }) => {
   return (
     <InfoWindow
       position={{ lat: parseFloat(data.location.lat), lng: parseFloat(data.location.lng) }}
-      options={{ pixelOffset: new window.google.maps.Size(0, -85) }}
+      options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
       id={data?.id}
       onCloseClick={onCloseClick}
     >
