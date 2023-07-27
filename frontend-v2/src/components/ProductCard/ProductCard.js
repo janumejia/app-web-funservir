@@ -200,7 +200,7 @@ const PostGrid = ({
       >
         {(gallery) ? gallery.map(({ secure_url, title }, index) => (
           <img
-            src={secure_url}
+            src={secure_url.replace('/image/upload/', '/image/upload/w_500,f_auto,q_auto/')} // Para optimizar las imágenes: https://cloudinary.com/blog/adaptive_browser_based_image_format_delivery
             alt={title}
             key={index}
             draggable={false}

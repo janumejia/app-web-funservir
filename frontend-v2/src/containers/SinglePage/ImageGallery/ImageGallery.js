@@ -11,7 +11,7 @@ const PostImageGallery = ({ gallery }) => {
     const asyncFunction = async () => {
       let auxImages = [];
       auxImages = await gallery.map((img) => {
-        return { "original": img.secure_url, "thumbnail": img.secure_url }
+        return { "original": img.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/'), "thumbnail": img.secure_url.replace('/image/upload/', '/image/upload/w_200,f_auto,q_auto/') }
       })
       setImages(auxImages)
     }

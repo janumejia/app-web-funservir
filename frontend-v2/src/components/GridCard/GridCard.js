@@ -42,7 +42,7 @@ const GridCard = ({
 
                   <Tooltip key={item.name} title={item.name}>
                     <img
-                      src={item.image.secure_url}
+                      src={item.image.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')}
                       alt={item.name}
                       style={{
                         marginRight: '5px',
