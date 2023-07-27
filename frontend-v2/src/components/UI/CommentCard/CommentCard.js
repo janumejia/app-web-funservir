@@ -1,12 +1,28 @@
 import React from 'react';
 import { Popover } from 'antd';
 import moment from 'moment';
+import 'moment/locale/es';
+import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 //import LikeDislike from './LikeDislike';
 //import Rating from '../Rating/Rating';
+moment.locale('es');
 
 export default class App extends React.Component {
   render() {
-    const { singleReview, authorRating } = this.props;
+  const { singleReview, authorRating } = this.props;
+  let i;
+  let ratingView = [];
+  if (singleReview.stars && singleReview.stars !== 0) {
+    for (i = 0; i < 5; i++) {
+      if (i < singleReview.stars) {
+        ratingView.push(<IoIosStar key={i} />);
+      } else {
+          ratingView.push(<IoIosStarOutline key={i} />)
+      }
+    }
+  }
+
+    
     const reviewAuthorFirstName = singleReview
       ? singleReview.userId.name
       : '';
@@ -17,6 +33,7 @@ export default class App extends React.Component {
     const content = singleReview ? singleReview.content : '';
     const reviewTitle = singleReview ? singleReview.title : '';
     const commentDate = singleReview ? singleReview.createdAt : '';
+    const postTime = new Date(commentDate).getTime();
     const authorAvatar = singleReview ? singleReview.userId.profilePicture : '';
     //const reviewRating = singleReview ? singleReview.reviewFields : '';
 
@@ -30,8 +47,8 @@ export default class App extends React.Component {
               </div>
               <div className="author-info">
                 <h3 className="author-name">{authorName}</h3>
-                {authorRating && (
-                  <div className="author-rating">{authorRating}</div>
+                {ratingView && (
+                  <div className="author-rating">{ratingView}</div>
                 )}
                 <div className="comment-date">
                   <Popover
@@ -40,7 +57,7 @@ export default class App extends React.Component {
                       'dddd, MMMM Do YYYY, h:mm:ss a'
                     )}
                   >
-                    <span>Publicado hace un día</span>
+                    <span>{`Publicado ${moment(postTime).fromNow()}`}</span>
                   </Popover>
                 </div>
               </div>

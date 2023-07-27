@@ -18,7 +18,6 @@ const SingleMapDisplay = ({ location }) => {
     const updateSiteData = async () => {
       let auxSiteData = [];
 
-      console.log("location -> ", typeof location)
 
       auxSiteData.push({
         id: location._id,

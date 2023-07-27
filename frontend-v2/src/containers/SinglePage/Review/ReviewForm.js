@@ -1,33 +1,35 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { /*Row, Col,*/ Input, Rate, Checkbox, Button } from 'antd';
+import { /*Row, Col,*/ Input, Rate, Checkbox, Button, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
+import axios from "../../../settings/axiosConfig";
 // import RadioGroup from 'components/UI/RadioGroup/RadioGroup';
 // import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import { Form, /*Label, GroupTitle, Description*/ } from './Review.style';
 
-const reviewPhotos = [
-  {
-    uid: '1',
-    name: 'hotel-1.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '2',
-    name: 'hotel-2.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-  {
-    uid: '3',
-    name: 'hotel-3.png',
-    status: 'done',
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },
-];
+// const reviewPhotos = [
+//   {
+//     uid: '1',
+//     name: 'hotel-1.png',
+//     status: 'done',
+//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+//   },
+//   {
+//     uid: '2',
+//     name: 'hotel-2.png',
+//     status: 'done',
+//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+//   },
+//   {
+//     uid: '3',
+//     name: 'hotel-3.png',
+//     status: 'done',
+//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+//   },
+// ];
 
-export default function ReviewForm() {
+export default function ReviewForm(props) {
+  const {siteId, userId, close} = props;
   const {
     control,
     formState: { errors },
@@ -35,23 +37,50 @@ export default function ReviewForm() {
     handleSubmit,
   } = useForm({
     mode: 'onChange',
-    defaultValues: {
-      reviewPhotos,
-    },
+    // defaultValues: {
+    //   reviewPhotos,
+    // },
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  
+  const onSubmit = async (data) => {
+    
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addComment`,  {...data, siteId, userId});
+      if (res) {
+        if (res.status === 200) {
+          close();
+          message.success(res.data.message, 6);
+        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+      }
+    } catch (error) {
+      if (typeof error.response.status === 'undefined') {
+
+        message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
+      } else {
+        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+
+          message.warning({ content: error.response.data.message, duration: 5 });
+        }
+        else if (error.response.status >= 500 && error.response.status <= 599) {
+
+          message.error({ content: error.response.data.message, duration: 5 });
+        } // Errores del servidor
+        else {
+          message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
+        }
+      }
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
         label="Calificación general"
-        htmlFor="ratings"
+        htmlFor="stars"
         error={errors.ratings && <span>¡Este campo es requerido!</span>}
       >
         <Controller
-          name="ratings"
+          name="stars"
           defaultValue=""
           control={control}
           rules={{ required: true }}
@@ -62,11 +91,11 @@ export default function ReviewForm() {
       </FormControl>
       <FormControl
         label="Titulo de la opinión"
-        htmlFor="reviewTitle"
+        htmlFor="title"
         error={errors.reviewTitle && <span>¡Este campo es requerido!</span>}
       >
         <Controller
-          name="reviewTitle"
+          name="title"
           defaultValue=""
           control={control}
           rules={{ required: true }}
@@ -82,11 +111,11 @@ export default function ReviewForm() {
       </FormControl>
       <FormControl
         label="Detalles de tu opinión"
-        htmlFor="reviewDetails"
+        htmlFor="content"
         error={errors.reviewDetails && <span>¡Este campo es requerido!</span>}
       >
         <Controller
-          name="reviewDetails"
+          name="content"
           defaultValue=""
           control={control}
           rules={{ required: true }}

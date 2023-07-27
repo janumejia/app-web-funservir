@@ -6,14 +6,19 @@ const Rating = (props) => {
   const { rating, ratingCount, type, ratingFieldName } = props;
   let i, floorValue;
   let ratingView = [];
+  let halfStar = false;
   if (rating && rating !== 0) {
     floorValue = Math.floor(rating);
     for (i = 0; i < 5; i++) {
       if (i < floorValue) {
         ratingView.push(<IoIosStar key={i} />);
       } else {
-        if (Math.round(rating) === floorValue) ratingView.push(<IoIosStarOutline key={i} />);
-        else ratingView.push(<IoIosStarHalf key={i} />)
+        if(!halfStar && floorValue!==rating){
+          ratingView.push(<IoIosStarHalf key={i} />)
+          halfStar = true;
+        }else{
+          ratingView.push(<IoIosStarOutline key={i} />)
+        }
       }
     }
   }
@@ -45,7 +50,7 @@ const Rating = (props) => {
         <>
           <span>{ratingView}</span>
           <strong>
-            {`${rating}`}
+            {` ${listingCondition}`}
           </strong>
           <strong>
             {`${showRatingCount}`}
