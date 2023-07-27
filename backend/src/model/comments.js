@@ -1,14 +1,18 @@
-const mongoose = require('mongoose');
+const {model, Schema} = require("mongoose") 
 
-const commentSchema = new mongoose.Schema({
+const commentSchema = new Schema({
   siteId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Site', // Reference to the Site model, assuming you have a separate model for sites
+    type: Schema.Types.ObjectId,
+    ref: 'Site',
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User model, assuming you have a separate model for users
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  title: {
+    type: String,
     required: true,
   },
   stars:{
@@ -18,11 +22,7 @@ const commentSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+},{ timestamps: true });
 
 module.exports = model('Comment', commentSchema);

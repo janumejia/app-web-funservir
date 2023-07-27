@@ -1,25 +1,24 @@
 import React from 'react';
 import { Popover } from 'antd';
 import moment from 'moment';
-import LikeDislike from './LikeDislike';
-import Rating from '../Rating/Rating';
+//import LikeDislike from './LikeDislike';
+//import Rating from '../Rating/Rating';
 
 export default class App extends React.Component {
   render() {
     const { singleReview, authorRating } = this.props;
     const reviewAuthorFirstName = singleReview
-      ? singleReview.reviewAuthorFirstName
+      ? singleReview.userId.name
       : '';
     const reviewAuthorLastName = singleReview
-      ? singleReview.reviewAuthorLastName
+      ? singleReview.userId.lastName
       : '';
     const authorName = reviewAuthorFirstName + ' ' + reviewAuthorLastName;
-    const content = singleReview ? singleReview.reviewText : '';
-    const reviewTitle = singleReview ? singleReview.reviewTitle : '';
-    const commentDate = singleReview ? singleReview.reviewDate : '';
-    const postTime = new Date(commentDate).getTime();
-    const authorAvatar = singleReview ? singleReview.reviewAuthorPic.url : '';
-    const reviewRating = singleReview ? singleReview.reviewFields : '';
+    const content = singleReview ? singleReview.content : '';
+    const reviewTitle = singleReview ? singleReview.title : '';
+    const commentDate = singleReview ? singleReview.createdAt : '';
+    const authorAvatar = singleReview ? singleReview.userId.profilePicture : '';
+    //const reviewRating = singleReview ? singleReview.reviewFields : '';
 
     return (
       <div className="comment-area">
