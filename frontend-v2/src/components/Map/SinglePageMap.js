@@ -25,7 +25,7 @@ const SingleMapDisplay = ({ location }) => {
         name: location.name,
         location: location.location,
         siteAddress: location.siteAddress,
-        thumbUrl: location.gallery[0].secure_url,
+        thumbUrl: location.gallery[0].secure_url.replace('/image/upload/', '/image/upload/w_500,f_auto,q_auto/'),
         // title: location.title,
         // price: location.price,
         rating: 5.0,
