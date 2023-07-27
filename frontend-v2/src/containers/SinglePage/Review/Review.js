@@ -38,13 +38,15 @@ const CommentBox = (props) => {
 const Review = (props) => {
   const {
     //ratingCount,
+    _id,
+    owner,
     comments,
     statusHeadingStyle,
     filterHeadingStyle,
     ratingLabelStyle,
     ratingCountStyle,
   } = props;
-  console.log(comments);
+
   const { loggedIn } = useContext(AuthContext);
 
   const [state, setState] = useState({
@@ -104,7 +106,7 @@ const Review = (props) => {
               wrapClassName="review_modal"
             >
               <ModalTitle>Escribe tu opinión aquí</ModalTitle>
-              <ReviewForm />
+              <ReviewForm siteId={_id} userId={owner._id} close={()=>handleModalClose('review')}/>
             </Modal>
           </RatingSearch>
         </HeaderSection>

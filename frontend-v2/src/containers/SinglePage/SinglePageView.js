@@ -38,6 +38,7 @@ const SinglePage = () => {
   
   if (isEmpty(data) || loading) return <Loader />;
   const {
+    _id,
     name,
     description,
     category,
@@ -223,6 +224,7 @@ const SinglePage = () => {
         <Row gutter={30}>
           <Col xl={16}>
             <Review
+              _id={_id}
               comments={comments}
               ratingCount={ratingCount}
               rating={rating}

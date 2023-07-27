@@ -13,6 +13,7 @@ const siteSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     // condition: { type: String },
     rating: { type: Schema.Types.Mixed },
     ratingCount: { type: Number },
+    ratingTotal: { type: Number },
     contactNumber: { type: String },
     contactNumber2: { type: String },
     inclusiveElements: [{ type: Schema.Types.ObjectId, ref: 'InclusiveElements' }],
