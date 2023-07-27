@@ -42,7 +42,7 @@ const Amenities = ({ titleStyle, titleStyle2, linkStyle, contentStyle, inclusive
         <Heading as="h2" content={"Elementos inclusivos: " + (inclusiveElements ? inclusiveElements.length : "0")} {...titleStyle} />
         <AmenitiesArea>
           {inclusiveElements.slice(0, seeMore === false ? firstElements : inclusiveElements.length).map((element) => {
-            return <IconCard icon={element.image.secure_url} title={element.name} />
+            return <IconCard icon={element.image.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')} title={element.name} />
           })}
         </AmenitiesArea>
         {firstElements < inclusiveElements.length &&
