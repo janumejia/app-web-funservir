@@ -1,10 +1,10 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, Rate, Checkbox, Button } from 'antd';
+import { /*Row, Col,*/ Input, Rate, Checkbox, Button } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import RadioGroup from 'components/UI/RadioGroup/RadioGroup';
-import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
-import { Form, Label, GroupTitle, Description } from './Review.style';
+// import RadioGroup from 'components/UI/RadioGroup/RadioGroup';
+// import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
+import { Form, /*Label, GroupTitle, Description*/ } from './Review.style';
 
 const reviewPhotos = [
   {

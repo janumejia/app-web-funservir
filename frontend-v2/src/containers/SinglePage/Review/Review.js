@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { IoIosStar, IoIosStarOutline, IoIosArrowDown } from 'react-icons/io';
-import { Row, Col, Button, Input, Checkbox, Divider, Modal } from 'antd';
+import { IoIosStar, IoIosStarOutline/*, IoIosArrowDown*/ } from 'react-icons/io';
+import { Row, Col, Button, /*Input, Checkbox,*/ Divider, Modal } from 'antd';
 import CommentCard from 'components/UI/CommentCard/CommentCard';
 import Heading from 'components/UI/Heading/Heading';
 import Text from 'components/UI/Text/Text';
@@ -12,18 +12,19 @@ import ReviewWrapper, {
   FilterElement,
   RatingSearch,
   RatingWrapper,
-  TextButton,
+  //TextButton,
   ModalTitle,
 } from './Review.style';
 import { Element } from 'react-scroll';
 import { AuthContext } from 'context/AuthProvider';
-import { Popover } from 'antd';
+import { Popover, Typography } from 'antd';
+const { Title } = Typography;
 
-const Search = Input.Search;
+//const Search = Input.Search;
 const CommentBox = (props) => {
-  const { reviews } = props;
-  return reviews && reviews.length !== 0
-    ? reviews.map((singleReview, i) => {
+  const { comments } = props;
+  return comments && comments.length !== 0
+    ? comments.map((singleReview, i) => {
       return (
         <Fragment key={i}>
           <Divider />
@@ -31,19 +32,19 @@ const CommentBox = (props) => {
         </Fragment>
       );
     })
-    : 'No Review Found';
+    : <Title style={{marginTop:'2rem'}} level={4}>Nadie ha comentado aún... ¡Sé el primero en comentar!</Title>
 };
 
 const Review = (props) => {
   const {
-    ratingCount,
-    reviews,
+    //ratingCount,
+    comments,
     statusHeadingStyle,
     filterHeadingStyle,
     ratingLabelStyle,
     ratingCountStyle,
   } = props;
-
+  console.log(comments);
   const { loggedIn } = useContext(AuthContext);
 
   const [state, setState] = useState({
@@ -66,7 +67,7 @@ const Review = (props) => {
         <HeaderSection>
           <RatingStatus>
             <Heading
-              content={`35 Opiniones`}
+              content={`${comments.length} Opiniones`}
               {...statusHeadingStyle}
             />
             <IoIosStar />
@@ -111,7 +112,6 @@ const Review = (props) => {
           <Col sm={12} lg={9}>
             <Heading content="Calificaciones de los usuarios" {...filterHeadingStyle} />
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Excelente" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -121,12 +121,10 @@ const Review = (props) => {
                   <IoIosStar />
                   <Text content="172" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Muy bien" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -136,12 +134,10 @@ const Review = (props) => {
                   <IoIosStarOutline />
                   <Text content="92" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Regular" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -151,12 +147,10 @@ const Review = (props) => {
                   <IoIosStarOutline />
                   <Text content="34" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-              <Checkbox onChange={onChange}>
                 <Text content="Malo" as="span" {...ratingLabelStyle} />
                 <RatingWrapper>
                   <IoIosStar />
@@ -166,12 +160,11 @@ const Review = (props) => {
                   <IoIosStarOutline />
                   <Text content="11" as="span" {...ratingCountStyle} />
                 </RatingWrapper>
-              </Checkbox>
             </FilterElement>
             {/* End of Filter Element */}
           </Col>
         </Row>
-        <CommentBox reviews={reviews} />
+        <CommentBox comments={comments} />
       </ReviewWrapper>
     </Element>
   );

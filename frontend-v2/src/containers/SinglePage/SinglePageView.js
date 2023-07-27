@@ -35,15 +35,15 @@ const SinglePage = () => {
     url += slug;
   }
   const { data, loading } = useDataApi(url);
+  
   if (isEmpty(data) || loading) return <Loader />;
   const {
     name,
     description,
     category,
-    reviews,
     rating,
     ratingCount,
-    price,
+    comments,
     gallery,
     siteAddress,
     locality,
@@ -223,7 +223,7 @@ const SinglePage = () => {
         <Row gutter={30}>
           <Col xl={16}>
             <Review
-              reviews={reviews}
+              comments={comments}
               ratingCount={ratingCount}
               rating={rating}
               owner={owner}

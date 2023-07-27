@@ -146,7 +146,7 @@ const addInclusiveSites = async (req, res) => {
 
         } catch (error) {
             if (error.code === 11000) return res.status(409).json({ message: "Ya existe este sitio inclusivo" }); // Este código de error se produce cuando hay un índice único duplicado
-            console.error(error);
+            
             return res.status(500).json({ message: "Error en creación del sitios inclusivo" });
         }
     } catch (error) {
