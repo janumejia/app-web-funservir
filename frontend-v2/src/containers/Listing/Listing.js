@@ -12,6 +12,10 @@ import CategorySearch from './Search/CategorySearch/CategorySearch';
 import ListingMap from './ListingMap';
 import { SINGLE_POST_PAGE } from 'settings/constant';
 import ListingWrapper, { PostsWrapper, ShowMapCheckbox } from './Listing.style';
+import NotFoundWrapper, { ContentWrapper } from './NoData.style';
+import Image from 'components/UI/Image/Image';
+import Heading from 'components/UI/Heading/Heading';
+import TextLink from 'components/UI/TextLink/TextLink';
 
 // DESCRIPCIÓN:
 // Componente para la página de resultados de la búsqueda de sitios, o para mostrar todos los sitios de interés registrados.
@@ -25,63 +29,76 @@ export default function Listing() {
 
   if (location.search) {
     url += location.search;
-    url = url.replace('?','/');
+    url = url.replace('?', '/');
   }
 
   const { data, loading, loadMoreData, total, limit } = useDataApi(url);
-  
+
   let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5]; // Para que aparezcan 5 columnas de resultados (sin mapa abierto)
-  
-  
+
+
   console.log("-x-x-x-x-x-x")
   console.log(location.search)
   console.log("-x-x-x-x-x-x")
+
+  console.log("data single page jejeje: ", data)
 
   if (showMap) {
     columnWidth = [1 / 1, 1 / 2, 1 / 2, 1 / 2, 1 / 3]; // Cuando está activo el mapa solo aparecen 3 columnas de resultados
   }
   const handleMapToggle = () => { // Al oprimir el botón de "ver mapa": aparece/desaparece
     setShowMap((showMap) => !showMap);
-    console.log("data: ", data)
   };
 
   return (
     <ListingWrapper>
-      <Sticky top={82} innerZ={1} activeClass="isHeaderSticky">
-        <Toolbar
-          left={
-            width > 991 ? (
-              <CategorySearch location={location} />
-            ) : (
-              <FilterDrawer location={location} />
-            )
-          }
-          right={
-            <ShowMapCheckbox>
-              <Checkbox defaultChecked={false} onChange={handleMapToggle}>
-                Ver mapa
-              </Checkbox>
-            </ShowMapCheckbox>
-          }
-        />
-      </Sticky>
+      {!loading && data.length === 0 ?
+        <NotFoundWrapper>
+          <ContentWrapper>
+            <Image src="/images/no-data.jpg" alt="" />
+            <Heading as="h2" content="Sin resultados para esta búsqueda" />
+            <TextLink link="/" content="Volver" />
+          </ContentWrapper>
+        </NotFoundWrapper>
+        :
+        <>
+          <Sticky top={82} innerZ={10} activeClass="isHeaderSticky">
+            <Toolbar
+              left={
+                width > 991 ? (
+                  <CategorySearch location={location} />
+                ) : (
+                  <FilterDrawer location={location} />
+                )
+              }
+              right={
+                <ShowMapCheckbox>
+                  <Checkbox defaultChecked={false} onChange={handleMapToggle}>
+                    Ver mapa
+                  </Checkbox>
+                </ShowMapCheckbox>
+              }
+            />
+          </Sticky>
 
-      <Fragment>
-        <PostsWrapper className={width > 767 && showMap ? 'col-12' : 'col-24'}>
-          <SectionGrid
-            link={SINGLE_POST_PAGE}
-            columnWidth={columnWidth}
-            data={data}
-            totalItem={total.length}
-            loading={loading}
-            limit={limit}
-            handleLoadMore={loadMoreData}
-            placeholder={<PostPlaceholder />}
-          />
-        </PostsWrapper>
+          <Fragment>
+            <PostsWrapper className={width > 767 && showMap ? 'col-12' : 'col-24'}>
+              <SectionGrid
+                link={SINGLE_POST_PAGE}
+                columnWidth={columnWidth}
+                data={data}
+                totalItem={total.length}
+                loading={loading}
+                limit={limit}
+                handleLoadMore={loadMoreData}
+                placeholder={<PostPlaceholder />}
+              />
+            </PostsWrapper>
 
-        {showMap && <ListingMap data={data} loading={loading} />}
-      </Fragment>
+            {showMap && <ListingMap data={data} loading={loading} />}
+          </Fragment>
+        </>
+      }
     </ListingWrapper>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import moment from 'moment';
 import { Button, Slider, Checkbox } from 'antd';
@@ -19,8 +19,15 @@ import CategorySearchWrapper, {
   ActionWrapper,
 } from './CategorySearch.style';
 
+import { OtherVariablesContext } from 'context/OtherVariablesProvider';
+
 const CategorySearch = ({ location }) => {
   let navigate = useNavigate();
+
+  const { allElements, allNeighborhoods, allLocations, allCategories } = useContext(OtherVariablesContext)
+
+  console.log("allElements: ", allElements)
+
   const searchParams = getStateFromUrl(location);
   const state = {
     amenities: searchParams.amenities || [],
@@ -97,21 +104,22 @@ const CategorySearch = ({ location }) => {
   };
 
   return (
-    <>
-    {/* <CategorySearchWrapper>
+    <CategorySearchWrapper>
       <ViewWithPopup
         className={amenities.length ? 'activated' : ''}
-        key={getAmenities.id}
+        key={"Elements"}
         noView={true}
         view={
           <Button type="default">
-            {getAmenities.name}
+            {"Elementos inclusivos"}
             {amenities.length > 0 && `: ${amenities.length}`}
           </Button>
         }
         popup={
           <Checkbox.Group
-            options={getAmenities.options}
+            options={allElements.map((element) => {
+              return { label: element?.name, value: element?.name }
+            })}
             defaultValue={amenities}
             onChange={(value) => onChange(value, 'amenities')}
           />
@@ -140,7 +148,7 @@ const CategorySearch = ({ location }) => {
       <ViewWithPopup
         className={
           Object.keys('date_range').length !== null &&
-          date_range.setStartDate !== null
+            date_range.setStartDate !== null
             ? 'activated'
             : ''
         }
@@ -257,8 +265,6 @@ const CategorySearch = ({ location }) => {
         </div>
       </div>
     </CategorySearchWrapper>
-    */}
-    </>
   );
 };
 

@@ -16,6 +16,7 @@ const getUserProfileInfo = require("./authentication/getUserProfile")
 const getSingleSite = require("./sites/getSingleSite")
 const editSite = require("./authentication/authenticatedUser/editSite")
 const addCommment = require("./authentication/authenticatedUser/comments/addComment")
+const getAllSiteNames = require("./sites/getAllSiteNames")
 
 module.exports = {
     registerUser,
@@ -35,5 +36,6 @@ module.exports = {
     getUserProfileInfo,
     getSingleSite,
     editSite,
-    addCommment
+    addCommment,
+    getAllSiteNames,
 }
