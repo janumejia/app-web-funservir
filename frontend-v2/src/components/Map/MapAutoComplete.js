@@ -1,63 +1,106 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
-
-// Formato del JSON de llegada del backend que contiene el barrio y la localidad
-const localitiesAndNeighborhoods = [
-  { locality: "Usaquén", neighborhood: "El Toberín" },
-  { locality: "Usaquén", neighborhood: "Babilonia" },
-  { locality: "Usaquén", neighborhood: "Darandelos" },
-  { locality: "Usaquén", neighborhood: "Estrella del Norte" },
-  { locality: "Usaquén", neighborhood: "Guanoa" },
-  { locality: "Usaquén", neighborhood: "Jardín Norte" },
-  { locality: "Usaquén", neighborhood: "La Liberia" },
-  { locality: "Usaquén", neighborhood: "La Pradera Norte" },
-  { locality: "Usaquén", neighborhood: "Las Orquídeas" },
-  { locality: "Usaquén", neighborhood: "Pantanito" },
-  { locality: "Usaquén", neighborhood: "Santa  Mónica" },
-  { locality: "Usaquén", neighborhood: "Villa Magdala" },
-  { locality: "Usaquén", neighborhood: "Villas de Aranjuez" },
-  { locality: "Usaquén", neighborhood: "Villas del Mediterráneo" },
-  { locality: "Usaquén", neighborhood: "Zaragoza" }
-]
+import { OtherVariablesContext } from 'context/OtherVariablesProvider';
 
 // DESCRIPCIÓN:
 // Componente para mostrar posibles sitios mientras escribes en la barra de búsqueda, usando un arreglo de objetos que contiene todos los barrios de Bogotá
 const SearchInput = (props) => {
-  const [neighborhoods, setNeighborhoods] = useState(localitiesAndNeighborhoods); //
+
+  const {
+    allNeighborhoods,
+    allCategories,
+    allSiteNames,
+    allLocations,
+  } = useContext(OtherVariablesContext);
+
   const [value, setValue] = useState("");
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState({});
+
+  // const [selectedSuggestions, setSelectedSuggestions] = useState({});
+  const [suggestions, setSuggestions] = useState([]); //
+  const [allSuggestionsSearchBar, setSuggestionsSearchBar] = useState([]);
+
+  // useEffect(() => {
+  //   props.updateValue();
+  // }, [value]);
+
+  useEffect(() => { // Para construir la lista completa de las sugerencias
+
+    const buildSuggestionList = () => {
+      let allSuggestions = [];
+
+      allLocations.forEach((element) => {
+        allSuggestions.push(`${element.name}`)
+      })
+
+      allNeighborhoods.forEach((element) => {
+        allSuggestions.push(`${element.name}, ${element.associatedLocality}`)
+      })
+
+      allCategories.forEach((element) => {
+        allSuggestions.push(`${element.name}`)
+      })
+
+      allSiteNames.forEach((element) => {
+        allSuggestions.push(`${element.name}`)
+      })
+
+      setSuggestionsSearchBar(allSuggestions); // Aquí se ajustan toda la lista de sugerencias
+    }
+
+
+    if (Array.isArray(allLocations) && allLocations.length > 0 &&
+      Array.isArray(allNeighborhoods) && allNeighborhoods.length > 0 &&
+      Array.isArray(allCategories) && allCategories.length > 0 &&
+      Array.isArray(allSiteNames) && allSiteNames.length > 0) buildSuggestionList();
+
+  }, [allLocations, allNeighborhoods, allCategories, allSiteNames]);
 
   // Para ajustar los barrios que se mostrará en las sugerencias de la barra de búsqueda:
   const onSuggestionsFetchRequested = ({ value }) => {
-    setNeighborhoods(filterNeighborhoods(value))
+    setSuggestions(filterNeighborhoods(value))
   }
 
   // Método para retornar los resultados a mostrar en las sugerencias:
   const filterNeighborhoods = (value) => {
     // Para sanitizar la entrada del usuario
     const inputValue = value.toLowerCase() // Cambia el texto a minúsculas
-      .replace(/[á,à,ä,â]/g, 'a') // ... y para reemplazar las vocales con acentos por simplemente la vocal
-      .replace(/[é,ë,è]/g, 'e')
-      .replace(/[í,ï,ì]/g, 'i')
-      .replace(/[ó,ö,ò]/g, 'o')
-      .replace(/[ü,ú,ù]/g, 'u')
-      .replace(/\s+/g, '') // Remover espacios
-      .replace(/[_]/g, '') // Remover guion bajo
+      .replace(/[áàäâ]/g, 'a') // ... y para reemplazar las vocales con acentos por simplemente la vocal
+      .replace(/[éëè]/g, 'e')
+      .replace(/[íïì]/g, 'i')
+      .replace(/[óöò]/g, 'o')
+      .replace(/[üúù]/g, 'u')
+      .replace(/\s+/g, ' ') // Remover espacios
+      .replace(/[_]/g, ' ') // Remover guion bajo
       .replace(/[^\w\s]/gi, ''); // ... y remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
 
     const inputLength = inputValue.length;
 
-    if (inputLength === 0) {
+    if (inputLength === 0 || !(allSuggestionsSearchBar.length > 0)) {
       return [];
 
     } else {  // Solamente se ejecuta si el usuario ha introducido algo en la barra de búsqueda
-      var count = 5; // Variable para limitar a solo 5 resultados en las sugerencias
-      var filtrado = localitiesAndNeighborhoods.filter((element) => { // Método filter retorna un arreglo con los elementos que cumplan la condición. Documentación: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
-        var stringToSearch = element.neighborhood + element.locality + element.neighborhood; // 2 veces el barrio para que se le muestren las sugerencias sin importar si digita primero el barrio o la localidad.
+
+      let count = 5; // Variable para limitar a solo 5 resultados en las sugerencias
+
+      let filtrado = allSuggestionsSearchBar.filter((element) => { // Método filter retorna un arreglo con los elementos que cumplan la condición. Documentación: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+        let stringToSearch = "";
+
+        if (/^[^,]*,[^,]*$/.test(element)) {
+          const parts = element.split(",");
+          stringToSearch = `bogota ${element} bogota ${parts[1]} ${parts[0]}`;
+        } else {
+          stringToSearch = element; // 2 veces el barrio para que se le muestren las sugerencias sin importar si digita primero el barrio o la localidad.
+        }
 
         if (count > 0 && stringToSearch.toLowerCase() // Para encontrar los resultados del autocompletado
-          .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remover acentos (lo mismo que está arriba pero simplificado)
-          .replace(/\s+/g, '') // Remover espacios (solo por motivo de búsqueda, y no se refleja en los resultados)
+          // .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remover acentos (lo mismo que está arriba pero simplificado)
+          .replace(/[áàäâ]/g, 'a') // Replace "á", "à", "ä", "â" with "a"
+          .replace(/[éëè]/g, 'e') // Replace "é", "ë", "è" with "e"
+          .replace(/[íïì]/g, 'i') // Replace "í", "ï", "ì" with "i"
+          .replace(/[óöò]/g, 'o') // Replace "ó", "ö", "ò" with "o"
+          .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
+          .replace(/,/g, '')
+          .replace(/\s+/g, ' ') // Remover espacios (solo por motivo de búsqueda, y no se refleja en los resultados)
           .includes(inputValue)) {
           count--;
           return element;
@@ -65,62 +108,40 @@ const SearchInput = (props) => {
 
       })
       return filtrado;
-
     }
-  }
-
-  const onSuggestionsClearRequested = () => {
-    setNeighborhoods([]);
   }
 
   // En caso de clickear la sugerencia, esto es lo que se pone en la barra de búsqueda:
   const getSuggestionValue = (suggestion) => {
-    return `${suggestion.neighborhood}, ${suggestion.locality}`;
+    return `${suggestion}`;
   }
 
   // Aquí se configura como se mostraran las sugerencias
   const renderSuggestion = (suggestion) => (
-    <div className='react-autosuggest__suggestions-list' onClick={() => selectNeighborhood(suggestion)}>
-      {`${suggestion.neighborhood}, ${suggestion.locality}`}
+    <div className='react-autosuggest__suggestions-list'>
+      {suggestion}
     </div>
   );
 
-  const selectNeighborhood = (neighborhood) => {
-    setSelectedNeighborhood(neighborhood);
-    console.log(neighborhood)
-  }
-
   const onChange = (e, { newValue }) => {
     setValue(newValue);
+    props.updateValue(newValue);
   }
 
   const inputProps = {
-    placeholder: "Ingrese barrio o localidad",
+    placeholder: "Busca por categoría, nombre, barrio o localidad",
     value,
     onChange
-  }
-
-  const eventEnter = (e) => {
-    if (e.key === "Enter") {
-      var split = e.target.value.split('-');
-      var neighborhood = {
-        neighborhood: split[0].trim(),
-        locality: split[1].trim(),
-      };
-      selectedNeighborhood(neighborhood);
-    }
   }
 
   return (
     <div className="map_autocomplete">
       <Autosuggest
-        suggestions={neighborhoods}
+        suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
-        onSuggestionSelected={eventEnter}
       />
     </div>
   );

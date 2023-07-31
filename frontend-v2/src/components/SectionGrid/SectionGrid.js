@@ -50,13 +50,13 @@ export default function SectionGrid({
   const limits = Array(n).fill(0);
   createStore({});
   let showButton = data.length < totalItem;
-  
+
   return (
     <>
-    <StateMachineProvider>
-      <Box className="grid_wrapper" {...rowStyle}>
-        {data && data.length
-          ? data.map((item) => {
+      <StateMachineProvider>
+        <Box className="grid_wrapper" {...rowStyle}>
+          {data && data.length
+            ? data.map((item) => {
               return (
                 <Box
                   className="grid_column"
@@ -66,23 +66,23 @@ export default function SectionGrid({
                 >
                   <ProductCard myProfile={myProfile} slug={item.name}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
                 </Box>
-                
+
               );
             })
-          : null}
+            : null}
 
-        {loading &&
-          limits.map((_, index) => (
-            <Box
-              className="grid_column"
-              width={columnWidth}
-              key={index}
-              {...columnStyle}
-            >
-              {placeholder ? placeholder : <Text content="Loading ..." />}
-            </Box>
-          ))}
-      </Box>
+          {loading &&
+            limits.map((_, index) => (
+              <Box
+                className="grid_column"
+                width={columnWidth}
+                key={index}
+                {...columnStyle}
+              >
+                {placeholder ? placeholder : <Text content="Loading ..." />}
+              </Box>
+            ))}
+        </Box>
       </StateMachineProvider>
       {showButton && (
         <LoadMore

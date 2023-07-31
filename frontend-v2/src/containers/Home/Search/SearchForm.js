@@ -23,50 +23,36 @@ export default function SearchForm() {
   let navigate = useNavigate();
 
   // place data
-  const [mapValue, setMapValue] = useState([]); // Para ajusta el valor del campo de búsqueda
+  const [searchValue, setSearchValue] = useState(""); // Para ajusta el valor del campo de búsqueda
   const updateValueFunc = (event) => {
-    const { searchedPlaceAPIData } = event;
-    if (!isEmpty(searchedPlaceAPIData)) {
-      setMapValue(searchedPlaceAPIData);
-    }
+    setSearchValue(event);
+
   };
 
   // navigate to the search page
   const goToSearchPage = () => {
-    let tempLocation = [];
-    console.log("mapValue:")
-    console.log(mapValue)
-    //const mapData = mapValue ? mapDataHelper(mapValue) : [];
-    // console.log("mapData:**")
-    // console.log(mapData)
-    // mapData &&
-    //   mapData.map((singleMapData, i) => {
-    //     return tempLocation.push({
-    //       name: singleMapData ? singleMapData.name : '',
-    //       formattedAddress: singleMapData ? singleMapData.formattedAddress : '',
-    //       lat: singleMapData ? singleMapData.lat.toFixed(3) : null,
-    //       lng: singleMapData ? singleMapData.lng.toFixed(3) : null,
-    //     });
-    //   });
-    // console.log("tempLocation:******")
-    console.log(tempLocation)
-    const location = tempLocation ? tempLocation[1] : {};
-    // console.log("////location/////")
-    console.log(location)
-    const query = {
-      // date_range: searchDate,
-      // room: roomGuest.room,
-      // guest: roomGuest.guest,
-      location,
-    };
-    console.log(query)
-    // const search = setStateToUrl(query);
-    const search = "search=" + mapValue.name;
-    console.log("mapValue.name -> ", mapValue.name)
-    navigate({
-      pathname: LISTING_POSTS_PAGE,
-      search: `?${createSearchParams(search)}`,
-    });
+
+    let searchValueSanitized = searchValue.toLowerCase() // Para encontrar los resultados del autocompletado
+      .replace(/[áàäâ]/g, 'a') // Replace "á", "à", "ä", "â" with "a"
+      .replace(/[éëè]/g, 'e') // Replace "é", "ë", "è" with "e"
+      .replace(/[íïì]/g, 'i') // Replace "í", "ï", "ì" with "i"
+      .replace(/[óöò]/g, 'o') // Replace "ó", "ö", "ò" with "o"
+      .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
+      .replace(/\s+/g, ' ') // Remover espacios
+      .replace(/[_]/g, ' ') // Remover guion bajo
+      .replace(/[^\w\s]/gi, '');
+
+    if (searchValueSanitized === "" || !(/[A-Za-z0-9]/.test(searchValueSanitized))) {
+      navigate({
+        pathname: LISTING_POSTS_PAGE,
+      });
+
+    } else {
+      navigate({
+        pathname: LISTING_POSTS_PAGE,
+        search: `?${createSearchParams(`buscar=${searchValueSanitized}`)}`,
+      });
+    }
   };
 
   return (
@@ -74,8 +60,8 @@ export default function SearchForm() {
       {/* Campo de búsqueda: Barrio o localidad */}
 
       <ComponentWrapper>
-        <FaMapMarkerAlt className="map-marker" />
-        <MapAutoComplete updateValue={(value) => {updateValueFunc(value); console.log("value --->", value) } }/> {/* Campo de búsqueda */}
+        <FaSearch className="map-marker" />
+        <MapAutoComplete updateValue={(value) => { updateValueFunc(value) }} /> {/* Campo de búsqueda */}
       </ComponentWrapper>
 
       <Button
