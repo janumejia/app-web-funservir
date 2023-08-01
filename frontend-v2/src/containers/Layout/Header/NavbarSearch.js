@@ -10,10 +10,28 @@ import { NavbarSearchWrapper } from './Header.style';
 
 export default function NavbarSearch() {
   let navigate = useNavigate();
-  let location = useLocation();
+  // let location = useLocation();
+  // const { search } = location;
 
   const [searchValue, setSearchValue] = useState(""); // Para ajusta el valor del campo de búsqueda
 
+  // useEffect(() => {
+  //   // console.log("search: ", search)
+  //   if (search) {
+  //     let searchValueSanitized = searchValue.toLowerCase() // Para encontrar los resultados del autocompletado
+  //       .replace(/[áàäâ]/g, 'a') // Replace "á", "à", "ä", "â" with "a"
+  //       .replace(/[éëè]/g, 'e') // Replace "é", "ë", "è" with "e"
+  //       .replace(/[íïì]/g, 'i') // Replace "í", "ï", "ì" with "i"
+  //       .replace(/[óöò]/g, 'o') // Replace "ó", "ö", "ò" with "o"
+  //       .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
+  //       .replace(/\s+/g, ' ') // Remover espacios
+  //       .replace(/[_]/g, ' ') // Remover guion bajo
+  //       .replace(/[^\w\s]/gi, '');
+
+  //     setSearchValue(searchValueSanitized);
+  //   }
+
+  // }, [])
   console.log("searchValue: ", searchValue)
 
   const updateValueFunc = (event) => {
