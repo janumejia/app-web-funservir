@@ -86,7 +86,11 @@ function dataFetchReducer(state, action) {
 const useDataApi = (initialUrl, limit = 10, initialData = []) => {
   const [url, setUrl] = useState(initialUrl);
   const navigate = useNavigate();
-  const location = useLocation();
+
+  // Para actualizar la URL cuando se realice otra búsqueda usando la barra de búsqueda superior
+  useEffect(() => {
+    setUrl(initialUrl);
+  },[initialUrl])
 
   // Para usar redux. El dispatch es como si fuera "setState"
   const [state, dispatch] = useReducer(dataFetchReducer, {

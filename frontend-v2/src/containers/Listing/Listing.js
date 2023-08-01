@@ -17,6 +17,13 @@ import Image from 'components/UI/Image/Image';
 import Heading from 'components/UI/Heading/Heading';
 import TextLink from 'components/UI/TextLink/TextLink';
 
+const SITES_API_URL = `${process.env.REACT_APP_HOST_BACK || '0.0.0.0'}/sites`;
+
+// Helper function to extract query parameters from the location object
+const getSearchParamsFromLocation = (location) => {
+  return location.search ? location.search.replace('?', '/') : '';
+};
+
 // DESCRIPCIÓN:
 // Componente para la página de resultados de la búsqueda de sitios, o para mostrar todos los sitios de interés registrados.
 export default function Listing() {
@@ -24,24 +31,10 @@ export default function Listing() {
   const { width } = useWindowSize(); // Devuelve un objeto que contiene el ancho y alto de la ventana del navegador.
   const [showMap, setShowMap] = useState(false); // Para mostrar el mapa al lado derecho de la pantalla
 
-  let url = `${process.env.REACT_APP_HOST_BACK}` || '0.0.0.0'; // La URL para pedir a la API todos los sitios de interés y poder mostrarlo (0.0.0.0 no es valido, pero Heroku lo detectará y le asignará una valida)
-  url += '/sites';
-
-  if (location.search) {
-    url += location.search;
-    url = url.replace('?', '/');
-  }
-
+  const url = `${SITES_API_URL}${getSearchParamsFromLocation(location)}`;
   const { data, loading, loadMoreData, total, limit } = useDataApi(url);
 
   let columnWidth = [1 / 1, 1 / 2, 1 / 3, 1 / 4, 1 / 5]; // Para que aparezcan 5 columnas de resultados (sin mapa abierto)
-
-
-  console.log("-x-x-x-x-x-x")
-  console.log(location.search)
-  console.log("-x-x-x-x-x-x")
-
-  console.log("data single page jejeje: ", data)
 
   if (showMap) {
     columnWidth = [1 / 1, 1 / 2, 1 / 2, 1 / 2, 1 / 3]; // Cuando está activo el mapa solo aparecen 3 columnas de resultados
@@ -52,17 +45,17 @@ export default function Listing() {
 
   return (
     <ListingWrapper>
-      {!loading && data.length === 0 ?
+      {!loading && data && data.length === 0 ?
         <NotFoundWrapper>
           <ContentWrapper>
             <Image src="/images/no-data.jpg" alt="" />
             <Heading as="h2" content="Sin resultados para esta búsqueda" />
-            <TextLink link="/" content="Volver" />
+            <TextLink link="/" content="Volver a inicio" />
           </ContentWrapper>
         </NotFoundWrapper>
         :
         <>
-          <Sticky top={82} innerZ={10} activeClass="isHeaderSticky">
+          <Sticky top={82} innerZ={1} activeClass="isHeaderSticky">
             <Toolbar
               left={
                 width > 991 ? (
