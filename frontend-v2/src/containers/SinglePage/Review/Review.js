@@ -106,7 +106,7 @@ const Review = (props) => {
               wrapClassName="review_modal"
             >
               <ModalTitle>Escribe tu opinión aquí</ModalTitle>
-              <ReviewForm siteId={_id} userId={owner._id} close={()=>handleModalClose('review')}/>
+              <ReviewForm siteId={_id} userId={owner && owner._id} close={()=>handleModalClose('review')}/>
             </Modal>
           </RatingSearch>
         </HeaderSection>
