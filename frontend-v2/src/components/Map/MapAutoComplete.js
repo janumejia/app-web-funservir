@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { OtherVariablesContext } from 'context/OtherVariablesProvider';
+import { useLocation } from 'react-router-dom';
 
 // DESCRIPCIÓN:
 // Componente para mostrar posibles sitios mientras escribes en la barra de búsqueda, usando un arreglo de objetos que contiene todos los barrios de Bogotá
 const SearchInput = (props) => {
+  let location = useLocation();
+  const { search } = location;
 
   const {
     allNeighborhoods,
@@ -12,6 +15,7 @@ const SearchInput = (props) => {
     allSiteNames,
     allLocations,
   } = useContext(OtherVariablesContext);
+
 
   const [value, setValue] = useState("");
 
@@ -22,6 +26,25 @@ const SearchInput = (props) => {
   // useEffect(() => {
   //   props.updateValue();
   // }, [value]);
+
+  useEffect(() => {
+    // console.log("search: ", search)
+    if (search && /^\?buscar=.*/.test(search)) {
+      let searchValueSanitized = search.replace(/^\?buscar=/, '')
+        .toLowerCase() // minusculas
+        .replace(/[áàäâ]/g, 'a') // Replace "á", "à", "ä", "â" with "a"
+        .replace(/[éëè]/g, 'e') // Replace "é", "ë", "è" with "e"
+        .replace(/[íïì]/g, 'i') // Replace "í", "ï", "ì" with "i"
+        .replace(/[óöò]/g, 'o') // Replace "ó", "ö", "ò" with "o"
+        .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
+        .replace(/\s+/g, ' ') // Remover espacios
+        .replace(/[_]/g, ' ') // Remover guion bajo
+        .replace(/[^\w\s]/gi, '');
+
+      setValue(searchValueSanitized);
+    }
+
+  }, [])
 
   useEffect(() => { // Para construir la lista completa de las sugerencias
 
