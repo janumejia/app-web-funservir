@@ -61,7 +61,7 @@ export default function SearchForm() {
 
       <ComponentWrapper>
         <FaSearch className="map-marker" />
-        <MapAutoComplete updateValue={(value) => { updateValueFunc(value) }} /> {/* Campo de búsqueda */}
+        <MapAutoComplete updateValue={(value) => { updateValueFunc(value) }} goToSearchPage={() => goToSearchPage()} /> {/* Campo de búsqueda */}
       </ComponentWrapper>
 
       <Button

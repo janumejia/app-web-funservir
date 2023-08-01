@@ -128,10 +128,17 @@ const SearchInput = (props) => {
     props.updateValue(newValue);
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      props.goToSearchPage();
+    }
+  };
+
   const inputProps = {
     placeholder: "Busca por categoría, nombre, barrio o localidad",
     value,
-    onChange
+    onChange,
+    onKeyDown: handleKeyPress, // Add the keydown event listener to handle the "Enter" key press
   }
 
   return (
