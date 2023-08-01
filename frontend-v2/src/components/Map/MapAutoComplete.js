@@ -80,7 +80,7 @@ const SearchInput = (props) => {
 
     } else {  // Solamente se ejecuta si el usuario ha introducido algo en la barra de búsqueda
 
-      let count = 5; // Variable para limitar a solo 5 resultados en las sugerencias
+      let count = 8; // Variable para limitar a solo 5 resultados en las sugerencias
 
       let filtrado = allSuggestionsSearchBar.filter((element) => { // Método filter retorna un arreglo con los elementos que cumplan la condición. Documentación: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
         let stringToSearch = "";
@@ -128,10 +128,17 @@ const SearchInput = (props) => {
     props.updateValue(newValue);
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      props.goToSearchPage();
+    }
+  };
+
   const inputProps = {
     placeholder: "Busca por categoría, nombre, barrio o localidad",
     value,
-    onChange
+    onChange,
+    onKeyDown: handleKeyPress, // Add the keydown event listener to handle the "Enter" key press
   }
 
   return (
