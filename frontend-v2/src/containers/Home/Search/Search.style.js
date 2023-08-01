@@ -194,7 +194,7 @@ export const ComponentWrapper = styled.div`
     width: 240px;
     height: 30px;
     padding: 10px 20px;
-    font-family: Helvetica, sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 300;
     font-size: 16px;
     border: 1px solid #aaa;
@@ -219,15 +219,22 @@ export const ComponentWrapper = styled.div`
     position: absolute;
     top: 51px;
     width: 100%; /* Para el tamaño del autocompletado ocupe todo el ancho de la barra de búsqueda */
-    border: 1px solid #aaa;
+    border: none;
     border-radius: 4px;
     background-color: #fff;
-    font-family: Helvetica, sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 300;
     font-size: 16px;
     ${'' /* border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px; */}
     z-index: 2;
+    background-color: #f7f7f7;
+    
+    /* Add shadow styles */
+    box-shadow: 
+      4px 0 4px rgba(0, 0, 0, 0.1), /* Right shadow */
+      0 4px 4px rgba(0, 0, 0, 0.1), /* Bottom shadow */
+      -4px 0 4px rgba(0, 0, 0, 0.1); /* Left shadow */
   }
 
   .react-autosuggest__suggestions-list {
@@ -238,11 +245,15 @@ export const ComponentWrapper = styled.div`
 
   .react-autosuggest__suggestion {
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 7px 20px;
   }
 
   .react-autosuggest__suggestion--highlighted {
     background-color: #ddd;
+    border-left: 4px solid #008489; /* Adjust the width and color as needed */
+    border-top-left-radius: 2px; /* Adjust the value as needed */
+    border-bottom-left-radius: 2px; /* Adjust the value as needed */
+    padding: 7px 16px;
   }
 /* Fin Autocompletado usando Autosuggest de React */
 
@@ -250,7 +261,6 @@ export const ComponentWrapper = styled.div`
   .map_autocomplete {
     width: 100%;
     position: relative;
-
 
     &::after {
       content: '';
@@ -281,8 +291,7 @@ export const ComponentWrapper = styled.div`
       }
     }
 
-
-  /* Única parte funcional */
+    /* Única parte funcional */
     input {
       border: 0;
       font-size: 15px;
