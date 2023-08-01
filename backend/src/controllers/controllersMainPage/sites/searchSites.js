@@ -24,7 +24,13 @@ const searchSites = async (req, res) => {
             .replace(/u/g, '[u,ü,ú,ù]');
 
         const patternToSearchV3 = patternToSearchV2.split(/[ ]+/g); // Separa la entrada cada vez que encuentre uno o más espacios (se una Regex). Ej: La cadena "first     middle  last" seria igual a -> ["first","middle","","last"] y no a esto -> ["first","","","","middle","","last"]  https://stackoverflow.com/questions/10079415/splitting-a-string-with-multiple-spaces
-        const regexArray = patternToSearchV3.map(function (element) { return new RegExp(element, "i") }); // Este es igual al anterior array pero en el formato de expresión regular (Regex) para que lo pueda incluir adentro de $in en la siguiente consulta. Más info en: https://stackoverflow.com/questions/36932078/unable-to-use-regex-in-in-operator-in-mongodb
+        
+        const regexArray = patternToSearchV3.map(function (element) { // Este busca exactamente la cadena, mientas que regexArrayName busca subcadenas
+            const exactMatchPattern = `^${element}$`;
+            return new RegExp(exactMatchPattern, "i");
+        });
+        
+        const regexArrayName = patternToSearchV3.map(function (element) { return new RegExp(element, "i") }); // Este es igual al anterior array pero en el formato de expresión regular (Regex) para que lo pueda incluir adentro de $in en la siguiente consulta. Más info en: https://stackoverflow.com/questions/36932078/unable-to-use-regex-in-in-operator-in-mongodb
 
         // Hacemos la búsqueda del patrón introducido usando consultas regex (https://www.mongodb.com/docs/manual/reference/operator/query/regex/). La i de options es para ignorar mayúsculas o minúsculas
         // Con $or hacemos la búsqueda para varios campos de los registros: titulo, tipo de sitio, ubicación, etc.
@@ -33,7 +39,7 @@ const searchSites = async (req, res) => {
         const dataFound = await Site.find(
             {
                 $or: [
-                    { "name": { $in: regexArray } },
+                    { "name": { $in: regexArrayName } },
                     { "category": { $in: regexArray } },
                     { "locality": { $in: regexArray } },
                     { "neighborhood": { $in: regexArray } },
