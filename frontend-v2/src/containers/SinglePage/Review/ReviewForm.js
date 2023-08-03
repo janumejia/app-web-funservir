@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { /*Row, Col,*/ Input, Rate, Checkbox, Button, message } from 'antd';
+import { Row, Col, Input, Rate, Checkbox, Button, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import axios from "../../../settings/axiosConfig";
 // import RadioGroup from 'components/UI/RadioGroup/RadioGroup';
@@ -130,6 +130,47 @@ export default function ReviewForm(props) {
           )}
         />
       </FormControl>
+      <Row type="flex" justify="space-between">
+        <Col>
+          <FormControl label="Elementos inclusivos" htmlFor="inclusivity">
+            <Controller
+              name="inclusivity"
+              defaultValue=""
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Rate onChange={onChange} onBlur={onBlur} value={value} />
+              )}
+            />
+          </FormControl>
+        </Col>
+        <Col>
+          <FormControl label="Accesibilidad" htmlFor="accessibility">
+            <Controller
+              name="accessibility"
+              defaultValue=""
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Rate onChange={onChange} onBlur={onBlur} value={value} />
+              )}
+            />
+          </FormControl>
+        </Col>
+        <Col>
+          <FormControl label="Servicio" htmlFor="service">
+            <Controller
+              name="service"
+              defaultValue=""
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Rate onChange={onChange} onBlur={onBlur} value={value} />
+              )}
+            />
+          </FormControl>
+        </Col>
+        </Row>
       {/* <FormControl
         label="What Sort of trip was this?"
         htmlFor="tripType"
