@@ -20,7 +20,7 @@ const addComment = async (req, res) => {
 
         await InclusiveSite.findOne({ _id: inputs.siteId }).then((site) => {
             if (site) {
-                
+                site.ratingStars[inputs.stars] = site.ratingStars[inputs.stars] + 1;
                 site.ratingTotal = site.ratingTotal + inputs.stars;
                 site.ratingCount = site.ratingCount + 1;
                 site.rating = (site.ratingTotal / site.ratingCount);

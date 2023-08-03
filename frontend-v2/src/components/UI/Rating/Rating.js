@@ -13,10 +13,10 @@ const Rating = (props) => {
       if (i < floorValue) {
         ratingView.push(<IoIosStar key={i} />);
       } else {
-        if(!halfStar && floorValue!==rating){
+        if (!halfStar && floorValue !== rating) {
           ratingView.push(<IoIosStarHalf key={i} />)
           halfStar = true;
-        }else{
+        } else {
           ratingView.push(<IoIosStarOutline key={i} />)
         }
       }
@@ -41,26 +41,38 @@ const Rating = (props) => {
   if (ratingCount) {
     showRatingCount = `(` + ratingCount + ` calificaciones)`;
   } else {
-    showRatingCount = '';
+    showRatingCount = 'Sin calificaciones';
   }
 
   return (
     <>
-      {type && type === 'bulk' ? (
-        <>
-          <span>{ratingView}</span>
-          <strong>
-            {` ${listingCondition}`}
-          </strong>
+      {(showRatingCount === 'Sin calificaciones') ?
+        (
           <strong>
             {`${showRatingCount}`}
           </strong>
-        </>
-      ) : (
-        <>
-          <span>{ratingFieldName}</span> {ratingView}
-        </>
-      )}
+          )
+        :
+        (
+          <>
+            {type && type === 'bulk' ? (
+              <>
+                <span>{ratingView}</span>
+                <strong>
+                  {` ${listingCondition}`}
+                </strong>
+                <strong>
+                  {`${showRatingCount}`}
+                </strong>
+              </>
+            ) : (
+              <>
+                <span>{ratingFieldName}</span> {ratingView}
+              </>
+            )}
+          </>
+        )}
+
     </>
   );
 };

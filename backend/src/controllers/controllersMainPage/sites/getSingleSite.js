@@ -10,7 +10,6 @@ const getSingleSite = async (req, res) => {
 
         const dataSite = await Site.find({ 'name': siteName }).populate('owner', {name:1, lastName:1, _id:1, profilePicture: 1}).populate('inclusiveElements').populate({ path: 'comments', populate: { path: 'userId', model: 'User' } });
         
-        console.log(dataSite[0].status)
 
         // Para solo permitir sitios en estado aprobado
         if( dataSite[0].status === 'Aprobado') return res.json( dataSite );

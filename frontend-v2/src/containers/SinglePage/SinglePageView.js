@@ -44,6 +44,7 @@ const SinglePage = () => {
     category,
     rating,
     ratingCount,
+    ratingStars,
     comments,
     gallery,
     siteAddress,
@@ -64,7 +65,7 @@ const SinglePage = () => {
     socialTwitter,
     socialWhatsapp
   } = data[0];
-
+  console.log(data);
   return (
     <SinglePageWrapper>
       <PostImage hasSecondAndThirdImage={gallery[1] && gallery[2]}>
@@ -229,6 +230,7 @@ const SinglePage = () => {
               ratingCount={ratingCount}
               rating={rating}
               owner={owner}
+              ratingStars={ratingStars}
             />
           </Col>
           <Col xl={8} />

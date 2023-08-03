@@ -261,7 +261,7 @@ export const RatingArea = styled.div`
   strong {
     margin-top: -2px;
     font-weight: 700;
-    margin-left: 8px;
+    
     /* @media   (max-width: 480px) {
 			margin-left: 0;
 		} */
