@@ -9,7 +9,6 @@ const getSingleSite = async (req, res) => {
         if(regex.siteNameRegex.test(siteName) === false) return res.status(400).json({message: "Nombre de sitio tiene un formato incorrecto"})
 
         const dataSite = await Site.find({ 'name': siteName }).populate('owner', {name:1, lastName:1, _id:1, profilePicture: 1}).populate('inclusiveElements').populate({ path: 'comments', populate: { path: 'userId', model: 'User' } });
-        
 
         // Para solo permitir sitios en estado aprobado
         if( dataSite[0].status === 'Aprobado') return res.json( dataSite );

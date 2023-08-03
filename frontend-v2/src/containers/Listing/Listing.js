@@ -21,7 +21,7 @@ const SITES_API_URL = `${process.env.REACT_APP_HOST_BACK || '0.0.0.0'}/sites`;
 
 // Helper function to extract query parameters from the location object
 const getSearchParamsFromLocation = (location) => {
-  return location.search ? location.search.replace('?', '/') : '';
+  return location.search && /^\?.+/.test(location.search) ? `/search${location.search}` : '';
 };
 
 // DESCRIPCIÓN:
@@ -45,52 +45,54 @@ export default function Listing() {
 
   return (
     <ListingWrapper>
+
+      <Sticky top={82} innerZ={1} activeClass="isHeaderSticky">
+        <Toolbar
+          left={
+            width > 991 ? (
+              <CategorySearch location={location} />
+            ) : (
+              <FilterDrawer location={location} />
+            )
+          }
+          right={
+            !loading && data && data.length === 0 ?
+              <></>
+              :
+              <ShowMapCheckbox>
+                <Checkbox defaultChecked={false} onChange={handleMapToggle}>
+                  Ver mapa
+                </Checkbox>
+              </ShowMapCheckbox>
+          }
+        />
+      </Sticky>
+
       {!loading && data && data.length === 0 ?
         <NotFoundWrapper>
           <ContentWrapper>
-            <Image src="/images/no-data.jpg" alt="" />
+            <img src="/images/no-data.jpg" alt="" style={{ "width": "70%" }} />
             <Heading as="h2" content="Sin resultados para esta búsqueda" />
             <TextLink link="/" content="Volver a inicio" />
           </ContentWrapper>
         </NotFoundWrapper>
         :
-        <>
-          <Sticky top={82} innerZ={1} activeClass="isHeaderSticky">
-            <Toolbar
-              left={
-                width > 991 ? (
-                  <CategorySearch location={location} />
-                ) : (
-                  <FilterDrawer location={location} />
-                )
-              }
-              right={
-                <ShowMapCheckbox>
-                  <Checkbox defaultChecked={false} onChange={handleMapToggle}>
-                    Ver mapa
-                  </Checkbox>
-                </ShowMapCheckbox>
-              }
+        <Fragment>
+          <PostsWrapper className={width > 767 && showMap ? 'col-12' : 'col-24'}>
+            <SectionGrid
+              link={SINGLE_POST_PAGE}
+              columnWidth={columnWidth}
+              data={data}
+              totalItem={total.length}
+              loading={loading}
+              limit={limit}
+              handleLoadMore={loadMoreData}
+              placeholder={<PostPlaceholder />}
             />
-          </Sticky>
+          </PostsWrapper>
 
-          <Fragment>
-            <PostsWrapper className={width > 767 && showMap ? 'col-12' : 'col-24'}>
-              <SectionGrid
-                link={SINGLE_POST_PAGE}
-                columnWidth={columnWidth}
-                data={data}
-                totalItem={total.length}
-                loading={loading}
-                limit={limit}
-                handleLoadMore={loadMoreData}
-                placeholder={<PostPlaceholder />}
-              />
-            </PostsWrapper>
-
-            {showMap && <ListingMap data={data} loading={loading} />}
-          </Fragment>
-        </>
+          {showMap && <ListingMap data={data} loading={loading} />}
+        </Fragment>
       }
     </ListingWrapper>
   );
