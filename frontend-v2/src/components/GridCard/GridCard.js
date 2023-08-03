@@ -19,7 +19,6 @@ const GridCard = ({
   favorite,
   location,
   title,
-  price,
   rating,
   editBtn,
   viewDetailsBtn,

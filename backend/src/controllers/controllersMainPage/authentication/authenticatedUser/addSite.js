@@ -126,7 +126,17 @@ const addInclusiveSites = async (req, res) => {
             socialFacebook: inputs.socialFacebook,
             socialTwitter: inputs.socialTwitter,
             webpage: inputs.webpage,
-            schedule: inputs.schedule
+            schedule: inputs.schedule,
+            ratingTotal: 0,
+            ratingCount: 0,
+            rating: 0,
+            ratingStars:{
+                "5": 0,
+                "4": 0,
+                "3": 0,
+                "2": 0,
+                "1": 0
+            }
         });
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente
@@ -146,7 +156,7 @@ const addInclusiveSites = async (req, res) => {
 
         } catch (error) {
             if (error.code === 11000) return res.status(409).json({ message: "Ya existe este sitio inclusivo" }); // Este código de error se produce cuando hay un índice único duplicado
-            
+
             return res.status(500).json({ message: "Error en creación del sitios inclusivo" });
         }
     } catch (error) {

@@ -9,7 +9,7 @@ moment.locale('es');
 
 export default class App extends React.Component {
   render() {
-  const { singleReview, authorRating } = this.props;
+  const { singleReview } = this.props;
   let i;
   let ratingView = [];
   if (singleReview.stars && singleReview.stars !== 0) {

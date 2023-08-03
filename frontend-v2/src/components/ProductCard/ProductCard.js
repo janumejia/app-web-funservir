@@ -173,7 +173,7 @@ const PostGrid = ({
       inclusiveElements={inclusiveElements}
       title={<TextLink link={`/post/${slug}`} content={name} />}
       // price={`$${price}/Night - Free Cancellation`}
-      rating={<Rating rating={5} ratingCount={35} type="bulk" />}
+      rating={<Rating rating={rating} ratingCount={ratingCount} type="bulk" />}
       viewDetailsBtn={
         <TextLink
           link={`/post/${slug}`}
