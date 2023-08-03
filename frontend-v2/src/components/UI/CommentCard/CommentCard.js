@@ -37,7 +37,6 @@ export default class App extends React.Component {
     const postTime = new Date(commentDate).getTime();
     const authorAvatar = singleReview ? singleReview.userId.profilePicture : '';
     const reviewRating = singleReview ? singleReview.reviewFields : '';
-    console.log(reviewRating);
     return (
       <div className="comment-area">
         <div className="comment-wrapper">
