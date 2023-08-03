@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { IoIosStar, IoIosStarOutline/*, IoIosArrowDown*/, IoIosStarHalf } from 'react-icons/io';
-import { Row, Col, Button, /*Input, Checkbox,*/ Divider, Modal } from 'antd';
+import { Row, Col, Button, /*Input, Checkbox,*/ Divider, Modal, Space } from 'antd';
 import CommentCard from 'components/UI/CommentCard/CommentCard';
 import Heading from 'components/UI/Heading/Heading';
 import Text from 'components/UI/Text/Text';
@@ -32,7 +32,7 @@ const CommentBox = (props) => {
         </Fragment>
       );
     })
-    : <Title style={{marginTop:'2rem'}} level={4}>Nadie ha comentado aún... ¡Sé el primero en comentar!</Title>
+    : <Title style={{ marginTop: '2rem' }} level={4}>Nadie ha comentado aún... ¡Sé el primero en comentar!</Title>
 };
 
 const Review = (props) => {
@@ -47,7 +47,7 @@ const Review = (props) => {
     ratingLabelStyle,
     ratingCountStyle,
   } = props;
-  
+
   let i, floorValue;
   let ratingView = [];
   let halfStar = false;
@@ -57,10 +57,10 @@ const Review = (props) => {
       if (i < floorValue) {
         ratingView.push(<IoIosStar key={i} />);
       } else {
-        if(!halfStar && floorValue!==rating){
+        if (!halfStar && floorValue !== rating) {
           ratingView.push(<IoIosStarHalf key={i} />)
           halfStar = true;
-        }else{
+        } else {
           ratingView.push(<IoIosStarOutline key={i} />)
         }
       }
@@ -121,7 +121,7 @@ const Review = (props) => {
               wrapClassName="review_modal"
             >
               <ModalTitle>Escribe tu opinión aquí</ModalTitle>
-              <ReviewForm siteId={_id} userId={owner && owner._id} close={()=>handleModalClose('review')}/>
+              <ReviewForm siteId={_id} userId={owner && owner._id} close={() => handleModalClose('review')} />
             </Modal>
           </RatingSearch>
         </HeaderSection>
@@ -129,65 +129,66 @@ const Review = (props) => {
           <Col sm={12} lg={9}>
             <Heading content="Calificaciones de los usuarios" {...filterHeadingStyle} />
             <FilterElement>
-                <Text content="Excelente " as="span" {...ratingLabelStyle} />
-                <RatingWrapper>
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStar />
-                  <Text content={ratingStars["5"]} as="span" {...ratingCountStyle} />
-                </RatingWrapper>
+              <RatingWrapper>
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStar />
+                <Space> <Text content="Excelente " as="span" {...ratingLabelStyle} /></Space>
+                <Text content={`(${ratingStars["5"]})`} as="span" {...ratingCountStyle} />
+              </RatingWrapper>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-                <Text content="Muy bien " as="span" {...ratingLabelStyle} />
-                <RatingWrapper>
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStarOutline />
-                  <Text content={ratingStars["4"]} as="span" {...ratingCountStyle} />
-                </RatingWrapper>
+              <RatingWrapper>
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStarOutline />
+                <Space> <Text content="Muy bien " as="span" {...ratingLabelStyle} /></Space>
+                <Text content={`(${ratingStars["4"]})`} as="span" {...ratingCountStyle} />
+              </RatingWrapper>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-                <Text content="Regular " as="span" {...ratingLabelStyle} />
-                <RatingWrapper>
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStarOutline />
-                  <IoIosStarOutline />
-                  <Text content={ratingStars["3"]} as="span" {...ratingCountStyle} />
-                </RatingWrapper>
+              <RatingWrapper>
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStarOutline />
+                <IoIosStarOutline />
+                <Space> <Text content="Regular " as="span" {...ratingLabelStyle} /></Space>
+                <Text content={`(${ratingStars["3"]})`} as="span" {...ratingCountStyle} />
+              </RatingWrapper>
             </FilterElement>
             {/* End of Filter Element */}
 
             <FilterElement>
-                <Text content="Malo " as="span" {...ratingLabelStyle} />
-                <RatingWrapper>
-                  <IoIosStar />
-                  <IoIosStar />
-                  <IoIosStarOutline />
-                  <IoIosStarOutline />
-                  <IoIosStarOutline />
-                  <Text content={ratingStars["2"]} as="span" {...ratingCountStyle} />
-                </RatingWrapper>
+              <RatingWrapper>
+                <IoIosStar />
+                <IoIosStar />
+                <IoIosStarOutline />
+                <IoIosStarOutline />
+                <IoIosStarOutline />
+                <Space> <Text content="Malo " as="span" {...ratingLabelStyle} /></Space>
+                <Text content={`(${ratingStars["2"]})`} as="span" {...ratingCountStyle} />
+              </RatingWrapper>
             </FilterElement>
             <FilterElement>
-                <Text content="Terrible " as="span" {...ratingLabelStyle} />
-                <RatingWrapper>
-                  <IoIosStar />
-                  <IoIosStarOutline />
-                  <IoIosStarOutline />
-                  <IoIosStarOutline />
-                  <IoIosStarOutline />
-                  <Text content={ratingStars["1"]} as="span" {...ratingCountStyle} />
-                </RatingWrapper>
+              <RatingWrapper>
+                <IoIosStar />
+                <IoIosStarOutline />
+                <IoIosStarOutline />
+                <IoIosStarOutline />
+                <IoIosStarOutline />
+                <Space> <Text content="Terrible " as="span" {...ratingLabelStyle} /></Space>
+                <Text content={`(${ratingStars["1"]})`} as="span" {...ratingCountStyle} />
+
+              </RatingWrapper>
             </FilterElement>
             {/* End of Filter Element */}
           </Col>
