@@ -1,4 +1,4 @@
-const {model, Schema} = require("mongoose") 
+const { model, Schema } = require("mongoose")
 
 const commentSchema = new Schema({
   siteId: {
@@ -15,14 +15,20 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  stars:{
+  stars: {
     type: Number,
     required: true
   },
   content: {
     type: String,
     required: true,
-  }
-},{ timestamps: true });
+  },
+  reviewFields: [
+    {
+      ratingFieldName: { type: String },
+      rating: { type: Number },
+    }
+  ]
+}, { timestamps: true });
 
 module.exports = model('Comment', commentSchema);

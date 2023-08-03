@@ -46,7 +46,7 @@ const Rating = (props) => {
 
   return (
     <>
-      {(showRatingCount === 'Sin calificaciones') ?
+      {(showRatingCount === 'Sin calificaciones' && type === 'bulk') ?
         (
           <strong>
             {`${showRatingCount}`}

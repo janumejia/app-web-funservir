@@ -13,7 +13,21 @@ const addComment = async (req, res) => {
             userId: ObjectId(decodedDataInToken._id),
             title: inputs.title,
             stars: inputs.stars,
-            content: inputs.content
+            content: inputs.content,
+            reviewFields: [
+                {
+                    ratingFieldName: "Elementos inclusivos",
+                    rating: inputs.inclusivity
+                },
+                {
+                    ratingFieldName: "Accesibilidad",
+                    rating: inputs.accessibility
+                },
+                {
+                    ratingFieldName: "Servicio",
+                    rating: inputs.service
+                },
+            ]
         })
        
         const savedComment = await newComment.save();

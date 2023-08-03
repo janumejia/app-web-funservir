@@ -4,12 +4,13 @@ import moment from 'moment';
 import 'moment/locale/es';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 //import LikeDislike from './LikeDislike';
-//import Rating from '../Rating/Rating';
+import Rating from '../Rating/Rating';
 moment.locale('es');
 
 export default class App extends React.Component {
   render() {
   const { singleReview } = this.props;
+  
   let i;
   let ratingView = [];
   if (singleReview.stars && singleReview.stars !== 0) {
@@ -35,8 +36,7 @@ export default class App extends React.Component {
     const commentDate = singleReview ? singleReview.createdAt : '';
     const postTime = new Date(commentDate).getTime();
     const authorAvatar = singleReview ? singleReview.userId.profilePicture : '';
-    //const reviewRating = singleReview ? singleReview.reviewFields : '';
-
+    const reviewRating = singleReview ? singleReview.reviewFields : '';
     return (
       <div className="comment-area">
         <div className="comment-wrapper">
@@ -70,7 +70,7 @@ export default class App extends React.Component {
             <h4>{reviewTitle}</h4>
             <p>{content}</p>
           </div>
-          {/* <div className="comment-rating">
+          <div className="comment-rating">
             {reviewRating && reviewRating.length !== 0
               ? reviewRating.map((singleReviewRating, i) => {
                   return (
@@ -85,7 +85,7 @@ export default class App extends React.Component {
                   );
                 })
               : ''}
-          </div> */}
+          </div>
         </div>
       </div>
     );
