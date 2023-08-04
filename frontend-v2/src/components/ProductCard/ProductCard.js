@@ -169,7 +169,7 @@ const PostGrid = ({
         />
 
       }
-      location={siteAddress}
+      location={neighborhood + ", " + locality}
       inclusiveElements={inclusiveElements}
       title={<TextLink link={`/post/${slug}`} content={name} />}
       // price={`$${price}/Night - Free Cancellation`}

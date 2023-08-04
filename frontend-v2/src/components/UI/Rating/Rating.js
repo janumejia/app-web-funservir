@@ -27,7 +27,9 @@ const Rating = (props) => {
     listingCondition = 'Excelente';
   } else if (rating && 4 <= rating && rating < 4.9) {
     listingCondition = 'Muy bueno';
-  } else if (rating && 3 <= rating && rating < 4) {
+  } else if (rating && 3.5 <= rating && rating < 4) {
+    listingCondition = 'Bueno';
+  } else if (rating && 3 <= rating && rating < 3.5) {
     listingCondition = 'Regular';
   } else if (rating && 2 <= rating && rating < 3) {
     listingCondition = 'Malo';
@@ -39,7 +41,7 @@ const Rating = (props) => {
 
   let showRatingCount;
   if (ratingCount) {
-    showRatingCount = `(` + ratingCount + ` calificaciones)`;
+    showRatingCount = `(` + ratingCount + `)`;
   } else {
     showRatingCount = 'Sin calificaciones';
   }
@@ -56,15 +58,15 @@ const Rating = (props) => {
         (
           <>
             {type && type === 'bulk' ? (
-              <>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <span>{ratingView}</span>
-                <strong>
-                  {` ${listingCondition}`}
+                <strong style={{ margin: '-3px 3px 0 7px' }}>
+                  {`${listingCondition}`}
                 </strong>
-                <strong>
+                <strong >
                   {`${showRatingCount}`}
                 </strong>
-              </>
+              </div>
             ) : (
               <>
                 <span>{ratingFieldName}</span> {ratingView}
