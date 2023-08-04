@@ -5,6 +5,7 @@ import { Badge, Tooltip } from 'antd';
 import GridCardWrapper, {
   ImageWrapper,
   FavoriteIcon,
+  FavoriteIconOriginal,
   ContentWrapper,
   LocationArea,
   TitleArea,
@@ -23,13 +24,14 @@ const GridCard = ({
   editBtn,
   viewDetailsBtn,
   children,
-  myProfile
+  myProfile,
+  favoriteOriginal,
 }) => {
   let classes = viewDetailsBtn || editBtn ? `has_btn ${className}` : className;
   return (
     <GridCardWrapper className={`grid_card ${classes}`.trim()}>
       <ImageWrapper className="media_wrapper">{children}</ImageWrapper>
-      {myProfile && favorite && <FavoriteIcon>{favorite}</FavoriteIcon>}
+      {myProfile && favorite ? <FavoriteIcon>{favorite}</FavoriteIcon>: (favoriteOriginal ? <FavoriteIconOriginal>{favoriteOriginal}</FavoriteIconOriginal> : <></>)}
       <ContentWrapper className="content_wrapper">
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
@@ -40,7 +42,7 @@ const GridCard = ({
                 if (index === 6) {
                   return (
                     <Badge
-                      count={`${inclusiveElements.length - 5}+`}
+                      count={`${inclusiveElements.length - 6}+`}
                       style={{ backgroundColor: '#008489' }}
                     />
                   )

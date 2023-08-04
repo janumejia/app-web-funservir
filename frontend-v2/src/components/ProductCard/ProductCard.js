@@ -4,6 +4,7 @@ import TextLink from 'components/UI/TextLink/TextLink';
 import Rating from 'components/UI/Rating/Rating';
 import { FormOutlined } from '@ant-design/icons';
 import Carousel from 'react-multi-carousel'; // Documentación: https://www.npmjs.com/package/react-multi-carousel
+import Favourite from 'components/UI/Favorite/Favorite';
 import 'react-multi-carousel/lib/styles.css';
 import GridCard from '../GridCard/GridCard';
 import { useNavigate } from 'react-router-dom';
@@ -168,6 +169,13 @@ const PostGrid = ({
           }}
         />
 
+      }
+      favoriteOriginal={
+        <Favourite
+          onClick={(event) => {
+            console.log(event);
+          }}
+        />
       }
       location={neighborhood + ", " + locality}
       inclusiveElements={inclusiveElements}

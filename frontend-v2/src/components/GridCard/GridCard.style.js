@@ -164,7 +164,21 @@ export const FavoriteIcon = styled.div`
   position: absolute;
   top: 10px;
   right: 8px;
-  z-index: 9;
+  /* z-index: 0; */
+  font-size: 190%;
+  color: white;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+
+export const FavoriteIconOriginal = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 8px;
+  margin-top: 0px;
+  /* z-index: 0; */
   font-size: 190%;
   color: white;
   transition: transform 0.3s ease;
