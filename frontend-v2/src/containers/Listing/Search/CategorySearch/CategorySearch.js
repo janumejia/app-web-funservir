@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import moment from 'moment';
-import { Button, Slider, Checkbox } from 'antd';
+import { Button, Slider, Checkbox, Space, Select } from 'antd';
 import ViewWithPopup from 'components/UI/ViewWithPopup/ViewWithPopup';
 import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
 import DateRangePicker from 'components/UI/DatePicker/ReactDates';
@@ -29,13 +29,13 @@ const CategorySearch = ({ location }) => {
 
   console.log("allElements: ", allElements)
 
-  
+
   const searchParams = getStateFromUrl(location);
   const state = {
     buscar: searchParams.buscar || [],
     elementos: searchParams.elementos || [],
     categoria: searchParams.categoria || [],
-    ubicacion: searchParams.ubicacion || [],
+    // ubicacion: searchParams.ubicacion || [],
     // date_range: searchParams.date_range || {
     //   setStartDate: null,
     //   setEndDate: null,
@@ -46,23 +46,23 @@ const CategorySearch = ({ location }) => {
     //   defaultMin: 0,
     //   defaultMax: 100,
     // },
-    location: searchParams.location || {
-      lat: null,
-      lng: null,
+    ubicacion: searchParams.ubicacion || {
+      locality: null,
+      neighborhood: null,
     },
     // room: parseInt(searchParams.room) || 0,
     // guest: parseInt(searchParams.guest) || 0,
   };
 
-  
+
   const { buscar, elementos, categoria, ubicacion } = state;
   // const [countRoom, setRoom] = useState(room);
   // const [countGuest, setGuest] = useState(guest);
-  
+
   const onChange = (value, type) => {
     console.log("Elementos: ", elementos);
     console.log("value: ", value, " type: ", type)
-    
+
     const query = {
       ...state,
       [type]: value,
@@ -108,7 +108,7 @@ const CategorySearch = ({ location }) => {
     // setGuest(0);
 
     let search = {};
-    if(state?.buscar.length !== 0) search = setStateToUrl({ buscar: state.buscar });
+    if (state?.buscar.length !== 0) search = setStateToUrl({ buscar: state.buscar });
     else search = setStateToUrl({ reset: '' });
 
     navigate({
@@ -172,23 +172,55 @@ const CategorySearch = ({ location }) => {
           </Button>
         }
         popup={
-          <Checkbox.Group
-            options={allElements.map((element) => {
-              return { label: element?.name, value: element?.name }
-            })}
-            defaultValue={ubicacion}
-            onChange={(value) => onChange(value, 'ubicacion')}
-          />
+          <Space wrap>
+            <Select
+              showSearch
+              style={{
+                'width': '238px',
+                'margin': '0 0 10px 0',
+              }}
+              placeholder="Selecciona una localidad"
+              onChange={(value) => onChange(value, 'locality')}
+              options={allLocations.map((locality) => ({
+                label: locality.name,
+                value: locality.name.replace(/ /g, '-'),
+              }))}
+            />
+
+            <Select
+              showSearch
+              style={{
+                width: '238px',
+              }}
+              placeholder="Selecciona un barrio"
+              onChange={(value) => onChange(value, 'neighborhoods')}
+              options={allLocations.map((locality) => ({
+                label: locality.name,
+                value: locality.name.replace(/ /g, '-'),
+              }))}
+            />
+            {/* <Select
+              style={{
+                width: 60,
+              }}
+              value={ubicacion.locality}
+              onChange={(value) => onChange(value, 'ubicacion')}
+              options={allNeighborhoods.map((city) => ({
+                label: city,
+                value: city,
+              }))}
+            /> */}
+          </Space>
         }
       />
-
-      <ViewWithPopup
+  
+      {/* <ViewWithPopup
         className={ubicacion.length ? 'activated' : ''}
         key={"Abierto"}
         noView={true}
         view={
           <Button type="default">
-            Abierto
+            Abierto ahora
             {ubicacion.length > 0 && `: ${ubicacion.length}`}
           </Button>
         }
@@ -201,7 +233,7 @@ const CategorySearch = ({ location }) => {
             onChange={(value) => onChange(value, 'ubicacion')}
           />
         }
-      />
+      /> */}
 
       {/* 
       <ViewWithPopup
