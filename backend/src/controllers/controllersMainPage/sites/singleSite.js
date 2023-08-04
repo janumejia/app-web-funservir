@@ -10,7 +10,7 @@ const searchSites = async (req, res) => {
         .replace(/[ó,ö,ò]/g, 'o')
         .replace(/[ü,ú,ù]/g, 'u')
         .replace(/[+]/g, ' ')
-        .replace(/[^\w\s]/gi, ''); // Remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
+        .replace(/[^\w\sñ]/gi, ''); // Remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
 
     const patternToSearchV2 = patternToSearchV1.replace(/a/g, '[a,á,à,ä,â]') // Considero necesario poner esto, porque en el caso que busquemos "cafeteria" y en la bd está "cafetería" (con tilde) no nos arrojara resultados, entonces esta parte resuelve eso
         .replace(/e/g, '[e,é,ë,è]')

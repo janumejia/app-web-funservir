@@ -39,6 +39,7 @@ export function setStateToUrl(state) {
         //   }
         //   urlData[key] = data && data.length ? data.join() : null;
         //   break;
+  
         case 'elementos':
           console.log("state[key]*** -> ", state[key])
           urlData[key] =
@@ -49,11 +50,11 @@ export function setStateToUrl(state) {
             state[key] && state[key].length ? state[key].join() : null;
           break;
         case 'ubicacion':
-          if (state[key]) {
-            urlData[key] = state[key] ? state[key] : null;
-          } else {
-            urlData[key] = '';
-          }
+          urlData[key] = state[key] ? state[key] : null;
+          // if (state[key]) {
+          // } else {
+          //   urlData[key] = '';
+          // }
           break;
         // case 'guest':
         //   if (state[key]) {
@@ -110,6 +111,9 @@ export function getStateFromUrl(location) {
         //       : null;
         //   }
         //   break;
+        // case 'buscar':
+        //   urlData[key] = state[key] ? state[key] : [];
+        //   break; 
 
         case 'elementos':
           console.log("urlData[key]: ", urlData[key])
@@ -128,11 +132,11 @@ export function getStateFromUrl(location) {
           break;
 
         case 'ubicacion':
-          if (urlData[key]) {
-            state[key] = urlData[key] ? urlData[key] : 0;
-          } else {
-            state[key] = '';
-          }
+          state[key] = urlData[key] ? urlData[key] : [];
+          // if (urlData[key]) {
+          // } else {
+          //   state[key] = '';
+          // }
           break;
 
         // case 'guest':
