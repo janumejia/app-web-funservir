@@ -75,7 +75,7 @@ export default function NavbarSearch() {
       .replace(/[óöò]/g, 'o') // Replace "ó", "ö", "ò" with "o"
       .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
       .replace(/\s+/g, ' ') // Remover espacios
-      .replace(/[_]/g, ' ') // Remover guion bajo
+      .replace(/[_+]/g, ' ') // Remover guion bajo
       .replace(/[^\w\s]/gi, '');
 
     if (searchValueSanitized === "" || !(/[A-Za-z0-9]/.test(searchValueSanitized))) {

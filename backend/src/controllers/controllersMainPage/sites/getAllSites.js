@@ -5,7 +5,7 @@ const getAllSites = async (req, res) => {
 
     try{
         // El select contiene los atributos a retornar de la consulta para cada documento de la colección
-        const dataFound = await Site.find({ status: "Aprobado" }).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule") 
+        const dataFound = await Site.find({ status: "Aprobado" }).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount") 
         return res.json( dataFound )
 
     } catch (error) {
