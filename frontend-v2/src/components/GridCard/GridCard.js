@@ -51,12 +51,14 @@ const GridCard = ({
                 return (
                   <Tooltip key={item.name} title={item.name}>
                     <img
-                      src={item.image.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')}
+                      src={item.image.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto,c_fill,h_200,w_200/')}
                       alt={item.name}
                       style={{
                         marginRight: '5px',
-                        maxWidth: '25px', // Set the maxWidth property to 25px
-                        maxHeight: '25px', // Set the maxHeight property to 25px to maintain aspect ratio
+                        // maxWidth: '26px', // Set the maxWidth property to 25px
+                        // maxHeight: '26px', // Set the maxHeight property to 25px to maintain aspect ratio
+                        width: '12%',
+                        height: 'auto',
                         objectFit: 'contain', // Use 'contain' to maintain aspect ratio without stretching
                       }}
                     />
