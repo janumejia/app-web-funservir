@@ -173,6 +173,20 @@ export const FavoriteIcon = styled.div`
   }
 `;
 
+export const FavoriteIconOriginal = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 8px;
+  margin-top: 0px;
+  z-index: 1;
+  font-size: 190%;
+  color: white;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+
 export const ContentWrapper = styled.div`
   padding: 15px;
   border-width: 1px;
