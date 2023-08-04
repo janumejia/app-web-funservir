@@ -31,6 +31,7 @@ const SearchInput = (props) => {
     // console.log("search: ", search)
     if (search && /^\?buscar=.*/.test(search)) {
       let searchValueSanitized = search.replace(/^\?buscar=/, '')
+        .replace(/&.*$/, '')
         .toLowerCase() // minusculas
         .replace(/[áàäâ]/g, 'a') // Replace "á", "à", "ä", "â" with "a"
         .replace(/[éëè]/g, 'e') // Replace "é", "ë", "è" with "e"

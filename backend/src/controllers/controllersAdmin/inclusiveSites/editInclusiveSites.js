@@ -47,7 +47,6 @@ const editInclusiveSites = async (req, res) => {
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
     // La función verifica si el valor del campo es válido según los criterios especificados y devuelve true o false.
     const validateInput = (input, dataName, dataType, regex) => {
-        // console.log("entra va validateInput con input:", input, " dataType:", dataType, " regex:", regex)
         if (dataType === 'string') {
             return typeof input === 'string' && regex.test(input);
         }

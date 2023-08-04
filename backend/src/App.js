@@ -78,7 +78,7 @@ app.post("/changePassword", verifyToken, controllers.changePassword)
 // Busqueda de sitios
 app.get("/sites", controllers.getAllSites)
 app.get("/siteNames", controllers.getAllSiteNames)
-app.get("/sites/buscar=:patternToSearch", controllers.searchSites)
+app.get("/sites/search", controllers.searchSites)
 app.get("/sites/:siteName", controllers.getSingleSite)
 
 // Rutas del portal administrador a partir de este punto:

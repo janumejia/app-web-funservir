@@ -86,6 +86,7 @@ function dataFetchReducer(state, action) {
 const useDataApi = (initialUrl, limit = 10, initialData = []) => {
   const [url, setUrl] = useState(initialUrl);
   const navigate = useNavigate();
+  console.log("^_^ initialUrl: ", initialUrl)
 
   // Para actualizar la URL cuando se realice otra búsqueda usando la barra de búsqueda superior
   useEffect(() => {

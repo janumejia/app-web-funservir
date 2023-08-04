@@ -20,6 +20,7 @@ import CategorySearchWrapper, {
 } from './CategorySearch.style';
 
 import { OtherVariablesContext } from 'context/OtherVariablesProvider';
+import { AiOutlineClear } from 'react-icons/ai';
 
 const CategorySearch = ({ location }) => {
   let navigate = useNavigate();
@@ -28,75 +29,88 @@ const CategorySearch = ({ location }) => {
 
   console.log("allElements: ", allElements)
 
+  
   const searchParams = getStateFromUrl(location);
   const state = {
-    amenities: searchParams.amenities || [],
-    property: searchParams.property || [],
-    date_range: searchParams.date_range || {
-      setStartDate: null,
-      setEndDate: null,
-    },
-    price: searchParams.price || {
-      min: 0,
-      max: 100,
-      defaultMin: 0,
-      defaultMax: 100,
-    },
+    buscar: searchParams.buscar || [],
+    elementos: searchParams.elementos || [],
+    categoria: searchParams.categoria || [],
+    ubicacion: searchParams.ubicacion || [],
+    // date_range: searchParams.date_range || {
+    //   setStartDate: null,
+    //   setEndDate: null,
+    // },
+    // price: searchParams.price || {
+    //   min: 0,
+    //   max: 100,
+    //   defaultMin: 0,
+    //   defaultMax: 100,
+    // },
     location: searchParams.location || {
       lat: null,
       lng: null,
     },
-    room: parseInt(searchParams.room) || 0,
-    guest: parseInt(searchParams.guest) || 0,
+    // room: parseInt(searchParams.room) || 0,
+    // guest: parseInt(searchParams.guest) || 0,
   };
-  const { amenities, property, date_range, price, room, guest } = state;
-  const [countRoom, setRoom] = useState(room);
-  const [countGuest, setGuest] = useState(guest);
 
+  
+  const { buscar, elementos, categoria, ubicacion } = state;
+  // const [countRoom, setRoom] = useState(room);
+  // const [countGuest, setGuest] = useState(guest);
+  
   const onChange = (value, type) => {
+    console.log("Elementos: ", elementos);
+    console.log("value: ", value, " type: ", type)
+    
     const query = {
       ...state,
       [type]: value,
     };
     const search = setStateToUrl(query);
+    console.log("LA NUEVA SEARCH EN CATEGORY: ", search)
     navigate({
       pathname: LISTING_POSTS_PAGE,
       search: `?${createSearchParams(search)}`,
     });
   };
 
-  const handleRoomGuestApply = () => {
-    const query = {
-      ...state,
-      room: countRoom,
-      guest: countGuest,
-    };
-    const search = setStateToUrl(query);
-    navigate({
-      pathname: LISTING_POSTS_PAGE,
-      search: `?${createSearchParams(search)}`,
-    });
-  };
+  // const handleRoomGuestApply = () => {
+  //   const query = {
+  //     ...state,
+  //     room: countRoom,
+  //     guest: countGuest,
+  //   };
+  //   const search = setStateToUrl(query);
+  //   navigate({
+  //     pathname: LISTING_POSTS_PAGE,
+  //     search: `?${createSearchParams(search)}`,
+  //   });
+  // };
 
-  const handleRoomGuestCancel = () => {
-    setRoom(0);
-    setGuest(0);
-    const query = {
-      ...state,
-      room: 0,
-      guest: 0,
-    };
-    const search = setStateToUrl(query);
-    navigate({
-      pathname: LISTING_POSTS_PAGE,
-      search: `?${createSearchParams(search)}`,
-    });
-  };
+  // const handleRoomGuestCancel = () => {
+  //   setRoom(0);
+  //   setGuest(0);
+  //   const query = {
+  //     ...state,
+  //     room: 0,
+  //     guest: 0,
+  //   };
+  //   const search = setStateToUrl(query);
+  //   navigate({
+  //     pathname: LISTING_POSTS_PAGE,
+  //     search: `?${createSearchParams(search)}`,
+  //   });
+  // };
 
   const onSearchReset = () => {
-    setRoom(0);
-    setGuest(0);
-    const search = setStateToUrl({ reset: '' });
+    // setRoom(0);
+    // setGuest(0);
+
+    let search = {};
+    if(state?.buscar.length !== 0) search = setStateToUrl({ buscar: state.buscar });
+    else search = setStateToUrl({ reset: '' });
+
     navigate({
       pathname: LISTING_POSTS_PAGE,
       search: `?${createSearchParams(search)}`,
@@ -106,13 +120,55 @@ const CategorySearch = ({ location }) => {
   return (
     <CategorySearchWrapper>
       <ViewWithPopup
-        className={amenities.length ? 'activated' : ''}
-        key={"Elements"}
+        className={elementos.length ? 'activated' : ''}
+        key={"elementos"}
         noView={true}
         view={
           <Button type="default">
-            {"Elementos inclusivos"}
-            {amenities.length > 0 && `: ${amenities.length}`}
+            Elementos inclusivos
+            {elementos.length > 0 && `: ${elementos.length}`}
+          </Button>
+        }
+        popup={
+          <Checkbox.Group
+            options={allElements.map((element) => {
+              return { label: element?.name, value: element?.name.replace(/ /g, '-') }
+            })}
+            defaultValue={elementos}
+            onChange={(value) => onChange(value, 'elementos')}
+          />
+        }
+      />
+
+      <ViewWithPopup
+        className={categoria.length ? 'activated' : ''}
+        key={"categoria"}
+        noView={true}
+        view={
+          <Button type="default">
+            Categoría
+            {categoria.length > 0 && `: ${categoria.length}`}
+          </Button>
+        }
+        popup={
+          <Checkbox.Group
+            options={allCategories.map((element) => {
+              return { label: element?.name, value: element?.name.replace(/ /g, '-') }
+            })}
+            defaultValue={categoria}
+            onChange={(value) => onChange(value, 'categoria')}
+          />
+        }
+      />
+
+      <ViewWithPopup
+        className={ubicacion.length ? 'activated' : ''}
+        key={"ubicacion"}
+        noView={true}
+        view={
+          <Button type="default">
+            Ubicación
+            {ubicacion.length > 0 && `: ${ubicacion.length}`}
           </Button>
         }
         popup={
@@ -120,31 +176,34 @@ const CategorySearch = ({ location }) => {
             options={allElements.map((element) => {
               return { label: element?.name, value: element?.name }
             })}
-            defaultValue={amenities}
-            onChange={(value) => onChange(value, 'amenities')}
+            defaultValue={ubicacion}
+            onChange={(value) => onChange(value, 'ubicacion')}
           />
         }
       />
 
       <ViewWithPopup
-        className={property.length ? 'activated' : ''}
-        key={getPropertyType.id}
+        className={ubicacion.length ? 'activated' : ''}
+        key={"Abierto"}
         noView={true}
         view={
           <Button type="default">
-            {getPropertyType.name}
-            {property.length > 0 && `: ${property.length}`}
+            Abierto
+            {ubicacion.length > 0 && `: ${ubicacion.length}`}
           </Button>
         }
         popup={
           <Checkbox.Group
-            options={getPropertyType.options}
-            defaultValue={property}
-            onChange={(value) => onChange(value, 'property')}
+            options={allElements.map((element) => {
+              return { label: element?.name, value: element?.name }
+            })}
+            defaultValue={ubicacion}
+            onChange={(value) => onChange(value, 'ubicacion')}
           />
         }
       />
 
+      {/* 
       <ViewWithPopup
         className={
           Object.keys('date_range').length !== null &&
@@ -256,11 +315,11 @@ const CategorySearch = ({ location }) => {
             </ActionWrapper>
           </RoomGuestWrapper>
         }
-      />
+      /> */}
       <div className="view_with__popup">
         <div className="popup_handler">
           <Button type="default" onClick={onSearchReset}>
-            Reset
+            Limpiar filtros
           </Button>
         </div>
       </div>
