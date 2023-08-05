@@ -35,7 +35,7 @@ const editUser = async (req, res) => {
         { input: 'socialFacebook', dataType: 'string', regex: regex.socialFacebookRegex },
         { input: 'socialTwitter', dataType: 'string', regex: regex.socialTwitterRegex },
         // { input: 'profilePicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
-        { input: 'coverPicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
+        // { input: 'coverPicture', dataType: 'string', regex: regex.changePicturesImagesRegex },
     ]
 
     // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.

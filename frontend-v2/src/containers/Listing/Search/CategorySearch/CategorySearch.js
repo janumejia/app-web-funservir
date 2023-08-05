@@ -35,7 +35,7 @@ const CategorySearch = ({ location }) => {
     buscar: searchParams.buscar || [],
     elementos: searchParams.elementos || [],
     categoria: searchParams.categoria || [],
-    // ubicacion: searchParams.ubicacion || [],
+    location: searchParams.ubicacion || [],
     // date_range: searchParams.date_range || {
     //   setStartDate: null,
     //   setEndDate: null,
@@ -46,10 +46,11 @@ const CategorySearch = ({ location }) => {
     //   defaultMin: 0,
     //   defaultMax: 100,
     // },
-    ubicacion: searchParams.ubicacion || {
-      locality: null,
-      neighborhood: null,
-    },
+    // ubicacion: searchParams.ubicacion || {
+    //   locality: null,
+    //   neighborhood: null,
+    // },
+    ubicacion: searchParams.ubicacion || [],
     // room: parseInt(searchParams.room) || 0,
     // guest: parseInt(searchParams.guest) || 0,
   };
@@ -162,13 +163,13 @@ const CategorySearch = ({ location }) => {
       />
 
       <ViewWithPopup
-        className={ubicacion.length ? 'activated' : ''}
-        key={"ubicacion"}
+        className={location.length ? 'activated' : ''}
+        key={"location"}
         noView={true}
         view={
           <Button type="default">
             Ubicación
-            {ubicacion.length > 0 && `: ${ubicacion.length}`}
+            {location.length > 0 && `: ${location.length}`}
           </Button>
         }
         popup={
@@ -180,7 +181,7 @@ const CategorySearch = ({ location }) => {
                 'margin': '0 0 10px 0',
               }}
               placeholder="Selecciona una localidad"
-              onChange={(value) => onChange(value, 'locality')}
+              // onChange={(value) => onChange(value, 'locality')}
               options={allLocations.map((locality) => ({
                 label: locality.name,
                 value: locality.name.replace(/ /g, '-'),
@@ -193,8 +194,8 @@ const CategorySearch = ({ location }) => {
                 width: '238px',
               }}
               placeholder="Selecciona un barrio"
-              onChange={(value) => onChange(value, 'neighborhoods')}
-              options={allLocations.map((locality) => ({
+              // onChange={(value) => onChange(value, 'neighborhoods')}
+              options={allNeighborhoods.map((locality) => ({
                 label: locality.name,
                 value: locality.name.replace(/ /g, '-'),
               }))}

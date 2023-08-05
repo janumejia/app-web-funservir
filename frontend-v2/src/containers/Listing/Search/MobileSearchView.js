@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import moment from 'moment';
 import { Slider, Button, Drawer, Checkbox } from 'antd';
@@ -30,7 +30,11 @@ import {
   ItemWrapper,
 } from './MobileSearchView.style';
 
+import { OtherVariablesContext } from 'context/OtherVariablesProvider';
+
 const FilterDrawer = ({ history, location }) => {
+  const { allElements, allNeighborhoods, allLocations, allCategories } = useContext(OtherVariablesContext)
+
   let navigate = useNavigate();
   const searchParams = getStateFromUrl(location);
   const [toggle, setToggle] = useState(false);
@@ -149,7 +153,7 @@ const FilterDrawer = ({ history, location }) => {
   return (
     <FilterArea>
       <Button className={toggle ? 'active' : ''} onClick={handleToggleDrawer}>
-        More filters
+        Más filtros
       </Button>
       <Drawer
         className="filter_drawer"
@@ -164,10 +168,10 @@ const FilterDrawer = ({ history, location }) => {
         <FilterElementsWrapper>
           <Accordion allowZeroExpanded={true}>
             {/* Start price range filter element */}
-            <AccordionItem>
+            {/* <AccordionItem>
               <AccordionItemHeading>
                 <AccordionItemButton>
-                  <Heading as="h4" content="Select Price Range" />
+                  <Heading as="h4" content="Selecciona elementos inclusivos" />
                   <IoIosArrowDown />
                 </AccordionItemButton>
               </AccordionItemHeading>
@@ -181,14 +185,14 @@ const FilterDrawer = ({ history, location }) => {
                   onChange={handlePriceChange}
                 />
               </AccordionItemPanel>
-            </AccordionItem>
+            </AccordionItem> */}
             {/* End of price range filter element */}
 
             {/* Start date filter element */}
-            <AccordionItem>
+            {/* <AccordionItem>
               <AccordionItemHeading>
                 <AccordionItemButton>
-                  <Heading as="h4" content="Choose Date" />
+                  <Heading as="h4" content="Categorías" />
                   <IoIosArrowDown />
                 </AccordionItemButton>
               </AccordionItemHeading>
@@ -214,20 +218,63 @@ const FilterDrawer = ({ history, location }) => {
                   }
                 />
               </AccordionItemPanel>
-            </AccordionItem>
+            </AccordionItem> */}
             {/* End of date filter element */}
+
 
             {/* Start amenities filter element */}
             <AccordionItem>
               <AccordionItemHeading>
                 <AccordionItemButton>
-                  <Heading as="h4" content="Amenities" />
+                  <Heading as="h4" content="Elementos" />
                   <IoIosArrowDown />
                 </AccordionItemButton>
               </AccordionItemHeading>
               <AccordionItemPanel>
                 <Checkbox.Group
-                  options={getAmenities.options}
+                  options={allElements.map((element) => {
+                    return { label: element?.name, value: element?.name.replace(/ /g, '-') }
+                  })}
+                  value={amenities}
+                  onChange={onChangeAmenity}
+                />
+              </AccordionItemPanel>
+            </AccordionItem>
+            {/* End of amenities filter element */}
+
+            {/* Start amenities filter element */}
+            <AccordionItem>
+              <AccordionItemHeading>
+                <AccordionItemButton>
+                  <Heading as="h4" content="Categoría" />
+                  <IoIosArrowDown />
+                </AccordionItemButton>
+              </AccordionItemHeading>
+              <AccordionItemPanel>
+                <Checkbox.Group
+                  options={allCategories.map((element) => {
+                    return { label: element?.name, value: element?.name.replace(/ /g, '-') }
+                  })}
+                  value={amenities}
+                  onChange={onChangeAmenity}
+                />
+              </AccordionItemPanel>
+            </AccordionItem>
+            {/* End of amenities filter element */}
+
+                        {/* Start amenities filter element */}
+                        <AccordionItem>
+              <AccordionItemHeading>
+                <AccordionItemButton>
+                  <Heading as="h4" content="Ubicación" />
+                  <IoIosArrowDown />
+                </AccordionItemButton>
+              </AccordionItemHeading>
+              <AccordionItemPanel>
+                <Checkbox.Group
+                  options={allCategories.map((element) => {
+                    return { label: element?.name, value: element?.name.replace(/ /g, '-') }
+                  })}
                   value={amenities}
                   onChange={onChangeAmenity}
                 />
@@ -236,7 +283,7 @@ const FilterDrawer = ({ history, location }) => {
             {/* End of amenities filter element */}
 
             {/* Start property type filter element */}
-            <AccordionItem>
+            {/* <AccordionItem>
               <AccordionItemHeading>
                 <AccordionItemButton>
                   <Heading as="h4" content="Property Type" />
@@ -250,11 +297,11 @@ const FilterDrawer = ({ history, location }) => {
                   onChange={onChangeProperty}
                 />
               </AccordionItemPanel>
-            </AccordionItem>
+            </AccordionItem> */}
             {/* End of property type filter element */}
 
             {/* Room & Guest type filter element */}
-            <AccordionItem>
+            {/* <AccordionItem>
               <AccordionItemHeading>
                 <AccordionItemButton>
                   <Heading as="h4" content="Choose Room and Guest" />
@@ -286,14 +333,15 @@ const FilterDrawer = ({ history, location }) => {
                   </ItemWrapper>
                 </RoomGuestWrapper>
               </AccordionItemPanel>
-            </AccordionItem>
+            </AccordionItem> */}
             {/* End of Room & Guest type filter element */}
+
           </Accordion>
 
           <ButtonGroup>
-            <Button onClick={handleCloseDrawer}>Cancel Filter</Button>
+            <Button onClick={handleCloseDrawer}>Cancelar filtro</Button>
             <Button type="primary" onClick={handleApplyFilter}>
-              Apply Filter
+              Aplicar filtro
             </Button>
           </ButtonGroup>
         </FilterElementsWrapper>
