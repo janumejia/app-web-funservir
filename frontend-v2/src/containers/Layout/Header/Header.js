@@ -129,7 +129,7 @@ export default function Header() {
                   <AvatarInfo>
                     <Text as="h3" content={userName} />
                     <TextLink
-                      link={AGENT_PROFILE_PAGE}
+                      link={`profile/${user._id}`}
                       content="Ver perfil"
                     />
                   </AvatarInfo>

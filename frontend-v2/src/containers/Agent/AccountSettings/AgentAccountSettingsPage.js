@@ -58,7 +58,7 @@ export default function AgentAccountSettingsPage() {
                 />
                 <ContentWrapper>
                   <AgentName>{user && user.name} {user && user.lastName}</AgentName>
-                  <Link to={AGENT_PROFILE_PAGE}>Ver perfil</Link>
+                  <Link to={`/profile/${user._id}`}>Ver perfil</Link>
                 </ContentWrapper>
               </AgentAvatar>
               <AccountSettingNavLink />
