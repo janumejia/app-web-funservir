@@ -195,7 +195,17 @@ const addInclusiveSites = async (req, res) => {
             socialFacebook: inputs.socialFacebook,
             socialTwitter: inputs.socialTwitter,
             webpage: inputs.webpage,
-            schedule: inputs.schedule
+            schedule: inputs.schedule,
+            ratingTotal: 0,
+            ratingCount: 0,
+            rating: 0,
+            ratingStars: {
+                "5": 0,
+                "4": 0,
+                "3": 0,
+                "2": 0,
+                "1": 0
+            }
         });
 
         // Guardar el sitio en la colección InclusiveSites y en la colección de sitios del usuario correspondiente
