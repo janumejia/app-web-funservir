@@ -139,7 +139,7 @@ const searchSites = async (req, res) => {
         //     query.$and.shift(); // Remover el elemento en posición 0 de $and
         // }
 
-        const dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule")
+        const dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount")
 
         if (dataFound) {
             return res.json(dataFound)
