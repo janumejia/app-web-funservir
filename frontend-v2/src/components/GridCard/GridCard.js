@@ -14,6 +14,13 @@ import GridCardWrapper, {
   ButtonGroup,
 } from './GridCard.style';
 
+const statusColorMap = {
+  Aprobado: 'green',
+  Pendiente: 'yellow',
+  Rechazado: 'red',
+  default: 'white'
+};
+
 const GridCard = ({
   className,
   inclusiveElements,
@@ -26,12 +33,15 @@ const GridCard = ({
   children,
   myProfile,
   favoriteOriginal,
+  status,
 }) => {
   let classes = viewDetailsBtn || editBtn ? `has_btn ${className}` : className;
-  return (
+
+  const renderContent = () => (
     <GridCardWrapper className={`grid_card ${classes}`.trim()}>
       <ImageWrapper className="media_wrapper">{children}</ImageWrapper>
-      {myProfile && favorite ? <FavoriteIcon>{favorite}</FavoriteIcon>: (favoriteOriginal ? <FavoriteIconOriginal>{favoriteOriginal}</FavoriteIconOriginal> : <></>)}
+      {myProfile && favorite ? <FavoriteIcon>{favorite}</FavoriteIcon> : (favoriteOriginal ? <FavoriteIconOriginal>{favoriteOriginal}</FavoriteIconOriginal> : <></>)}
+
       <ContentWrapper className="content_wrapper">
         {location && <LocationArea>{location}</LocationArea>}
         {title && <TitleArea>{title}</TitleArea>}
@@ -82,8 +92,23 @@ const GridCard = ({
           ) : null}
         </MetaWrapper>
       </ContentWrapper>
-
     </GridCardWrapper>
+  );
+
+  return (
+    <>
+      {myProfile && status ? (
+        <Badge.Ribbon
+          text={status}
+          color={statusColorMap[status]}
+          style={{ top: "183px" }}
+        >
+          {renderContent()}
+        </Badge.Ribbon>
+      ) : (
+        renderContent()
+      )}
+    </>
   );
 };
 
