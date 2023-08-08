@@ -49,7 +49,7 @@ const ProfileNavigation = (props) => {
             className={path === location.pathname && 'ant-menu-item-selected'}
             key="0"
           >
-            <NavLink to={path}>Sitios inclusivos</NavLink>
+            <NavLink to={`/profile/${user._id}`}>Sitios inclusivos</NavLink>
           </Menu.Item>
           {/* <Menu.Item key="1">
             <NavLink to={AGENT_PROFILE_FAVORITE}>Favoritos</NavLink>
