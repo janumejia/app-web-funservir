@@ -35,7 +35,7 @@ const CategorySearch = ({ location }) => {
     buscar: searchParams.buscar || [],
     elementos: searchParams.elementos || [],
     categoria: searchParams.categoria || [],
-    location: searchParams.ubicacion || [],
+    // location: searchParams.ubicacion || [],
     // date_range: searchParams.date_range || {
     //   setStartDate: null,
     //   setEndDate: null,
@@ -51,12 +51,13 @@ const CategorySearch = ({ location }) => {
     //   neighborhood: null,
     // },
     ubicacion: searchParams.ubicacion || [],
+    // localidad: searchParams.localidad || [],
     // room: parseInt(searchParams.room) || 0,
     // guest: parseInt(searchParams.guest) || 0,
   };
 
 
-  const { buscar, elementos, categoria, ubicacion } = state;
+  const { buscar, elementos, categoria, ubicacion, localidad } = state;
   // const [countRoom, setRoom] = useState(room);
   // const [countGuest, setGuest] = useState(guest);
 
@@ -163,13 +164,13 @@ const CategorySearch = ({ location }) => {
       />
 
       <ViewWithPopup
-        className={location.length ? 'activated' : ''}
-        key={"location"}
+        className={ubicacion.length ? 'activated' : ''}
+        key={"ubicacion"}
         noView={true}
         view={
           <Button type="default">
             Ubicación
-            {location.length > 0 && `: ${location.length}`}
+            {ubicacion.length > 0 && `: ${ubicacion.length}`}
           </Button>
         }
         popup={
@@ -181,7 +182,14 @@ const CategorySearch = ({ location }) => {
                 'margin': '0 0 10px 0',
               }}
               placeholder="Selecciona una localidad"
-              // onChange={(value) => onChange(value, 'locality')}
+              onChange={(value) => {
+                try {
+                  onChange(value, 'ubicacion');
+                  console.log("onchange ubicacion");
+                } catch (error) {
+                  console.error("Error in onchange ubicacion:", error);
+                }
+              }}
               options={allLocations.map((locality) => ({
                 label: locality.name,
                 value: locality.name.replace(/ /g, '-'),
@@ -195,9 +203,9 @@ const CategorySearch = ({ location }) => {
               }}
               placeholder="Selecciona un barrio"
               // onChange={(value) => onChange(value, 'neighborhoods')}
-              options={allNeighborhoods.map((locality) => ({
-                label: locality.name,
-                value: locality.name.replace(/ /g, '-'),
+              options={allNeighborhoods.map((neighborhood) => ({
+                label: neighborhood.name,
+                value: neighborhood.name.replace(/ /g, '-'),
               }))}
             />
             {/* <Select
@@ -214,7 +222,7 @@ const CategorySearch = ({ location }) => {
           </Space>
         }
       />
-  
+
       {/* <ViewWithPopup
         className={ubicacion.length ? 'activated' : ''}
         key={"Abierto"}

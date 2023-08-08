@@ -65,6 +65,7 @@ const PostGrid = ({
   socialTwitter,
   webpage,
   schedule,
+  status,
 }) => {
   let navigate = useNavigate();
 
@@ -177,6 +178,7 @@ const PostGrid = ({
           }}
         />
       }
+      status={status}
       location={neighborhood + ", " + locality}
       inclusiveElements={inclusiveElements}
       title={<TextLink link={`/post/${slug}`} content={name} />}
