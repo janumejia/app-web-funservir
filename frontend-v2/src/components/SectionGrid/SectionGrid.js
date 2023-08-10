@@ -57,17 +57,32 @@ export default function SectionGrid({
         <Box className="grid_wrapper" {...rowStyle}>
           {data && data.length
             ? data.map((item) => {
-              return (
-                <Box
-                  className="grid_column"
-                  width={columnWidth}
-                  key={item.id}
-                  {...columnStyle}
-                >
-                  <ProductCard myProfile={myProfile} slug={item.name}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
-                </Box>
+              if (!myProfile) {
+                if (item.status && item.status === "Aprobado") {
+                  return (
+                    <Box
+                      className="grid_column"
+                      width={columnWidth}
+                      key={item.id}
+                      {...columnStyle}
+                    >
+                      <ProductCard myProfile={myProfile} slug={item.name}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
+                    </Box>
+                  );
+                }
+              } else {
+                return (
+                  <Box
+                    className="grid_column"
+                    width={columnWidth}
+                    key={item.id}
+                    {...columnStyle}
+                  >
+                    <ProductCard myProfile={myProfile} slug={item.name}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
+                  </Box>
 
-              );
+                );
+              }
             })
             : null}
 
