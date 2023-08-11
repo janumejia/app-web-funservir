@@ -101,7 +101,7 @@ const GridCard = ({
         <Badge.Ribbon
           text={status}
           color={statusColorMap[status]}
-          style={{ top: "183px" }}
+          style={{ top: "157px" }}
         >
           {renderContent()}
         </Badge.Ribbon>
