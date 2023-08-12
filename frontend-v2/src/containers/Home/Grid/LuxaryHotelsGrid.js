@@ -12,8 +12,10 @@ import {
   SINGLE_POST_PAGE,
 } from '../../../settings/constant';
 
+const BEST_SITES_API_URL = `${process.env.REACT_APP_HOST_BACK || '0.0.0.0'}/bestRanking`;
+
 const LuxaryHotelsGrid = () => {
-  const { data, loading } = useDataApi('/data/hotel.json');
+  const { data, loading } = useDataApi(BEST_SITES_API_URL);
   const { width } = useWindowSize();
 
   let posts = data;

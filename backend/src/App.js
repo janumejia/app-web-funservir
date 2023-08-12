@@ -80,6 +80,7 @@ app.get("/sites", controllers.getAllSites)
 app.get("/siteNames", controllers.getAllSiteNames)
 app.get("/sites/search", controllers.searchSites)
 app.get("/sites/:siteName", controllers.getSingleSite)
+app.get("/bestRanking", controllers.getBestRankingSites)
 
 // Rutas del portal administrador a partir de este punto:
 

@@ -20,7 +20,7 @@ const Home = () => {
       {/* Secciones que tiene la pantalla principal/Home */}
       {/* <LocationGrid /> */}
       {/* <TopHotelsGrid /> */}
-      {/* <LuxaryHotelsGrid /> */}
+      <LuxaryHotelsGrid />
     </>
   );
 };

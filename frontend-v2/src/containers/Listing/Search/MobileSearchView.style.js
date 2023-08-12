@@ -69,6 +69,31 @@ export const FilterArea = styled.div`
   }
 `;
 
+export const BestRakingArea = styled.div`
+  padding: 29px 0;
+  overflow: hidden;
+
+  button,
+  button.ant-btn {
+    color: ${themeGet('#ffffff', '#2C2C2C')};
+    font-size: 15px;
+    height: 38px;
+    border-radius: 3px;
+    border: 1px solid ${themeGet('border.3', '#E6E6E6')};
+    &::after {
+      content: none;
+    }
+    &:hover {
+      background-color: ${themeGet('border.3', '#E6E6E6')};
+    }
+    &.active {
+      color: ${themeGet('color.1', '#ffffff')};
+      border-color: ${themeGet('primary.0', '#008489')};
+      background-color: ${themeGet('primary.0', '#008489')};
+    }
+  }
+`;
+
 export const FilterElementsWrapper = styled.div`
   position: relative;
   height: 100%;

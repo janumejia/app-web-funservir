@@ -35,7 +35,7 @@ const CategorySearch = ({ location }) => {
 
   const [selectedLocality, setSelectedLocality] = useState();
   const [selectedNeighborhood, setSelectedNeighborhood] = useState();
-  const [neighborhoodOptions, setNeighborhoodOptions] = useState();
+  // const [neighborhoodOptions, setNeighborhoodOptions] = useState();
   const [bestRating, setBestRating] = useState(false);
 
   const searchParams = getStateFromUrl(location);
@@ -76,7 +76,7 @@ const CategorySearch = ({ location }) => {
 
     let query = {};
     if (type === 'mejorPuntuacion') {
-      if (value === true){
+      if (value === true) {
         query = {
           ...state,
           [type]: "si",
@@ -87,7 +87,7 @@ const CategorySearch = ({ location }) => {
           [type]: "no",
         };
       }
-    }else if (type === 'ubicacion') {
+    } else if (type === 'ubicacion') {
       if (localityOrNeighborhood && localityOrNeighborhood === 'localidad') {
         if (value === null) {
           if (state.ubicacion && /^[^,]*,[^,]+$/.test(state.ubicacion)) {
@@ -231,37 +231,41 @@ const CategorySearch = ({ location }) => {
 
   // }, [])
 
-  useEffect(() => {
-    const setOptions = () => {
-      return allNeighborhoods.map((neighborhood) => {
-        if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) {
-          if (neighborhood.associatedLocality === selectedLocality.label) {
-            return {
-              label: neighborhood.name,
-              value: neighborhood.name.replace(/ /g, '-'),
-            }
-          }
-        } else {
+  const setOptions = () => {
+    return allNeighborhoods.map((neighborhood) => {
+      if(ubicacion && /^[^,]*,[^,]*$/.test(ubicacion)) {
+      // if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) {
+        if (neighborhood.associatedLocality === ubicacion.split(",")[0].replace(/-/g, ' ')) {
           return {
             label: neighborhood.name,
             value: neighborhood.name.replace(/ /g, '-'),
           }
         }
-      }).filter(option => option); // Remove any undefined options
-    }
+      } else {
+        return {
+          label: neighborhood.name,
+          value: neighborhood.name.replace(/ /g, '-'),
+        }
+      }
+    }).filter(option => option); // Remove any undefined options
+  }
 
-    if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) setNeighborhoodOptions(setOptions());
+  const theOptions = setOptions();
 
-  }, [selectedLocality])
+  // useEffect(() => {
+  //   if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) setNeighborhoodOptions(setOptions());
+
+  // }, [selectedLocality])
 
   useEffect(() => {
-    if(bestRating) onChange(true, 'mejorPuntuacion');
+    if (bestRating) onChange(true, 'mejorPuntuacion');
     else onChange(false, 'mejorPuntuacion');
     console.log("mejorPuntuacion: ", mejorPuntuacion);
   }, [bestRating, mejorPuntuacion])
 
   useEffect(() => {
-    if(searchParams.mejorPuntuacion === "si") setBestRating(true)
+    if (searchParams.mejorPuntuacion === "si") setBestRating(true)
+    // if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) setNeighborhoodOptions(setOptions());
   }, [])
 
   return (
@@ -350,7 +354,7 @@ const CategorySearch = ({ location }) => {
                     console.error("Error in onchange ubicacion:", error);
                   }
                 }}
-                value={selectedLocality}
+                // value={selectedLocality}
                 options={allLocations.map((locality) => ({
                   label: locality.name,
                   value: locality.name.replace(/ /g, '-'),
@@ -376,7 +380,7 @@ const CategorySearch = ({ location }) => {
 
                   return null;
                 }}
-                value={selectedNeighborhood}
+                // value={selectedNeighborhood}
                 onChange={(valueSelect) => {
                   setSelectedNeighborhood(valueSelect);
                   console.log(valueSelect)
@@ -402,27 +406,13 @@ const CategorySearch = ({ location }) => {
                 //     }
                 //   }
                 // })}
-                options={neighborhoodOptions}
+                options={theOptions}
               />
             </div>
           </RoomGuestWrapper>
         }
       />
 
-      {/* <ViewWithPopup
-        className={ubicacion.length ? 'activated' : ''}
-        key={"Abierto"}
-        noView={true}
-        view={
-          <Button type="default">
-            Mejor puntuación
-            {ubicacion.length > 0 && `: ${ubicacion.length}`}
-          </Button>
-        }
-        popup={
-          <></>
-        }
-      /> */}
       <div className={"view_with__popup" + (bestRating ? ' activated' : '')}>
         <div className="popup_handler">
           <Button type="default" onClick={() => setBestRating(!bestRating)}>
