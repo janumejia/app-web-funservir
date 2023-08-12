@@ -17,6 +17,7 @@ const getSingleSite = require("./sites/getSingleSite")
 const editSite = require("./authentication/authenticatedUser/editSite")
 const addCommment = require("./authentication/authenticatedUser/comments/addComment")
 const getAllSiteNames = require("./sites/getAllSiteNames")
+const getBestRankingSites = require("./sites/getBestRankingSites")
 
 module.exports = {
     registerUser,
@@ -38,4 +39,5 @@ module.exports = {
     editSite,
     addCommment,
     getAllSiteNames,
+    getBestRankingSites,
 }
