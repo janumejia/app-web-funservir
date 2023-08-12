@@ -225,9 +225,8 @@ const searchSites = async (req, res) => {
         
         let dataFound;
         
-        if (req?.query?.mejorPuntuacion && req.query.mejorPuntuacion.length !== 0 && req.query.mejorPuntuacion === "si") {
-            console.log("ordenado")
-            dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount").sort({ rating: -1 });
+        if (req?.query?.mejorPuntuacion && req.query.mejorPuntuacion.length !== 0 && req.query.mejorPuntuacion === "si") {yy
+            dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount").sort({ rating: -1, ratingCount: -1 });
         } else {
             dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount")
         }
