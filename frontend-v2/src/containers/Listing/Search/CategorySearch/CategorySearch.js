@@ -36,6 +36,7 @@ const CategorySearch = ({ location }) => {
   const [selectedLocality, setSelectedLocality] = useState();
   const [selectedNeighborhood, setSelectedNeighborhood] = useState();
   const [neighborhoodOptions, setNeighborhoodOptions] = useState();
+  const [bestRating, setBestRating] = useState(false);
 
   const searchParams = getStateFromUrl(location);
   const state = {
@@ -61,10 +62,11 @@ const CategorySearch = ({ location }) => {
     // localidad: searchParams.localidad || [],
     // room: parseInt(searchParams.room) || 0,
     // guest: parseInt(searchParams.guest) || 0,
+    mejorPuntuacion: searchParams.mejorPuntuacion || [],
   };
 
 
-  const { buscar, elementos, categoria, ubicacion, localidad } = state;
+  const { buscar, elementos, categoria, ubicacion, localidad, mejorPuntuacion } = state;
   // const [countRoom, setRoom] = useState(room);
   // const [countGuest, setGuest] = useState(guest);
 
@@ -73,7 +75,19 @@ const CategorySearch = ({ location }) => {
     console.log("value: ", value, " type: ", type)
 
     let query = {};
-    if (type === 'ubicacion') {
+    if (type === 'mejorPuntuacion') {
+      if (value === true){
+        query = {
+          ...state,
+          [type]: "si",
+        };
+      } else {
+        query = {
+          ...state,
+          [type]: "no",
+        };
+      }
+    }else if (type === 'ubicacion') {
       if (localityOrNeighborhood && localityOrNeighborhood === 'localidad') {
         if (value === null) {
           if (state.ubicacion && /^[^,]*,[^,]+$/.test(state.ubicacion)) {
@@ -169,10 +183,12 @@ const CategorySearch = ({ location }) => {
   const onSearchReset = () => {
     // setRoom(0);
     // setGuest(0);
-
     let search = {};
     if (state?.buscar.length !== 0) search = setStateToUrl({ buscar: state.buscar });
     else search = setStateToUrl({ reset: '' });
+    setBestRating(false);
+    setSelectedLocality(null);
+    setSelectedNeighborhood(null);
 
     navigate({
       pathname: LISTING_POSTS_PAGE,
@@ -237,6 +253,16 @@ const CategorySearch = ({ location }) => {
     if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) setNeighborhoodOptions(setOptions());
 
   }, [selectedLocality])
+
+  useEffect(() => {
+    if(bestRating) onChange(true, 'mejorPuntuacion');
+    else onChange(false, 'mejorPuntuacion');
+    console.log("mejorPuntuacion: ", mejorPuntuacion);
+  }, [bestRating, mejorPuntuacion])
+
+  useEffect(() => {
+    if(searchParams.mejorPuntuacion === "si") setBestRating(true)
+  }, [])
 
   return (
     <CategorySearchWrapper>
@@ -389,20 +415,21 @@ const CategorySearch = ({ location }) => {
         noView={true}
         view={
           <Button type="default">
-            Abierto ahora
+            Mejor puntuación
             {ubicacion.length > 0 && `: ${ubicacion.length}`}
           </Button>
         }
         popup={
-          <Checkbox.Group
-            options={allElements.map((element) => {
-              return { label: element?.name, value: element?.name }
-            })}
-            defaultValue={ubicacion}
-            onChange={(value) => onChange(value, 'ubicacion')}
-          />
+          <></>
         }
       /> */}
+      <div className={"view_with__popup" + (bestRating ? ' activated' : '')}>
+        <div className="popup_handler">
+          <Button type="default" onClick={() => setBestRating(!bestRating)}>
+            Mejor puntuación
+          </Button>
+        </div>
+      </div>
 
       {/* 
       <ViewWithPopup

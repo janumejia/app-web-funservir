@@ -46,7 +46,7 @@ const searchSites = async (req, res) => {
                 .replace(/o/g, '[oóöò]')
                 .replace(/u/g, '[uüúù]');
 
-            console.log("regexPattern: ", regexPattern)
+            // console.log("regexPattern: ", regexPattern)
             const regexArrayName = regexPattern.split(/[ ]+/g).map(element => new RegExp(element, "i"));
             const regexArrayLocalitiesAndNeighborhoods = regexPattern.split(/[ ]+/g).map(element => {
                 const aux = element.replace(/\[[^\[\]]*\]/g, 'a')
@@ -54,7 +54,7 @@ const searchSites = async (req, res) => {
                 if (aux.length > 3) return new RegExp(element, "i")
             }).filter(regex => regex !== undefined);
 
-            console.log("regexArrayLocalitiesAndNeighborhoods: ", regexArrayLocalitiesAndNeighborhoods)
+            // console.log("regexArrayLocalitiesAndNeighborhoods: ", regexArrayLocalitiesAndNeighborhoods)
 
             // Aquí se inserta la búsqueda del nombre en la BD
             // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
@@ -120,13 +120,13 @@ const searchSites = async (req, res) => {
             for (const element of regexArray) {
                 for (const iElement of inclusiveElements) {
                     if (element.test(iElement.name)) {
-                        console.log("MATCH:", element, " = ", iElement.name);
+                        // console.log("MATCH:", element, " = ", iElement.name);
                         matchedElementsId.push(iElement._id);
                     }
                 }
             }
 
-            console.log("matchedElementsId: ", matchedElementsId);
+            // console.log("matchedElementsId: ", matchedElementsId);
 
             // const exactMatch = `^${patternToSearchV2}$`;
 
@@ -165,7 +165,7 @@ const searchSites = async (req, res) => {
                 return new RegExp(exactMatchPattern, "i");
             });
 
-            console.log("regexArray: ", regexArray)
+            // console.log("regexArray: ", regexArray)
 
             // Aquí se inserta la búsqueda del nombre en la BD
             // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
@@ -201,7 +201,7 @@ const searchSites = async (req, res) => {
                     return new RegExp(exactMatchPattern, "i");
                 });
 
-                console.log("regexArray: ", regexArray)
+                // console.log("regexArray: ", regexArray)
 
                 if (patternToSearchV3[1].length > 0) {
                     query.$and.push({ "neighborhood": { $in: regexArray[1] } })
@@ -216,14 +216,24 @@ const searchSites = async (req, res) => {
             }
         }
 
-
+        
         // let dataFound;
-
+        
         // if(query.$and[0].$or.length === 0) { // Para resolver un bug
         //     query.$and.shift(); // Remover el elemento en posición 0 de $and
         // }
+        
+        let dataFound;
+        
+        if (req?.query?.mejorPuntuacion && req.query.mejorPuntuacion.length !== 0 && req.query.mejorPuntuacion === "si") {
+            console.log("ordenado")
+            dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount").sort({ rating: -1 });
+        } else {
+            dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount")
+        }
 
-        const dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount")
+
+        // console.log(dataFound);
 
         if (dataFound) {
             return res.json(dataFound)
