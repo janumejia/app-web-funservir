@@ -124,12 +124,12 @@ export const RoomGuestWrapper = styled.div`
 `;
 
 export const ItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  /* display: flex; */
+  /* align-items: center;
+  justify-content: space-between; */
+  margin: 20px 0 0 0;
 
-  .quantity {
+  /* .quantity {
     height: 30px;
     input {
       font-size: 15px;
@@ -138,7 +138,7 @@ export const ItemWrapper = styled.div`
       width: 18px;
       height: 18px;
     }
-  }
+  } */
 `;
 
 export const ActionWrapper = styled.div`
