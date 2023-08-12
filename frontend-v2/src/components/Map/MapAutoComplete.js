@@ -40,7 +40,7 @@ const SearchInput = (props) => {
         .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
         .replace(/\s+/g, ' ') // Remover espacios
         .replace(/[_+]/g, ' ') // Remover guion bajo
-        .replace(/[^\w\s]/gi, '');
+        .replace(/[^\w\sñ]/gi, '');
 
       setValue(searchValueSanitized);
     }
@@ -95,7 +95,7 @@ const SearchInput = (props) => {
       .replace(/[üúù]/g, 'u')
       .replace(/\s+/g, ' ') // Remover espacios
       .replace(/[_]/g, ' ') // Remover guion bajo
-      .replace(/[^\w\s]/gi, ''); // ... y remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
+      .replace(/[^\w\sñ]/gi, ''); // ... y remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
 
     const inputLength = inputValue.length;
 
@@ -125,6 +125,7 @@ const SearchInput = (props) => {
           .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
           .replace(/,/g, '')
           .replace(/\s+/g, ' ') // Remover espacios (solo por motivo de búsqueda, y no se refleja en los resultados)
+          .replace(/[^\w\sñ]/gi, '') // ... y remover caracteres especiales con RegExp. Solo se permiten dígitos, caracteres y espacios en blanco. Sacado de https://stackoverflow.com/questions/4374822/remove-all-special-characters-with-regexp
           .includes(inputValue)) {
           count--;
           return element;

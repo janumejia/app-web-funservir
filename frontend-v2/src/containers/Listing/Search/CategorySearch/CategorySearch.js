@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import moment from 'moment';
-import { Button, Slider, Checkbox, Space, Select } from 'antd';
+import { Button, Slider, Checkbox, Space } from 'antd';
 import ViewWithPopup from 'components/UI/ViewWithPopup/ViewWithPopup';
 import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
 import DateRangePicker from 'components/UI/DatePicker/ReactDates';
@@ -18,9 +18,11 @@ import CategorySearchWrapper, {
   ItemWrapper,
   ActionWrapper,
 } from './CategorySearch.style';
-
 import { OtherVariablesContext } from 'context/OtherVariablesProvider';
 import { AiOutlineClear } from 'react-icons/ai';
+import Select from 'react-select'
+import { update } from 'lodash';
+
 
 const CategorySearch = ({ location }) => {
   let navigate = useNavigate();
@@ -29,6 +31,9 @@ const CategorySearch = ({ location }) => {
 
   console.log("allElements: ", allElements)
 
+  const [selectedLocality, setSelectedLocality] = useState();
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState();
+  const [neighborhoodOptions, setNeighborhoodOptions] = useState();
 
   const searchParams = getStateFromUrl(location);
   const state = {
@@ -61,14 +66,68 @@ const CategorySearch = ({ location }) => {
   // const [countRoom, setRoom] = useState(room);
   // const [countGuest, setGuest] = useState(guest);
 
-  const onChange = (value, type) => {
+  const onChange = (value, type, localityOrNeighborhood) => {
     console.log("Elementos: ", elementos);
     console.log("value: ", value, " type: ", type)
 
-    const query = {
-      ...state,
-      [type]: value,
-    };
+    let query = {};
+    if (type === 'ubicacion') {
+      if (localityOrNeighborhood && localityOrNeighborhood === 'localidad') {
+        if (value === null) {
+          if (state.ubicacion && /^[^,]*,[^,]+$/.test(state.ubicacion)) {
+            query = {
+              ...state,
+              [type]: "," + state.ubicacion.split(',')[1],
+            };
+          } else {
+            query = {
+              ...state,
+              [type]: "",
+            };
+          }
+        } else {
+          query = {
+            ...state,
+            [type]: value.value + ",",
+          };
+          setSelectedNeighborhood(null);
+        }
+      } else if (localityOrNeighborhood && localityOrNeighborhood === 'barrio') {
+        if (value === null) {
+          if (state.ubicacion && /^[^,]+,[^,]*$/.test(state.ubicacion)) {
+            query = {
+              ...state,
+              [type]: state.ubicacion.split(',')[0] + ",",
+            };
+          } else {
+            query = {
+              ...state,
+              [type]: "",
+            };
+          }
+
+        } else {
+          if (state && state.ubicacion && /^[^,]+,[^,]*$/.test(state.ubicacion)) {
+            query = {
+              ...state,
+              [type]: state.ubicacion.split(',')[0] + "," + value.value,
+            };
+          }
+          else {
+            query = {
+              ...state,
+              [type]: "," + value.value,
+            };
+          }
+        }
+      }
+    } else {
+      query = {
+        ...state,
+        [type]: value,
+      };
+    }
+
     const search = setStateToUrl(query);
     console.log("LA NUEVA SEARCH EN CATEGORY: ", search)
     navigate({
@@ -119,6 +178,64 @@ const CategorySearch = ({ location }) => {
     });
   };
 
+  // useEffect(() => {
+  //   const defaultLocality = () => {
+
+  //     if (typeof ubicacion === "string" && ubicacion) {
+  //       const locationName = ubicacion.split(',')[0].replace(/-/g, ' ');
+  //       const foundLocation = allLocations.find(element => element.name === locationName);
+
+  //       if (foundLocation) {
+  //         const formattedName = foundLocation.name.replace(/ /g, '-');
+  //         return { label: foundLocation.name, value: formattedName };
+  //       }
+  //     }
+
+  //     return null;
+  //   }
+
+  //   const defaultNeighborhood = () => {
+  //     if (typeof ubicacion === "string" && ubicacion) {
+  //       const neighborhoodName = ubicacion.split(',')[1].replace(/-/g, ' ');
+  //       const foundNeighborhood = allNeighborhoods.find(element => element.name === neighborhoodName);
+
+  //       if (foundNeighborhood) {
+  //         const formattedName = foundNeighborhood.name.replace(/ /g, '-');
+  //         return { label: foundNeighborhood.name, value: formattedName };
+  //       }
+  //     }
+
+  //     return null;
+  //   }
+
+  //   setSelectedLocality(defaultLocality());
+  //   setSelectedNeighborhood(defaultNeighborhood());
+
+  // }, [])
+
+  useEffect(() => {
+    const setOptions = () => {
+      return allNeighborhoods.map((neighborhood) => {
+        if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) {
+          if (neighborhood.associatedLocality === selectedLocality.label) {
+            return {
+              label: neighborhood.name,
+              value: neighborhood.name.replace(/ /g, '-'),
+            }
+          }
+        } else {
+          return {
+            label: neighborhood.name,
+            value: neighborhood.name.replace(/ /g, '-'),
+          }
+        }
+      }).filter(option => option); // Remove any undefined options
+    }
+
+    if (selectedLocality && selectedLocality.label && selectedLocality.label.length > 0) setNeighborhoodOptions(setOptions());
+
+  }, [selectedLocality])
+
   return (
     <CategorySearchWrapper>
       <ViewWithPopup
@@ -162,64 +279,105 @@ const CategorySearch = ({ location }) => {
           />
         }
       />
-
+      {console.log("ubicacion: ", ubicacion)}
+      {console.log(typeof ubicacion === "string")}
       <ViewWithPopup
         className={ubicacion.length ? 'activated' : ''}
         key={"ubicacion"}
         noView={true}
+        style={{ align: "center" }}
         view={
           <Button type="default">
             Ubicación
-            {ubicacion.length > 0 && `: ${ubicacion.length}`}
+            {/* {ubicacion.length > 0 && `: ${ubicacion.length}`} */}
           </Button>
         }
         popup={
-          <Space wrap>
-            <Select
-              showSearch
-              style={{
-                'width': '238px',
-                'margin': '0 0 10px 0',
-              }}
-              placeholder="Selecciona una localidad"
-              onChange={(value) => {
-                try {
-                  onChange(value, 'ubicacion');
-                  console.log("onchange ubicacion");
-                } catch (error) {
-                  console.error("Error in onchange ubicacion:", error);
-                }
-              }}
-              options={allLocations.map((locality) => ({
-                label: locality.name,
-                value: locality.name.replace(/ /g, '-'),
-              }))}
-            />
+          <RoomGuestWrapper>
+            <div>
+              <Select
+                // style={{ "align-content": "center", "align-items": "center", "align-self": "center", "align-tracks": "center" }}
+                isSearchable={true}
+                isClearable={true}
+                placeholder="Selecciona una localidad"
+                defaultValue={() => {
+                  if (typeof ubicacion === "string" && ubicacion) {
+                    const locationName = ubicacion.split(',')[0].replace(/-/g, ' ');
+                    const foundLocation = allLocations.find(element => element.name === locationName);
 
-            <Select
-              showSearch
-              style={{
-                width: '238px',
-              }}
-              placeholder="Selecciona un barrio"
-              // onChange={(value) => onChange(value, 'neighborhoods')}
-              options={allNeighborhoods.map((neighborhood) => ({
-                label: neighborhood.name,
-                value: neighborhood.name.replace(/ /g, '-'),
-              }))}
-            />
-            {/* <Select
-              style={{
-                width: 60,
-              }}
-              value={ubicacion.locality}
-              onChange={(value) => onChange(value, 'ubicacion')}
-              options={allNeighborhoods.map((city) => ({
-                label: city,
-                value: city,
-              }))}
-            /> */}
-          </Space>
+                    if (foundLocation) {
+                      const formattedName = foundLocation.name.replace(/ /g, '-');
+                      return { label: foundLocation.name, value: formattedName };
+                    }
+                  }
+
+                  return null;
+                }}
+                onChange={(valueSelect) => {
+                  setSelectedLocality(valueSelect);
+                  console.log(valueSelect)
+                  try {
+                    onChange(valueSelect, 'ubicacion', 'localidad');
+                  } catch (error) {
+                    console.error("Error in onchange ubicacion:", error);
+                  }
+                }}
+                value={selectedLocality}
+                options={allLocations.map((locality) => ({
+                  label: locality.name,
+                  value: locality.name.replace(/ /g, '-'),
+                }))}
+              />
+            </div>
+            <div style={{ "margin": "20px 0 0 0" }}>
+              <Select
+                // style={{ "align-content": "center", "align-items": "center", "align-self": "center", "align-tracks": "center" }}
+                isSearchable={true}
+                isClearable={true}
+                placeholder="Selecciona un barrio"
+                defaultValue={() => {
+                  if (typeof ubicacion === "string" && ubicacion) {
+                    const neighborhoodName = ubicacion.split(',')[1].replace(/-/g, ' ');
+                    const foundNeighborhood = allNeighborhoods.find(element => element.name === neighborhoodName);
+
+                    if (foundNeighborhood) {
+                      const formattedName = foundNeighborhood.name.replace(/ /g, '-');
+                      return { label: foundNeighborhood.name, value: formattedName };
+                    }
+                  }
+
+                  return null;
+                }}
+                value={selectedNeighborhood}
+                onChange={(valueSelect) => {
+                  setSelectedNeighborhood(valueSelect);
+                  console.log(valueSelect)
+                  try {
+                    onChange(valueSelect, 'ubicacion', 'barrio');
+                  } catch (error) {
+                    console.error("Error in onchange ubicacion:", error);
+                  }
+                }}
+                // options={allNeighborhoods.map((neighborhood) => {
+                //   console.log("selectedLocality: " + selectedLocality)
+                //   if (ubicacion && Array.isArray(ubicacion) && ubicacion.length !== 0 && /^[^,]*,[^,]*$/.test(ubicacion[0])) {
+                //     if (ubicacion[0].split(',')[0].length !== 0 && neighborhood.associatedLocality === ubicacion[0].split(',')[0]) {
+                //       return {
+                //         label: neighborhood.name,
+                //         value: neighborhood.name.replace(/ /g, '-'),
+                //       }
+                //     }
+                //   } else {
+                //     return {
+                //       label: neighborhood.name,
+                //       value: neighborhood.name.replace(/ /g, '-'),
+                //     }
+                //   }
+                // })}
+                options={neighborhoodOptions}
+              />
+            </div>
+          </RoomGuestWrapper>
         }
       />
 

@@ -15,6 +15,15 @@ const searchSites = async (req, res) => {
         };
 
         if (req?.query?.buscar && req.query.buscar.length !== 0) {
+            let queryBuscar = {
+                $or: [
+                    // { "name": { $in: regexArrayName } },
+                    // { "category": { $in: regexArrayName } },
+                    // { "locality": { $in: regexArrayLocalitiesAndNeighborhoods } },
+                    // { "neighborhood": { $in: regexArrayLocalitiesAndNeighborhoods } },
+                ]
+            }
+
             // console.log("req?.query?.buscar: ", req.query.buscar)
             // Sanitizar las entradas:
             const sanitizedSearchQuery = req.query.buscar
@@ -28,6 +37,7 @@ const searchSites = async (req, res) => {
                 .replace(/[_]/g, '') // Remove underscores
                 .replace(/[^\w\sñ]/gi, '') // Remove special characters
 
+            // console.log("sanitizedSearchQuery: ", sanitizedSearchQuery)
             // Transformar lo anterior en un regex
             const regexPattern = sanitizedSearchQuery
                 .replace(/a/g, '[aáàäâ]')
@@ -36,11 +46,41 @@ const searchSites = async (req, res) => {
                 .replace(/o/g, '[oóöò]')
                 .replace(/u/g, '[uüúù]');
 
+            console.log("regexPattern: ", regexPattern)
             const regexArrayName = regexPattern.split(/[ ]+/g).map(element => new RegExp(element, "i"));
+            const regexArrayLocalitiesAndNeighborhoods = regexPattern.split(/[ ]+/g).map(element => {
+                const aux = element.replace(/\[[^\[\]]*\]/g, 'a')
+                // console.log("aux:'", aux, "'")
+                if (aux.length > 3) return new RegExp(element, "i")
+            }).filter(regex => regex !== undefined);
+
+            console.log("regexArrayLocalitiesAndNeighborhoods: ", regexArrayLocalitiesAndNeighborhoods)
 
             // Aquí se inserta la búsqueda del nombre en la BD
             // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
-            query.$and.push({ "name": { $in: regexArrayName } })
+
+            queryBuscar.$or.push({ "name": { $in: regexArrayName } })
+            queryBuscar.$or.push({ "category": { $in: regexArrayName } })
+
+
+            if (regexArrayLocalitiesAndNeighborhoods.length > 0) {
+                queryBuscar.$or.push({ "locality": { $in: regexArrayLocalitiesAndNeighborhoods } })
+                queryBuscar.$or.push({ "neighborhood": { $in: regexArrayLocalitiesAndNeighborhoods } })
+            }
+            // query.$and.push({
+            //     $or: [
+            //         { "name": { $in: regexArrayName } },
+            //         { "category": { $in: regexArrayName } },
+            //         // { "locality": { $in: regexArrayLocalitiesAndNeighborhoods } },
+            //         // { "neighborhood": { $in: regexArrayLocalitiesAndNeighborhoods } },
+            //     ]
+            // })
+
+            // console.log("queryBuscar: ", queryBuscar);
+
+            query.$and.push(queryBuscar)
+
+
         }
 
         if (req?.query?.elementos && req.query.elementos.length !== 0) {
@@ -97,7 +137,7 @@ const searchSites = async (req, res) => {
             }
         }
 
-        if (req?.query?.categoria && req.query.categoria !== 0) {
+        if (req?.query?.categoria && req.query.categoria.length !== 0) {
             // console.log("req?.query?.buscar: ", req.query.buscar)
             // Sanitizar las entradas:
             const patternToSearchV1 = req.query.categoria
@@ -130,6 +170,50 @@ const searchSites = async (req, res) => {
             // Aquí se inserta la búsqueda del nombre en la BD
             // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
             query.$and.push({ "category": { $in: regexArray } })
+        }
+
+        if (req?.query?.ubicacion && req.query.ubicacion.length !== 0) {
+            // console.log("req?.query?.buscar: ", req.query.buscar)
+            // Sanitizar las entradas:
+            const patternToSearchV1 = req.query.ubicacion
+                .replace(/[áàäâ]/g, 'a')
+                .replace(/[éëè]/g, 'e')
+                .replace(/[íïì]/g, 'i')
+                .replace(/[óöò]/g, 'o')
+                .replace(/[üúù]/g, 'u')
+                .replace(/[-]/g, ' ')
+                .replace(/\s+/g, ' ') // Remove spaces
+                .replace(/[_]/g, '') // Remove underscores
+                .replace(/[^\w\s,ñ]/gi, '') // Remove special characters
+
+            // Transformar lo anterior en un regex
+            const patternToSearchV2 = patternToSearchV1.replace(/a/g, '[aáàäâ]') // Considero necesario poner esto, porque en el caso que busquemos "cafeteria" y en la bd está "cafetería" (con tilde) no nos arrojara resultados, entonces esta parte resuelve eso
+                .replace(/e/g, '[eéëè]')
+                .replace(/i/g, '[iíïì]')
+                .replace(/o/g, '[oóöò]')
+                .replace(/u/g, '[uüúù]');
+
+            if (/^[^,]*,[^,]*$/.test(req.query.ubicacion)) {
+                const patternToSearchV3 = patternToSearchV2.split(/[,]+/g);
+
+                const regexArray = patternToSearchV3.map(function (element) { // Este busca exactamente la cadena, mientas que regexArrayName busca subcadenas
+                    const exactMatchPattern = `^${element}$`;
+                    return new RegExp(exactMatchPattern, "i");
+                });
+
+                console.log("regexArray: ", regexArray)
+
+                if (patternToSearchV3[1].length > 0) {
+                    query.$and.push({ "neighborhood": { $in: regexArray[1] } })
+                }
+
+                if (patternToSearchV3[0].length > 0) {
+                    query.$and.push({ "locality": { $in: regexArray[0] } })
+                }
+
+                // Aquí se inserta la búsqueda del nombre en la BD
+                // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
+            }
         }
 
 

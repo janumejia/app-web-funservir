@@ -40,7 +40,7 @@ export default function SearchForm() {
       .replace(/[üúù]/g, 'u') // Replace "ü", "ú", "ù" with "u"
       .replace(/\s+/g, ' ') // Remover espacios
       .replace(/[_]/g, ' ') // Remover guion bajo
-      .replace(/[^\w\s]/gi, '');
+      .replace(/[^\w\sñ]/gi, '');
 
     if (searchValueSanitized === "" || !(/[A-Za-z0-9]/.test(searchValueSanitized))) {
       navigate({
