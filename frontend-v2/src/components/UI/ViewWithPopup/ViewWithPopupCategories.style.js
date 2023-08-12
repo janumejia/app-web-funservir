@@ -9,22 +9,29 @@ export const Container = styled.div`
       position: absolute;
       width: 100%;
       z-index: 999;
-      min-width: 350px;
+      min-width: 740px;
       padding: 30px;
       background-color: #ffffff;
     `}
+  
+  max-height: calc(100vh - 180px); /* Set the maximum height before scrollbar appears */
+  overflow-y: auto;
 
   .ant-checkbox-group {
-    display: flex;
-    flex-direction: column;
+    /* display: flex;
+    flex-direction: column; */
+    column-count: 3; /* You can adjust this value */
     .ant-checkbox-group-item {
+      width: 216px; /* Each column takes 50% width */
+      /* box-sizing: border-box; */
+      //padding: 0 10px; /* Adjust padding as needed */
       margin: 9px 0;
-      &:first-child {
+      /* &:first-child {
         margin-top: 0;
       }
       &:last-child {
         margin-bottom: 0;
-      }
+      } */
     }
   }
 
