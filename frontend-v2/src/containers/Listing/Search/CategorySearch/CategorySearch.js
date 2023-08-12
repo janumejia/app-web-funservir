@@ -3,6 +3,8 @@ import { useNavigate, createSearchParams } from 'react-router-dom';
 import moment from 'moment';
 import { Button, Slider, Checkbox, Space } from 'antd';
 import ViewWithPopup from 'components/UI/ViewWithPopup/ViewWithPopup';
+import ViewWithPopupElements from 'components/UI/ViewWithPopup/ViewWithPopupElements';
+import ViewWithPopupCategories from 'components/UI/ViewWithPopup/ViewWithPopupCategories';
 import InputIncDec from 'components/UI/InputIncDec/InputIncDec';
 import DateRangePicker from 'components/UI/DatePicker/ReactDates';
 import { setStateToUrl, getStateFromUrl } from '../url-handler';
@@ -238,7 +240,7 @@ const CategorySearch = ({ location }) => {
 
   return (
     <CategorySearchWrapper>
-      <ViewWithPopup
+      <ViewWithPopupElements
         className={elementos.length ? 'activated' : ''}
         key={"elementos"}
         noView={true}
@@ -259,7 +261,7 @@ const CategorySearch = ({ location }) => {
         }
       />
 
-      <ViewWithPopup
+      <ViewWithPopupCategories
         className={categoria.length ? 'activated' : ''}
         key={"categoria"}
         noView={true}
