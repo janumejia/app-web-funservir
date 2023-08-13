@@ -88,7 +88,7 @@ const Review = (props) => {
         <HeaderSection>
           <RatingStatus>
             <Heading
-              content={`${comments.length} Opiniones`}
+              content={`${comments ? comments.length : 0} Opiniones`}
               {...statusHeadingStyle}
             />
             {ratingView}

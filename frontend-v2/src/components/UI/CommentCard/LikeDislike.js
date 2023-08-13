@@ -20,12 +20,17 @@ const LikeDislike = ({ _id, loggedIn, isLikeSelected, isDislikeSelected, likesCo
   const sendLikeDislike = async (action) => {
     const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addLikeDislike`, { _id: _id, action: action });
     console.log("res: ", res)
-    if (res && res.data && res.data.content) {
+    if (res && res.status === 200 && res.data && res.data.content) {
       console.log("entra")
       setState({
         action: res.data.content.action,
         likes: res.data.content.likes,
         dislikes: res.data.content.dislikes,
+      });
+    } else {
+      setState({
+        ...state,
+        action: '',
       });
     }
   }
