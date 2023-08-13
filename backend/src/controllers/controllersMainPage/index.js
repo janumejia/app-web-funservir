@@ -18,6 +18,7 @@ const editSite = require("./authentication/authenticatedUser/editSite")
 const addCommment = require("./authentication/authenticatedUser/comments/addComment")
 const getAllSiteNames = require("./sites/getAllSiteNames")
 const getBestRankingSites = require("./sites/getBestRankingSites")
+const reportComment = require("./authentication/authenticatedUser/comments/reportComment")
 
 module.exports = {
     registerUser,
@@ -40,4 +41,5 @@ module.exports = {
     addCommment,
     getAllSiteNames,
     getBestRankingSites,
+    reportComment,
 }

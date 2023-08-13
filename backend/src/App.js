@@ -71,6 +71,7 @@ app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( p
 app.post("/addSite", verifyToken, controllers.addSite)
 app.post("/editSite", verifyToken, controllers.editSite)
 app.post("/addComment", verifyToken, controllers.addCommment)
+app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/updateUserInfo", verifyToken, controllers.updateUserInfo)
 app.post("/changePictures", verifyToken, controllers.changePictures)
 app.post("/changePassword", verifyToken, controllers.changePassword)
@@ -123,6 +124,11 @@ app.get("/getNeighborhoods", controllersAdmin.getNeighborhoods)  // No necesita 
 app.post("/addNeighborhoods", verifyTokenAdmin, controllersAdmin.addNeighborhoods)
 app.post("/editNeighborhoods", verifyTokenAdmin, controllersAdmin.editNeighborhoods)
 app.post("/deleteNeighborhoods", verifyTokenAdmin, controllersAdmin.deleteNeighborhoods)
+
+// Comentarios reportados
+app.get("/getReportedComments", verifyTokenAdmin, controllersAdmin.getReportedComments)
+app.post("/deleteReportedComments", verifyTokenAdmin, controllersAdmin.deleteReportedComments)
+app.post("/keepReportedComment", verifyTokenAdmin, controllersAdmin.keepReportedComment)
 
 //Notificaciones
 app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)

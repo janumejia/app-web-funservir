@@ -28,7 +28,15 @@ const commentSchema = new Schema({
       ratingFieldName: { type: String },
       rating: { type: Number },
     }
-  ]
+  ],
+  isReported: {
+    type: Boolean,
+    default: false, // Default value for the new property
+  },
+  reportedBy: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
 }, { timestamps: true });
 
 module.exports = model('Comment', commentSchema);

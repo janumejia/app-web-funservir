@@ -5,6 +5,7 @@ import InclusiveElements from "../inclusiveElements/InclusiveElements";
 import InclusiveSites from "../sites/inclusiveSites/InclusiveSites";
 import Locations from "../sites/locations/Locations";
 import Neighborhoods from "../sites/neighborhoods/Neighborhoods";
+import ReportedComments from "../sites/reportedComments/ReportedComments";
 import Categories from "../categories/Categories"
 import DropDownAdminuser from "../dropDownAdminUser/DropDownAdminUser";
 import UncheckedSitesNotification from './UncheckedSitesNotification';
@@ -16,7 +17,8 @@ import {
   SmileOutlined,
   AlertOutlined,
   AppstoreOutlined,
-  CompassOutlined
+  CompassOutlined,
+  FormOutlined
 } from "@ant-design/icons"; // Sacados de: https://ant.design/components/icon
 import { Breadcrumb, Layout, Menu, Space } from "antd";
 import AuthContext from "../../context/AuthProvider";
@@ -32,7 +34,7 @@ const items2 = [SmileOutlined, AlertOutlined, AppstoreOutlined].map(
       icon: React.createElement(icon),
       label: `${options[index]}`,
       children: new Array(1).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
+        const subKey = index * 5 + j + 1;
         return {
           key: subKey,
           label: (<Link to={url[index]}>{`Gestionar ${options[index]}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aquí
@@ -59,6 +61,24 @@ const submenuManageSites = {
 };
 
 items2.push(submenuManageSites); // Agregamos el objeto anterior en la ultima posición del arreglo items2
+
+// Para agregar la opción "Gestionar sitios" en el menu, que contiene 3 opciones: "Gestionar sitios inclusivos", "Gestionar localidades", "Gestionar barrios"
+const optionsMore = ["Comenta. reportados"]; // Opciones de item "Gestionar sitios" del menu
+const optionsUrlMore = ["reportedComments"];
+const itemKeyMore = [111]; // Cada opción del submenu debe tener una key única, y no necesariamente en orden
+const submenuManageMore = {
+  key: "mas",
+  icon: React.createElement(FormOutlined),
+  label: `Más`,
+  children: optionsMore.map((option, index) => {
+    return {
+      key: itemKeyMore[index],
+      label: (<Link to={optionsUrlMore[index]}>{`${option}`}</Link>), //El label es un ReactNode, por eso pude meter el Link aquí
+    };
+  })
+};
+
+items2.push(submenuManageMore); // Agregamos el objeto anterior en la ultima posición del arreglo items2
 
 const MainComponent = () => {
   const { auth } = useContext(AuthContext); // Aquí podemos consultar el token
@@ -126,6 +146,7 @@ const MainComponent = () => {
                 <Route path="/inclusiveSites" element={<InclusiveSites isAnySitePending={sitiosPendientes} setIsAnySitePending={setSitiosPendientes}/>} />
                 <Route path="/locations" element={<Locations />} />
                 <Route path="/neighborhoods" element={<Neighborhoods />} />
+                <Route path="/reportedComments" element={<ReportedComments />} />
               </Routes>
             </Content>
           </Layout>
