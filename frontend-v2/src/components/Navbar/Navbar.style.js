@@ -267,7 +267,6 @@ export const AuthWrapper = styled.div`
   }
 `;
 
-// Creado por Julián (si no funciona ya sabe por qué)
 export const AuthWrapper2 = styled.div`
   margin-left: 74px;
 

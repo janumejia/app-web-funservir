@@ -70,13 +70,16 @@ app.get("/status", verifyToken, controllers.tokenStatus)
 app.get("/user", verifyToken, controllers.getUserById) // Sintaxis -> app.get( path, callback )
 app.post("/addSite", verifyToken, controllers.addSite)
 app.post("/editSite", verifyToken, controllers.editSite)
-app.post("/addComment", verifyToken, controllers.addCommment)
-app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/updateUserInfo", verifyToken, controllers.updateUserInfo)
 app.post("/changePictures", verifyToken, controllers.changePictures)
 app.post("/changePassword", verifyToken, controllers.changePassword)
 
-// Busqueda de sitios
+// Comentarios
+app.post("/addComment", verifyToken, controllers.addCommment)
+app.post("/reportComment", verifyToken, controllers.reportComment)
+app.post("/addLikeDislike", verifyToken, controllers.addLikeDislikeComment)
+
+// Búsqueda de sitios
 app.get("/sites", controllers.getAllSites)
 app.get("/siteNames", controllers.getAllSiteNames)
 app.get("/sites/search", controllers.searchSites)
@@ -142,7 +145,6 @@ app.use((req, res, next) => {
 })
 
 /* Fin rutas de nuestra APP */
-
 
 // Leer puerto por donde funcionará nuestro servidor
 const host = process.env.BACKEND_HOST;
