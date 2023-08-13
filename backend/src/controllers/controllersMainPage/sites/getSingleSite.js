@@ -21,12 +21,14 @@ const getSingleSite = async (req, res) => {
                 },
             }).lean(); // Para que retorne un objeto de javascript (antes daba problemas)
 
-        dataSite[0].comments.forEach(comment => {
-            const likesCount = comment && comment.likes ? comment.likes.length : 0;
-            const dislikesCount = comment && comment.dislikes ? comment.dislikes.length : 0;
-            comment.likesCount = likesCount;
-            comment.dislikesCount = dislikesCount;
-        });
+        if(dataSite[0].comments && dataSite[0].comments.length > 0) {
+            dataSite[0].comments.forEach(comment => {
+                const likesCount = comment && comment.likes ? comment.likes.length : 0;
+                const dislikesCount = comment && comment.dislikes ? comment.dislikes.length : 0;
+                comment.likesCount = likesCount;
+                comment.dislikesCount = dislikesCount;
+            });
+        }
 
         console.log(dataSite[0].comments)
 

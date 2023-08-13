@@ -1,4 +1,5 @@
 const Comment = require("../../../model/comments.js");
+const InclusiveSites = require("../../../model/site")
 const { ...regex } = require("../../../regex") // Importación de patrones de Regex
 
 const keepReportedComment = async (req, res) => {
@@ -40,13 +41,46 @@ const keepReportedComment = async (req, res) => {
   }
 
   try {
-    const deletedComment = await Comment.findByIdAndDelete(inputs._id);
+    const theComment = await Comment.findById(inputs._id);
 
-    if (deletedComment) {
-      res.json({ message: "Comentario eliminado correctamente" });
-    } else {
-      res.status(404).json({ message: "Comentario no encontrado" });
+    if (!theComment) {
+      return res.status(404).json({ message: "Comentario no encontrado" });
     }
+
+    const theSite = await InclusiveSites.findById(theComment.siteId);
+
+    const updateRatingStars = (stars, increment) => {
+      if (typeof theSite.ratingStars[stars] === "number" && theSite.ratingStars[stars] > 0) {
+        theSite.ratingStars[stars] -= increment;
+      }
+    };
+
+    updateRatingStars(theComment.stars, 1);
+
+    const newRatingCount = theSite.comments.length === 0 ? 0 : theSite.ratingCount - 1;
+    const newRatingTotal = theSite.comments.length === 0 ? 0 : theSite.ratingTotal - theComment.stars;
+    const newRating = theSite.comments.length === 0 ? 0 : (theSite.ratingTotal - theComment.stars) / (theSite.ratingCount - 1);
+    const newRatingStars = theSite.comments.length === 0 ? { 1: "0", 2: "0", 3: "0", 4: "0", 5: "0" } : theSite.ratingStars;
+
+    const updatedSite = await InclusiveSites.findByIdAndUpdate(
+      theComment.siteId,
+      {
+        $pull: { comments: theComment._id },
+        $set: {
+          ratingCount: newRatingCount,
+          ratingTotal: newRatingTotal,
+          rating: newRating,
+          ratingStars: newRatingStars,
+        },
+
+      },
+      { new: true } // Retorna la ultima versión
+    );
+
+    await Comment.findByIdAndDelete(inputs._id);
+
+    res.json({ message: "Comentario eliminado correctamente" });
+
   } catch (error) {
     res.status(500).json({ message: "Error al eliminar comentario" });
   }
