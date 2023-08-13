@@ -8,12 +8,15 @@ import { BsThreeDots } from 'react-icons/bs';
 import { MdReportProblem } from 'react-icons/md';
 import { AuthContext } from 'context/AuthProvider';
 import axios from "../../../settings/axiosConfig"; // Para la petición de registro
+import LikeDislike from './LikeDislike';
 moment.locale('es');
 
 
 const CommentCard = ({ singleReview }) => {
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, user } = useContext(AuthContext);
   const [openThreeDots, setOpenThreeDots] = useState(false);
+
+  console.log("singleReview: ", singleReview)
 
   const ReportComment = async () => {
     if (loggedIn) {
@@ -81,6 +84,7 @@ const CommentCard = ({ singleReview }) => {
             </div>
           </div>
           <div className="rating-area">
+            <LikeDislike loggedIn={loggedIn} _id={singleReview._id} isLikeSelected={loggedIn && user && singleReview.likes && singleReview.likes.includes(user._id)} isDislikeSelected={loggedIn && user && singleReview.dislikes && singleReview.dislikes.includes(user._id)} likesCount={singleReview.likesCount} dislikesCount={singleReview.dislikesCount} />
             <Popover
               content={
                 loggedIn ?
@@ -154,8 +158,8 @@ const CommentCard = ({ singleReview }) => {
             })
             : ''}
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

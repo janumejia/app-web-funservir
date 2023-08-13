@@ -29,6 +29,14 @@ const commentSchema = new Schema({
       rating: { type: Number },
     }
   ],
+  likes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  dislikes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
   isReported: {
     type: Boolean,
     default: false, // Default value for the new property

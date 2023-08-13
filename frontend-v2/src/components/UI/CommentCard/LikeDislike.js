@@ -6,50 +6,74 @@ import {
   DislikeOutlined,
   DislikeFilled,
 } from '@ant-design/icons';
+import { BiSolidTimeFive } from 'react-icons/bi';
+import axios from "../../../settings/axiosConfig"; // Para la petición de registro
 
-const LikeDislike = () => {
+
+const LikeDislike = ({ _id, loggedIn, isLikeSelected, isDislikeSelected, likesCount, dislikesCount }) => {
   const [state, setState] = useState({
-    likes: 0,
-    dislikes: 0,
-    action: null,
+    likes: likesCount && typeof likesCount === "number" ? likesCount : 0,
+    dislikes: dislikesCount && typeof dislikesCount === "number" ? dislikesCount : 0,
+    action: isLikeSelected ? 'liked' : (isDislikeSelected ? 'disliked' : ''),
   });
 
-  const handleLike = () => {
-    setState({
-      ...state,
-      likes: 1,
-      dislikes: 0,
-      action: 'liked',
-    });
+  const sendLikeDislike = async (action) => {
+    const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addLikeDislike`, { _id: _id, action: action });
+    console.log("res: ", res)
+    if (res && res.data && res.data.content) {
+      console.log("entra")
+      setState({
+        action: res.data.content.action,
+        likes: res.data.content.likes,
+        dislikes: res.data.content.dislikes,
+      });
+    }
+  }
+
+  const handleLike = async () => {
+    if (loggedIn) {
+      setState({
+        ...state,
+        action: 'loading',
+      });
+      await sendLikeDislike("like");
+    }
   };
 
-  const handleDisLike = () => {
-    setState({
-      ...state,
-      likes: 0,
-      dislikes: 1,
-      action: 'disliked',
-    });
+  const handleDisLike = async () => {
+    if (loggedIn) {
+      setState({
+        ...state,
+        action: 'loading',
+      });
+      await sendLikeDislike("dislike");
+    }
   };
 
   return (
     <Fragment>
       <span className="comment-helpful">
-        <Tooltip title="Like">
+        <Tooltip title={loggedIn ? "Me gusta" : "Debes iniciar sesión"}>
           {state.action === 'liked' ? (
             <LikeFilled onClick={handleLike} />
           ) : (
-            <LikeOutlined onClick={handleLike} />
+            state.action === 'loading' ?
+              <BiSolidTimeFive />
+              :
+              <LikeOutlined onClick={handleLike} />
           )}
         </Tooltip>
         <span style={{ paddingLeft: 8, cursor: 'auto' }}>{state.likes}</span>
       </span>
       <span className="comment-report">
-        <Tooltip title="Dislike">
+        <Tooltip title={loggedIn ? "No me gusta" : "Debes iniciar sesión"}>
           {state.action === 'disliked' ? (
             <DislikeFilled onClick={handleDisLike} />
           ) : (
-            <DislikeOutlined onClick={handleDisLike} />
+            state.action === 'loading' ?
+              <BiSolidTimeFive />
+              :
+              <DislikeOutlined onClick={handleDisLike} />
           )}
         </Tooltip>
         <span style={{ paddingLeft: 8, cursor: 'auto' }}>{state.dislikes}</span>
