@@ -15,7 +15,7 @@ const BottomReservation = ({ title, price, rating, ratingCount, schedule, locati
         title={title}
         price={price}
         rating={
-          <Rating rating={rating} ratingCount={ratingCount} type="bulk" />
+          <Rating rating={rating} ratingCount={ratingCount} type="mobile" />
         }
         action={
           <Button type="primary" onClick={() => setVisible(true)}>
