@@ -64,6 +64,9 @@ const ReviewWrapper = styled.div`
           }
         }
         .rating-area {
+          display: flex;
+          justify-content: center; /* Center horizontally */
+          align-items: center; /* Center vertically */
           > span {
             margin-right: 15px;
             color: ${themeGet('text.2', '#777777')};

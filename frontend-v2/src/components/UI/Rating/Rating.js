@@ -53,7 +53,7 @@ const Rating = (props) => {
           <strong>
             {`${showRatingCount}`}
           </strong>
-          )
+        )
         :
         (
           <>
@@ -67,7 +67,18 @@ const Rating = (props) => {
                   {`${showRatingCount}`}
                 </strong>
               </div>
-            ) : (
+            ) : (type && type === 'mobile' ?
+              <div style={{ alignItems: 'center' }}>
+                <span >{ratingView}</span>
+                <br/>
+                <strong style={{ margin: '0px 3px 0 0px' }}>
+                  {`${listingCondition}`}
+                </strong>
+                <strong >
+                  {`${showRatingCount}`}
+                </strong>
+              </div>
+              :
               <>
                 <span>{ratingFieldName}</span> {ratingView}
               </>
