@@ -5,6 +5,7 @@ import Text from 'components/UI/Text/Text';
 import LocationWrapper from './Location.style';
 import Map from 'components/Map/Map';
 import { Element } from 'react-scroll';
+import { Link } from 'react-router-dom';
 
 const Location = ({
   // titleStyle,
@@ -22,7 +23,19 @@ const Location = ({
     <Element name="ubicacion" className="ubicacion">
       <LocationWrapper>
         <Heading as="h2" content="Ubicación" {...titleStyle} />
-        <Text content={location.siteAddress + ", " + location.neighborhood + ", " + location.locality} {...locationMetaStyle} />
+        <Text
+          content={
+            <>
+              <p style={{ "margin": "3px 0 5px 0" }}>
+                {location.siteAddress + ", " + location.neighborhood + ", " + location.locality}
+              </p>
+              <Link to={`http://www.google.com/maps/place/${location.location.lat},${location.location.lng}`} target="_blank">
+                {"Abrir en Google Maps"}
+              </Link>
+            </>
+          }
+          {...locationMetaStyle}
+        />
         {/* <Text
           content="Queda a 5 minutos a pie desde la estación Usaquen. El barrio es tranquilo y perfecto para disfrutar del auténtico sabor de la vida romana, con tiendas, galerías de arte, restaurantes, bares y discotecas, todo cerca y listo para ser descubierto."
           {...contentStyle}
