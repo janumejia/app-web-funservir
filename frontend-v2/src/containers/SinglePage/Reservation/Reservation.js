@@ -5,7 +5,7 @@ import Heading from 'components/UI/Heading/Heading';
 import Text from 'components/UI/Text/Text';
 import TextLink from 'components/UI/TextLink/TextLink';
 import RenderReservationForm from './RenderReservationForm';
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineCalendar, AiOutlineInfoCircle } from "react-icons/ai";
 import {
   IoLogoWhatsapp,
   IoLogoTwitter,
@@ -15,6 +15,7 @@ import {
 } from 'react-icons/io';
 import { Button, Popover } from 'antd';
 import { SocialAccount } from './Reservation.style.js';
+import { BsCalendarWeek } from 'react-icons/bs';
 
 function convertTimeTo12HourFormat(time) {
   if (!time) return null;
@@ -237,7 +238,7 @@ const CardHeader = ({ schedule }) => {
               backgroundColor: "#F7F7F7",
             }}
           >
-            <AiOutlineInfoCircle style={{ fontSize: '20px', margin: '1px 0 0 0' }} />
+            <BsCalendarWeek style={{ fontSize: '20px', margin: '1px 0 0 0' }} />
           </Button>
         </Fragment>
       </div>

@@ -30,8 +30,6 @@ const getSingleSite = async (req, res) => {
             });
         }
 
-        console.log(dataSite[0].comments)
-
         // Para solo permitir sitios en estado aprobado
         if (dataSite[0].status === 'Aprobado') return res.json(dataSite);
         else return res.status(404).json({ message: "No se encontró el sitio" });
