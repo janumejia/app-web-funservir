@@ -76,17 +76,17 @@ const SinglePage = () => {
           <img
             className="main-image"
             src={gallery[0].secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')}
-            alt="img 1 banner"
+            alt=""
           />
           <img
             className="second-image"
             src={gallery[1] && gallery[1].secure_url && gallery[1].secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')}
-            alt="img 2 banner"
+            alt=""
           />
           <img
             className="third-image"
             src={gallery[2] && gallery[2].secure_url && gallery[2].secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')}
-            alt="img 3 banner"
+            alt=""
           />
         </div>
         <Button

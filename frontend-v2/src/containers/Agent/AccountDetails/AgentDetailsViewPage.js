@@ -21,6 +21,7 @@ import {
   AGENT_PROFILE_FAVORITE,
   AGENT_PROFILE_CONTACT,
 } from 'settings/constant';
+import NotFoundWrapper, { ContentWrapper } from './NoData.style';
 
 import AgentDetailsPage, {
   BannerSection,
@@ -35,6 +36,7 @@ import AgentDetailsPage, {
 
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import TextLink from 'components/UI/TextLink/TextLink';
 
 const ProfileNavigation = (props) => {
   let location = useLocation();
@@ -58,7 +60,7 @@ const ProfileNavigation = (props) => {
             <NavLink to={AGENT_PROFILE_CONTACT}>Contacto</NavLink>
           </Menu.Item> */}
         </Menu>
-        {props._id===user._id && loggedIn && (
+        {props._id === user._id && loggedIn && (
           <Link className="add_card" to={ADD_SITE_PAGE}>
             <IoIosAdd /> Crear sitio
           </Link>
@@ -70,10 +72,21 @@ const ProfileNavigation = (props) => {
 
 const AgentProfileInfo = (props) => {
   const { data, loading } = useDataApi('/data/agent.json');
-  const { user, setProfileData, profileData } = useContext(AuthContext);
+  const { user, loggedIn, setProfileData, profileData } = useContext(AuthContext);
+
   useEffect(() => {
-      async function profileData(){
-      await axios.get(`${process.env.REACT_APP_HOST_BACK}/profile/${props._id}`).then((res) => setProfileData(res.data));
+
+    async function profileData() {
+      try {
+
+        const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/profile/${props._id}`);
+        if (res) {
+          setProfileData(res.data)
+        }
+      } catch (e) {
+        // setProfileData(res.data)
+        // console.log(e)
+      }
     }
     profileData();
   }, [setProfileData, props._id])
@@ -91,7 +104,7 @@ const AgentProfileInfo = (props) => {
 
 
   const username = `${profileData.name} ${profileData.lastName}`;
-  
+
   return (
     <Fragment>
       <BannerSection>
@@ -160,15 +173,27 @@ const AgentProfileInfo = (props) => {
 
 export default function AgentDetailsViewPage(props) {
   const { userId } = useParams();
+  const { loggedIn } = useContext(AuthContext);
+
   return (
     <AgentDetailsPage>
-      <AuthProvider>
-        <AgentProfileInfo _id={userId} />
-        <ProfileNavigation path={AGENT_PROFILE_PAGE} _id={userId} {...props} />
-        <Container fluid={true}>
-          <Outlet />
-        </Container>
-      </AuthProvider>
+      {loggedIn ?
+        <AuthProvider>
+          < AgentProfileInfo _id={userId} />
+          <ProfileNavigation path={AGENT_PROFILE_PAGE} _id={userId} {...props} />
+          <Container fluid={true}>
+            <Outlet />
+          </Container>
+        </AuthProvider>
+        :
+        <NotFoundWrapper>
+          <ContentWrapper>
+            <Image src="/images/403-forbidden.svg" alt="404"/>
+            <Heading as="h2" content="Debes iniciar sesión primero" />
+            <TextLink link="/" content="Volver" />
+          </ContentWrapper>
+        </NotFoundWrapper>
+      }
     </AgentDetailsPage>
   );
 }
