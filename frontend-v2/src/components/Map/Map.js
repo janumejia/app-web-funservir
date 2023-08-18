@@ -20,7 +20,7 @@ const Map = (props) => {
       {multiple ? (
         <MapWrapper // Mapa general
           id="map-multiple-location"
-          zoom={11} // Tamaño del zoom del mapa de google maps en la página de resultados de sitios
+          zoom={12} // Tamaño del zoom del mapa de google maps en la página de resultados de sitios
           center={{ // Ubicación por defecto del mapa cuando es cargado
             lat: 4.646321,
             lng: -74.118711

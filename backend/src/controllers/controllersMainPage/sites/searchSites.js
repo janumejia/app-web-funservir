@@ -58,7 +58,7 @@ const searchSites = async (req, res) => {
 
             // Aquí se inserta la búsqueda del nombre en la BD
             // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
-
+            console.log("regexArrayName: ", regexArrayName)
             queryBuscar.$or.push({ "name": { $in: regexArrayName } })
             queryBuscar.$or.push({ "category": { $in: regexArrayName } })
 

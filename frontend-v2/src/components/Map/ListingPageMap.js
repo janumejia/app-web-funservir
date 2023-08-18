@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Marker } from '@react-google-maps/api';
 import HotelInfoWindow from './MapInfoWindow';
 import MakerImage from './hotelMapMarker.png';
+import MakerImageText from './hotelMapMarker-text.png';
 
 const HotelMapMarkerCluster = ({ location, clusterer }) => {
   console.log("location:")
@@ -21,7 +22,7 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
 
     const updateSiteData = async () => {
       let auxSiteData = [];
-      
+
       await location.forEach((item) => {
         auxSiteData.push({
           id: item._id,
@@ -29,6 +30,7 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
           location: item.location,
           siteAddress: item.siteAddress,
           thumbUrl: item.gallery[0].secure_url.replace('/image/upload/', '/image/upload/w_500,f_auto,q_auto/'),
+          inclusiveElements: item.inclusiveElements,
           // title: item.title,
           // price: item.price,
           rating: 5.0,
@@ -48,7 +50,8 @@ const HotelMapMarkerCluster = ({ location, clusterer }) => {
     return (
       <Marker
         key={index}
-        icon={MakerImage}
+        icon={singlePostLocation && singlePostLocation.name ? MakerImageText : MakerImage}
+        label={ singlePostLocation && singlePostLocation.name && ( singlePostLocation.name.length > 15 ? (`${singlePostLocation.name.substr(0, 12)}...`) : singlePostLocation.name.substr(0, 15)) }
         clusterer={clusterer}
         position={{ lat: parseFloat(singlePostLocation.location.lat), lng: parseFloat(singlePostLocation.location.lng) }}
         onClick={() => infoWindowToggle(singlePostLocation.id)}
