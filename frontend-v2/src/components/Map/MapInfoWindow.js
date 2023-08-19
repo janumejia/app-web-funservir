@@ -18,7 +18,6 @@ const MapInfoWindow = ({ data, onCloseClick }) => {
         location={data?.siteAddress}
         title={data && data.name && (<TextLink link={`/post/${data.name}`} content={data.name} />)}
         inclusiveElements={data?.inclusiveElements}
-        // price={`$${data?.price}/Night - Free Cancellation`}
         rating={
           <Rating
             rating={data?.rating}

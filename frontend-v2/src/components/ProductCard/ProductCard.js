@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import TextLink from 'components/UI/TextLink/TextLink';
 import Rating from 'components/UI/Rating/Rating';
 import { FormOutlined } from '@ant-design/icons';
 import Carousel from 'react-multi-carousel'; // Documentación: https://www.npmjs.com/package/react-multi-carousel
-import Favourite from 'components/UI/Favorite/Favorite';
+import Favorite from 'components/UI/Favorite/Favorite';
 import 'react-multi-carousel/lib/styles.css';
 import GridCard from '../GridCard/GridCard';
 import { useNavigate } from 'react-router-dom';
 import { EDIT_SITE_PAGE } from 'settings/constant';
 import editDataAction from '../../containers/EditListing/EditListingAction';
 import { useStateMachine } from 'little-state-machine';
+import { AuthContext } from 'context/AuthProvider';
+
 const responsive = {
   desktop: {
     breakpoint: {
@@ -40,6 +42,7 @@ const responsive = {
 
 // const daysOfTheWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 
+
 const PostGrid = ({
   _id,
   name,
@@ -67,6 +70,7 @@ const PostGrid = ({
   schedule,
   status,
 }) => {
+  const {user, setUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
   const { actions } = useStateMachine({ editDataAction })
@@ -172,10 +176,14 @@ const PostGrid = ({
 
       }
       favoriteOriginal={
-        <Favourite
-          onClick={(event) => {
-            console.log(event);
-          }}
+        <Favorite
+          isActive={user.favorites && user.favorites.some(obj => obj._id === _id)? true : false}
+          _idSite={_id}
+          userData={user}
+          setUserData={setUser}
+          // onClick={(event) => {
+          //   console.log(event);
+          // }}
         />
       }
       status={status}

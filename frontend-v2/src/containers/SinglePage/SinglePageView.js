@@ -129,7 +129,7 @@ const SinglePage = () => {
         </Modal>
       </PostImage>
 
-      <TopBar title={name} shareURL={href} author={author} media={gallery} />
+      <TopBar title={name} shareURL={href} author={author} media={gallery} _id={_id} />
 
       <Container fullWidth={true} fluid={true}>
         <Row gutter={30} id="reviewSection" style={{ marginTop: 30 }}>

@@ -29,6 +29,7 @@ module.exports = {
     siteStatusRegex: new RegExp(/^(Pendiente|Aprobado|Rechazado)$/),
     socialWhatsappRegex: new RegExp(/^\d{10}$|^$/), // Igual que el regex de numero telefónico, y se le debe agregar +57
     webpageRegex: new RegExp(/(^(https:\/\/)[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$)|(^$)/),
+    favoriteRegex: new RegExp(/^saveFav$|^discardFav$/),
 
     /* Localidades */
     nameLocationRegex: generalAlphanumeric(1,100),

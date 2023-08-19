@@ -79,6 +79,9 @@ app.post("/addComment", verifyToken, controllers.addCommment)
 app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/addLikeDislike", verifyToken, controllers.addLikeDislikeComment)
 
+// Favoritos
+app.post("/handleFavorite", verifyToken, controllers.handleFavorite)
+
 // Búsqueda de sitios
 app.get("/sites", controllers.getAllSites)
 app.get("/siteNames", controllers.getAllSiteNames)

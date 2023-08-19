@@ -44,7 +44,7 @@ const tokenStatus = async (req, res) => {
             }
         }
 
-        let userInfo = await Users.find({ '_id': inputs._id }, ' -password -__v -userType').populate({path:'associatedSites', populate : {path:'inclusiveElements', model:'InclusiveElements'}});
+        let userInfo = await Users.find({ '_id': inputs._id }, ' -password -__v -userType').populate({path:'associatedSites', populate : {path:'inclusiveElements', model:'InclusiveElements'}}).populate({ path: 'favorites', model: 'Site', populate: { path: 'inclusiveElements', model: 'InclusiveElements' }});
         
         if (userInfo) {
             // Para remover el elemento _id en la respuesta del JSON, ya que se debe utilizar el _id de la cookie de sesión

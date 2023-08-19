@@ -41,21 +41,26 @@ import TextLink from 'components/UI/TextLink/TextLink';
 const ProfileNavigation = (props) => {
   let location = useLocation();
   const { path, className } = props;
-  const { loggedIn, user } = useContext(AuthContext);
+  const { loggedIn, user, profileData } = useContext(AuthContext);
 
   return (
     <NavigationArea>
       <Container fluid={true}>
         <Menu className={className}>
           <Menu.Item
-            className={path === location.pathname && 'ant-menu-item-selected'}
+            className={/^\/profile\/[0-9a-fA-F]{24}$/.test(location.pathname) && 'ant-menu-item-selected'}
             key="0"
           >
-            <NavLink to={`/profile/${user._id}`}>Sitios inclusivos</NavLink>
+            <NavLink to={`/profile/${profileData._id}`}>Sitios inclusivos</NavLink>
           </Menu.Item>
-          {/* <Menu.Item key="1">
-            <NavLink to={AGENT_PROFILE_FAVORITE}>Favoritos</NavLink>
-          </Menu.Item> */}
+          {props._id === user._id && loggedIn && (
+            <Menu.Item
+              className={/^\/profile\/[0-9a-fA-F]{24}\/favorites$/.test(location.pathname) && 'ant-menu-item-selected'}
+              key="1"
+            >
+              <NavLink to={AGENT_PROFILE_FAVORITE}>Favoritos</NavLink>
+            </Menu.Item>
+          )}
           {/* <Menu.Item key="2">
             <NavLink to={AGENT_PROFILE_CONTACT}>Contacto</NavLink>
           </Menu.Item> */}
@@ -188,7 +193,7 @@ export default function AgentDetailsViewPage(props) {
         :
         <NotFoundWrapper>
           <ContentWrapper>
-            <Image src="/images/403-forbidden.svg" alt="404"/>
+            <Image src="/images/403-forbidden.svg" alt="404" />
             <Heading as="h2" content="Debes iniciar sesión primero" />
             <TextLink link="/" content="Volver" />
           </ContentWrapper>

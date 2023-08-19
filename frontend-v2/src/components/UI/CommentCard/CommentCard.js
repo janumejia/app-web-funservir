@@ -16,8 +16,6 @@ const CommentCard = ({ singleReview }) => {
   const { loggedIn, user } = useContext(AuthContext);
   const [openThreeDots, setOpenThreeDots] = useState(false);
 
-  console.log("singleReview: ", singleReview)
-
   const ReportComment = async () => {
     if (loggedIn) {
       message.loading("Cargando", 0);

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
 
 const HeaderWrapper = styled.header`
-  z-index: 9; // Este es el z-index del header y todos sus componentes
+  z-index: 999; // Este es el z-index del header y todos sus componentes
   width: 100%;
 
   /* Autocompletado usando Autosuggest de React */
