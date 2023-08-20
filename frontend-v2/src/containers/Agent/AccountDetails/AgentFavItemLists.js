@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SectionGrid from 'components/SectionGrid/SectionGrid';
 import { PostPlaceholder } from 'components/UI/ContentLoader/ContentLoader';
 import useDataApi from 'library/hooks/useDataApi';
@@ -13,13 +13,22 @@ import NotFoundWrapper, { ContentWrapper, ContentWrapperFav, NotFoundWrapperFav 
 
 const AgentFavItemLists = () => {
   // const { data, loadMoreData, loading } = useDataApi('/data/agent.json');
-  const { user, setUser } = useContext(AuthContext);
-  const favourite_post = user && user.favorites ? user.favorites : [];
+  const { user } = useContext(AuthContext);
+
+  const [favourite_post, setFavourite_post] = useState(null);
+
+  useEffect(() => {
+    if (!favourite_post) setFavourite_post(user && user.favorites ? user.favorites : [])
+
+  }, [user])
+
+
+  // const favourite_post = user && user.favorites ? user.favorites : [];
   console.log("user.favorites: ", user.favorites)
 
   return (
     <>
-      {favourite_post.length > 0 ?
+      {favourite_post && favourite_post.length > 0 ?
         <SectionGrid
           // link={SINGLE_POST_PAGE}
           data={favourite_post}

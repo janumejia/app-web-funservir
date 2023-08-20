@@ -70,7 +70,7 @@ const PostGrid = ({
   schedule,
   status,
 }) => {
-  const {user, setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   let navigate = useNavigate();
 
   const { actions } = useStateMachine({ editDataAction })
