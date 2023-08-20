@@ -8,7 +8,7 @@ export const SINGLE_POST_PAGE = '/post';
 
 // Agent Profile Page Section
 export const AGENT_PROFILE_PAGE = '/profile/:userId';
-export const AGENT_PROFILE_FAVORITE = 'favorite-post';
+export const AGENT_PROFILE_FAVORITE = 'favorites';
 export const AGENT_PROFILE_CONTACT = 'contact';
 export const AGENT_ACCOUNT_SETTINGS_PAGE = '/account-settings';
 export const AGENT_PROFILE_EDIT_PAGE = 'edit';

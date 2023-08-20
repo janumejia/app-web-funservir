@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Sticky from 'react-stickynode';
 import {
   FaceBookShare,
@@ -10,6 +10,7 @@ import { Button, Menu, Dropdown } from 'antd';
 import Favorite from 'components/UI/Favorite/Favorite';
 import ScrollBar from 'components/UI/ScrollBar/ScrollBar';
 import { TobBarWrapper, ButtonGroup } from '../SinglePageView.style';
+import { AuthContext } from 'context/AuthProvider';
 
 const topBarMenu = [
   {
@@ -50,9 +51,18 @@ const SocialShareMenu = (props) => {
 };
 
 const SideButtons = (props) => {
+  const {user, setUser } = useContext(AuthContext);
+
   return (
     <ButtonGroup>
-      <Favorite className="ant-btn" content="Guardar" />
+      <Favorite
+        className="ant-btn"
+        content="Guardar"
+        isActive={user.favorites && user.favorites.some(obj => obj._id === props._id) ? true : false}
+        _idSite={props._id}
+        userData={user}
+        setUserData={setUser}
+      />
       <Dropdown
         placement="bottomRight"
         overlay={() => <SocialShareMenu {...props} />}
@@ -73,7 +83,7 @@ const SideButtons = (props) => {
 };
 
 const TopBar = (props) => {
-  const { title, shareURL, author, media } = props;
+  const { title, shareURL, author, media, _id } = props;
   return (
     <TobBarWrapper>
       <Sticky innerZ={1} top={80} activeClass="isSticky">
@@ -85,6 +95,7 @@ const TopBar = (props) => {
               author={author}
               title={title}
               shareURL={shareURL}
+              _id={_id}
             />
           }
         />

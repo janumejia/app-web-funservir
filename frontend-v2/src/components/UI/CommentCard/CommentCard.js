@@ -9,14 +9,13 @@ import { MdReportProblem } from 'react-icons/md';
 import { AuthContext } from 'context/AuthProvider';
 import axios from "../../../settings/axiosConfig"; // Para la petición de registro
 import LikeDislike from './LikeDislike';
+import { NavLink } from 'react-router-dom';
 moment.locale('es');
 
 
 const CommentCard = ({ singleReview }) => {
   const { loggedIn, user } = useContext(AuthContext);
   const [openThreeDots, setOpenThreeDots] = useState(false);
-
-  console.log("singleReview: ", singleReview)
 
   const ReportComment = async () => {
     if (loggedIn) {
@@ -64,10 +63,22 @@ const CommentCard = ({ singleReview }) => {
         <div className="comment-header">
           <div className="avatar-area">
             <div className="author-avatar">
-              <img src={authorAvatar} alt={authorName} />
+              {loggedIn ?
+                <NavLink to={`/profile/${singleReview.userId._id}`}>
+                  <img src={authorAvatar} alt={authorName} />
+                </NavLink>
+                :
+                <img src={authorAvatar} alt={authorName} />
+              }
             </div>
             <div className="author-info">
-              <h3 className="author-name">{authorName}</h3>
+              {loggedIn ?
+                <NavLink to={`/profile/${singleReview.userId._id}`}>
+                  <h3 className="author-name">{authorName}</h3>
+                </NavLink>
+                :
+                <h3 className="author-name">{authorName}</h3>
+              }
               {ratingView && (
                 <div className="author-rating">{ratingView}</div>
               )}

@@ -19,6 +19,7 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     socialInstagram: {type: String, required: false},
     socialFacebook: {type: String, required: false},
     socialTwitter: {type: String, required: false},
+    favorites: [{ type: Schema.Types.ObjectId, ref: 'Site' }],
 })
 
 module.exports = model("User", userSchema) // Después mongo le pone la s (users)

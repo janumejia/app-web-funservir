@@ -1,14 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import useToggle from './useToggle';
 import FavoriteWrapper from './Favorite.style';
 import { AuthContext } from 'context/AuthProvider';
-import { Popover } from 'antd';
+import { Popover, message } from 'antd';
+import axios from "settings/axiosConfig"; // Para la petición de registro
 
-const Favorite = ({ className, content, onClick }) => {
+const Favorite = ({ className, content, onClick, isActive, _idSite, userData, setUserData }) => {
   const { loggedIn } = useContext(AuthContext);
   // use toggle hooks
-  const [toggleValue, toggleHandler] = useToggle(false);
+  const [toggleValue, toggleHandler] = useToggle(isActive);
+  const [loading, setLoading] = useState(false);
 
   // Add all classs to an array
   const addAllClass = ['favorite'];
@@ -18,9 +20,34 @@ const Favorite = ({ className, content, onClick }) => {
     addAllClass.push(className);
   }
 
-  const handelClick = (event) => {
-    toggleHandler();
-    onClick(!toggleValue);
+  const handelClick = async (event) => {
+    const isRequestOK = await sendFavorite();
+    if(isRequestOK) {
+      toggleHandler();
+      onClick(!toggleValue);
+    }
+  };
+  
+  const sendFavorite = async () => {
+    try {
+      if (loggedIn) {
+        // message.loading("Cargando favorito", 0);
+        const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/handleFavorite`, { _idSite: _idSite, action: (toggleValue ? "discardFav" : "saveFav") });
+        message.destroy();
+        if (res) {
+          if (res.status === 200) {
+            setUserData({ ...userData, favorites: res.data.content.favorites })
+            // message.success(res.data.message, 3);
+            return true;
+          } else message.warning("Error en la solicitud", 3);
+        }
+        console.log("reportar");
+      }
+    } catch (e) {
+      message.destroy();
+      message.warning("Error en la solicitud", 3);
+    }
+    return false;
   };
 
   return (
@@ -44,7 +71,7 @@ const Favorite = ({ className, content, onClick }) => {
             <span>{content}</span>
           </FavoriteWrapper>
         </Popover>
-        :
+        : 
         <FavoriteWrapper
           onClick={handelClick}
           className={`${addAllClass.join(' ')} ${toggleValue ? 'active' : ''}`}
