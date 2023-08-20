@@ -34,8 +34,8 @@ const AgentItemLists = () => {
         <NotFoundWrapperFav>
           <ContentWrapperFav>
             <Image src="/images/no-data-profile2.svg" alt="404" />
-            <Heading as="h2" content="No has agregado favoritos aún" />
-            <TextLink link="/listing" content="Ir a todos los sitios" />
+            <Heading as="h2" content="No se han agregado sitios" />
+            {/* <TextLink link="/listing" content="Ir a todos los sitios" /> */}
           </ContentWrapperFav>
         </NotFoundWrapperFav>
       }

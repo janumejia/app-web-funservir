@@ -177,9 +177,9 @@ const PostGrid = ({
       }
       favoriteOriginal={
         <Favorite
-          isActive={user.favorites && user.favorites.some(obj => obj._id === _id)? true : false}
+          isActive={user && user.favorites && user.favorites.some(obj => obj._id === _id)? true : false}
           _idSite={_id}
-          userData={user}
+          userData={user && user}
           setUserData={setUser}
           // onClick={(event) => {
           //   console.log(event);
