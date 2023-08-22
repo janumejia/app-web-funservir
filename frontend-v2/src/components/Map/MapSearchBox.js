@@ -16,29 +16,132 @@ import addDataAction from '../../containers/Auth/SignUp/SignUpOwner/AddOwnerActi
 
 const MapWithSearchBox = (props) => {
   const [searchBox, setSearchBox] = useState(); // Guarda el estado del componente de búsqueda del mapa.
-  const [dragNDropData, setDragNDropData] = useState([]); // Guarda el estado del componente de arrastrar y soltar del mapa.
-  const { updateValue, name } = props;// Se extrae de las props para actualizar el valor ingresado en la búsqueda de ubicaciones.
+  // const [dragNDropData, setDragNDropData] = useState([]); // Guarda el estado del componente de arrastrar y soltar del mapa.
+  const { updateValue, name, defaultValue } = props;// Se extrae de las props para actualizar el valor ingresado en la búsqueda de ubicaciones.
   const [locationInput, setLocationInput] = useState({ searchedLocation: '' }); // Se usa para guardar el estado de la ubicación ingresada en el campo de búsqueda.
-  
+
   // Se usa para guardar el estado de los detalles de la ubicación.
   const [locationDetails, setLocationDetails] = useState({
     center: { // Centro predeterminado del mapa en Bogotá.
-      lat: 4.640560, 
-      lng: -74.117027,
+      lat: defaultValue && defaultValue.lat ? defaultValue.lat : 4.640560,
+      lng: defaultValue && defaultValue.lng ? defaultValue.lng : -74.117027,
     },
     markers: [ // Ubicación predeterminada en Bogotá.
       {
         position: {
-          lat: 4.640560,
-          lng: -74.117027,
+          lat: defaultValue && defaultValue.lat ? defaultValue.lat : 4.640560,
+          lng: defaultValue && defaultValue.lng ? defaultValue.lng : -74.117027,
         },
       },
     ],
     places: [], // Array para almacenar los lugares seleccionados en el mapa.
   });
 
-  const onLoad = (ref) => setSearchBox(ref); // Función que se ejecuta cuando el componente de búsqueda del mapa carga y recibe una referencia a ese componente como parámetro
-  
+  // useEffect(() => {
+  //   const getUserLocation = () => {
+
+  //     navigator?.geolocation.getCurrentPosition(async (position) => {
+
+  //       console.log("Latitude: ", position.coords.latitude);
+  //       console.log("Longitude: ", position.coords.longitude);
+
+  //       setLocationDetails({
+  //         ...locationDetails,
+  //         center: { lat: position.coords.latitude, lng: position.coords.longitude },
+  //         markers: [{ position: { lat: position.coords.latitude, lng: position.coords.longitude } }],
+  //       });
+
+  //       while (!window.google) {
+
+  //       }
+
+  //         let tempLocArray = [];
+  //         var geocoder = new window.google.maps.Geocoder(); // Crea un nuevo objeto Geocoder 
+
+  //         // Crea un objeto que contiene las coordenadas latitud y longitud de la nueva ubicación del marcador
+  //         const latlng = {
+  //           lat: Number(position.coords.latitude),
+  //           lng: Number(position.coords.longitude),
+  //         };
+
+  //         // Utiliza la función geocode para obtener los resultados de la búsqueda inversa de la nueva ubicación
+  //         await geocoder.geocode({ latLng: latlng }, function (results, status) {
+  //           if (results && results[0] && results[0].formatted_address) { // Si se encontró una dirección formateada, actualiza el estado de la entrada de ubicación con ella
+  //             setLocationInput({
+  //               searchedLocation: results[0] && results[0].formatted_address,
+  //             });
+
+  //             // Crea un objeto de ubicación y lo agrega a un array temporal
+  //             const location = {
+  //               place_id: results[0].place_id,
+  //               formatted_address: results[0].formatted_address,
+  //               address_components: results[0].address_components,
+  //               geometry: results[0].geometry,
+  //             };
+  //             tempLocArray.push(location);
+  //           }
+  //           // setDragNDropData(tempLocArray); // Actualiza el estado del array de datos de arrastrar y soltar con el array temporal
+  //         });
+  //         if (tempLocArray && tempLocArray.length > 0) updateValue(tempLocArray); // Actualiza el valor del componente padre con los datos de arrastrar y soltar
+  //     });
+  //   }
+
+  //   if (props.getUserLocation) getUserLocation();
+  // }, [])
+
+  const onLoad = (ref) => {
+    setSearchBox(ref)
+
+    if (props.setUserLocation) {
+
+      // Permite ajustar la ubicación del usuario en el mapa
+      navigator?.geolocation.getCurrentPosition(async (position) => {
+
+        console.log("Latitude: ", position.coords.latitude);
+        console.log("Longitude: ", position.coords.longitude);
+
+        setLocationDetails({
+          ...locationDetails,
+          center: { lat: position.coords.latitude, lng: position.coords.longitude },
+          markers: [{ position: { lat: position.coords.latitude, lng: position.coords.longitude } }],
+        });
+
+        while (!window.google) {
+
+        }
+
+        let tempLocArray = [];
+        var geocoder = new window.google.maps.Geocoder(); // Crea un nuevo objeto Geocoder 
+
+        // Crea un objeto que contiene las coordenadas latitud y longitud de la nueva ubicación del marcador
+        const latlng = {
+          lat: Number(position.coords.latitude),
+          lng: Number(position.coords.longitude),
+        };
+
+        // Utiliza la función geocode para obtener los resultados de la búsqueda inversa de la nueva ubicación
+        await geocoder.geocode({ latLng: latlng }, function (results, status) {
+          if (results && results[0] && results[0].formatted_address) { // Si se encontró una dirección formateada, actualiza el estado de la entrada de ubicación con ella
+            setLocationInput({
+              searchedLocation: results[0] && results[0].formatted_address,
+            });
+
+            // Crea un objeto de ubicación y lo agrega a un array temporal
+            const location = {
+              place_id: results[0].place_id,
+              formatted_address: results[0].formatted_address,
+              address_components: results[0].address_components,
+              geometry: results[0].geometry,
+            };
+            tempLocArray.push(location);
+          }
+          // setDragNDropData(tempLocArray); // Actualiza el estado del array de datos de arrastrar y soltar con el array temporal
+        });
+        if (tempLocArray && tempLocArray.length > 0) updateValue(tempLocArray); // Actualiza el valor del componente padre con los datos de arrastrar y soltar
+      });
+    }
+  }; // Función que se ejecuta cuando el componente de búsqueda del mapa carga y recibe una referencia a ese componente como parámetro
+
   // Función que se ejecuta cuando se selecciona una ubicación en el componente de búsqueda del mapa
   // Obtiene las ubicaciones seleccionadas, las agrega a un objeto LatLngBounds que determina el área de visualización del mapa
   // y actualiza el estado del componente de mapa para mostrar las nuevas ubicaciones en el mapa
@@ -62,7 +165,7 @@ const MapWithSearchBox = (props) => {
       center: nextCenter,
       markers: nextMarkers,
     });
-    
+
     setLocationInput({ // Actualiza el estado del componente de entrada de texto para mostrar la ubicación seleccionada
       searchedLocation: places && places[0] && places[0].formatted_address,
     });
@@ -91,14 +194,14 @@ const MapWithSearchBox = (props) => {
   };
 
   // Función que se ejecuta al finalizar el arrastre del marcador en el mapa
-  const onDragEndFunc = (marker) => {
+  const onDragEndFunc = async (marker) => {
     let tempLocArray = [];
     var geocoder = new window.google.maps.Geocoder(); // Crea un nuevo objeto Geocoder 
-    
+
     // Crea un objeto que contiene las coordenadas latitud y longitud de la nueva ubicación del marcador
     const latlng = {
-      lat: Number(marker.latLng.lat().toFixed(4)),
-      lng: Number(marker.latLng.lng().toFixed(4)),
+      lat: Number(marker.latLng.lat()),
+      lng: Number(marker.latLng.lng()),
     };
 
     // Actualiza el estado de los detalles de la ubicación con la nueva ubicación del marcador
@@ -108,9 +211,8 @@ const MapWithSearchBox = (props) => {
     });
 
     // Utiliza la función geocode para obtener los resultados de la búsqueda inversa de la nueva ubicación
-    geocoder.geocode({ latLng: latlng }, function (results, status) {
-      console.log(results, 'results');
-      if (results[0] && results[0].formatted_address) { // Si se encontró una dirección formateada, actualiza el estado de la entrada de ubicación con ella
+    await geocoder.geocode({ latLng: latlng }, function (results, status) {
+      if (results && results[0] && results[0].formatted_address) { // Si se encontró una dirección formateada, actualiza el estado de la entrada de ubicación con ella
         setLocationInput({
           searchedLocation: results[0] && results[0].formatted_address,
         });
@@ -124,14 +226,14 @@ const MapWithSearchBox = (props) => {
         };
         tempLocArray.push(location);
       }
-      setDragNDropData(tempLocArray); // Actualiza el estado del array de datos de arrastrar y soltar con el array temporal
+      // setDragNDropData(tempLocArray); // Actualiza el estado del array de datos de arrastrar y soltar con el array temporal
     });
-    updateValue(dragNDropData); // Actualiza el valor del componente padre con los datos de arrastrar y soltar
+    updateValue(tempLocArray); // Actualiza el valor del componente padre con los datos de arrastrar y soltar
   };
 
   // Para que ajuste la ubicación de acuerdo a lo ingresado por el usuario dueño de sitio en los campos de Dirección, Localidad y Barrio
   // const { state } = useStateMachine({ addDataAction });
-  
+
   // useEffect(() => {
   //   const country = "Colombia";
   //   let address, neighborhood, locality;
@@ -147,7 +249,7 @@ const MapWithSearchBox = (props) => {
 
   //   // Cambiar el texto del campo de búsqueda aquí
   //   setLocationInput({ searchedLocation: address + ", " + locality + ", " + neighborhood + ", " + country });
-    
+
   //   // Cambiar centro del mapa aquí
   //   if(locationInput.searchedLocation != ''){
   //     const places = searchBox.getPlaces();
@@ -192,7 +294,7 @@ const MapWithSearchBox = (props) => {
           style={{
             boxSizing: `border-box`,
             border: `1px solid transparent`,
-            width: `60%` ,
+            width: `60%`,
             height: `40px`,
             marginTop: `10px`,
             marginLeft: `10px`,
@@ -212,6 +314,7 @@ const MapWithSearchBox = (props) => {
       {locationDetails.markers.map((marker, index) => {
         return (
           <Marker
+            draggable={true}
             icon={MakerImage}
             key={index}
             position={marker.position}

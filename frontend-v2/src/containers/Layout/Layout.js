@@ -20,6 +20,8 @@ import {
   AGENT_PASSWORD_CHANGE_PAGE,
   REGISTRATION_USER,
   REGISTRATION_OWNER,
+  ADD_KEY_POINT_PAGE,
+  EDIT_SITE_PAGE,
 } from 'settings/constant';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -50,6 +52,8 @@ export default function Layout() {
           {location.pathname === LISTING_POSTS_PAGE ||
           location.pathname === PRICING_PLAN_PAGE ||
           location.pathname === ADD_SITE_PAGE ||
+          location.pathname === ADD_KEY_POINT_PAGE ||
+          location.pathname === EDIT_SITE_PAGE ||
           location.pathname === AGENT_PROFILE_PAGE ||
           location.pathname === CHANGE_PASSWORD_PAGE ||
           location.pathname === FORGET_PASSWORD_PAGE ||

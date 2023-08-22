@@ -22,6 +22,7 @@ import {
   FORGET_PASSWORD_PAGE,
   ADD_SITE_PAGE,
   EDIT_SITE_PAGE,
+  ADD_KEY_POINT_PAGE,
   AGENT_IMAGE_EDIT_PAGE,
   AGENT_PASSWORD_CHANGE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
@@ -31,9 +32,9 @@ import {
 
 // protected route
 function RequireAuth({ children }) {
-  let { loggedIn } = useContext(AuthContext);
+  let { loggedIn, statusRequestDone } = useContext(AuthContext);
   let location = useLocation();
-  if (!loggedIn) {
+  if (statusRequestDone && !loggedIn) {
     return <Navigate to={LOGIN_PAGE} state={{ from: location }} />;
   }
 
@@ -88,6 +89,9 @@ const AgentPictureChangeForm = React.lazy(() =>
 const ChangePassWord = React.lazy(() =>
   import('containers/Agent/AccountSettings/ChangePassWordForm')
 );
+const AddKeyPointPage = React.lazy(() =>
+  import('containers/AddKeyPoint/AddKeyPoint')
+);
 
 export default function AppRoutes() {
   return (
@@ -122,9 +126,9 @@ export default function AppRoutes() {
           path={AGENT_PROFILE_PAGE}
           element={
             <React.Suspense fallback={<Loader />}>
-             
+             <RequireAuth>
               <AgentDetailsViewPage />
-              
+             </RequireAuth>
             </React.Suspense>
           }
         >
@@ -308,6 +312,16 @@ export default function AppRoutes() {
             }
           />
         </Route>
+        <Route
+          path={ADD_KEY_POINT_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <RequireAuth>
+                <AddKeyPointPage />
+              </RequireAuth>
+            </React.Suspense>
+          }
+        />
         {/* end of Protected routes*/}
         <Route
           path="*"

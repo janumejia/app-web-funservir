@@ -21,6 +21,7 @@ export const PRICING_PLAN_PAGE = '/pricing-plan';
 export const PRIVACY_PAGE = '/privacy';
 export const ADD_SITE_PAGE = '/add-site';
 export const EDIT_SITE_PAGE = '/edit-site';
+export const ADD_KEY_POINT_PAGE = '/add-key-point';
 
 // Login / Registration Page
 export const LOGIN_PAGE = '/sign-in';

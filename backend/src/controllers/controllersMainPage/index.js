@@ -21,6 +21,7 @@ const getBestRankingSites = require("./sites/getBestRankingSites")
 const reportComment = require("./authentication/authenticatedUser/comments/reportComment")
 const addLikeDislikeComment = require("./authentication/authenticatedUser/comments/addLikeDislikeComment")
 const handleFavorite = require("./authentication/authenticatedUser/handleFavorite")
+const addKeyPoint = require("./authentication/authenticatedUser/keyPoints/addKeyPoint")
 
 module.exports = {
     registerUser,
@@ -46,4 +47,5 @@ module.exports = {
     reportComment,
     addLikeDislikeComment,
     handleFavorite,
+    addKeyPoint,
 }
