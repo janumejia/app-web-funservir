@@ -10,6 +10,7 @@ export const AuthContext = React.createContext();
 const AuthProvider = (props) => {
 
   let navigate = useNavigate();
+  const [statusRequestDone, setStatusRequestDone] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [profileData, setProfileData] = useState({});
@@ -25,6 +26,7 @@ const AuthProvider = (props) => {
           if (res.status === 200) {
             setUser(...res.data.data);
             setLoggedIn(true);
+            setStatusRequestDone(true);
   
           } else message.warning("Respuesta del servidor desconocida");
         }
@@ -33,6 +35,7 @@ const AuthProvider = (props) => {
         else {
           setUser({});
           setLoggedIn(false);
+          setStatusRequestDone(true);
         }
       }
     }
@@ -221,7 +224,8 @@ const AuthProvider = (props) => {
         user,
         admin,
         profileData,
-        setProfileData
+        setProfileData,
+        statusRequestDone,
       }}
     >
       <>{props.children}</>

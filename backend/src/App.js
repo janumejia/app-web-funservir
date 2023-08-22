@@ -79,6 +79,9 @@ app.post("/addComment", verifyToken, controllers.addCommment)
 app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/addLikeDislike", verifyToken, controllers.addLikeDislikeComment)
 
+// Puntos/lugares clave
+app.post("/addKeyPoint", verifyToken, controllers.addKeyPoint)
+
 // Favoritos
 app.post("/handleFavorite", verifyToken, controllers.handleFavorite)
 

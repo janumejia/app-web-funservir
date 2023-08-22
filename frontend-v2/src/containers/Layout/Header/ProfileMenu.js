@@ -7,6 +7,7 @@ import {
   AGENT_PROFILE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
   ADD_SITE_PAGE,
+  ADD_KEY_POINT_PAGE,
 } from 'settings/constant';
 
 export default function ProfileMenu({ avatar }) {
@@ -36,12 +37,15 @@ export default function ProfileMenu({ avatar }) {
           <NavLink to={`/profile/${user._id}`}>Ver perfil</NavLink>
         </Menu.Item>
         <Menu.Item onClick={closeDropdown} key="1">
-          <NavLink to={ADD_SITE_PAGE}>Crear sitio</NavLink>
+          <NavLink to={ADD_KEY_POINT_PAGE}>Crear lugar clave</NavLink>
         </Menu.Item> 
         <Menu.Item onClick={closeDropdown} key="2">
+          <NavLink to={ADD_SITE_PAGE}>Crear sitio inclusivo</NavLink>
+        </Menu.Item> 
+        <Menu.Item onClick={closeDropdown} key="3">
           <NavLink to={AGENT_ACCOUNT_SETTINGS_PAGE}>Ajustes</NavLink>
         </Menu.Item>
-        <Menu.Item key="3">
+        <Menu.Item key="4">
           <button onClick={handleLogout}>Cerrar sesión</button>
         </Menu.Item>
       </Menu>
