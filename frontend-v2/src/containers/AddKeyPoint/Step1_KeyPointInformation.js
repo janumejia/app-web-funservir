@@ -258,7 +258,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           error={errors.location && <span>¡Este campo es requerido!</span>}
         >
           <MapWithSearchBox
-            getUserLocation={true}
+            setUserLocation={true}
             name="location"
             updateValue={(value) => {
               handleOnChange('location', mapDataHelper(value)[0])

@@ -92,51 +92,54 @@ const MapWithSearchBox = (props) => {
   const onLoad = (ref) => {
     setSearchBox(ref)
 
-    // Permite ajustar la ubicación del usuario en el mapa
-    navigator?.geolocation.getCurrentPosition(async (position) => {
+    if (props.setUserLocation) {
 
-      console.log("Latitude: ", position.coords.latitude);
-      console.log("Longitude: ", position.coords.longitude);
+      // Permite ajustar la ubicación del usuario en el mapa
+      navigator?.geolocation.getCurrentPosition(async (position) => {
 
-      setLocationDetails({
-        ...locationDetails,
-        center: { lat: position.coords.latitude, lng: position.coords.longitude },
-        markers: [{ position: { lat: position.coords.latitude, lng: position.coords.longitude } }],
-      });
+        console.log("Latitude: ", position.coords.latitude);
+        console.log("Longitude: ", position.coords.longitude);
 
-      while (!window.google) {
+        setLocationDetails({
+          ...locationDetails,
+          center: { lat: position.coords.latitude, lng: position.coords.longitude },
+          markers: [{ position: { lat: position.coords.latitude, lng: position.coords.longitude } }],
+        });
 
-      }
+        while (!window.google) {
 
-      let tempLocArray = [];
-      var geocoder = new window.google.maps.Geocoder(); // Crea un nuevo objeto Geocoder 
-
-      // Crea un objeto que contiene las coordenadas latitud y longitud de la nueva ubicación del marcador
-      const latlng = {
-        lat: Number(position.coords.latitude),
-        lng: Number(position.coords.longitude),
-      };
-
-      // Utiliza la función geocode para obtener los resultados de la búsqueda inversa de la nueva ubicación
-      await geocoder.geocode({ latLng: latlng }, function (results, status) {
-        if (results && results[0] && results[0].formatted_address) { // Si se encontró una dirección formateada, actualiza el estado de la entrada de ubicación con ella
-          setLocationInput({
-            searchedLocation: results[0] && results[0].formatted_address,
-          });
-
-          // Crea un objeto de ubicación y lo agrega a un array temporal
-          const location = {
-            place_id: results[0].place_id,
-            formatted_address: results[0].formatted_address,
-            address_components: results[0].address_components,
-            geometry: results[0].geometry,
-          };
-          tempLocArray.push(location);
         }
-        // setDragNDropData(tempLocArray); // Actualiza el estado del array de datos de arrastrar y soltar con el array temporal
+
+        let tempLocArray = [];
+        var geocoder = new window.google.maps.Geocoder(); // Crea un nuevo objeto Geocoder 
+
+        // Crea un objeto que contiene las coordenadas latitud y longitud de la nueva ubicación del marcador
+        const latlng = {
+          lat: Number(position.coords.latitude),
+          lng: Number(position.coords.longitude),
+        };
+
+        // Utiliza la función geocode para obtener los resultados de la búsqueda inversa de la nueva ubicación
+        await geocoder.geocode({ latLng: latlng }, function (results, status) {
+          if (results && results[0] && results[0].formatted_address) { // Si se encontró una dirección formateada, actualiza el estado de la entrada de ubicación con ella
+            setLocationInput({
+              searchedLocation: results[0] && results[0].formatted_address,
+            });
+
+            // Crea un objeto de ubicación y lo agrega a un array temporal
+            const location = {
+              place_id: results[0].place_id,
+              formatted_address: results[0].formatted_address,
+              address_components: results[0].address_components,
+              geometry: results[0].geometry,
+            };
+            tempLocArray.push(location);
+          }
+          // setDragNDropData(tempLocArray); // Actualiza el estado del array de datos de arrastrar y soltar con el array temporal
+        });
+        if (tempLocArray && tempLocArray.length > 0) updateValue(tempLocArray); // Actualiza el valor del componente padre con los datos de arrastrar y soltar
       });
-      if (tempLocArray && tempLocArray.length > 0) updateValue(tempLocArray); // Actualiza el valor del componente padre con los datos de arrastrar y soltar
-    });
+    }
   }; // Función que se ejecuta cuando el componente de búsqueda del mapa carga y recibe una referencia a ese componente como parámetro
 
   // Función que se ejecuta cuando se selecciona una ubicación en el componente de búsqueda del mapa
