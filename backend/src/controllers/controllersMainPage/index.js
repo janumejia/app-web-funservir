@@ -22,6 +22,7 @@ const reportComment = require("./authentication/authenticatedUser/comments/repor
 const addLikeDislikeComment = require("./authentication/authenticatedUser/comments/addLikeDislikeComment")
 const handleFavorite = require("./authentication/authenticatedUser/handleFavorite")
 const addKeyPoint = require("./authentication/authenticatedUser/keyPoints/addKeyPoint")
+const getKeyPoints = require("./keyPoints/getKeyPoints")
 
 module.exports = {
     registerUser,
@@ -48,4 +49,5 @@ module.exports = {
     addLikeDislikeComment,
     handleFavorite,
     addKeyPoint,
+    getKeyPoints,
 }

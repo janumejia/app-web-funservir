@@ -57,6 +57,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
       classification: state?.dataAddKeyPoint?.classification,
+      title: state?.dataAddKeyPoint?.title,
       description: state?.dataAddKeyPoint?.description,
       // location: state?.dataAddKeyPoint?.location,
     },
@@ -92,9 +93,10 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     try {
       const formData = {
         classification: data.classification,
+        title: data.title,
         description: data.description,
         sitePhotos: auxPhotos,
-        location: {lat: data.location.lat.toString(), lng: data.location.lng.toString()},
+        location: { lat: data.location.lat.toString(), lng: data.location.lng.toString() },
         formattedAddress: data.location.formattedAddress,
       };
 
@@ -189,12 +191,55 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
             )}
           />
         </FormControl>
+        <FormControl
+          label="Titulo"
+          htmlFor="title"
+          error={
+            errors.title && errors.title.type === "required" ? (
+              <span>¡Este campo es requerido!</span>
+            ) : errors.title && errors.title.type === "pattern" ? (
+              <span>¡El nombre está en un formato no válido!</span>
+            ) : null
+          }
+        >
+          <Controller
+            name="title"
+            defaultValue={state?.dataAddSite?.title}
+            control={control}
+            rules={{
+              required: true,
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/,
+              // validate: {
+              //   isTitleValid: async (value) => {
+              //     const pattern = /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/;
+              //     return !pattern.test(value) && "¡El nombre está en un formato no válido!";
+              //   }
+              // }
+
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                onChange={(e) => { // Cuando el usuario cambia el valor del campo
+                  onChange(e);
+                  handleOnChange('title', e);
+                  trigger("title");
+                }}
+                onBlur={() => { // Cuando el usuario quita el focus del campo
+                  trigger("title");
+                  onBlur();
+                }}
+                value={value}
+                placeholder="Escribe un titulo aquí"
+              />
+            )}
+          />
+        </FormControl>
 
         <FormControl
           label={
             <div>
               Descripción
-              {/* <div style={{ marginLeft: '4px', display: 'inline', opacity: 0.6 }}>(Opcional)</div> */}
+              <div style={{ marginLeft: '4px', display: 'inline', opacity: 0.6 }}>(Opcional)</div>
             </div>
           }
           htmlFor="description"
@@ -208,11 +253,11 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="description"
-            defaultValue={state?.dataAddSite?.description}
+            defaultValue={state?.dataAddSite?.description || ""}
             control={control}
             rules={{
-              required: true,
-              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/
+              required: false,
+              pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,2000}$/
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input.TextArea

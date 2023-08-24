@@ -80,6 +80,7 @@ app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/addLikeDislike", verifyToken, controllers.addLikeDislikeComment)
 
 // Puntos/lugares clave
+app.get("/getKeyPoints", controllers.getKeyPoints)
 app.post("/addKeyPoint", verifyToken, controllers.addKeyPoint)
 
 // Favoritos
