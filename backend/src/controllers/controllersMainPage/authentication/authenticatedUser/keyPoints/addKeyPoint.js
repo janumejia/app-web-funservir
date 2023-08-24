@@ -17,6 +17,7 @@ const addKeyPoint = async (req, res) => {
 
     const dataArray = [
         { input: 'classification', dataType: 'string', regex: regex.classificationRegex },
+        { input: 'title', dataType: 'string', regex: regex.siteNameRegex },
         { input: 'description', dataType: 'string', regex: regex.descriptionRegex },
         { input: 'location', dataType: 'object', regex: regex.locationRegex, properties: ['lat', 'lng'] },
         { input: 'formattedAddress', dataType: 'string', regex: regex.formattedAddressRegex },
@@ -63,8 +64,9 @@ const addKeyPoint = async (req, res) => {
 
         const newKeyPoint = new keyPoint({
             classification: inputs.classification,
+            title: inputs.title,
             description: inputs.description,
-            sitePhotos: uploadRes,
+            gallery: uploadRes,
             location: inputs.location,
             formattedAddress: inputs.formattedAddress,
             createdBy: ObjectId(decodedDataInToken._id),

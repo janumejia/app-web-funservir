@@ -71,6 +71,6 @@ module.exports = {
 
     // Puntos/lugares clave
     classificationRegex: new RegExp(/^inclusiveElement$|^architecturalBarrier$/),
-    descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){1,2000}$/),
+    descriptionRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/]){0,2000}$/),
     formattedAddressRegex: new RegExp(/^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&\/#]){0,500}$/),
 };

@@ -5,6 +5,7 @@ export const AGENTS_PAGE = '/agents';
 // Listing Single Page Section
 export const LISTING_POSTS_PAGE = '/listing';
 export const SINGLE_POST_PAGE = '/post';
+export const LISTING_KEYPOINTS_PAGE = '/keypoints';
 
 // Agent Profile Page Section
 export const AGENT_PROFILE_PAGE = '/profile/:userId';

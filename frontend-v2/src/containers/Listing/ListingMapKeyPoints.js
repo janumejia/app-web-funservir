@@ -1,6 +1,6 @@
 import React from 'react';
 import isEmpty from 'lodash/isEmpty';
-import Map from 'components/Map/Map';
+import MapKeyPoints from 'components/Map/MapKeyPoints';
 import useDataApi from 'library/hooks/useDataApi';
 import { FixedMap } from './Listing.style';
 
@@ -10,7 +10,7 @@ const ListingMap = ({ data, loading }) => {
   console.log(data);
   return (
     <FixedMap>
-      <Map location={data} multiple={true} />
+      <MapKeyPoints location={data} multiple={true} />
     </FixedMap>
   );
 };

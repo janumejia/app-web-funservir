@@ -416,7 +416,7 @@ const CategorySearch = ({ location }) => {
       <div className={"view_with__popup" + (bestRating ? ' activated' : '')}>
         <div className="popup_handler">
           <Button type="default" onClick={() => setBestRating(!bestRating)}>
-            Mejor puntuación
+            Mejor puntuación primero
           </Button>
         </div>
       </div>
