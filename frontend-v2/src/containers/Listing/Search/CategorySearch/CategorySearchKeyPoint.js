@@ -96,7 +96,7 @@ const CategorySearchKeyPoint = ({ location }) => {
   return (
     <CategorySearchWrapper>
 
-      <div className={"view_with__popup" + (elements ? ' activated' : '')}>
+      <div className={"view_with__popup" + (elements ? ' activatedElements' : '')}>
         <div className="popup_handler">
           <Button type="default" onClick={() => setElements(!elements)}>
             Elementos inclusivos
@@ -104,7 +104,7 @@ const CategorySearchKeyPoint = ({ location }) => {
         </div>
       </div>
 
-      <div className={"view_with__popup" + (barriers ? ' activated' : '')}>
+      <div className={"view_with__popup" + (barriers ? ' activatedBarriers' : '')}>
         <div className="popup_handler">
           <Button type="default" onClick={() => setBarriers(!barriers)}>
             Barreras arquitectónicas

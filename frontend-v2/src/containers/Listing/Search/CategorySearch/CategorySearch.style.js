@@ -70,6 +70,34 @@ const CategorySearchWrapper = styled.div`
       }
     }
 
+    &.activatedElements {
+      .popup_handler {
+        button,
+        button.ant-btn {
+          color: ${themeGet('color.1', '#ffffff')};
+          border-color: ${themeGet('#51B81A', '#51B81A')};
+          background-color: ${themeGet('#51B81A', '#51B81A')};
+          &:hover {
+            opacity: 0.85;
+          }
+        }
+      }
+    }
+
+    &.activatedBarriers {
+      .popup_handler {
+        button,
+        button.ant-btn {
+          color: ${themeGet('color.1', '#ffffff')};
+          border-color: ${themeGet('#FA8C16', '#FA8C16')};
+          background-color: ${themeGet('#FA8C16', '#FA8C16')};
+          &:hover {
+            opacity: 0.85;
+          }
+        }
+      }
+    }
+
     .popup_container {
       #popup {
         > div {
