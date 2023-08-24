@@ -160,7 +160,7 @@ const SearchInput = (props) => {
   };
 
   const inputProps = {
-    placeholder: "Busca por categoría, nombre, barrio o localidad",
+    placeholder: "Busca sitios por categoría, nombre, barrio o localidad",
     value,
     onChange,
     onKeyDown: handleKeyPress, // Add the keydown event listener to handle the "Enter" key press

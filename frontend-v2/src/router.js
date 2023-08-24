@@ -7,6 +7,7 @@ import {
   HOME_PAGE,
   LISTING_POSTS_PAGE,
   SINGLE_POST_PAGE,
+  LISTING_KEYPOINTS_PAGE,
   AGENT_PROFILE_PAGE,
   AGENT_PROFILE_FAVORITE,
   AGENT_PROFILE_CONTACT,
@@ -47,6 +48,7 @@ const ListingPage = React.lazy(() => import('containers/Listing/Listing'));
 const SinglePageView = React.lazy(() =>
   import('containers/SinglePage/SinglePageView')
 );
+const ListingKeyPointsPage = React.lazy(() => import('containers/Listing/ListingKeyPoints'));
 const AgentDetailsViewPage = React.lazy(() =>
   import('containers/Agent/AccountDetails/AgentDetailsViewPage')
 );
@@ -121,14 +123,22 @@ export default function AppRoutes() {
             </React.Suspense>
           }
         />
+        <Route
+          path={LISTING_KEYPOINTS_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <ListingKeyPointsPage />
+            </React.Suspense>
+          }
+        />
         {/* Nested routes for agent page */}
         <Route
           path={AGENT_PROFILE_PAGE}
           element={
             <React.Suspense fallback={<Loader />}>
-             <RequireAuth>
-              <AgentDetailsViewPage />
-             </RequireAuth>
+              <RequireAuth>
+                <AgentDetailsViewPage />
+              </RequireAuth>
             </React.Suspense>
           }
         >
