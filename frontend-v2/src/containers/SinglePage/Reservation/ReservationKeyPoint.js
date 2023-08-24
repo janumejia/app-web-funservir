@@ -143,12 +143,12 @@ const defaultSchedule = {
   }
 }
 
-export default function Reservation({ schedule, createdAt, updatedAt, location, completeAddress, contactNumber, contactNumber2, webpage, email, socialFacebook, socialInstagram, socialTwitter, socialWhatsapp }) {
+export default function Reservation({ id, schedule, createdAt, updatedAt, location, completeAddress, contactNumber, contactNumber2, webpage, email, socialFacebook, socialInstagram, socialTwitter, socialWhatsapp }) {
   return (
     <Card
       className="reservation_sidebar"
       header={<CardHeader createdAt={createdAt} updatedAt={updatedAt} />}
-      content={<RenderReservationForm location={location} completeAddress={completeAddress} contactNumber={contactNumber} contactNumber2={contactNumber2} webpage={webpage} email={email} />}
+      content={<RenderReservationForm id={id} location={location} completeAddress={completeAddress} contactNumber={contactNumber} contactNumber2={contactNumber2} webpage={webpage} email={email} />}
       footer={
         <>
           <SocialAccount>

@@ -15,9 +15,11 @@ import Text from 'components/UI/Text/Text';
 import { fontSize } from 'styled-system';
 import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react-icons/md";
 import { BsArrowUpRight } from "react-icons/bs";
-import { Link } from 'react-scroll';
+import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { EDIT_KEY_POINT_PAGE } from 'settings/constant.js';
 
-const RenderReservationForm = ({ location, completeAddress, contactNumber, contactNumber2, webpage, email }) => {
+const RenderReservationForm = ({ id, location, completeAddress, contactNumber, contactNumber2, webpage, email }) => {
   const [formState, setFormState] = useState({
     startDate: null,
     endDate: null,
@@ -55,10 +57,11 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, conta
     });
   };
   const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(
-      `Start Date: ${formState.startDate}\nEnd Date: ${formState.endDate}\nRooms: ${formState.room}\nGuests: ${formState.guest}`
-    );
+    <Navigate to={EDIT_KEY_POINT_PAGE} state={{ from: location }} />
+    // e.preventDefault();
+    // alert(
+    //   `Start Date: ${formState.startDate}\nEnd Date: ${formState.endDate}\nRooms: ${formState.room}\nGuests: ${formState.guest}`
+    // );
   };
 
   // const handleScrollUp = () => {
@@ -174,9 +177,11 @@ const RenderReservationForm = ({ location, completeAddress, contactNumber, conta
         />
       </div>
       <FormActionArea>
-        <Button htmlType="submit" type="primary">
+      <Link to={EDIT_KEY_POINT_PAGE + "/" + id}>
+        <Button type="primary">
           Modificar Lugar Clave
         </Button>
+      </Link>
       </FormActionArea>
       {/* <div className='telephone'>
         <MdPhone style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />

@@ -260,6 +260,7 @@ const SinglePage = () => {
               >
                 <Reservation
                   // schedule={schedule}
+                  id={_id}
                   location={location}
                   completeAddress={formattedAddress}
                   createdAt={createdAt}
@@ -276,12 +277,15 @@ const SinglePage = () => {
               </Sticky>
             ) : (
               <BottomReservation
+                id={_id}
+                location={location}
+                completeAddress={formattedAddress}
+                createdAt={createdAt}
+                updatedAt={updatedAt}
                 title={title}
                 // rating={rating}
                 // ratingCount={ratingCount}
                 // schedule={schedule}
-                location={location}
-                completeAddress={formattedAddress}
               // contactNumber={contactNumber}
               // contactNumber2={contactNumber2}
               // webpage={webpage}

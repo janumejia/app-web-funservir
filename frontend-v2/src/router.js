@@ -24,6 +24,7 @@ import {
   ADD_SITE_PAGE,
   EDIT_SITE_PAGE,
   ADD_KEY_POINT_PAGE,
+  EDIT_KEY_POINT_PAGE,
   AGENT_IMAGE_EDIT_PAGE,
   AGENT_PASSWORD_CHANGE_PAGE,
   AGENT_ACCOUNT_SETTINGS_PAGE,
@@ -96,6 +97,9 @@ const ChangePassWord = React.lazy(() =>
 );
 const AddKeyPointPage = React.lazy(() =>
   import('containers/AddKeyPoint/AddKeyPoint')
+);
+const EditKeyPointPage = React.lazy(() =>
+  import('containers/EditKeyPoint/EditKeyPoint')
 );
 
 export default function AppRoutes() {
@@ -339,6 +343,16 @@ export default function AppRoutes() {
             <React.Suspense fallback={<Loader />}>
               <RequireAuth>
                 <AddKeyPointPage />
+              </RequireAuth>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path={EDIT_KEY_POINT_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <RequireAuth>
+                <EditKeyPointPage />
               </RequireAuth>
             </React.Suspense>
           }
