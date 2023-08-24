@@ -13,7 +13,7 @@ const getKeyPoints = async (req, res) => {
         } else {
             dataFound = await KeyPoint.find().select("_id classification title description gallery location formattedAddress updatedAt").sort({ updatedAt: -1 });
         }
-
+        console.log("entra all key")
         if (dataFound) {
             return res.json(dataFound)
         } else {

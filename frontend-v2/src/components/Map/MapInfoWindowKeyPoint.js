@@ -16,7 +16,7 @@ const MapInfoWindow = ({ data, onCloseClick }) => {
       <GridCardKeyPoint
         className="info_window_card"
         location={data?.formattedAddress}
-        title={data && data.title && (<TextLink link={`/post/${data.id}`} content={data.title} />)}
+        title={data && data.title && (<TextLink link={`/keypoints/${data.id}`} content={data.title} />)}
         classification={data && data?.classification}
         mapView={true}
         updatedAt={data && data?.updatedAt}

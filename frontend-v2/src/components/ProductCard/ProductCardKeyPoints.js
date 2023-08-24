@@ -171,7 +171,7 @@ const PostGridKeyPoint = ({
       //   />
       // }
       // status={status}
-      title={<TextLink link={`/post/${slug}`} content={title} />}
+      title={<TextLink link={`/keypoints/${slug}`} content={title} />}
       classification={classification}
       location={formattedAddress}
       updatedAt={updatedAt}
@@ -180,7 +180,7 @@ const PostGridKeyPoint = ({
       // rating={<Rating rating={rating} ratingCount={ratingCount} type="bulk" />}
       viewDetailsBtn={
         <TextLink
-          link={`/post/${slug}`}
+          link={`/keypoints/${slug}`}
           icon={<FiExternalLink />}
           content="Ver detalles"
         />

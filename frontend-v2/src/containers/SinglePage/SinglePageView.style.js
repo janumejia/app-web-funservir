@@ -286,4 +286,90 @@ export const PostImage = styled.div`
   }
 `;
 
+export const PostImageKeyPoint = styled.div`
+  /* height: calc(100vh - 2 * 82px); */
+  height: ${({ hasFirstImage }) => (hasFirstImage ? "400px" : "0px")};
+  position: relative;
+
+  img.main-image {
+    width: ${({ hasSecondAndThirdImage }) => (hasSecondAndThirdImage ? "66.6%" : "100%")};
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    border-radius: "8px"; /* Added border radius */
+  }
+
+  .second-image,
+  .third-image {
+    position: absolute;
+    object-fit: cover;
+    border-radius: 8px; /* Added border radius */
+    display: ${({ hasSecondAndThirdImage }) => (hasSecondAndThirdImage ? "block" : "none")};
+  }
+
+  .second-image {
+    width: 33%;
+    height: 49.5%;
+    top: 0;
+    right: 0;
+  }
+
+  .third-image {
+    width: 33%;
+    height: 49.5%;
+    bottom: 0;
+    right: 0;
+  }
+
+  @media (max-width: 991px) {
+    height: 406px;
+
+    img.main-image {
+      width: 100%;
+      border-top-right-radius: 0px; /* Added border radius */
+      border-bottom-right-radius: 0px; /* Added border radius */
+    }
+
+    .second-image,
+    .third-image {
+      display: none;
+    }
+
+  }
+
+  .image_gallery_button {
+    background: ${themeGet('color.1', '#ffffff')};
+    border-radius: 3px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #2c2c2c;
+    border: 1px solid;
+    border-color: transparent;
+    height: 37px;
+    ${'' /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16); */}
+    position: absolute;
+    bottom: 30px;
+    right: 25px;
+    padding: 8px;
+    cursor: pointer;
+
+    .button-icon {
+      margin-right: 8px; /* Adjust the spacing between icon and text */
+      margin-top: 3px;
+    }
+
+    :hover {
+      border-color: black;
+    }
+
+    :hover,
+    :focus {
+      background: ${themeGet('color.2', '#E6E6E6')};
+      color: ${themeGet('text.0', '#2C2C2C')};
+    }
+  }
+`;
+
 export default SinglePageWrapper;
