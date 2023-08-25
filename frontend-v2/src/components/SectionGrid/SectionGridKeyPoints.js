@@ -65,7 +65,7 @@ export default function SectionGridKeyPoints({
                     key={item.id}
                     {...columnStyle}
                   >
-                    <ProductCardKeyPoint myProfile={myProfile} slug={item.title} {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
+                    <ProductCardKeyPoint myProfile={myProfile} slug={item._id} {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
                   </Box>
                 );
 
@@ -77,9 +77,8 @@ export default function SectionGridKeyPoints({
                     key={item.id}
                     {...columnStyle}
                   >
-                    <ProductCardKeyPoint myProfile={myProfile} slug={item.title}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
+                    <ProductCardKeyPoint myProfile={myProfile} slug={item._id}  {...item} /> {/*link={link} recordar que con esto es que se le pone el link a la págnia del sitio*/}
                   </Box>
-
                 );
               }
             })

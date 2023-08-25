@@ -32,6 +32,10 @@ const DescriptionWrapper = styled.div`
   .divider-class {
     margin: 15px 0;
   }
+
+  .divider-class-keypoint {
+    margin: 15px 0 20px 0;
+  }
 `;
 
 export default DescriptionWrapper;

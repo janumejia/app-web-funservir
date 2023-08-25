@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MarkerClusterer } from '@react-google-maps/api';
 import MapWrapper from './MapWrapper';
 import HotelMapMarkerCluster from './ListingPageMapKeyPoints';
-import HotelMapMarkerSingle from './SinglePageMap';
+import HotelMapMarkerSingleKeyPoint from './SinglePageMapKeyPoint';
 
 // DESCRIPCIÓN:
 // Componente para configurar el despliegue del mapa de google maps en la pantalla: Zoom del mismo, puntos en el mapa, etc.
@@ -53,7 +53,7 @@ const Map = (props) => {
             lng: location && location.location && location.location.lng ? parseFloat(location.location.lng) : -74.118711,
           }}
         >
-          <HotelMapMarkerSingle location={location} />
+          <HotelMapMarkerSingleKeyPoint location={location} />
         </MapWrapper>
       )}
     </>
