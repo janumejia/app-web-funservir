@@ -52,8 +52,6 @@ const editKeyPoint = async (req, res) => {
         }
     }
 
-    console.log("Inputs: ", inputs)
-
     try {
         // Validar que el _id del dueño de sitio exista
         const userExist = await User.findOne({ '_id': decodedDataInToken._id });
@@ -71,27 +69,33 @@ const editKeyPoint = async (req, res) => {
             return img;
         }));
 
-        console.log("deletedImgs: ", deletedImgs)
-
-        const theKeyPoint = await keyPoint.findById(inputs._id);
-
-        const gallery = theKeyPoint.gallery.filter(img => {
-            return inputs.photosToRemove.includes(img.public_id);
-        });
-
-        const dataToUpdateKeyPoint = {
+        const data1ToUpdateKeyPoint = {
             classification: inputs.classification,
             title: inputs.title,
             description: inputs.description,
-            $push: { gallery: { $each: uploadRes } },
+            $pull: {
+                gallery: {
+                    public_id: {
+                        $in: inputs.photosToRemove
+                    }
+                },
+            },
             location: inputs.location,
             formattedAddress: inputs.formattedAddress,
             modifiedBy: ObjectId(decodedDataInToken._id),
         };
 
-        const updatedKeyPoint = await keyPoint.findByIdAndUpdate(inputs._id, dataToUpdateKeyPoint);
+        await keyPoint.findByIdAndUpdate(inputs._id, data1ToUpdateKeyPoint);
 
-        return res.status(200).json({ message: "Punto clave editado exitosamente", element: updatedKeyPoint });
+        const data2ToUpdateKeyPoint = {
+            $push: {
+                gallery: { $each: uploadRes }
+            },
+        };
+
+        await keyPoint.findByIdAndUpdate(inputs._id, data2ToUpdateKeyPoint);
+
+        return res.status(200).json({ message: "Punto clave editado exitosamente" });
 
     } catch (error) {
         console.log(error)

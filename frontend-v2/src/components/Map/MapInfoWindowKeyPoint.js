@@ -20,6 +20,7 @@ const MapInfoWindow = ({ data, onCloseClick }) => {
         classification={data && data?.classification}
         mapView={true}
         updatedAt={data && data?.updatedAt}
+        createdAt={data?.createdAt}
       // inclusiveElements={data?.inclusiveElements}
       // rating={
       //   <Rating
