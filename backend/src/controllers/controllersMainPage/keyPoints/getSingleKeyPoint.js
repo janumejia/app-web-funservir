@@ -5,7 +5,6 @@ const { ...regex } = require("../../../regex") // Traemos los regex necesarios p
 const getSingleSite = async (req, res) => {
     try {
         const keyPoint = req.params.keyPoint;
-        console.log("entra single key")
 
         if (regex._idMongooseRegex.test(keyPoint) === false) return res.status(400).json({ message: "_id del lugar tiene un formato incorrecto" })
 
@@ -31,7 +30,6 @@ const getSingleSite = async (req, res) => {
             });
         }
 
-        console.log("dataSite: ", dataSite)
         return res.json([dataSite]);
 
     } catch (error) {

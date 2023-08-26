@@ -61,6 +61,7 @@ const GridCard = ({
   viewDetailsBtn,
   children,
   myProfile,
+  createdAt,
   updatedAt,
   // favoriteOriginal,
   // status,
@@ -121,7 +122,7 @@ const GridCard = ({
               {editBtn}
             </ButtonGroup>
           ) : null} */}
-          {updatedAt && <p style={{ margin: '0px 0 0px 0' }}>{`Modificado hace ${timeDiff(updatedAt)}`}</p>
+          {updatedAt && <p style={{ margin: '0px 0 0px 0' }}>{`${createdAt === updatedAt ? "Creado" : "Modificado"} hace ${timeDiff(updatedAt)}`}</p>
           }
           
         </MetaWrapper>

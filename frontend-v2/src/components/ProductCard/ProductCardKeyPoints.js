@@ -53,6 +53,7 @@ const PostGridKeyPoint = ({
   slug,
   myProfile,
   updatedAt,
+  createdAt,
 }) => {
   const { user, setUser } = useContext(AuthContext);
   let navigate = useNavigate();
@@ -175,6 +176,7 @@ const PostGridKeyPoint = ({
       classification={classification}
       location={formattedAddress}
       updatedAt={updatedAt}
+      createdAt={createdAt}
       // inclusiveElements={inclusiveElements}
       // price={`$${price}/Night - Free Cancellation`}
       // rating={<Rating rating={rating} ratingCount={ratingCount} type="bulk" />}

@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from 'react';
-import { Button } from 'antd';
+import React, { Fragment, useContext, useState } from 'react';
+import { Button, Popover } from 'antd';
 import HtmlLabel from 'components/UI/HtmlLabel/HtmlLabel';
 import DatePickerRange from 'components/UI/DatePicker/ReactDates';
 import ViewWithPopup from 'components/UI/ViewWithPopup/ViewWithPopup';
@@ -16,10 +16,14 @@ import { fontSize } from 'styled-system';
 import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react-icons/md";
 import { BsArrowUpRight } from "react-icons/bs";
 import { Link } from 'react-router-dom';
+import {  Link as LinkScroll } from 'react-scroll';
+
 import { Navigate } from 'react-router-dom';
 import { EDIT_KEY_POINT_PAGE } from 'settings/constant.js';
+import { AuthContext } from 'context/AuthProvider.js';
 
 const RenderReservationForm = ({ id, location, completeAddress, contactNumber, contactNumber2, webpage, email }) => {
+  const { loggedIn } = useContext(AuthContext);
   const [formState, setFormState] = useState({
     startDate: null,
     endDate: null,
@@ -149,7 +153,7 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
         {...styleHeading}
       />
       {/* <a href="#ubicacion"> */}
-      <Link
+      <LinkScroll
         key={'ubicacion'}
         className="linkItem"
         activeClass="active"
@@ -165,7 +169,7 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
 
 
         <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=17&size=600x250&&markers=${location.lat},${location.lng}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY_BRUTE}`} alt="mapa" />
-      </Link>
+      </LinkScroll>
       {/* </a> */}
       <div className='location' style={{ wordBreak: 'break-all' }}>
         <MdLocationOn style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />
@@ -177,11 +181,26 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
         />
       </div>
       <FormActionArea>
-      <Link to={"/edit-key-point/" + id}>
-        <Button type="primary">
-          Modificar Lugar Clave
-        </Button>
-      </Link>
+        {loggedIn ?
+          <Link to={"/edit-key-point/" + id}>
+            <Button type="primary">
+              Modificar Lugar Clave
+            </Button>
+          </Link>
+          :
+          <Popover
+            content={"Debes iniciar sesión primero"}
+            // placement="bottom"
+            //         style={{
+            //           "display": "flex",
+            //           "align-items": "center"
+            //         }}
+          >
+            <Button type="primary">
+              Modificar Lugar Clave
+            </Button>
+          </Popover>
+        }
       </FormActionArea>
       {/* <div className='telephone'>
         <MdPhone style={{ fontSize: '20px', margin: '3px 10px 0 0' }} />

@@ -17,7 +17,9 @@ let hasOwner = false;
 
 
 const Owner = ({
+  title,
   owner,
+  modified,
 }) => {
   const { loggedIn } = useContext(AuthContext);
 
@@ -32,12 +34,12 @@ const Owner = ({
 
   return (
     // <Element name="Dueño del sitio" className="ownerclass">
-    <OwnerWrapper>
+    <OwnerWrapper modified={modified}>
       {hasOwner ? (
         loggedIn ?
           (
             <Link to={"/profile/" + id}>
-              <Heading as="h2" content="Creado por" />
+              <Heading as="h2" content={title} />
               <div className="avatar-area">
                 <div className="author-avatar">
                   <img src={ownerAvatar} alt={fullName} />
@@ -61,7 +63,7 @@ const Owner = ({
           :
           (
             <>
-              <Heading as="h2" content="Creado por" />
+              <Heading as="h2" content={title} />
               <Popover
                 content={"Debes iniciar sesión primero"}
                 placement="bottomLeft"
@@ -91,7 +93,7 @@ const Owner = ({
             </>
           )
       ) : (
-        <Heading as="h2" content="Sin propietario" />
+        <Heading as="h2" content="Sin información" />
       )}
     </OwnerWrapper>
   );

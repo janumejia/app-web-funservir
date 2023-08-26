@@ -8,17 +8,20 @@ import { ContentWrapperFav, NotFoundWrapperFav } from './NoData.style';
 import Image from 'components/UI/Image/Image';
 import Heading from 'components/UI/Heading/Heading';
 import TextLink from 'components/UI/TextLink/TextLink';
+import Loader from 'components/Loader/Loader';
 
 
 const AgentItemLists = () => {
   const { data, loadMoreData, loading, total } = useDataApi('/data/agent.json');
   //const listed_post = data[0] && data[0].listed_post ? data[0].listed_post : [];
   const { user, profileData } = useContext(AuthContext);
-  const listed_post = profileData.associatedSites ? profileData.associatedSites : [];
+  const listed_post = profileData.associatedSites ? profileData.associatedSites : null;
+
+  if(!listed_post) return <Loader />
 
   return (
     <>
-      {listed_post.length > 0 ?
+      {listed_post && listed_post.length > 0 ?
         <SectionGrid
           myProfile={profileData._id === user._id}
           link={SINGLE_POST_PAGE}

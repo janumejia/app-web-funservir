@@ -21,8 +21,35 @@ import useDataApi from 'library/hooks/useDataApi';
 import isEmpty from 'lodash/isEmpty';
 import { FaImages } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
-import { size } from 'lodash';
+import { size, update } from 'lodash';
 import { bottom } from 'styled-system';
+
+const dateReadeable = (dateStr) => {
+
+  // Parse ISO 8601 date
+  const date = new Date(dateStr);
+
+  // Format options
+  const options = {
+    // weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+
+  // Convert to locale string
+  const formattedDate = date.toLocaleString('es-ES', options);
+
+  // Replace comma with - 
+  let finalDate = formattedDate;
+  // finalDate = finalDate.replace(/^./, firstLetter => firstLetter.toUpperCase());
+
+  console.log(finalDate);
+  // "2:30 PM - agosto 24, 2023"
+  return finalDate;
+}
 
 const SinglePage = () => {
   let { slug } = useParams();
@@ -60,6 +87,7 @@ const SinglePage = () => {
     updatedAt,
     // schedule,
     createdBy,
+    modifiedBy,
     // contactNumber,
     // contactNumber2,
     // webpage,
@@ -246,9 +274,23 @@ const SinglePage = () => {
                 mb: ['14px', '20px', '14px'],
               }}
             />
-            <Owner
-              owner={createdBy}
-            />
+            <Row gutter={[16, 16]}>
+              <Col md={12} sm={24}>
+                <Owner
+                  title={`Creado el ${dateReadeable(createdAt)}`}
+                  owner={createdBy}
+                />
+              </Col>
+              {modifiedBy &&
+                <Col md={12} sm={24}>
+                  <Owner
+                    title={`Modificado el ${dateReadeable(updatedAt)}`}
+                    owner={modifiedBy}
+                    modified={true}
+                  />
+                </Col>
+              }
+            </Row>
           </Col>
           <Col xl={8}>
             {width > 1200 ? (
@@ -283,9 +325,9 @@ const SinglePage = () => {
                 createdAt={createdAt}
                 updatedAt={updatedAt}
                 title={title}
-                // rating={rating}
-                // ratingCount={ratingCount}
-                // schedule={schedule}
+              // rating={rating}
+              // ratingCount={ratingCount}
+              // schedule={schedule}
               // contactNumber={contactNumber}
               // contactNumber2={contactNumber2}
               // webpage={webpage}

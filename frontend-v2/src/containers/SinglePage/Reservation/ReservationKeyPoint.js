@@ -107,7 +107,7 @@ const CardHeader = ({ createdAt, updatedAt }) => {
       // onOpenChange={handleClickChange}
       overlayStyle={{ width: 300 }}
     >
-      Ultima modificación hace {updatedAt ? timeDiff(updatedAt) : (createdAt && timeDiff(createdAt))}
+      {createdAt === updatedAt ? "Creado" : "Ultima modificación" } hace {updatedAt ? timeDiff(updatedAt) : (createdAt && timeDiff(createdAt))}
     </Popover>
   );
 };
@@ -152,7 +152,7 @@ export default function Reservation({ id, schedule, createdAt, updatedAt, locati
       footer={
         <>
           <SocialAccount>
-            {"¿Este lugar ya no existe? "}
+            {"¿Este lugar no existe? "}
             <Link>
               Eliminar
             </Link>
