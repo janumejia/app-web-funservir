@@ -22,6 +22,8 @@ import {
   REGISTRATION_OWNER,
   ADD_KEY_POINT_PAGE,
   EDIT_SITE_PAGE,
+  LISTING_KEYPOINTS_PAGE,
+  EDIT_KEY_POINT_PAGE,
 } from 'settings/constant';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -50,9 +52,11 @@ export default function Layout() {
             <Outlet />
           </Content>
           {location.pathname === LISTING_POSTS_PAGE ||
+          location.pathname === LISTING_KEYPOINTS_PAGE ||
           location.pathname === PRICING_PLAN_PAGE ||
           location.pathname === ADD_SITE_PAGE ||
           location.pathname === ADD_KEY_POINT_PAGE ||
+          `/${singlePageUrlFormLocation?.[1]}` === EDIT_KEY_POINT_PAGE ||
           location.pathname === EDIT_SITE_PAGE ||
           location.pathname === AGENT_PROFILE_PAGE ||
           location.pathname === CHANGE_PASSWORD_PAGE ||

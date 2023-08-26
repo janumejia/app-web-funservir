@@ -348,7 +348,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path={EDIT_KEY_POINT_PAGE}
+          path={`${EDIT_KEY_POINT_PAGE}/:slug`}
           element={
             <React.Suspense fallback={<Loader />}>
               <RequireAuth>

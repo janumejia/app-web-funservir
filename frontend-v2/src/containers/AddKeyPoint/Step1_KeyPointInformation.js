@@ -72,7 +72,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
 
   const updatePhotos = async (event) => {
     if (event) {
-      let aux1 = auxPhotos;
+      let aux1 = [];
       await event.map(async (img) => {
         new Promise((resolve, reject) => {
           const reader = new FileReader();

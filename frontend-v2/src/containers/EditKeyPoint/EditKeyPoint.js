@@ -5,11 +5,10 @@ import axios from '../../settings/axiosConfig.js';
 
 // Importamos cada paso del registro
 import Step1_KeyPointInformation from './Step1_KeyPointInformation.js'; // Paso 1
-import Step2_SitePhotos from './Step2_SitePhotos.js'; // Paso 2
-import Step3_MoreInfoSite from './Step3_MoreInfoSite.js'; // Paso 3 
 
 import Stepper from './AddCreateKeyPoint.style.js';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Loader from 'components/Loader/Loader.js';
 
 createStore({}); // Siempre hay que crearlo para que pueda leer el estado guardado en la sessionStorage
 
@@ -17,21 +16,32 @@ createStore({}); // Siempre hay que crearlo para que pueda leer el estado guarda
 // Componente de registro de usuario, donde controlamos los pasos de registro que debe completar el que va el usuario
 // y desplegamos la respectiva pantalla de acuerdo al paso en el que se encuentra (solo son 2 pasos)
 const CreateKeyPoint = () => {
-
-  const location = useLocation();
-  // Para ajustar las opciones disponibles
+  let navigate = useNavigate();
+  // const location = useLocation();
+  const { slug } = useParams();
+  const [loading, setLoading] = useState(true);
   const [initialData, setInitialData] = useState([]);
+  // Para ajustar las opciones disponibles
   // const [availableLocalities, setAvailableLocalities] = useState([]);
   // const [availableNeighborhoods, setAvailableNeighborhoods] = useState([]);
   // const [availableCategories, setAvailableCategories] = useState([]);
-  console.log("location: ", location)
+  // console.log("location: ", location)
+  console.log("slug: ", slug)
   // Se ejecuta cada vez que se modifica el valor de count
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_HOST_BACK}/getSingleKeyPoint/${location.pathname.replace("/edit-key-point/", "")}`)
+    axios.get(`${process.env.REACT_APP_HOST_BACK}/getSingleKeyPoint/${slug}`)
       .then((res) => {
         // setAvailableElements(res.data);
-        console.log(res)
+        console.log("found data: ", res.data[0])
+        if(res.data[0]) {
+          setInitialData(res.data[0]);
+          setLoading(false);
+        } else {
+          navigate('/404', { replace: true })
+        }
       }).catch((error) => {
+
+        navigate('/404', { replace: true })
         // message.info({ content: blankMessage, duration: 5 });
         // message.error('No se pudieron cargar los elementos inclusivos disponibles', 5);
         // console.error(error)
@@ -74,7 +84,7 @@ const CreateKeyPoint = () => {
 
   switch (step) {
     case 1:
-      stepComponent = <Step1_KeyPointInformation setStep={setStep} />;
+      stepComponent = <Step1_KeyPointInformation setStep={setStep} initialData={initialData} />;
       break;
 
     // case 2:
@@ -88,6 +98,8 @@ const CreateKeyPoint = () => {
     default:
       stepComponent = null;
   }
+
+  if (loading) return <Loader />
 
   return (
     <StateMachineProvider> {/* Se usa para recordar la información ingresada por el usuario entre pasos */}

@@ -1,15 +1,15 @@
-export default function addDataAction(state, payload) {
+export default function editDataAction(state, payload) {
   return {
     ...state,
-    dataAddKeyPoint: {
-      ...state.dataAddKeyPoint,
+    dataEditKeyPoint: {
+      ...state.dataEditKeyPoint,
       ...payload,
     },
   };
 }
 
-export function addDataResetAction() {
+export function editDataResetAction() {
   return {
-    dataAddKeyPoint: {},
+    dataEditKeyPoint: {},
   };
 }

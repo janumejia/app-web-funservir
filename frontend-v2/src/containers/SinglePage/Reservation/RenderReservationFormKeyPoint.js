@@ -57,7 +57,7 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
     });
   };
   const handleSubmit = (e) => {
-    <Navigate to={EDIT_KEY_POINT_PAGE} state={{ from: location }} />
+    <Navigate to={"EDIT_KEY_POINT_PAGE"} state={{ from: location }} />
     // e.preventDefault();
     // alert(
     //   `Start Date: ${formState.startDate}\nEnd Date: ${formState.endDate}\nRooms: ${formState.room}\nGuests: ${formState.guest}`
@@ -177,7 +177,7 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
         />
       </div>
       <FormActionArea>
-      <Link to={EDIT_KEY_POINT_PAGE + "/" + id}>
+      <Link to={"/edit-key-point/" + id}>
         <Button type="primary">
           Modificar Lugar Clave
         </Button>
