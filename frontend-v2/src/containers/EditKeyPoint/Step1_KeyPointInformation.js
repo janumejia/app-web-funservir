@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Row, Col, Input, Button, Select, InputNumber, Tooltip, Radio, message } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
-import addDataAction, { addDataResetAction } from './AddCreateKeyPointAction';
+import editDataAction, { editDataResetAction } from './AddCreateKeyPointAction';
 import { FormHeader, Title, Description, FormContent, FormAction, StyledInputNumber, ColombiaFlag } from './AddCreateKeyPoint.style';
 import axios from "../../settings/axiosConfig"; // Para la petición de registro
 import {
@@ -39,10 +39,10 @@ const inclusiveSiteNameVerification = async (siteName) => {
   return true; // Válido
 }
 
-const AccountDetails = ({ setStep, availableCategories, availableElements }) => {
+const AccountDetails = ({ setStep, availableCategories, availableElements, initialData }) => {
   // const { actions, state } = useStateMachine({ addDataAction }); // Usamos el estado global de StateMachine
-  const { actions: actionsUpdate, state } = useStateMachine({ addDataAction });
-  const { actions: actionsReset } = useStateMachine({ addDataResetAction });
+  const { actions: actionsUpdate, state } = useStateMachine({ editDataAction });
+  const { actions: actionsReset } = useStateMachine({ editDataResetAction });
 
 
   const navigate = useNavigate();
@@ -56,67 +56,109 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
     trigger, // Lo importamos para validar que la entrada del usuario se cumpla mientras se está editando
   } = useForm({
     defaultValues: { // Valores por defecto del formularios
-      classification: state?.dataAddKeyPoint?.classification,
-      title: state?.dataAddKeyPoint?.title,
-      description: state?.dataAddKeyPoint?.description,
+      classification: state?.dataAddKeyPoint?.classification || initialData?.classification,
+      title: state?.dataAddKeyPoint?.title || initialData?.title,
+      description: state?.dataAddKeyPoint?.description || initialData?.description,
       // location: state?.dataAddKeyPoint?.location,
     },
   });
 
   const handleOnChange = (key, event) => {
-    actionsUpdate.addDataAction({ [key]: (key === "sitePhotos" || key === "inclusiveElements" || key === "location" || key === "location2" ? event : event.target.value) });
+    actionsUpdate.editDataAction({ [key]: (key === "sitePhotos" || key === "inclusiveElements" || key === "location" || key === "location2" ? event : event.target.value) });
     setValue(key, (key === "sitePhotos" || key === "inclusiveElements" || key === "location" || key === "location2" ? event : event.target.value));
   };
 
   const [auxPhotos, setAuxPhotos] = useState([]);
+  const [auxPhotosToKeep, setAuxPhotosToKeep] = useState([]);
+
+  // const updatePhotos = async (event) => {
+  //   console.log("event: ", event)
+  //   if (event) {
+  //     let aux1 = auxPhotos;
+  //     await event.map(async (img) => {
+  //       new Promise((resolve, reject) => {
+  //         const reader = new FileReader();
+  //         reader.readAsDataURL(img.originFileObj);
+  //         reader.onload = () => resolve(reader.result);
+  //         reader.onerror = (error) => reject(error);
+  //       }).then(result => {
+  //         aux1.push(result);
+  //       });
+  //     });
+
+  //     setAuxPhotos(aux1);
+  //   }
+  // }
 
   const updatePhotos = async (event) => {
     if (event) {
-      let aux1 = auxPhotos;
+      let aux1 = [];
+      let aux2 = [];
+
       await event.map(async (img) => {
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(img.originFileObj);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }).then(result => {
-          aux1.push(result);
-        });
+        try {
+          if (!img.originFileObj) { // Es imagen que ya estaba y se quiere conservar
+            aux2.push(img.uid)
+
+          } else { // es imagen nueva
+            const reader = new FileReader();
+            reader.readAsDataURL(img.originFileObj);
+            reader.onload = () => { aux1.push((reader.result)); }
+            reader.onerror = (error) => { throw new Error(error); }
+
+          }
+        } catch (error) {
+          console.log("error")
+        }
       });
 
       setAuxPhotos(aux1);
+      setAuxPhotosToKeep(aux2);
     }
   }
 
   const onSubmit = async (data) => {
 
+    console.log("AuxPhotos: ", auxPhotos)
+    console.log("AuxPhotosToRemove: ", auxPhotosToKeep)
     try {
+      // console.log("auxPhotosToKeep: ", auxPhotosToKeep)
+      
+      const imgsToRemove = initialData.gallery
+        .filter(img => !auxPhotosToKeep.includes(img.asset_id))
+        .map(img => img.asset_id);
+
+      // console.log("imgsToRemove: ", imgsToRemove)
+
       const formData = {
+        _id: initialData._id,
         classification: data.classification,
         title: data.title,
         description: data.description,
         sitePhotos: auxPhotos,
-        location: { lat: data.location.lat.toString(), lng: data.location.lng.toString() },
-        formattedAddress: data.location.formattedAddress,
+        photosToRemove: imgsToRemove,
+        location: data?.location?.lat ? { lat: data.location.lat.toString(), lng: data.location.lng.toString() } : { lat: initialData.location.lat.toString(), lng: initialData.location.lng.toString() },
+        formattedAddress: data?.location?.formattedAddress || initialData.formattedAddress,
       };
 
       message.loading("Subiendo registro, por favor espera", 0)
       console.log({ ...formData })
-      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addKeyPoint`, { ...formData });
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/editKeyPoint`, { ...formData });
       message.destroy();
       if (res) {
         if (res.status === 200) {
           message.success(res.data.message, 6);
           // setTimeout(function () {
-          // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
+          // actionsReset.editDataResetAction(); // Para resetear los campos una vez termine el registro
           navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
           // }, 3000);
-          actionsReset.addDataResetAction();
+          actionsReset.editDataResetAction();
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
+      console.log(error)
       message.destroy();
-      if (typeof error.response.status === 'undefined') {
+      if (!error || !error.response || !error.response.status || typeof error.response.status === 'undefined') {
 
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {
@@ -160,7 +202,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="classification"
-            defaultValue={state?.dataAddSite?.classification}
+            // defaultValue={state?.dataEditSite?.classification || initialData}
             control={control}
             rules={{
               required: true,
@@ -204,7 +246,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="title"
-            defaultValue={state?.dataAddSite?.title}
+            defaultValue={state?.dataEditSite?.title}
             control={control}
             rules={{
               required: true,
@@ -253,7 +295,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <Controller
             name="description"
-            defaultValue={state?.dataAddSite?.description || ""}
+            defaultValue={state?.dataEditSite?.description || ""}
             control={control}
             rules={{
               required: false,
@@ -287,7 +329,14 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
         >
           <DragAndDropUploader
             name="sitePhotos"
-            // value={state?.dataAddSite?.sitePhotos}
+            value={initialData.gallery.map((img) => {
+              return {
+                asset_id: img.asset_id,
+                public_id: img.public_id,
+                url: img.secure_url,
+                thumbUrl: img.secure_url
+              }
+            })}
             onUploadChange={(e) => {
               updatePhotos(e);
               // handleOnChange('sitePhotos', e);
@@ -303,14 +352,14 @@ const AccountDetails = ({ setStep, availableCategories, availableElements }) => 
           error={errors.location && <span>¡Este campo es requerido!</span>}
         >
           <MapWithSearchBox
-            setUserLocation={true}
+            setUserLocation={false}
             name="location"
             updateValue={(value) => {
               handleOnChange('location', mapDataHelper(value)[0])
               // setValue('location', tempLocationData);
               // setLocation({ lat: value[0].geometry.location.lat(), lng: value[0].geometry.location.lng() }); // Ajustamos un objeto con longitud y latitud en el estado de LSM
             }}
-            defaultValue={state?.dataAddSite?.location}
+            defaultValue={state?.dataEditSite?.location || initialData?.location}
           />
         </FormControl>
       </FormContent>

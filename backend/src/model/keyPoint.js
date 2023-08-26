@@ -22,6 +22,7 @@ const keyPointSchema = new Schema({
         type: String,
         required: true,
     },
+    modifiedBy: { type: Schema.Types.ObjectId, ref: 'User' },
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
     comments: [{
         type: Schema.Types.ObjectId,

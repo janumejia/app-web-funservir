@@ -23,14 +23,14 @@ const MapWithSearchBox = (props) => {
   // Se usa para guardar el estado de los detalles de la ubicación.
   const [locationDetails, setLocationDetails] = useState({
     center: { // Centro predeterminado del mapa en Bogotá.
-      lat: defaultValue && defaultValue.lat ? defaultValue.lat : 4.640560,
-      lng: defaultValue && defaultValue.lng ? defaultValue.lng : -74.117027,
+      lat: defaultValue && defaultValue.lat ? parseFloat(defaultValue.lat) : 4.640560,
+      lng: defaultValue && defaultValue.lng ? parseFloat(defaultValue.lng) : -74.117027,
     },
     markers: [ // Ubicación predeterminada en Bogotá.
       {
         position: {
-          lat: defaultValue && defaultValue.lat ? defaultValue.lat : 4.640560,
-          lng: defaultValue && defaultValue.lng ? defaultValue.lng : -74.117027,
+          lat: defaultValue && defaultValue.lat ? parseFloat(defaultValue.lat) : 4.640560,
+          lng: defaultValue && defaultValue.lng ? parseFloat(defaultValue.lng) : -74.117027,
         },
       },
     ],

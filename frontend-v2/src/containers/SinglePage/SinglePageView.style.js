@@ -298,7 +298,7 @@ export const PostImageKeyPoint = styled.div`
     top: 0;
     left: 0;
     object-fit: cover;
-    border-radius: "8px"; /* Added border radius */
+    border-radius: 8px; /* Added border radius */
   }
 
   .second-image,
@@ -328,8 +328,8 @@ export const PostImageKeyPoint = styled.div`
 
     img.main-image {
       width: 100%;
-      border-top-right-radius: 0px; /* Added border radius */
-      border-bottom-right-radius: 0px; /* Added border radius */
+      border-top-right-radius: 10px; /* Added border radius */
+      border-bottom-right-radius: 10px; /* Added border radius */
     }
 
     .second-image,
