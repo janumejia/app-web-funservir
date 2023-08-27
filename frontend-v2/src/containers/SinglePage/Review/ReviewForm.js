@@ -29,7 +29,7 @@ import { Form, /*Label, GroupTitle, Description*/ } from './Review.style';
 // ];
 
 export default function ReviewForm(props) {
-  const { siteId, userId, close } = props;
+  const { siteId, userId, close, setCommentsState } = props;
   const {
     control,
     formState: { errors },
@@ -42,6 +42,40 @@ export default function ReviewForm(props) {
     // },
   });
 
+  const updateComments = async () => {
+    if (siteId) {
+      try {
+        const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/getCommentsSite/`, { _id: siteId });
+        // message.destroy();
+        if (res) {
+          if (res.status === 200) {
+            setCommentsState(res.data.content.comments)
+          } else message.warning("Respuesta del servidor desconocida");
+        }
+      } catch (error) {
+        console.log("error: ", error)
+        message.destroy();
+        if (!error?.response?.status || typeof error.response.status === 'undefined') {
+          message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
+        } else {
+          if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+
+            message.warning({ content: error.response.data.message, duration: 5 });
+          }
+          else if (error.response.status >= 500 && error.response.status <= 599) {
+
+            message.error({ content: error.response.data.message, duration: 5 });
+          } // Errores del servidor
+          else {
+
+            message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
+          }
+        }
+      }
+    }
+
+  }
+
   const onSubmit = async (data) => {
 
     try {
@@ -50,12 +84,13 @@ export default function ReviewForm(props) {
         if (res.status === 200) {
           close();
           message.success(res.data.message, 6);
+          await updateComments();
         } else message.warning("Respuesta del servidor desconocida");
       }
     } catch (error) {
-      if (typeof error.response.status === 'undefined') {
+      if (!error?.response?.status || typeof error.response.status === 'undefined') {
+        message.warning({ content: "Error de conectividad con el servidor aqui", duration: 5 });
 
-        message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {
         if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
 

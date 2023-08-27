@@ -189,7 +189,7 @@ const AuthProvider = (props) => {
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
-      if (typeof error.response.status === 'undefined') {
+      if (!error?.response?.status || typeof error.response.status === 'undefined') {
 
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {
