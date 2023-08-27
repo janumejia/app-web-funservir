@@ -50,7 +50,7 @@ export default function ReviewForm(props) {
         if (res.status === 200) {
           close();
           message.success(res.data.message, 6);
-        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+        } else message.warning("Respuesta del servidor desconocida");
       }
     } catch (error) {
       if (typeof error.response.status === 'undefined') {
