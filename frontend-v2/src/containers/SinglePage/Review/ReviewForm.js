@@ -29,7 +29,7 @@ import { Form, /*Label, GroupTitle, Description*/ } from './Review.style';
 // ];
 
 export default function ReviewForm(props) {
-  const {siteId, userId, close} = props;
+  const { siteId, userId, close } = props;
   const {
     control,
     formState: { errors },
@@ -41,11 +41,11 @@ export default function ReviewForm(props) {
     //   reviewPhotos,
     // },
   });
-  
+
   const onSubmit = async (data) => {
-    
+
     try {
-      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addComment`,  {...data, siteId, userId});
+      const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/addComment`, { ...data, siteId, userId });
       if (res) {
         if (res.status === 200) {
           close();
@@ -77,28 +77,48 @@ export default function ReviewForm(props) {
       <FormControl
         label="Calificación general"
         htmlFor="stars"
-        error={errors.ratings && <span>¡Este campo es requerido!</span>}
+        error={
+          errors.stars && errors.stars.type === "required" ? (
+            <span>¡Este campo es requerido!</span>
+          ) : errors.stars && errors.stars.type === "validate" ? (
+            <span>¡Este campo es requerido!</span>
+          ) : null
+        }
       >
         <Controller
           name="stars"
-          defaultValue=""
           control={control}
-          rules={{ required: true }}
+          rules={{
+            required: true,
+            validate: (value) => (/^[1-5]$/.test(parseInt(value)))
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Rate onChange={onChange} onBlur={onBlur} value={value} />
+            <>
+
+              {console.log("value: ", value)}
+              <Rate onChange={onChange} onBlur={onBlur} value={value} />
+            </>
           )}
         />
       </FormControl>
       <FormControl
         label="Titulo de la opinión"
         htmlFor="title"
-        error={errors.reviewTitle && <span>¡Este campo es requerido!</span>}
+        error={
+          errors.title && errors.title.type === "required" ? (
+            <span>¡Este campo es requerido!</span>
+          ) : errors.title && errors.title.type === "pattern" ? (
+            <span>¡El valor ingresado no es válido!</span>
+          ) : null
+        }
       >
         <Controller
           name="title"
-          defaultValue=""
           control={control}
-          rules={{ required: true }}
+          rules={{
+            required: true,
+            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:-]){1,255}$/,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               onChange={onChange}
@@ -112,13 +132,21 @@ export default function ReviewForm(props) {
       <FormControl
         label="Detalles de tu opinión"
         htmlFor="content"
-        error={errors.reviewDetails && <span>¡Este campo es requerido!</span>}
+        error={
+          errors.content && errors.content.type === "required" ? (
+            <span>¡Este campo es requerido!</span>
+          ) : errors.content && errors.content.type === "pattern" ? (
+            <span>¡El valor ingresado no es válido!</span>
+          ) : null
+        }
       >
         <Controller
           name="content"
-          defaultValue=""
           control={control}
-          rules={{ required: true }}
+          rules={{
+            required: true,
+            pattern: /^([A-Za-z0-9ñÑáéíóúÁÉÍÓÚü\s,.:\-;\(\)\[\]¿?¡!$&#\/]){1,2000}$/,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input.TextArea
               rows={5}
@@ -132,12 +160,24 @@ export default function ReviewForm(props) {
       </FormControl>
       <Row type="flex" justify="space-between">
         <Col>
-          <FormControl label="Elementos inclusivos" htmlFor="inclusivity">
+          <FormControl
+            label="Elementos inclusivos"
+            htmlFor="inclusivity"
+            error={
+              errors.inclusivity && errors.inclusivity.type === "required" ? (
+                <span>¡Este campo es requerido!</span>
+              ) : errors.inclusivity && errors.inclusivity.type === "validate" ? (
+                <span>¡Este campo es requerido!</span>
+              ) : null
+            }
+          >
             <Controller
               name="inclusivity"
-              defaultValue=""
               control={control}
-              rules={{ required: true }}
+              rules={{
+                required: true,
+                validate: (value) => (/^[1-5]$/.test(parseInt(value)))
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Rate onChange={onChange} onBlur={onBlur} value={value} />
               )}
@@ -145,12 +185,24 @@ export default function ReviewForm(props) {
           </FormControl>
         </Col>
         <Col>
-          <FormControl label="Accesibilidad" htmlFor="accessibility">
+          <FormControl
+            label="Accesibilidad"
+            htmlFor="accessibility"
+            error={
+              errors.accessibility && errors.accessibility.type === "required" ? (
+                <span>¡Este campo es requerido!</span>
+              ) : errors.accessibility && errors.accessibility.type === "validate" ? (
+                <span>¡Este campo es requerido!</span>
+              ) : null
+            }
+          >
             <Controller
               name="accessibility"
-              defaultValue=""
               control={control}
-              rules={{ required: true }}
+              rules={{
+                required: true,
+                validate: (value) => (/^[1-5]$/.test(parseInt(value)))
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Rate onChange={onChange} onBlur={onBlur} value={value} />
               )}
@@ -158,19 +210,31 @@ export default function ReviewForm(props) {
           </FormControl>
         </Col>
         <Col>
-          <FormControl label="Servicio" htmlFor="service">
+          <FormControl
+            label="Servicio"
+            htmlFor="service"
+            error={
+              errors.service && errors.service.type === "required" ? (
+                <span>¡Este campo es requerido!</span>
+              ) : errors.service && errors.service.type === "validate" ? (
+                <span>¡Este campo es requerido!</span>
+              ) : null
+            }
+          >
             <Controller
               name="service"
-              defaultValue=""
               control={control}
-              rules={{ required: true }}
+              rules={{
+                required: true,
+                validate: (value) => (/^[1-5]$/.test(parseInt(value)))
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Rate onChange={onChange} onBlur={onBlur} value={value} />
               )}
             />
           </FormControl>
         </Col>
-        </Row>
+      </Row>
       {/* <FormControl
         label="What Sort of trip was this?"
         htmlFor="tripType"
