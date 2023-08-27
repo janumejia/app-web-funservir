@@ -26,6 +26,7 @@ const getKeyPoints = require("./keyPoints/getKeyPoints")
 const getSingleKeyPoint = require("./keyPoints/getSingleKeyPoint")
 const editKeyPoint = require("./authentication/authenticatedUser/keyPoints/editKeyPoint")
 const deleteKeyPoint = require("./authentication/authenticatedUser/keyPoints/deleteKeyPoint")
+const getCommentsSite = require("./authentication/authenticatedUser/comments/getCommentsSite")
 
 module.exports = {
     registerUser,
@@ -56,4 +57,5 @@ module.exports = {
     getSingleKeyPoint,
     editKeyPoint,
     deleteKeyPoint,
+    getCommentsSite,
 }

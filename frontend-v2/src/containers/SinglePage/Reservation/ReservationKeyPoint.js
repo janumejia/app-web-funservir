@@ -170,7 +170,7 @@ export default function Reservation({ id, schedule, createdAt, updatedAt, locati
       console.log("reportar");
     }
   };
-  
+
   return (
     <Card
       className="reservation_sidebar"
@@ -179,50 +179,61 @@ export default function Reservation({ id, schedule, createdAt, updatedAt, locati
       footer={
         <>
           <SocialAccount>
-            <Popover
-              title={
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <AiOutlineWarning
-                    style={{
-                      width: "25px",
-                      height: "25px",
-                      color: 'red',
-                    }}
-                  />
+            {loggedIn ?
+              <Popover
+                title={
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <AiOutlineWarning
+                      style={{
+                        width: "25px",
+                        height: "25px",
+                        color: 'red',
+                      }}
+                    />
 
-                  <b style={{ marginLeft: '8px', marginRight: '8px' }}>
-                    ¿Estas seguro?
-                  </b>
-                  <AiOutlineWarning
-                    style={{
-                      width: "25px",
-                      height: "25px",
-                      color: 'red',
-                    }}
-                  />
-                </div>
-              }
-              trigger="click"
-              content={
-                <div>
-                  <p style={{ textAlign: 'justify', marginBottom: '15px' }}>
-                    Eliminaras este lugar clave de todo el aplicativo y esta información no podrá ser recuperada
-                  </p>
-                  <div style={{ 'display': 'flex', 'justify-content': 'center', 'gap': '10px' }} >
-                    <Button type='danger' onClick={deleteKeyPoint}>
-                      Eliminar
-                    </Button>
+                    <b style={{ marginLeft: '8px', marginRight: '8px' }}>
+                      ¿Estas seguro?
+                    </b>
+                    <AiOutlineWarning
+                      style={{
+                        width: "25px",
+                        height: "25px",
+                        color: 'red',
+                      }}
+                    />
                   </div>
-                </div>
-              }
-              overlayStyle={{ width: 300 }}
-              getPopupContainer={getPopupContainer}
-            >
-              {"¿Este lugar no existe? "}
-              <Link>
-                eliminar
-              </Link>
-            </Popover>
+                }
+                trigger="click"
+                content={
+                  <div>
+                    <p style={{ textAlign: 'justify', marginBottom: '15px' }}>
+                      Eliminaras este lugar clave de todo el aplicativo y esta información no podrá ser recuperada
+                    </p>
+                    <div style={{ 'display': 'flex', 'justify-content': 'center', 'gap': '10px' }} >
+                      <Button type='danger' onClick={deleteKeyPoint}>
+                        Eliminar
+                      </Button>
+                    </div>
+                  </div>
+                }
+                overlayStyle={{ width: 300 }}
+                getPopupContainer={getPopupContainer}
+              >
+                {"¿Este lugar no existe? "}
+                <Link>
+                  eliminar
+                </Link>
+              </Popover>
+              :
+              <>
+                  {"¿Este lugar no existe? "}
+                <Popover content={"Debes iniciar sesión primero"}>
+                  <Link>
+                    eliminar
+                  </Link>
+                </Popover>
+              </>
+            }
           </SocialAccount>
         </>
       }

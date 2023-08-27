@@ -46,6 +46,7 @@ const Review = (props) => {
     filterHeadingStyle,
     ratingLabelStyle,
     ratingCountStyle,
+    setCommentsState,
   } = props;
 
   let i, floorValue;
@@ -121,7 +122,7 @@ const Review = (props) => {
               wrapClassName="review_modal"
             >
               <ModalTitle>Escribe tu opinión aquí</ModalTitle>
-              <ReviewForm siteId={_id} userId={owner && owner._id} close={() => handleModalClose('review')} />
+              <ReviewForm siteId={_id} userId={owner && owner._id} setCommentsState={setCommentsState} close={() => handleModalClose('review')} />
             </Modal>
           </RatingSearch>
         </HeaderSection>

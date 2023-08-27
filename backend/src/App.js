@@ -75,6 +75,7 @@ app.post("/changePictures", verifyToken, controllers.changePictures)
 app.post("/changePassword", verifyToken, controllers.changePassword)
 
 // Comentarios
+app.post("/getCommentsSite", controllers.getCommentsSite)
 app.post("/addComment", verifyToken, controllers.addCommment)
 app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/addLikeDislike", verifyToken, controllers.addLikeDislikeComment)
