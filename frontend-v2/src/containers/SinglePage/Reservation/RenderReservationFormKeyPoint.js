@@ -184,7 +184,7 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
         {loggedIn ?
           <Link to={"/edit-key-point/" + id}>
             <Button type="primary">
-              Modificar Lugar Clave
+              Modificar lugar clave
             </Button>
           </Link>
           :
@@ -197,7 +197,7 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
             //         }}
           >
             <Button type="primary">
-              Modificar Lugar Clave
+              Modificar lugar clave
             </Button>
           </Popover>
         }
