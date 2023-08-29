@@ -148,6 +148,9 @@ app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)
 //Obtener el perfil de un usuario
 app.get("/profile/:userId", controllers.getUserProfileInfo)
 
+//Confirmar Email
+app.get("/confirm-email", controllers.confirmEmail)
+
 // custom 404
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Upss, ruta no encontrada' });
