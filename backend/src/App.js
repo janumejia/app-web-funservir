@@ -75,6 +75,7 @@ app.post("/changePictures", verifyToken, controllers.changePictures)
 app.post("/changePassword", verifyToken, controllers.changePassword)
 
 // Comentarios
+app.post("/getCommentsSite", controllers.getCommentsSite)
 app.post("/addComment", verifyToken, controllers.addCommment)
 app.post("/reportComment", verifyToken, controllers.reportComment)
 app.post("/addLikeDislike", verifyToken, controllers.addLikeDislikeComment)
@@ -84,6 +85,7 @@ app.get("/getKeyPoints", controllers.getKeyPoints)
 app.get("/getSingleKeyPoint/:keyPoint", controllers.getSingleKeyPoint)
 app.post("/addKeyPoint", verifyToken, controllers.addKeyPoint)
 app.post("/editKeyPoint", verifyToken, controllers.editKeyPoint)
+app.post("/deleteKeyPoint", verifyToken, controllers.deleteKeyPoint)
 
 // Favoritos
 app.post("/handleFavorite", verifyToken, controllers.handleFavorite)

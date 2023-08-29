@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
 
 const OwnerWrapper = styled.div`
-  padding: 20px 0;
+  padding: 20px 20px;
+  background-color: ${(props) => (props.modified && '#f6f6f6')};;
+  
   .location_meta {
     margin-bottom: 29px;
   }

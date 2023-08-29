@@ -206,7 +206,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
       }
     } catch (error) {
       message.destroy();
-      if (typeof error.response.status === 'undefined') {
+      if (!error?.response?.status || typeof error.response.status === 'undefined') {
 
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {

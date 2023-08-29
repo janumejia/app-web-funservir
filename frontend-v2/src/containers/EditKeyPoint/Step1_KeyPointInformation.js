@@ -20,6 +20,7 @@ import { mapDataHelper } from 'components/Map/mapDataHelper';
 import DragAndDropUploader from 'components/UI/ImageUploader/DragAndDropUploader';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { LISTING_KEYPOINTS_PAGE } from 'settings/constant';
 
 const { Option } = Select;
 
@@ -98,7 +99,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
       await event.map(async (img) => {
         try {
           if (!img.originFileObj) { // Es imagen que ya estaba y se quiere conservar
-            aux2.push(img.uid)
+            aux2.push(img.name)
 
           } else { // es imagen nueva
             const reader = new FileReader();
@@ -125,8 +126,8 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
       // console.log("auxPhotosToKeep: ", auxPhotosToKeep)
       
       const imgsToRemove = initialData.gallery
-        .filter(img => !auxPhotosToKeep.includes(img.asset_id))
-        .map(img => img.asset_id);
+        .filter(img => !auxPhotosToKeep.includes(img.public_id))
+        .map(img => img.public_id);
 
       // console.log("imgsToRemove: ", imgsToRemove)
 
@@ -150,10 +151,10 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
           message.success(res.data.message, 6);
           // setTimeout(function () {
           // actionsReset.editDataResetAction(); // Para resetear los campos una vez termine el registro
-          navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+          navigate(`${LISTING_KEYPOINTS_PAGE}/${initialData._id}`, { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
           // }, 3000);
           actionsReset.editDataResetAction();
-        } else message.warning(res.status + " - Respuesta del servidor desconocida");
+        } else message.warning("Respuesta del servidor desconocida");
       }
     } catch (error) {
       console.log(error)

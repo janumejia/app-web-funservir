@@ -11,9 +11,9 @@ const getKeyPoints = async (req, res) => {
         } else if (req?.query?.barreras_arquitectonicas && req.query.barreras_arquitectonicas === "no") {
             dataFound = await KeyPoint.find({ classification: 'inclusiveElement' }).select("_id classification title description gallery location formattedAddress updatedAt").sort({ updatedAt: -1 });
         } else {
-            dataFound = await KeyPoint.find().select("_id classification title description gallery location formattedAddress updatedAt").sort({ updatedAt: -1 });
+            dataFound = await KeyPoint.find().select("_id classification title description gallery location formattedAddress updatedAt createdAt").sort({ updatedAt: -1 });
         }
-        console.log("entra all key")
+
         if (dataFound) {
             return res.json(dataFound)
         } else {

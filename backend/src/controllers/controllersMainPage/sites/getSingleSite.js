@@ -21,7 +21,11 @@ const getSingleSite = async (req, res) => {
                 },
             }).lean(); // Para que retorne un objeto de javascript (antes daba problemas)
 
-        if(dataSite[0].comments && dataSite[0].comments.length > 0) {
+        // Ordenar comentarios por createdAt
+            if (dataSite[0].comments && dataSite[0].comments.length > 0) {
+            dataSite[0].comments.sort((a, b) => b.createdAt - a.createdAt); // Más recientes primero
+            
+            // Agregar likes y dislikes
             dataSite[0].comments.forEach(comment => {
                 const likesCount = comment && comment.likes ? comment.likes.length : 0;
                 const dislikesCount = comment && comment.dislikes ? comment.dislikes.length : 0;

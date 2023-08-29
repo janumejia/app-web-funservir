@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'library/hooks/useLocation';
 import Sticky from 'react-stickynode';
-import { Row, Col, Modal, Button } from 'antd';
+import { Row, Col, Modal, Button, message } from 'antd';
 import Container from 'components/UI/Container/Container';
 import Loader from 'components/Loader/Loader';
 import useWindowSize from 'library/hooks/useWindowSize';
@@ -23,6 +23,7 @@ import { FaImages } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
 import { size } from 'lodash';
 import { bottom } from 'styled-system';
+import axios from "../../settings/axiosConfig"; // Para la petición de registro
 
 const SinglePage = () => {
   let { slug } = useParams();
@@ -35,7 +36,14 @@ const SinglePage = () => {
     url += slug;
   }
   const { data, loading } = useDataApi(url);
-  
+
+  const [commentsState, setCommentsState] = useState([]);
+
+  useEffect(() => {
+    if(data?.[0]?.comments && data[0].comments.length > 0) setCommentsState(data[0].comments);
+  }, [data])
+
+
   if (isEmpty(data) || loading) return <Loader />;
   const {
     _id,
@@ -66,6 +74,7 @@ const SinglePage = () => {
     socialWhatsapp
   } = data[0];
   console.log(data);
+
   return (
     <SinglePageWrapper>
       <PostImage hasSecondAndThirdImage={gallery[1] && gallery[2]}>
@@ -226,7 +235,8 @@ const SinglePage = () => {
           <Col xl={16}>
             <Review
               _id={_id}
-              comments={comments}
+              comments={commentsState}
+              setCommentsState={setCommentsState}
               ratingCount={ratingCount}
               rating={rating}
               owner={owner}

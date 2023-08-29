@@ -4,19 +4,16 @@ const User = require("../../../../../model/user");
 const { ObjectId } = require('mongodb');
 const { ...regex } = require("../../../../../regex")
 
-const addComment = async (req, res) => {
-
+const getCommentsSite = async (req, res) => {
     try {
+
         const { ...inputs } = req.body;
-        const decodedDataInToken = req.decodedDataInToken;
 
         // Cuando la entrada excede le limite permitido, el JSON de la petición llega vacío en este punto
         if (Object.keys(inputs).length === 0) return res.status(413).json({ message: `El tamaño de la información enviada excede los límites permitidos.` });
 
         const dataArray = [
-            { input: 'siteId', dataType: 'string', regex: regex._idMongooseRegex },
-            { input: 'title', dataType: 'string', regex: regex.siteNameRegex },
-            { input: 'content', dataType: 'string', regex: regex.descriptionRegex },
+            { input: '_id', dataType: 'string', regex: regex._idMongooseRegex },
         ]
 
         // Función validateInput que toma tres argumentos: el valor del campo, el tipo de datos que se espera y la expresión regular que se utilizará para validar el valor.
@@ -47,62 +44,39 @@ const addComment = async (req, res) => {
             }
         }
 
-        const validateStars = (arrayOfStars) => {
-            let isValid = true;
+        let dataSite = await InclusiveSite.findById(inputs._id).select("comments status")
+            .populate({
+                path: 'comments',
+                select: 'siteId userId title content stars reviewFields createdAt updatedAt likes dislikes',
+                populate: {
+                    path: 'userId',
+                    model: 'User',
+                    select: 'name lastName email profilePicture',
+                },
+            }).lean(); // Para que retorne un objeto de javascript (antes daba problemas)
 
-            arrayOfStars.forEach(element => {
-                if (typeof element !== 'number' || !/^[1-5]$/.test(element.toString())) {
-                    isValid = false;
-                }
+        // Ordenar comentarios por createdAt
+        if (dataSite?.comments && dataSite.comments.length > 0) {
+            dataSite.comments.sort((a, b) => b.createdAt - a.createdAt); // Más recientes primero
+
+            // Agregar likes y dislikes
+            dataSite.comments.forEach(comment => {
+                const likesCount = comment && comment.likes ? comment.likes.length : 0;
+                const dislikesCount = comment && comment.dislikes ? comment.dislikes.length : 0;
+                comment.likesCount = likesCount;
+                comment.dislikesCount = dislikesCount;
             });
-
-            return isValid;
         }
 
-        const resValidateStars = validateStars([inputs.stars, inputs.inclusivity, inputs.accessibility, inputs.service]);
-        if (!resValidateStars) return res.status(422).json({ message: `El valor de la puntuación en estrellas no es válido` });
+        // Para solo permitir sitios en estado aprobado
+        if (dataSite.status === 'Aprobado') return res.json({ content: dataSite});
+        else return res.status(404).json({ message: "No se encontró el sitio" });
 
-        const newComment = new Comment({
-            siteId: inputs.siteId,
-            userId: ObjectId(decodedDataInToken._id),
-            title: inputs.title,
-            stars: inputs.stars,
-            content: inputs.content,
-            reviewFields: [
-                {
-                    ratingFieldName: "Elementos inclusivos",
-                    rating: inputs.inclusivity
-                },
-                {
-                    ratingFieldName: "Accesibilidad",
-                    rating: inputs.accessibility
-                },
-                {
-                    ratingFieldName: "Servicio",
-                    rating: inputs.service
-                },
-            ]
-        })
-
-        const savedComment = await newComment.save();
-
-        await InclusiveSite.findOne({ _id: inputs.siteId }).then((site) => {
-            if (site) {
-                site.ratingStars[inputs.stars] = site.ratingStars[inputs.stars] + 1;
-                site.ratingTotal = site.ratingTotal + inputs.stars;
-                site.ratingCount = site.ratingCount + 1;
-                site.rating = (site.ratingTotal / site.ratingCount);
-                site.comments.push(savedComment._id);
-
-                site.save();
-                return res.status(200).json({ message: "Comentario registrado", element: savedComment });
-            } else {
-                res.status(409).json({ message: "No existe el sitio solicitado" });
-            }
-        })
     } catch (error) {
-        return res.status(500).json({ message: "Error en la publicación del comentario" });
+        console.log(error)
+        return res.status(500).json({ message: "Error al cargar sitio" })
     }
+
 }
 
-module.exports = addComment
+module.exports = getCommentsSite

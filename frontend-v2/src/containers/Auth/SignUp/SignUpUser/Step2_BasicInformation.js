@@ -63,7 +63,7 @@ const BasicInformationU = ({ setStep }) => {
       }
     } catch (error) {
 
-      if (typeof error.response.status === 'undefined') {
+      if (!error?.response?.status || typeof error.response.status === 'undefined') {
         message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
       } else {
         if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
