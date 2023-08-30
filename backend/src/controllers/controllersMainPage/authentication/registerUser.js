@@ -3,6 +3,7 @@ const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGen
 const User = require("../../../model/user")
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
+const confirmEmail = require("./emailVerification")
 const { nameUserRegex, lastNameUserRegex, emailRegex, passwordRegex, genderRegex, addressRegex, isCaregiverRegex, institutionRegex, conditionRegex } = require("../../../regex") // Traemos los regex necesarios para validación de entradas
 var validator = require('validator');
 const axios = require('axios');
@@ -90,6 +91,7 @@ const addUser = async (req, res) => {
                 lastName: inputs.lastName,
                 dateOfBirth: inputs.dateOfBirth,
                 email: inputs.email,
+                emailConfirmed: false,
                 password: hash,
                 gender: inputs.gender,
                 address: inputs.address,
@@ -101,6 +103,7 @@ const addUser = async (req, res) => {
                 profilePicture: randomAvatar(inputs.gender)
             });
 
+            confirmEmail(inputs.email);
             newUser.save().then((savedUser) => {
                 return res.status(200).json({ message: "Usuario creado correctamente. Ahora debes iniciar sesión" });
             }).catch((err) => {

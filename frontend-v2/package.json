@@ -8,6 +8,7 @@
   "private": true,
   "author": "Andrés y Julián",
   "dependencies": {
+    "-": "^0.0.1",
     "@glidejs/glide": "^3.5.1",
     "@react-google-maps/api": "^2.7.0",
     "@styled-system/theme-get": "^5.1.2",

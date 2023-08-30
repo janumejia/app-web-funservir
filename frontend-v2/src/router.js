@@ -30,6 +30,7 @@ import {
   AGENT_ACCOUNT_SETTINGS_PAGE,
   REGISTRATION_USER,
   REGISTRATION_OWNER,
+  EMAIL_CONFIRMED_PAGE
 } from './settings/constant';
 
 // protected route
@@ -76,6 +77,8 @@ const SignUpUserPage = React.lazy(() => import('containers/Auth/SignUp/SignUpUse
 const SignUpOwnerPage = React.lazy(() => import('containers/Auth/SignUp/SignUpOwner/AddOwner')); // Registro de dueño de sitio - nuevo flujo
 
 const NotFound = React.lazy(() => import('containers/404/404'));
+
+const EmailConfirmed = React.lazy(() => import('containers/emailConfirmed/emailConfirmed'));
 // protected route
 const AddListingPage = React.lazy(() =>
   import('containers/AddListing/AddListing')
@@ -363,6 +366,14 @@ export default function AppRoutes() {
           element={
             <React.Suspense fallback={<Loader />}>
               <NotFound />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path={EMAIL_CONFIRMED_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <EmailConfirmed />
             </React.Suspense>
           }
         />

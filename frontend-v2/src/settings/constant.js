@@ -37,3 +37,5 @@ export const REGISTRATION_PART_2_ACCOUNT_SETTINGS_PAGE = '/account-settings2';
 export const REGISTRATION_SITE_OWNER_PAGE = '/sign-up-site-owner'; // Ruta dueño de sitio
 export const CHANGE_PASSWORD_PAGE = '/change-password';
 export const FORGET_PASSWORD_PAGE = '/forget-password';
+
+export const EMAIL_CONFIRMED_PAGE = '/confirm-email';
