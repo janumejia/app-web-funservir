@@ -4,6 +4,7 @@ const userSchema = new Schema({ // Opciones de mongoose para definir esquema:htt
     name: {type: String, required: true},
     lastName: {type: String, required: true},
     email: {type: String, required: true, unique: true},
+    emailConfirmed: {type: Boolean, required: true},
     password: {type: String, required: true},
     dateOfBirth: {type: Date, required: true},
     gender: {type: String, required: true},

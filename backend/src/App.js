@@ -151,7 +151,7 @@ app.get("/notification", verifyTokenAdmin, controllersAdmin.siteNotification)
 app.get("/profile/:userId", controllers.getUserProfileInfo)
 
 //Confirmar Email
-app.get("/confirm-email", controllers.confirmEmail)
+app.post("/confirmEmailToken", controllers.tokenEmailVerification)
 
 // custom 404
 app.use((req, res, next) => {
