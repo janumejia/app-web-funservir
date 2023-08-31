@@ -32,7 +32,6 @@ export default function NavbarSearch() {
   //   }
 
   // }, [])
-  console.log("searchValue: ", searchValue)
 
   const updateValueFunc = (event) => {
     setSearchValue(event);

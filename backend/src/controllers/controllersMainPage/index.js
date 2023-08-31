@@ -27,6 +27,7 @@ const getSingleKeyPoint = require("./keyPoints/getSingleKeyPoint")
 const editKeyPoint = require("./authentication/authenticatedUser/keyPoints/editKeyPoint")
 const deleteKeyPoint = require("./authentication/authenticatedUser/keyPoints/deleteKeyPoint")
 const getCommentsSite = require("./authentication/authenticatedUser/comments/getCommentsSite")
+const confirmEmail = require("./authentication/emailVerification")
 const tokenEmailVerification = require("./authentication/tokenEmailVerification")
 module.exports = {
     registerUser,
@@ -58,5 +59,6 @@ module.exports = {
     editKeyPoint,
     deleteKeyPoint,
     getCommentsSite,
+    confirmEmail,
     tokenEmailVerification
 }

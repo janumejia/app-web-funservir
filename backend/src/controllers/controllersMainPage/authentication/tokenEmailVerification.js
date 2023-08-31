@@ -20,9 +20,10 @@ const tokenEmailVerification = async (req, res) => {
         const query = { email: email };
         const update = {emailConfirmed: true};
         await User.findOneAndUpdate(query, update);
+        res.json({message: "Success"});
     } else {
         
-        res.status(500).json({ message: "Error" })
+        res.json({ message: "Error" });
     }
 
 }
