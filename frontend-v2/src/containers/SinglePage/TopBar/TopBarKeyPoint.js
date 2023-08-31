@@ -58,7 +58,7 @@ const SideButtons = (props) => {
       <Favorite
         className="ant-btn"
         content="Guardar"
-        isActive={user.favorites && user.favorites.some(obj => obj._id === props._id) ? true : false}
+        isActive={user && user.favorites && user.favorites.some(obj => obj._id === props._id) ? true : false}
         _idSite={props._id}
         userData={user}
         setUserData={setUser}
