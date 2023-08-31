@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Radio, Button, Input, DatePicker, Checkbox, message } from 'antd';
+import { Row, Col, Radio, Button, Input, DatePicker, Checkbox, message, Alert } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction, { addDataResetAction } from './AddUserAction';
 import {
@@ -54,11 +54,10 @@ const BasicInformationU = ({ setStep }) => {
       const res = await axios.post(`${process.env.REACT_APP_HOST_BACK}/registerUser`, formData);
       if (res) {
         if (res.status === 200) {
-          message.success(res.data.message, 5);
-          // setTimeout(function () {
+          message.success(res.data.message, 1.5).then(()=>message.info('Se ha enviado un email para completar el registro. Revise su bandeja de entrada.', 10));
           actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
           navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
-          // }, 3000);
+
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }
     } catch (error) {
@@ -116,7 +115,7 @@ const BasicInformationU = ({ setStep }) => {
                     value={(state.data.dateOfBirth) ? moment(state.data.dateOfBirth) : ""}
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      if(e._d) handleOnChange('dateOfBirth', e._d);
+                      if (e._d) handleOnChange('dateOfBirth', e._d);
                     }}
                     placeholder="Selecciona tu fecha de nacimiento"
                     showToday={false}
@@ -206,7 +205,7 @@ const BasicInformationU = ({ setStep }) => {
                   trigger("address");
                   onBlur();
                 }}
-                value={(value && value.trim() === "")?"":value}
+                value={(value && value.trim() === "") ? "" : value}
                 placeholder="Escribe tu dirección."
               />
             )}
@@ -313,14 +312,21 @@ const BasicInformationU = ({ setStep }) => {
                   trigger("institution");
                   onBlur();
                 }}
-                value={(value && value.trim() === "")?"":value}
+                value={(value && value.trim() === "") ? "" : value}
                 placeholder="Escribe el nombre de la fundación."
               />
             )}
           />
         </FormControl>
-
-
+        <div>
+        <Alert
+          message="Atención"
+          description="Antes de continuar, verifique que su correo electrónico esté escrito correctamente. Al finalizar se le enviará un email para completar el registro."
+          type="warning"
+          showIcon
+          closable
+        />
+        </div>
       </FormContent>
 
       <FormAction>

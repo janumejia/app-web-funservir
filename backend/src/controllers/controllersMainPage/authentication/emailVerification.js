@@ -18,7 +18,7 @@ const confirmEmail = (req, res) => {
         sender(email, timeLimitedURL);
         res.json(timeLimitedURL);
     } catch (error) {
-        res.json({message: error});
+        res?.json({message: error});
 
     }
 }

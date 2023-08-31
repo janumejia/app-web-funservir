@@ -2,12 +2,14 @@ const { randomAvatar } = require("../../../utils/avatarGenerator/RandomAvatarGen
 const cloudinary = require("../../../middlewares/cloudinary");
 const Neighborhoods = require("../../../model/neighborhoods")
 const InclusiveSites = require("../../../model/site")
+const confirmEmail = require("./emailVerification")
 const User = require("../../../model/user")
 const { ObjectId } = require('mongodb');
 var validator = require('validator');
 const bcrypt = require("bcryptjs")
 const moment = require('moment') // Para validar que el campo fecha realmente tenga una fecha válida
 const axios = require('axios');
+
 
 const { _idMongooseRegex, nameUserRegex, lastNameUserRegex, genderRegex, addressRegex, conditionRegex, isCaregiverRegex, institutionRegex, siteNameRegex, descriptionRegex, categoryRegex, contactNumberRegex, locationRegex, localityRegex, neighborhoodRegex, passwordRegex, inclusiveElementsRegex, imgRegex, socialWhatsappRegex, socialInstagramRegex, socialFacebookRegex, socialTwitterRegex, webpageRegex, contactNumber2Regex, moreInfoInclusivityRegex } = require("../../../regex") // Importación de patrones de Regex
 
@@ -145,6 +147,7 @@ const addInclusiveSites = async (req, res) => {
             lastName: inputs.lastName,
             dateOfBirth: inputs.dateOfBirth,
             email: inputs.email,
+            emailConfirmed: false,
             password: hash,
             gender: inputs.gender,
             address: inputs.address,
@@ -155,7 +158,7 @@ const addInclusiveSites = async (req, res) => {
             userType: "Propietario", // Porque en este controlador se registra un usuario dueño de sitio
             profilePicture: randomAvatar(inputs.gender)
         });
-
+        confirmEmail(inputs.email);
         const savedNewUser = await newUser.save(); // Aquí se crea el usuario
 
         // Validar que el _id del dueño de sitio exista
@@ -221,7 +224,7 @@ const addInclusiveSites = async (req, res) => {
 
             await User.findByIdAndUpdate(query, update);
 
-            return res.status(200).json({ message: "Registro exitoso. Ahora debes iniciar sesión", element: savedSite });
+            return res.status(200).json({ message: "Usuario creado correctamente", element: savedSite });
 
         } catch (error) {
             if (error.code === 11000) return res.status(409).json({ message: "Ya existe este sitio inclusivo" }); // Este código de error se produce cuando hay un índice único duplicado

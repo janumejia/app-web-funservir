@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, InputNumber, Button, Card, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Card, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddUserAction';
 import { FormHeader, Title, Description, FormContent, FormAction } from './AddUser.style';
@@ -190,11 +191,11 @@ const AccountDetails = ({ setStep }) => {
                 }}
                 value={(value && value.trim() === "") ? "" : value}
                 placeholder="Ej: juan.martinez@dominio.com"
-              // suffix={
-              //   <Tooltip placement="topRight" title='El correo electrónico debe seguir un formato válido. Ejemplo: "usuario@dominio.com". Además, no puede contener el signo de suma (+)' >
-              //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-              //   </Tooltip>
-              // }
+                suffix={
+                  <Tooltip placement="topRight" title='Asegurese que el correo ingresado esté correctamente escrito' >
+                    <QuestionCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
+                  </Tooltip>
+                }
               />
             )}
           />
