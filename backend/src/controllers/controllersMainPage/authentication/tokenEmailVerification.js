@@ -9,10 +9,10 @@ function generateToken(secret, expirationTime) {
 
 const tokenEmailVerification = async (req, res) => {
     const {token, email, expires} = req.body;
-    const secretKey = 'yourSecretKey';
-    const expirationTime = 3600;
+    const expirationTime = 3600; // Token válido por 1 hora
     const currentTime = Date.now();
     const expirationTimestamp = parseInt(expires);
+    const secretKey = `yourSecretKey${expirationTimestamp}${email}`;
     const isValidToken = token === generateToken(secretKey, expirationTime);
     
     if (isValidToken && currentTime < expirationTimestamp) {
