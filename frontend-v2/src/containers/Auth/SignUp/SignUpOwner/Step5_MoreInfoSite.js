@@ -196,11 +196,8 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
       message.destroy();
       if (res) {
         if (res.status === 200) {
-          message.success(res.data.message, 5);
-          // setTimeout(function () {
-          // actionsReset.addDataResetAction(); // Para resetear los campos una vez termine el registro
+          message.success(res.data.message, 1.5).then(()=>message.info('Se ha enviado un email para completar el registro. Revise su bandeja de entrada.', 10));
           navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
-          // }, 3000);
           actionsReset.addDataResetAction();
         } else message.warning(res.status + " - Respuesta del servidor desconocida");
       }

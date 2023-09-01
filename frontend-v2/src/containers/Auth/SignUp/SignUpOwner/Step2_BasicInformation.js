@@ -1,7 +1,7 @@
 import { IoIosArrowBack } from 'react-icons/io';
 import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
+import { Row, Col, Radio, Button, Input, DatePicker, Checkbox, Alert } from 'antd';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddOwnerAction';
 import {
@@ -52,7 +52,7 @@ const BasicInformationU = ({ setStep }) => {
   const onSubmit = async (data) => {
     actionsUpdate.addDataAction(data); // Guardar la información ingresada en el estado de StateMachine
     setStep(3); // Pasar a la siguiente página de registro
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -90,9 +90,9 @@ const BasicInformationU = ({ setStep }) => {
                     value={(state.data2.dateOfBirth) ? moment(state.data2.dateOfBirth) : ""}
                     onChange={(e) => { // Cuando el usuario cambia el valor del campo
                       onChange(e);
-                      if(e._d) handleOnChange('dateOfBirth', e._d);
+                      if (e._d) handleOnChange('dateOfBirth', e._d);
                       console.log(e._d)
-                      console.log(typeof(e._d))
+                      console.log(typeof (e._d))
                     }}
                     placeholder="Selecciona una fecha"
                     showToday={false}
@@ -295,7 +295,6 @@ const BasicInformationU = ({ setStep }) => {
             )}
           />
         </FormControl>
-
 
       </FormContent>
 

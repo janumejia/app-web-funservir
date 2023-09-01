@@ -105,7 +105,7 @@ const addUser = async (req, res) => {
 
             confirmEmail(inputs.email);
             newUser.save().then((savedUser) => {
-                return res.status(200).json({ message: "Usuario creado correctamente. Ahora debes iniciar sesión" });
+                return res.status(200).json({ message: "Usuario creado correctamente." });
             }).catch((err) => {
                 console.error(err);
                 return res.status(500).json({ message: "Error al crear usuario" });

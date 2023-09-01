@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStateMachine } from 'little-state-machine'; // Para manejar estados globales, como Redux, pero más simple: https://github.com/beekai-oss/little-state-machine
 import { useForm, Controller } from 'react-hook-form';
-import { Row, Col, Input, InputNumber, Button, Card, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Card, Tooltip, Alert } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import FormControl from 'components/UI/FormControl/FormControl';
 import addDataAction from './AddOwnerAction';
 import { FormHeader, Title, Description, FormContent, FormAction } from './AddOwner.style';
@@ -97,11 +98,6 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={value}
                     placeholder="Escribe tu nombre"
-                  // suffix={
-                  //   <Tooltip placement="topRight" title="El nombre solo puede contener caracteres alfabéticos y espacios" >
-                  //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-                  //   </Tooltip>
-                  // }
                   />
                 )}
               />
@@ -140,11 +136,6 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={value}
                     placeholder="Escribe tu apellido"
-                  // suffix={
-                  //   <Tooltip placement="topRight" title="El apellido solo puede contener caracteres alfabéticos y espacios" >
-                  //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-                  //   </Tooltip>
-                  // }
                   />
                 )}
               />
@@ -169,7 +160,6 @@ const AccountDetails = ({ setStep }) => {
             control={control}
             rules={{
               required: true,
-              // pattern: /^\w+([.-]?\w+){1,150}@\w+([.-]?\w+){1,147}(\.\w{2,3})+  $/,
               validate: {
                 isEmailValid: async (value) => {
                   return validator.isEmail(value) ? (await emailVerification(value) ? true : "¡Este correo ya se encuentra registrado!") : "¡El correo está en un formato no válido!";
@@ -189,11 +179,11 @@ const AccountDetails = ({ setStep }) => {
                 }}
                 value={value}
                 placeholder="Escribe tu correo"
-              // suffix={
-              //   <Tooltip placement="topRight" title='El correo electrónico debe seguir un formato válido. Ejemplo: "usuario@dominio.com". Además, no puede contener el signo de suma (+)' >
-              //     <InfoCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
-              //   </Tooltip>
-              // }
+                suffix={
+                  <Tooltip placement="topRight" title='Asegurese que el correo ingresado esté correctamente escrito' >
+                    <QuestionCircleOutlined style={{ color: 'gray', opacity: 0.5, fontSize: '18px' }} />
+                  </Tooltip>
+                }
               />
             )}
           />
@@ -240,16 +230,6 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={value}
                     placeholder="Escribe tu contraseña"
-
-                  // Para evitar copy paste de la contraseña
-                  // onPaste={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
-                  // onCopy={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
                   />
                 )}
               />
@@ -298,7 +278,6 @@ const AccountDetails = ({ setStep }) => {
                 control={control}
                 rules={{
                   required: true,
-                  // pattern:  /^(((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}])[a-zA-Z\d!@#\$%\^&\*\(\)_\-\.\?\[\]`~;:\+={}]{8,70})|([$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][.\/0-9a-zA-Z]{53}))$/, // // Cumple con los requerimientos de la definición de los datos: https://docs.google.com/spreadsheets/d/1E6UXjeC4WlpGbUcGGMZ0wc7HciOc8zu6Cn9i9dA6MJo/edit#gid=0 al igual que los requisitos de IBM:https://www.ibm.com/docs/en/baw/19.x?topic=security-characters-that-are-valid-user-ids-passwords
                   validate: (value) =>
                     value === password || false,
                 }}
@@ -316,21 +295,9 @@ const AccountDetails = ({ setStep }) => {
                     }}
                     value={state?.data2?.confirmPassword}
                     placeholder="Escribe otra vez tu contraseña"
-
-                  // Para evitar copy paste de la contraseña
-                  // onPaste={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
-                  // onCopy={(e) => {
-                  //   e.preventDefault()
-                  //   return false;
-                  // }}
-
                   />
                 )}
               />
-
             </FormControl>
             <Card>
               <PasswordChecklist
@@ -346,6 +313,15 @@ const AccountDetails = ({ setStep }) => {
             </Card>
           </Col>
         </Row>
+        <div style={{marginTop:'20px'}}>
+          <Alert
+            message="Atención"
+            description="Antes de continuar, verifique que su correo electrónico esté escrito correctamente. Al finalizar se le enviará un email para completar el registro."
+            type="warning"
+            showIcon
+            closable
+          />
+        </div>
       </FormContent>
       <FormAction>
         <div className="inner-wrapper">
