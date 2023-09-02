@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    #container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #e3e3e3;
+      box-shadow: 1px 3px 5px 2px rgba(0,0,0,0.17);
+    }
+
+    #logo {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    #logo img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    #content {
+      padding: 20px;
+    }
+
+    #button {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #button a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4591CA;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="container">
+      <div id="logo">
+        <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/v1693691011/FunservirLogos/funservirLogo_c2j4wk.png" alt="Funservir">
+      </div>
+      <div id="content">
+        <h3>Muchas gracias por registrarte en la plataforma de Funservir</h3>
+        <p>Por favor da click en el botón a continuación para finalizar tu registro.</p>
+        <em>Este correo será válido por 1 hora desde su momento de envío</em>
+      </div>
+      <hr>
+      <div id="button">
+        <a href=<%= emailLink %>>Confirmo que este es mi correo electrónico</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
