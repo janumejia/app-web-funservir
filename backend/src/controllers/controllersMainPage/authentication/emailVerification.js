@@ -7,13 +7,14 @@ function generateToken(secret, expirationTime) {
 }
 
 const confirmEmail = (req, res) => {
-    const secretKey = 'yourSecretKey';
-    const expirationTime = 3600; // Token valid for 1 hour
-    const baseURL = 'http://localhost:3000/confirm-email';
     try {
-        const token = generateToken(secretKey, expirationTime);
         const email = (req.body)?req.body.email:req;
-        const queryParams = `token=${token}&email=${email}&expires=${Date.now() + expirationTime * 1000}`;
+        const expirationTime = 3600; // Token válido por 1 hora
+        const expirationTimestamp = Date.now() + expirationTime * 1000;
+        const baseURL = 'http://localhost:3000/confirm-email';
+        const secretKey = `yourSecretKey${expirationTimestamp}${email}`;
+        const token = generateToken(secretKey, expirationTime);
+        const queryParams = `token=${token}&email=${email}&expires=${expirationTimestamp}`;
         const timeLimitedURL = `${baseURL}?${queryParams}`;
         sender(email, timeLimitedURL);
         res.json(timeLimitedURL);
