@@ -150,7 +150,7 @@ const getPopupContainer = (triggerNode) => {
   return triggerNode.parentNode;
 };
 
-export default function Reservation({ id, schedule, createdAt, updatedAt, location, completeAddress, contactNumber, contactNumber2, webpage, email, socialFacebook, socialInstagram, socialTwitter, socialWhatsapp }) {
+export default function Reservation({ id, createdAt, updatedAt, location, completeAddress, contactNumber, contactNumber2, webpage, email }) {
   const { loggedIn } = useContext(AuthContext);
   let navigate = useNavigate();
 

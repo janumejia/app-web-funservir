@@ -16,7 +16,7 @@ import { fontSize } from 'styled-system';
 import { MdLocationOn, MdPhone, MdOutlineLaptopChromebook, MdEmail } from "react-icons/md";
 import { BsArrowUpRight } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import {  Link as LinkScroll } from 'react-scroll';
+import { Link as LinkScroll } from 'react-scroll';
 
 import { Navigate } from 'react-router-dom';
 import { EDIT_KEY_POINT_PAGE } from 'settings/constant.js';
@@ -184,20 +184,21 @@ const RenderReservationForm = ({ id, location, completeAddress, contactNumber, c
         {loggedIn ?
           <Link to={"/edit-key-point/" + id}>
             <Button type="primary">
-              Modificar lugar clave
+              Modificar información
             </Button>
           </Link>
           :
           <Popover
             content={"Debes iniciar sesión primero"}
-            // placement="bottom"
-            //         style={{
-            //           "display": "flex",
-            //           "align-items": "center"
-            //         }}
+            style={{ zIndex: 999999 }}
+          // placement="bottom"
+          //         style={{
+          //           "display": "flex",
+          //           "align-items": "center"
+          //         }}
           >
             <Button type="primary">
-              Modificar lugar clave
+              Modificar información
             </Button>
           </Popover>
         }
