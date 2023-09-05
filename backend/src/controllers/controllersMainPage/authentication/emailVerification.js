@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+require('dotenv').config({ path: '.env' })
 const sender = require('../../../utils/emailSender');
 function generateToken(secret, expirationTime) {
     const data = `${secret}${expirationTime}`;
@@ -12,7 +13,7 @@ const confirmEmail = (req, res) => {
         const expirationTime = 3600; // Token válido por 1 hora
         const expirationTimestamp = Date.now() + expirationTime * 1000;
         const baseURL = 'http://localhost:3000/confirm-email';
-        const secretKey = `yourSecretKey${expirationTimestamp}${email}`;
+        const secretKey = `${process.env.MAIL_SALT_TOKEN}${expirationTimestamp}${email}`;
         const token = generateToken(secretKey, expirationTime);
         const queryParams = `token=${token}&email=${email}&expires=${expirationTimestamp}`;
         const timeLimitedURL = `${baseURL}?${queryParams}`;

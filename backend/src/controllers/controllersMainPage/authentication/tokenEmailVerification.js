@@ -1,4 +1,5 @@
 const User = require("../../../model/user");
+require('dotenv').config({ path: '.env' })
 const crypto = require('crypto');
 
 function generateToken(secret, expirationTime) {
@@ -12,7 +13,7 @@ const tokenEmailVerification = async (req, res) => {
     const expirationTime = 3600; // Token válido por 1 hora
     const currentTime = Date.now();
     const expirationTimestamp = parseInt(expires);
-    const secretKey = `yourSecretKey${expirationTimestamp}${email}`;
+    const secretKey = `${process.env.MAIL_SALT_TOKEN}${expirationTimestamp}${email}`;
     const isValidToken = token === generateToken(secretKey, expirationTime);
     
     if (isValidToken && currentTime < expirationTimestamp) {

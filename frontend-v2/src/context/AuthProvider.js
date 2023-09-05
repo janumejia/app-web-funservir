@@ -27,11 +27,11 @@ const AuthProvider = (props) => {
             setUser(...res.data.data);
             setLoggedIn(true);
             setStatusRequestDone(true);
-  
+
           } else message.warning("Respuesta del servidor desconocida");
         }
       } catch (error) {
-        if(error && error.response && error.response.status && error.response.status === 503) message.error({ content: error.response.data.message, duration: 3 });
+        if (error && error.response && error.response.status && error.response.status === 503) message.error({ content: error.response.data.message, duration: 3 });
         else {
           setUser({});
           setLoggedIn(false);
@@ -58,22 +58,26 @@ const AuthProvider = (props) => {
       if (res) {
         if (res.status === 200) {
           message.success(res.data.message, 3);
-          
-          setUser( res.data.data );
+
+          setUser(res.data.data);
           setLoggedIn(true);
           navigate('/', { replace: true });
 
         } else message.warning("Respuesta del servidor desconocida", 3);
       }
     } catch (error) {
-      console.log(error)
       message.destroy();
       if (!error.response || (error.response && typeof error.response.status === 'undefined')) {
         message.warning({ content: "Error de conectividad con el servidor", duration: 3 });
       } else {
         if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
-
-          message.warning({ content: error.response.data.message, duration: 3 });
+          if (error.response.status === 401 && error.response.data.message === '!Auth') {
+            setUser(error.response.data.user);
+            navigate('/no-auth', { replace: true });
+          } else {
+            
+            message.warning({ content: error.response.data.message, duration: 3 });
+          }
         }
         else if (error.response.status >= 500 && error.response.status <= 599) {
 
@@ -86,7 +90,7 @@ const AuthProvider = (props) => {
     }
 
     // -----
-    
+
     // await axios.post(`${process.env.REACT_APP_HOST_BACK}/loginUser`, params, {
     //   withCredentials: true
     // })
