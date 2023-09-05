@@ -30,7 +30,8 @@ import {
   AGENT_ACCOUNT_SETTINGS_PAGE,
   REGISTRATION_USER,
   REGISTRATION_OWNER,
-  EMAIL_CONFIRMED_PAGE
+  EMAIL_CONFIRMED_PAGE,
+  EMAIL_NOT_CONFIRMED_PAGE
 } from './settings/constant';
 
 // protected route
@@ -79,6 +80,7 @@ const SignUpOwnerPage = React.lazy(() => import('containers/Auth/SignUp/SignUpOw
 const NotFound = React.lazy(() => import('containers/404/404'));
 
 const EmailConfirmed = React.lazy(() => import('containers/emailConfirmed/emailConfirmed'));
+const EmailNotConfirmed = React.lazy(() => import('containers/emailNotConfirmed/emailNotConfirmed'));
 // protected route
 const AddListingPage = React.lazy(() =>
   import('containers/AddListing/AddListing')
@@ -374,6 +376,14 @@ export default function AppRoutes() {
           element={
             <React.Suspense fallback={<Loader />}>
               <EmailConfirmed />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path={EMAIL_NOT_CONFIRMED_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <EmailNotConfirmed />
             </React.Suspense>
           }
         />

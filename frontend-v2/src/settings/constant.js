@@ -39,3 +39,4 @@ export const CHANGE_PASSWORD_PAGE = '/change-password';
 export const FORGET_PASSWORD_PAGE = '/forget-password';
 
 export const EMAIL_CONFIRMED_PAGE = '/confirm-email';
+export const EMAIL_NOT_CONFIRMED_PAGE = '/no-auth';
