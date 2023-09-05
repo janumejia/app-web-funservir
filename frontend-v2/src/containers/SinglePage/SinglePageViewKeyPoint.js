@@ -12,8 +12,8 @@ import LocationKeyPoint from './Location/LocationKeyPoint';
 import Owner from './Owner/OwnerKeyPoint';
 import MoreAboutInclusivity from './MoreAboutInclusivity/MoreAboutInclusivity';
 import Review from './Review/Review';
-import Reservation from './Reservation/ReservationKeyPoint';
-import BottomReservation from './Reservation/BottomReservation';
+import ReservationKeyPoint from './Reservation/ReservationKeyPoint';
+import BottomReservationKeyPoint from './Reservation/BottomReservationKeyPoint';
 import TopBar from './TopBar/TopBarKeyPoint';
 import SinglePageWrapper, { PostImage, PostImageKeyPoint } from './SinglePageView.style';
 import PostImageGallery from './ImageGallery/ImageGallery';
@@ -165,7 +165,7 @@ const SinglePage = () => {
 
       <Container fullWidth={true} fluid={true}>
         <Row gutter={30} id="reviewSection" style={{ marginTop: 30 }}>
-          <Col xl={16}>
+          <Col md={24} xl={16}>
             <DescriptionKeyPoint
               description={description}
               title={title}
@@ -274,15 +274,15 @@ const SinglePage = () => {
                 mb: ['14px', '20px', '14px'],
               }}
             />
-            <Row gutter={[16, 16]}>
-              <Col md={12} sm={24}>
+            <Row gutter={8}>
+              <Col xl={12} >
                 <Owner
                   title={`Creado el ${dateReadeable(createdAt)}`}
                   owner={createdBy}
                 />
               </Col>
               {modifiedBy &&
-                <Col md={12} sm={24}>
+                <Col xl={12}>
                   <Owner
                     title={`Modificado el ${dateReadeable(updatedAt)}`}
                     owner={modifiedBy}
@@ -300,7 +300,7 @@ const SinglePage = () => {
                 top={202}
                 bottomBoundary="#reviewSection"
               >
-                <Reservation
+                <ReservationKeyPoint
                   // schedule={schedule}
                   id={_id}
                   location={location}
@@ -318,7 +318,7 @@ const SinglePage = () => {
                 />
               </Sticky>
             ) : (
-              <BottomReservation
+              <BottomReservationKeyPoint
                 id={_id}
                 location={location}
                 completeAddress={formattedAddress}

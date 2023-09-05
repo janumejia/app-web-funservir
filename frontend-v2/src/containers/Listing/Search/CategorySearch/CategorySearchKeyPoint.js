@@ -26,7 +26,7 @@ import Select from 'react-select'
 import { update } from 'lodash';
 
 
-const CategorySearchKeyPoint = ({ location }) => {
+const CategorySearchKeyPoint = ({ elementsTitle, barriersTitle, location }) => {
   let navigate = useNavigate();
 
   const searchParams = getStateFromUrl(location);
@@ -99,7 +99,7 @@ const CategorySearchKeyPoint = ({ location }) => {
       <div className={"view_with__popup" + (elements ? ' activatedElements' : '')}>
         <div className="popup_handler">
           <Button type="default" onClick={() => setElements(!elements)}>
-            Elementos inclusivos
+            {elementsTitle}
           </Button>
         </div>
       </div>
@@ -107,7 +107,7 @@ const CategorySearchKeyPoint = ({ location }) => {
       <div className={"view_with__popup" + (barriers ? ' activatedBarriers' : '')}>
         <div className="popup_handler">
           <Button type="default" onClick={() => setBarriers(!barriers)}>
-            Barreras arquitectónicas
+            {barriersTitle}
           </Button>
         </div>
       </div>
