@@ -51,13 +51,10 @@ export default function ListingKeyPoints() {
       <Sticky top={82} innerZ={2} activeClass="isHeaderSticky">
         <Toolbar
           left={
-            width > 991 ? (
-              <CategorySearchKeyPoint location={location} />
+            width > 550 ? (
+              <CategorySearchKeyPoint elementsTitle={"Elementos inclusivos"} barriersTitle={"Barreras arquitectónicas"} location={location} />
             ) : (
-              <>
-
-              {/* <FilterDrawer location={location} /> */}
-              </>
+              <CategorySearchKeyPoint elementsTitle={"Elementos"} barriersTitle={"Barreras"} location={location} />
             )
           }
           right={
