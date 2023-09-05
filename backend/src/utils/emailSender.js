@@ -1,11 +1,12 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const ejs = require('ejs');
+require('dotenv').config({ path: '.env' })
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "andres_f.quintero_s@uao.edu.co",
-        pass: "nqqsmkkekuukhozj"
+        user: `${process.env.MAIL_SENDER}`,
+        pass: `${process.env.MAIL_PASS}`
     },
     tls: {
         rejectUnauthorized: false
@@ -24,7 +25,7 @@ const sender = (addressee, link) => {
             emailLink: link
         });
         const mailOptions = {
-            from: "andres_f.quintero_s@uao.edu.co",
+            from: `${process.env.MAIL_SENDER}`,
             to: addressee,
             subject: "Funservir: Verificación de Email",
             html: renderedEmail,
