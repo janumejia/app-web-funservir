@@ -82,7 +82,7 @@ const login = async (req, res) => {
                                     name: user.name,
                                     lastName: user.lastName,
                                     email: user.email,
-                                    emailConfirmed: user.email
+                                    emailConfirmed: user.emailConfirmed
                                 };
                                 res.status(401).json({ message: "!Auth", user: data })
                             }
