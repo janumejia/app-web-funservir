@@ -114,6 +114,9 @@ const addUser = async (req, res) => {
     // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
     const cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
 
+    const validateEmailConfirmed = typeof inputs.emailConfirmed === "boolean"
+    if (!validateEmailConfirmed) return res.status(422).json({ message: `El valor de emailConfirmed es inválido` });
+
     try {
         const user = await User.findOne({ email: inputs.email });
         if (user) {
@@ -191,6 +194,7 @@ const addUser = async (req, res) => {
             socialFacebook: inputs.socialFacebook,
             socialInstagram: inputs.socialInstagram,
             socialTwitter: inputs.socialTwitter,
+            emailConfirmed: inputs.emailConfirmed,
         });
 
         const savedUser = await newUser.save();
