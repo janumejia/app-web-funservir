@@ -33,6 +33,11 @@ const rol = [
     <Option key="Administrador" value="Administrador">Administrador</Option>,
 ]
 
+const emailConfirmed = [
+    <Option key="Si" value={true}>Si</Option>,
+    <Option key="No" value={false}>No</Option>
+]
+
 const isCaregiver = [
     <Option key="Si" value="Si">Si</Option>,
     <Option key="No" value="No">No</Option>
@@ -46,6 +51,8 @@ const options = (title) => {
         return rol;
     } else if (title === "Tutor*") {
         return isCaregiver;
+    } else if (title === "¿Confirmó correo?*") {
+        return emailConfirmed;
     }
 }
 
@@ -111,10 +118,10 @@ const ManageUsers = () => {
             reader.onerror = (error) => reject(error);
         });
 
-    const handleChange = async ( info, whichImg ) => {
+    const handleChange = async (info, whichImg) => {
         console.log("hadleChange info: ", info, " whichImg: ", whichImg)
         if (info.file.type === 'image/jpeg' || info.file.type === 'image/png' || info.file.type === 'image/jpg') {
-            if(whichImg === "Perfil") await getBase64(info.file);
+            if (whichImg === "Perfil") await getBase64(info.file);
             else if (whichImg === "Banner") await coverGetBase64(info.file);
         }
     };
@@ -135,7 +142,7 @@ const ManageUsers = () => {
             <td {...restProps}>
                 {editing ? (
                     <>
-                        {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*") ? (
+                        {(title === "Sexo*" || title === "Discapacidad" || title === "Rol*" || title === "Tutor*" || title === "¿Confirmó correo?*") ? (
                             <Form.Item
                                 name={dataIndex}
                                 style={{
@@ -193,7 +200,7 @@ const ManageUsers = () => {
                                 style={{
                                     margin: 0,
                                 }}>
-                                <UploadComponent loading={loading} handleChange={handleChange} imageUrl={coverImageUrl} whichImg={"Banner"}/>
+                                <UploadComponent loading={loading} handleChange={handleChange} imageUrl={coverImageUrl} whichImg={"Banner"} />
                             </Form.Item>
                         ) : (
                             <Form.Item
@@ -220,7 +227,7 @@ const ManageUsers = () => {
                                                 const aux = (rules("describeYourself").test(value) ? Promise.resolve() : Promise.reject());
                                                 return aux;
                                             } else if (title === 'Facebook') {
-                                                const aux = (value === '') ? true : (rules("socialFacebook").test(value) ? Promise.resolve() : Promise.reject());
+                                                const aux = (rules("socialFacebook").test(value) ? Promise.resolve() : Promise.reject());
                                                 return aux;
                                             } else if (title === 'Instagram') {
                                                 const aux = (value === '') ? true : (rules("socialInstagram").test(value) ? Promise.resolve() : Promise.reject());
@@ -261,8 +268,11 @@ const ManageUsers = () => {
                         let dateOfBirthAux = moment(res.data[i].dateOfBirth).format("YYYY-MM-DD");
                         res.data[i].dateOfBirth = dateOfBirthAux;
                     }
+                    if(!res.data[i]?.socialFacebook) res.data[i].socialFacebook = "";
+                    if(!res.data[i]?.socialInstagram) res.data[i].socialInstagram = "";
+                    if(!res.data[i]?.socialTwitter) res.data[i].socialTwitter = "";
                 }
-
+                console.log("res.data: ", res.data);
                 setData(res.data); // Se ajustan los datos recibidos del backend
             }).catch((error) => console.error(error));
 
@@ -327,6 +337,7 @@ const ManageUsers = () => {
                     socialInstagram: row.socialInstagram,
                     socialFacebook: row.socialFacebook,
                     socialTwitter: row.socialTwitter,
+                    emailConfirmed: row.emailConfirmed,
                 }
 
                 axios.post('/addUser', newUser, { headers: { 'token': localStorage.getItem("token") } })
@@ -355,7 +366,7 @@ const ManageUsers = () => {
             } else if (key !== "0" && row.name && row.lastName && row.email && row.password && row.dateOfBirth && row.gender && row.address && row["isCaregiver"] && row.userType) {
 
                 let imageUrlToBeSend = imageUrl;
-                if(!RegExp(/^data:image.*/).test(imageUrl)) {
+                if (!RegExp(/^data:image.*/).test(imageUrl)) {
                     imageUrlToBeSend = "";
                 }
 
@@ -438,9 +449,9 @@ const ManageUsers = () => {
             align: "left",
             editable: true,
             render: (element) => {
-                if(element) return <img src={element} alt={``} style={{ width: '110px', height: 'auto' }} />
+                if (element) return <img src={element} alt={``} style={{ width: '110px', height: 'auto' }} />
                 else return <></>
-                
+
             }
         },
         {
@@ -574,7 +585,7 @@ const ManageUsers = () => {
             title: 'Facebook',
             dataIndex: "socialFacebook",
             key: "socialFacebook",
-            editable: true
+            editable: true,
         },
         {
             title: 'Instagram',
@@ -587,6 +598,23 @@ const ManageUsers = () => {
             dataIndex: "socialTwitter",
             key: "socialTwitter",
             editable: true
+        },
+        {
+            title: '¿Confirmó correo?*',
+            dataIndex: "emailConfirmed",
+            width: "3%",
+            key: "emailConfirmed",
+            editable: true,
+            render: (emailConfirmed) => {
+                if (emailConfirmed) return "Si"
+                else return "No"
+            },
+            sorter: (a, b) => {
+                if (a.emailConfirmed === b.emailConfirmed) {
+                    return 0;
+                }
+                return a.emailConfirmed ? -1 : 1;
+            }
         },
         {
             title: 'Operación',
@@ -667,7 +695,8 @@ const ManageUsers = () => {
                 coverPicture: "",
                 socialFacebook: "",
                 socialInstagram: "",
-                socialTwitter: ""
+                socialTwitter: "",
+                emailConfirmed: true,
             };
             setData([...data, newUser]);
             edit(newUser);

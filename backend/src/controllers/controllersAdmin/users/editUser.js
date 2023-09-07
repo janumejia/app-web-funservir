@@ -114,6 +114,9 @@ const editUser = async (req, res) => {
         return true;
     };
 
+    const validateEmailConfirmed = typeof inputs.emailConfirmed === "boolean"
+    if (!validateEmailConfirmed) return res.status(422).json({ message: `El valor de emailConfirmed es inválido` });
+
     // La imagen tiene esta forma: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAAh1BMVEUAAABk2vth2vxh2/xh2vxh2/xh2vth2/xh2vth2vxh2/xh2vxh2vxh2/xh2vxh2vxh2vth2vth2vth2...
     // entonces el base64 está después de la coma, y eso es lo que le pasamos al método de comprobación
     const cloudinaryUrlRegex = RegExp(/^https:\/\/res\.cloudinary\.com\/.*$/);
@@ -173,6 +176,7 @@ const editUser = async (req, res) => {
                     doc.socialFacebook = inputs.socialFacebook;
                     doc.socialInstagram = inputs.socialInstagram;
                     doc.socialTwitter = inputs.socialTwitter;
+                    doc.emailConfirmed = inputs.emailConfirmed;
                     await doc.save();
                 }
             })
@@ -193,6 +197,7 @@ const editUser = async (req, res) => {
             doc.socialFacebook = inputs.socialFacebook;
             doc.socialInstagram = inputs.socialInstagram;
             doc.socialTwitter = inputs.socialTwitter;
+            doc.emailConfirmed = inputs.emailConfirmed;
             await doc.save();
         }
         res.status(200).json({ message: "Usuario editado correctamente", doc });
