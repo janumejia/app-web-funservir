@@ -70,7 +70,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
   };
 
   const [auxPhotos, setAuxPhotos] = useState([]);
-  const [auxPhotosToKeep, setAuxPhotosToKeep] = useState([]);
+  const [auxPhotosToKeep, setAuxPhotosToKeep] = useState(initialData.gallery.map(e => e.public_id));
 
   // const updatePhotos = async (event) => {
   //   console.log("event: ", event)
@@ -91,6 +91,9 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
   //   }
   // }
 
+
+  // console.log("initialData --> ", initialData)
+  console.log("auxPhotosToKeep -> ", auxPhotosToKeep)
   const updatePhotos = async (event) => {
     if (event) {
       let aux1 = [];
@@ -121,7 +124,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
   const onSubmit = async (data) => {
 
     console.log("AuxPhotos: ", auxPhotos)
-    console.log("AuxPhotosToRemove: ", auxPhotosToKeep)
+    console.log("AuxPhotosToKeep: ", auxPhotosToKeep)
     try {
       // console.log("auxPhotosToKeep: ", auxPhotosToKeep)
       
@@ -129,7 +132,7 @@ const AccountDetails = ({ setStep, availableCategories, availableElements, initi
         .filter(img => !auxPhotosToKeep.includes(img.public_id))
         .map(img => img.public_id);
 
-      // console.log("imgsToRemove: ", imgsToRemove)
+      console.log("imgsToRemove: ", imgsToRemove)
 
       const formData = {
         _id: initialData._id,
