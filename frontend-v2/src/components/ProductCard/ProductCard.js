@@ -77,7 +77,6 @@ const PostGrid = ({
 
   const [isClose, setIsClose] = useState();
   const [scheduleWithDate, setScheduleWithDate] = useState();
-
   
   useEffect(() => {
     // Función para convertir cadena en objeto de fecha

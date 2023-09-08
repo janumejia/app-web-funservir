@@ -8,10 +8,13 @@ import GlideCarousel, {
 } from 'components/UI/GlideCarousel/GlideCarousel';
 import SearchForm from './SearchForm';
 import BannerWrapper, { SearchWrapper } from './Search.style';
+import useWindowSize from 'library/hooks/useWindowSize';
 
 // DESCRIPCIÓN:
 // Componente que configura la parte principal de la pantalla principal: Carrusel de imágenes y usa la barra de búsqueda (componente hija llamada SearchForm)
 const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
+  const { width } = useWindowSize();
+  console.log()
   return (
     <BannerWrapper>
       <GlideCarousel // Carrusel de imágenes
@@ -20,21 +23,39 @@ const SearchArea = ({ searchTitleStyle, searchDescriptionStyle }) => {
         bullets={true}
         numberOfBullets={4}
       >
+      {width > 569 ?
         <>
          {/* Las imágenes del carrusel de imágenes */}
           <GlideSlide>
-            <img src="/images/banner/1.jpg" alt="" />
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/banner_1.jpg" alt="" />
           </GlideSlide>
           <GlideSlide>
-            <img src="/images/banner/2.jpg" alt="" />
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/banner_2.jpg" alt="" />
           </GlideSlide>
           <GlideSlide>
-            <img src="/images/banner/3.jpg" alt="" />
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/banner_3.jpg" alt="" />
           </GlideSlide>
           <GlideSlide>
-            <img src="/images/banner/4.jpg" alt="" />
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/banner_4.jpg" alt="" />
           </GlideSlide>
         </>
+        :
+        <>
+         {/* Las imágenes del carrusel de imágenes en celular */}
+          <GlideSlide>
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/bannermobile_1.jpg" alt="" />
+          </GlideSlide>
+          <GlideSlide>
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/bannermobile_2.jpg" alt="" />
+          </GlideSlide>
+          <GlideSlide>
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/bannermobile_3.jpg" alt="" />
+          </GlideSlide>
+          <GlideSlide>
+            <img src="https://res.cloudinary.com/pasantiafunservir/image/upload/f_auto,q_auto/v1694200503/BannerImages/bannermobile_4.jpg" alt="" />
+          </GlideSlide>
+        </>
+      }
       </GlideCarousel>
 
       <Container>
