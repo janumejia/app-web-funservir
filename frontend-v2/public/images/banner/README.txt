@@ -1,0 +1,1 @@
+Las imagenes del banner se encuentran en cloudinary.
