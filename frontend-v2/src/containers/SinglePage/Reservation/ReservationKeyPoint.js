@@ -81,6 +81,7 @@ const dateReadeable = (dateStr) => {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour12: true,
     hour: 'numeric',
     minute: 'numeric'
   };
@@ -88,12 +89,8 @@ const dateReadeable = (dateStr) => {
   // Convert to locale string
   const formattedDate = date.toLocaleString('es-ES', options);
 
-  // Replace comma with - 
-  let finalDate = formattedDate.replace(',', ' -');
-  finalDate = finalDate.replace(/^./, firstLetter => firstLetter.toUpperCase());
+  let finalDate = formattedDate.replace(/^./, firstLetter => firstLetter.toUpperCase());
 
-  console.log(finalDate);
-  // "2:30 PM - agosto 24, 2023"
   return finalDate;
 }
 
@@ -106,9 +103,9 @@ const CardHeader = ({ createdAt, updatedAt }) => {
       // title={<h3 style={{ "text-align": "center", "fontWeight": "bold", "margin": "5px 0 5px 0" }} > Horario </h3>}
       trigger="hover"
       open={true}
-      // getPopupContainer={getPopupContainer} // Add this line to make the popover follow the button
+      getPopupContainer={getPopupContainer} // Add this line to make the popover follow the button
       // onOpenChange={handleClickChange}
-      overlayStyle={{ width: 300 }}
+      overlayStyle={{ width: 380 }}
     >
       {createdAt === updatedAt ? "Creado" : "Ultima modificación"} hace {updatedAt ? timeDiff(updatedAt) : (createdAt && timeDiff(createdAt))}
     </Popover>

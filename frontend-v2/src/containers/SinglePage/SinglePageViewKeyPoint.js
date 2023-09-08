@@ -35,6 +35,7 @@ const dateReadeable = (dateStr) => {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    hour12: true, 
     hour: 'numeric',
     minute: 'numeric'
   };
@@ -42,12 +43,8 @@ const dateReadeable = (dateStr) => {
   // Convert to locale string
   const formattedDate = date.toLocaleString('es-ES', options);
 
-  // Replace comma with - 
   let finalDate = formattedDate;
-  // finalDate = finalDate.replace(/^./, firstLetter => firstLetter.toUpperCase());
 
-  console.log(finalDate);
-  // "2:30 PM - agosto 24, 2023"
   return finalDate;
 }
 
