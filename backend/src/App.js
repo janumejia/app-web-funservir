@@ -37,10 +37,14 @@ app.use(cookieParser()); // Para ajustar la cookie de sesión
 en este caso responde las peticiones desde cualquier origen (inseguro) */
 const corsOrigins = process.env.BACKEND_ALLOWED_ORIGINS.split(',');
 
-app.use(cors({
-    origin: corsOrigins,
-    credentials: true, // Para permitir el envÃ­o de cookies
-}))
+/* Permitir todos los origines entrantes: cors = * */
+app.use(cors())
+
+/* Permitir solo los dominios declarados en corsOrigins */
+// app.use(cors({
+//     origin: corsOrigins,
+//     credentials: true, // Para permitir el envÃ­o de cookies
+// }))
 
 // Para permitir el envió de archivos grandes en el JSON (necesario para las imágenes)
 app.use(express.json({ limit: '50mb', extended: true }));
