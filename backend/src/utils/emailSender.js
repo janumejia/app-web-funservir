@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const ejs = require('ejs');
-require('dotenv').config({ path: '.env' })
+// require('dotenv').config({ path: '.env' })
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -14,10 +14,11 @@ const transporter = nodemailer.createTransport({
 });
 
 const sender = (addressee, link) => {
+    try {
 
-    fs.readFile('src/utils/email.ejs', 'utf-8', (err, templateData) => {
-        if (err) {
-            console.error('Error reading template file:', err);
+        fs.readFile('src/utils/email.ejs', 'utf-8', (err, templateData) => {
+            if (err) {
+                console.error('Error reading template file:', err);
             return;
         }
         // Render the EJS template with dynamic data
@@ -38,6 +39,10 @@ const sender = (addressee, link) => {
             }
         });
     });
+    } catch (error) {
+        console.log("aqui fue el error")
+        console.log(error)
+    }
 }
 
 module.exports = sender;

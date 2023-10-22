@@ -61,7 +61,7 @@ app.use((err, req, res, next) => {
 
 /* Rutas de nuestra APP */
 app.get('/', (req, res) => { res.json({ message: "¡Backend Funcionando!"}); });
-app.post('/', (req, res) => { res.json({ dataHeaders: req.headers, dataBody: req.body }); });
+// app.post('/', (req, res) => { res.json({ dataHeaders: req.headers, dataBody: req.body }); });
 app.post("/registerUser", controllers.registerUser)
 app.post("/registerOwner", controllers.registerOwner)
 app.post("/loginUser", controllers.login)
