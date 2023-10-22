@@ -13,6 +13,7 @@ import {
   AGENT_PROFILE_CONTACT,
   PRICING_PLAN_PAGE,
   PRIVACY_PAGE,
+  COOKIES_PAGE,
   LOGIN_PAGE,
   REGISTRATION_PAGE,
   // REGISTRATION_PART_2_PROFILE_PAGE, // Importación ruta agregar más info - editar perfil
@@ -69,6 +70,7 @@ const AgentContact = React.lazy(() =>
 );
 const PricingPage = React.lazy(() => import('containers/Pricing/Pricing'));
 const PrivacyPage = React.lazy(() => import('containers/Privacy/Privacy'));
+const CookiePage = React.lazy(() => import('containers/Privacy/Cookies'));
 const SignInPage = React.lazy(() => import('containers/Auth/SignIn/SignIn'));
 const SignUpPage = React.lazy(() => import('containers/Auth/SignUp/SignUp'));
 const ForgetPasswordPage = React.lazy(() =>
@@ -201,6 +203,14 @@ export default function AppRoutes() {
           element={
             <React.Suspense fallback={<Loader />}>
               <PrivacyPage />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path={COOKIES_PAGE}
+          element={
+            <React.Suspense fallback={<Loader />}>
+              <CookiePage />
             </React.Suspense>
           }
         />

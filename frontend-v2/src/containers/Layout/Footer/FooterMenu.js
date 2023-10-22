@@ -6,6 +6,7 @@ import {
   HOME_PAGE,
   LISTING_POSTS_PAGE,
   PRIVACY_PAGE,
+  COOKIES_PAGE,
   PRICING_PLAN_PAGE,
   AGENT_PROFILE_PAGE,
 } from 'settings/constant';
@@ -17,14 +18,17 @@ const FooterMenu = () => {
         <NavLink to={`${PRIVACY_PAGE}`}>Ver sitios</NavLink>
       </Menu.Item> */}
       <Menu.Item key="1">
-        <NavLink to={`${PRIVACY_PAGE}`}>Quiénes somos</NavLink>
+        <NavLink to={`${PRICING_PLAN_PAGE}`}>Quiénes somos</NavLink>
       </Menu.Item>
       <Menu.Item key="2">
         <NavLink to={`${PRIVACY_PAGE}`}>Privacidad</NavLink>
       </Menu.Item>
       <Menu.Item key="3">
-        <NavLink to={`${PRIVACY_PAGE}`}>Contáctenos</NavLink>
+        <NavLink to={`${COOKIES_PAGE}`}>Cookies</NavLink>
       </Menu.Item>
+      {/* <Menu.Item key="4">
+        <NavLink to={`${PRIVACY_PAGE}`}>Contáctenos</NavLink>
+      </Menu.Item> */}
     </Menu>
   );
 };

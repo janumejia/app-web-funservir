@@ -6,17 +6,17 @@ const PricingWrapper = styled.div`
   margin: 0 auto;
   padding-bottom: 30px;
 
-  @media (max-width: 1200px) {
+  /* @media (max-width: 960px) { */
     padding-left: 30px;
     padding-right: 30px;
-  }
-  @media (max-width: 480px) {
+  /* } */
+  /* @media (max-width: 480px) {
     padding: 0 25px;
-  }
+  } */
 `;
 
 export const PricingHeader = styled.div`
-  text-align: center;
+  text-align: left;
   padding: 60px 0;
   @media (max-width: 480px) {
     padding: 40px 0;
@@ -25,7 +25,15 @@ export const PricingHeader = styled.div`
 
 export const Title = styled.h2`
   color: ${themeGet('text.0', '#2C2C2C')};
+  text-align: center;
   font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 30px;
+`;
+
+export const SubTitle = styled.h3`
+  color: ${themeGet('text.0', '#2C2C2C')};
+  font-size: 20px;
   font-weight: 700;
   margin-bottom: 10px;
 `;
@@ -40,13 +48,14 @@ export const Description = styled.p`
 export const PricingTableArea = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px;
+  margin: -50px 0px 5px 0px;
+  justify-content: center; /* Center items horizontally */
 
   .price_card {
-    width: calc(100% / 3 - 30px);
+    width: calc(100% / 3);
     margin: 0 15px;
 
-    @media (max-width: 767px) {
+    @media (max-width: 960px) {
       width: 100%;
       margin-bottom: 30px;
     }
@@ -65,7 +74,7 @@ export const ButtonGroup = styled.div`
 
   button {
     color: ${themeGet('text.0', '#2C2C2C')};
-    font-size: 15px;
+    font-size: 18px;
     min-width: 117px;
     min-height: 37px;
     display: flex;

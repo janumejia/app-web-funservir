@@ -53,7 +53,6 @@ export default function Layout() {
           </Content>
           {location.pathname === LISTING_POSTS_PAGE ||
           location.pathname === LISTING_KEYPOINTS_PAGE ||
-          location.pathname === PRICING_PLAN_PAGE ||
           location.pathname === ADD_SITE_PAGE ||
           location.pathname === ADD_KEY_POINT_PAGE ||
           `/${singlePageUrlFormLocation?.[1]}` === EDIT_KEY_POINT_PAGE ||
@@ -61,7 +60,6 @@ export default function Layout() {
           location.pathname === AGENT_PROFILE_PAGE ||
           location.pathname === CHANGE_PASSWORD_PAGE ||
           location.pathname === FORGET_PASSWORD_PAGE ||
-          location.pathname === PRIVACY_PAGE ||
           location.pathname === REGISTRATION_USER ||
           location.pathname === REGISTRATION_OWNER ||
           location.pathname ===

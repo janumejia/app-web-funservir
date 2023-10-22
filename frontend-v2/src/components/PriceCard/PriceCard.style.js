@@ -11,14 +11,15 @@ const PriceCardWrapper = styled.div`
     border-color: 0;
     box-shadow: 0 0 30px ${themeGet('boxShadow.1', 'rgba(0, 0, 0, 0.16)')};
 
-    button {
+    /* button {
       color: ${themeGet('color.1', '#ffffff')};
       background-color: ${themeGet('primary.0', '#008489')};
-    }
+    } */
   }
 `;
 
 export const PricingHeader = styled.div`
+  text-align: center;
   padding: 27px 29px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
@@ -41,7 +42,7 @@ export const Price = styled.p`
 
 export const PricingList = styled.ul`
   margin: 0;
-  padding: 29px 30px 30px;
+  padding: 29px 30px 0px;
   margin-bottom: 97px;
 
   li {
@@ -65,17 +66,31 @@ export const PricingList = styled.ul`
 `;
 
 export const PriceAction = styled.div`
+  justify-content: center; /* Center items horizontally */
   padding: 30px;
   width: 100%;
   position: absolute;
   left: 0;
   bottom: 0;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
   background-color: ${themeGet('color.1', '#ffffff')};
+  
+  svg {
+    margin: 0 10px 0 10px;
+    width: 30px;
+    height: 30px;
+
+    &.linkedin {
+      fill: ${themeGet('#0b69c8', '#0b69c8')};
+    }
+
+    &.github {
+      fill: ${themeGet('#000000', '#000000')};
+    }
+  }
 `;
 
 export const Button = styled.button`
+  position: relative;
   cursor: pointer;
   min-width: 104px;
   min-height: 37px;
@@ -87,6 +102,12 @@ export const Button = styled.button`
   color: ${themeGet('text.0', '#2C2C2C')};
   background-color: ${themeGet('color.2', '#F7F7F7')};
   transition: background-color 0.25s ease;
+  margin: 0 6px 0 6px;
+
+  &:hover {
+    color: ${themeGet('color.1', '#ffffff')};
+    background-color: ${themeGet('primary.0', '#008489')};
+  }
 `;
 
 export default PriceCardWrapper;
