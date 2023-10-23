@@ -22,6 +22,7 @@ const imgFunservir = 'https://res.cloudinary.com/pasantiafunservir/image/upload/
 const facebookLink = 'https://www.facebook.com/Funservir';
 const linkedinLink = 'https://www.linkedin.com/company/fundaci-n-social-servir';
 const imgBuyMeACoffee = 'https://res.cloudinary.com/pasantiafunservir/image/upload/v1698012742/ImagenesQuienesSomos/buy-me-a-coffee_go2vqz.png';
+const linkBuyMeACoffee = 'https://www.buymeacoffee.com/funservircol'
 
 const Pricing = () => {
   const [currentPlan, setCurrentPlan] = useState('monthly');
@@ -83,7 +84,7 @@ const Pricing = () => {
       </Description>
       <Description>
         <div style={{ textAlign: 'center' }}>
-          <a href="https://www.buymeacoffee.com/" target="_blank" rel="noopener noreferrer">
+          <a href={linkBuyMeACoffee} target="_blank" rel="noopener noreferrer">
             <img
               src={imgBuyMeACoffee}
               alt=''
