@@ -18,7 +18,7 @@ export const AGENT_PASSWORD_CHANGE_PAGE = 'change-password';
 export const AGENT_PROFILE_DELETE = '/delete';
 
 // Other Pages
-export const PRICING_PLAN_PAGE = '/pricing-plan';
+export const PRICING_PLAN_PAGE = '/about-us';
 export const PRIVACY_PAGE = '/privacy';
 export const COOKIES_PAGE = '/cookies';
 export const ADD_SITE_PAGE = '/add-site';
