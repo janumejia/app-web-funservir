@@ -16,6 +16,7 @@ import {
 import { Button, Popover } from 'antd';
 import { SocialAccount } from './Reservation.style.js';
 import { BsCalendarWeek } from 'react-icons/bs';
+import { FaXTwitter } from 'react-icons/fa6';
 
 function convertTimeTo12HourFormat(time) {
   if (!time) return null;
@@ -298,13 +299,13 @@ export default function Reservation({ schedule, location, completeAddress, conta
               </Popover>
             }
             {socialTwitter &&
-              <Popover content="Ir a Twitter">
+              <Popover content="Ir a X (Twitter)">
                 <a
                   href={socialTwitter}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <IoLogoTwitter className="twitter" />
+                  <FaXTwitter className="twitter" />
                 </a>
               </Popover>
             }

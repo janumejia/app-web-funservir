@@ -37,6 +37,7 @@ import AgentDetailsPage, {
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import TextLink from 'components/UI/TextLink/TextLink';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const ProfileNavigation = (props) => {
   let location = useLocation();
@@ -127,13 +128,13 @@ const AgentProfileInfo = (props) => {
             </ProfileInformation>
             <SocialAccount>
               {(profileData.socialTwitter) ?
-                <Popover content="Ir a Twitter">
+                <Popover content="Ir a X (Twitter)">
                   <a
                     href={profileData.socialTwitter}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <IoLogoTwitter className="twitter" />
+                    <FaXTwitter className="twitter" />
                   </a>
                 </Popover> :
                 <Popover content="Cuenta de Twitter sin configurar">

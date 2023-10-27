@@ -12,6 +12,7 @@ import {
     IoLogoFacebook,
     IoLogoInstagram,
 } from 'react-icons/io';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const { Link } = Typography;
 
@@ -217,9 +218,9 @@ const ManageInclusiveSites = ({ isAnySitePending, setIsAnySitePending }) => {
                                     href={record.socialTwitter}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    title="Twitter"
+                                    title="X (Twitter)"
                                 >
-                                    <IoLogoTwitter style={{ fill: "#55ADEE", fontSize: "22px" }} />
+                                    <FaXTwitter style={{ fill: "#0f1419", fontSize: "22px" }} />
                                 </a>
                             )}
                         </div>

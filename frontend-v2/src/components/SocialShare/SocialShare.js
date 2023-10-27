@@ -11,6 +11,9 @@ import {
   FaPinterest,
   FaLinkedinIn,
 } from 'react-icons/fa';
+import {
+  FaXTwitter,
+} from 'react-icons/fa6';
 import { Popover } from 'antd';
 
 export const FaceBookShare = (props) => {
@@ -29,10 +32,10 @@ export const FaceBookShare = (props) => {
 export const TwitterShare = (props) => {
   const { shareURL, title, author } = props;
   return (
-    <Popover content="Twitter">
+    <Popover content="X (Twitter)">
       <div className="twitter">
         <TwitterShareButton url={shareURL} title={title} via={author}>
-          <FaTwitter /> Twitter
+          <FaXTwitter /> X (Twitter)
         </TwitterShareButton>
       </div>
     </Popover>

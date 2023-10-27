@@ -13,6 +13,7 @@ import {
     IoLogoFacebook,
     IoLogoInstagram,
 } from 'react-icons/io';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const AddEditInclusiveSite = ({ site }) => {
     const [form] = Form.useForm();
@@ -359,7 +360,7 @@ const AddEditInclusiveSite = ({ site }) => {
                 </Form.Item>
                 <Form.Item
                     name="socialTwitter"
-                    label="Twitter"
+                    label="X (Twitter)"
                     rules={[
                         {
                             message: `¡Formato de red social no valido!`,
@@ -368,7 +369,7 @@ const AddEditInclusiveSite = ({ site }) => {
                         }
                     ]}
                 >
-                    <Input addonBefore={(<IoLogoTwitter style={{ fill: "#55ADEE" }} />)} socialTwitter="socialTwitter" placeholder="Ingrese la URL de la red social" />
+                    <Input addonBefore={(<FaXTwitter style={{ fill: "#0f1419" }} />)} socialTwitter="socialTwitter" placeholder="Ingrese la URL de la red social" />
                 </Form.Item>
                 <Form.Item
                     name="socialFacebook"
