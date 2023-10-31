@@ -88,18 +88,22 @@ const login = async (req, res) => {
                             }
 
                         } else {
-                            const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
-                            res.status(401).json({ message: "Correo y/o contraseña incorrecta", user: {} })
+                            setTimeout(async () => {
+                                // const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
+                                res.status(401).json({ message: "Correo y/o contraseña incorrecta", user: {} })
+                        },  5000); // 5 segundos
                         }
                     })
             } else {
-                // Para evitar enumeración de usuarios debido al tiempo de respuesta
-                await User.findOne({}).populate({ path: 'associatedSites', populate: { path: 'inclusiveElements', model: 'InclusiveElements' } });
+                setTimeout(async () => {
+                    // Para evitar enumeración de usuarios debido al tiempo de respuesta
+                    // await User.findOne({}).populate({ path: 'associatedSites', populate: { path: 'inclusiveElements', model: 'InclusiveElements' } });
 
-                await bcrypt.compare("fakepassword", "$2b$10$abcdefghijklmnopqrstuv") // Simula comparación de la contraseña
-                const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
+                    // await bcrypt.compare("fakepassword", "$2b$10$abcdefghijklmnopqrstuv") // Simula comparación de la contraseña
+                    // const fakeToken = jwt.sign({ _id: "fakeId", userType: "fakeuUserType" }, process.env.BACKEND_JWT_SECRET, { expiresIn: 86400 });
 
-                res.status(401).json({ message: "Correo y/o contraseña incorrecta", user: {} })
+                    res.status(401).json({ message: "Correo y/o contraseña incorrecta", user: {} })
+                }, 5000); // 5 segundos
             }
         })
 }
