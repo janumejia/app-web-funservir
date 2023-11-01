@@ -6,27 +6,6 @@ const DraggerWrapper = styled.div``;
 
 const { Dragger } = Upload;
 
-// const photos = [
-//   {
-//     uid: '1',
-//     name: 'hotel-1.png',
-//     status: 'done',
-//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//   },
-//   {
-//     uid: '2',
-//     name: 'hotel-2.png',
-//     status: 'done',
-//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//   },
-//   {
-//     uid: '3',
-//     name: 'hotel-3.png',
-//     status: 'done',
-//     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//   },
-// ];
-
 const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
   let status = null;
   const beforeUpload = (file) => {
@@ -50,7 +29,6 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
     return picture.status !== 'error';
   }
   const handleOnChange = (info) => {
-    
     if (status === 'done') {
       const result = info.fileList.filter(removeBadPics);
       onUploadChange(result);
@@ -66,17 +44,21 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       message.error(`${info.file.name} ha sido eliminada.`);
     }
   }
-  const list = (value)=>{
     const listResult = value?.map((element)=>{
       return {
-        uid: element.asset_id,
-        name: element.public_id,
-        url: element.url,
-        thumbUrl: element.thumbUrl
+        uid: element.uid,
+        name: element.name,
+        thumbUrl: element.thumbUrl,
+        lastModified: element.lastModified,
+        lastModifiedDate: element.lastModifiedDate,
+        originFileObj: element.originFileObj,
+        percent: element.percent,
+        size: element.size,
+        status: element.status,
+        type: element.type
       }
     })
-    return listResult;
-  }
+    console.log(listResult);
   
   return (
     <DraggerWrapper className="drag_and_drop_uploader">
@@ -88,7 +70,7 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       multiple= {true}
       maxCount={maxImgs ? maxImgs : 8}
       onChange={handleOnChange}
-      defaultFileList={list(value)}
+      defaultFileList={listResult}
       >
         <div className="ant-upload-drag-icon">
           <IoIosCloudUpload />

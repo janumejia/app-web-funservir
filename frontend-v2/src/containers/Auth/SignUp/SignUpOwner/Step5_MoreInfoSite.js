@@ -57,63 +57,12 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   }, [isClose])
 
-  // Función para poner el mismo horario para todos los dias
-  // const setSameScheduleToall = ( day ) => {
-  //   console.log("Inicio setSameScheduleToall");
-  //   let auxIsClose = isClose;
-
-  //   for (let key in auxIsClose) {
-  //     if (auxIsClose.hasOwnProperty(key)) {
-  //       auxIsClose[key] = isClose[day];
-  //     }
-  //   }
-
-  //   setIsClose(auxIsClose);
-
-  //   let dataInSelectedDay = state.data2.schedule[day]
-  //   // console.log("state.data2.schedule  -> ", state.data2.schedule)
-  //   console.log(`state.data2.schedule[${day}]: `)
-
-  //   if (dataInSelectedDay.hasOwnProperty('start')) {
-  //     delete dataInSelectedDay['start'];
-  //   }
-
-  //   if (dataInSelectedDay.hasOwnProperty('end')) {
-  //     delete dataInSelectedDay['end'];
-  //   }
-
-  //   Object.keys(dataInSelectedDay).forEach(key => {
-  //     console.log(key + ': ' + dataInSelectedDay[key]);
-  //   });
-
-  //   let auxSchedule = {}
-  //   for (let d of daysOfTheWeek){
-  //     auxSchedule[d] = dataInSelectedDay;
-  //   }
-
-  //   let fieldSustitution = [ moment(state?.data2?.schedule?.[day]?.start, "HH:mm") , moment(state?.data2?.schedule?.[day]?.end, "HH:mm") ];
-  //   let storedScheduleSustitution = { start: moment(state?.data2?.schedule?.[day]?.[0], "HH:mm") , end: moment(state?.data2?.schedule?.[day]?.[1], "HH:mm") };
-  //   for(let d of daysOfTheWeek){
-  //     // handleOnChange(`schedule.${d}`, storedScheduleSustitution);
-  //     console.log("evento: ", dataInSelectedDay, "HH:mm" );
-  //     setValue(`schedule.${d}`, dataInSelectedDay);
-  //     // trigger(`schedule.${day}`);
-  //   }
-  //   actionsUpdate.addDataAction({ 'schedule': auxSchedule });
-  // }
-
-  // useEffect(() => {
-  //   if(isSubmitted && )
-  //   setError('schedule', { type: 'required' })
-
-  // },[isSubmitted])
 
   const handleOnChange = (key, event) => {
     console.log("key: ", key);
     console.log("event: ", event);
     if (key.startsWith("schedule.")) {
-      // console.log("start ", event[0] && event[0]);
-      // console.log("end ", event[1] && event[1]);
+
       let auxSchedule = state?.data2?.schedule ? state.data2.schedule : {}; // Si no se ha inicializado el horario en el LSM
       let day = key.split(".")[1];
 
@@ -129,8 +78,6 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
         auxSchedule[day].start = event?.[0]?._d ?? null;
         auxSchedule[day].end = event?.[1]?._d ?? null;
       }
-
-      console.log(auxSchedule)
 
       actionsUpdate.addDataAction({ 'schedule': auxSchedule });
       setValue('schedule', auxSchedule);
@@ -153,14 +100,18 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
 
   const aux1 = [];
   const imgsCloudinary = state?.data2?.sitePhotos?.map(async (img) => {
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(img.originFileObj);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    }).then(result => {
-      aux1.push(result);
-    });
+    if (img.thumbUrl === "") {
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(img.originFileObj);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      }).then(result => {
+        aux1.push(result);
+      });
+    }else{
+      aux1.push(img.thumbUrl);
+    }
   });
 
   const onSubmit = async (data) => {
@@ -196,7 +147,7 @@ const SiteLocation = ({ setStep, availableLocalities, availableNeighborhoods }) 
       message.destroy();
       if (res) {
         if (res.status === 200) {
-          message.success(res.data.message, 1.5).then(()=>message.info('Se ha enviado un email para completar el registro. Revise su bandeja de entrada.', 10));
+          message.success(res.data.message, 1.5).then(() => message.info('Se ha enviado un email para completar el registro. Revise su bandeja de entrada.', 10));
           navigate('/sign-in', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
           actionsReset.addDataResetAction();
         } else message.warning(res.status + " - Respuesta del servidor desconocida");

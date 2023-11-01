@@ -32,6 +32,9 @@ const SitePhotos = ({ setStep }) => {
     }
   };
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -47,9 +50,12 @@ const SitePhotos = ({ setStep }) => {
           name="sitePhotos"
           value={state?.data2?.sitePhotos}
           onUploadChange={(data2) => {
-            actions.AddOwnerAction({ 'sitePhotos': data2 });
-            setValue('sitePhotos', data2)
-          }}
+            sleep(500).then(() => {
+              actions.AddOwnerAction({ 'sitePhotos': data2 });
+              setValue('sitePhotos', data2)
+            })
+          }
+          }
         />
 
       </FormContent>
