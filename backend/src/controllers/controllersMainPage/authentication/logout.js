@@ -1,5 +1,5 @@
 const logout = async (req, res) => {
-    res.clearCookie("AWFS-token");
+    // res.clearCookie("AWFS-token");
     res.json({ message: "Has cerrado sesión correctamente." });
 }
 
