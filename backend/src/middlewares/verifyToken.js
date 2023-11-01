@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = async (req, res, next) => {
     try {
-        console.log("Contenido petición: ", req)
-        console.log("Cookies petición: ", req.cookies)
+        // console.log("Contenido petición: ", req)
+        // console.log("Cookies petición: ", req.cookies)
         console.log("encabezados petición: ", req.headers)
-        const token = req.cookies['AWFS-token'];
+        // const token = req.cookies['AWFS-token'];
+        const token = req.headers['authorization'];
         if (!token) {
             return res.status(401).json({ message: 'No autorizado: No hay token' });
         }
