@@ -60,21 +60,23 @@ const login = async (req, res) => {
                                 // matchedDomain = matchedDomain[1].concat(matchedDomain[2])
 
                                 // ver tipo de proyecto
-                                const secureCookie = process.env.BACKEND_NODE_ENV === "development" ? false : true;
-                                const sameSiteValue = process.env.BACKEND_NODE_ENV === "development" ? "Strict" : "None";
+                                // const secureCookie = process.env.BACKEND_NODE_ENV === "development" ? false : true;
+                                // const sameSiteValue = process.env.BACKEND_NODE_ENV === "development" ? "Strict" : "None";
 
                                 res
-                                    .cookie("AWFS-token", token, // Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
-                                        {
-                                            httpOnly: true, // True = no puede ser accedida a traves de JavaScript
-                                            secure: secureCookie, // True = solo puede se transportada por HTTPS, no http sin SSL
-                                            sameSite: sameSiteValue, // La cookie solo podrá ser enviada al destino donde se genero lo cookie
-                                            // domain: matchedDomain,
-                                            maxAge: 7 * 24 * 60 * 60 * 1000, // La cookie durará 7 días (en milisegundos) 
-                                        })
+                                    // .cookie("Authorization", token // Basado en: https://medium.com/@zahedialfurquan20/using-cookies-to-store-jwt-for-authentication-and-authorization-in-a-mern-stack-app-a58d7a5d6b6e
+                                        // ,{
+                                        //     httpOnly: true, // True = no puede ser accedida a traves de JavaScript
+                                        //     secure: secureCookie, // True = solo puede se transportada por HTTPS, no http sin SSL
+                                        //     sameSite: sameSiteValue, // La cookie solo podrá ser enviada al destino donde se genero lo cookie
+                                        //     // domain: matchedDomain,
+                                        //     maxAge: 7 * 24 * 60 * 60 * 1000, // La cookie durará 7 días (en milisegundos) 
+                                        // }
+                                        // )
                                     .json({
                                         message: "Usuario autenticado correctamente",
-                                        data: data
+                                        data: data,
+                                        token: token
                                     })
                             } else {
                                 const data = {

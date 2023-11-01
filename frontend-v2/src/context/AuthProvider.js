@@ -21,6 +21,7 @@ const AuthProvider = (props) => {
     // Para verificar si está logueado en el primer renderizado de la página
     const isLoggedIn = async () => {
       try {
+
         const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/status`, { withCredentials: true })
         if (res) {
           if (res.status === 200) {
@@ -28,9 +29,13 @@ const AuthProvider = (props) => {
             setLoggedIn(true);
             setStatusRequestDone(true);
 
-          } else message.warning("Respuesta del servidor desconocida");
+          } else {
+            localStorage.removeItem('AWFS-token');
+            message.warning("Respuesta del servidor desconocida");
+          }
         }
       } catch (error) {
+        localStorage.removeItem('AWFS-token');
         if (error && error.response && error.response.status && error.response.status === 503) message.error({ content: error.response.data.message, duration: 3 });
         else {
           setUser({});
@@ -57,6 +62,8 @@ const AuthProvider = (props) => {
       message.destroy();
       if (res) {
         if (res.status === 200) {
+          const AWFS_token = res.data.token;
+          localStorage.setItem('AWFS-token', AWFS_token);
           message.success(res.data.message, 3);
 
           setUser(res.data.data);
@@ -75,7 +82,7 @@ const AuthProvider = (props) => {
             setUser(error.response.data.user);
             navigate('/no-auth', { replace: true });
           } else {
-            
+
             message.warning({ content: error.response.data.message, duration: 3 });
           }
         }
@@ -181,32 +188,40 @@ const AuthProvider = (props) => {
     try {
       message.destroy();
       message.loading("Cargando", 0);
-      const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/logout`)
+      // const res = await axios.get(`${process.env.REACT_APP_HOST_BACK}/logout`)
+
+      localStorage.removeItem('AWFS-token');
+      navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+      setLoggedIn(false);
+      setUser(null);
 
       message.destroy();
-      if (res) {
-        if (res.status === 200) {
-          navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
-          setLoggedIn(false);
-          setUser(null);
-          message.success(res.data.message, 5);
-        } else message.warning(res.status + " - Respuesta del servidor desconocida");
-      }
-    } catch (error) {
-      if (!error?.response?.status || typeof error.response.status === 'undefined') {
 
-        message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
-      } else {
-        if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
-          message.warning({ content: error.response.data.message, duration: 5 });
-        }
-        else if (error.response.status >= 500 && error.response.status <= 599) {
-          message.error({ content: error.response.data.message, duration: 5 });
-        } // Errores del servidor
-        else {
-          message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
-        }
-      }
+      message.success("Has cerrado sesión correctamente.", 5);
+      // if (res) {
+      //   if (res.status === 200) {
+      //     navigate('/', { replace: true }); // El {replace: true} es para que la página anterior sea igual a la actual: https://reach.tech/router/api/navigate
+      //     setLoggedIn(false);
+      //     setUser(null);
+      //     message.success(res.data.message, 5);
+      //   } else message.warning(res.status + " - Respuesta del servidor desconocida");
+      // }
+    } catch (error) {
+      message.warning({ content: "Se generó un error al terminar la sesión", duration: 5 });
+      // if (!error?.response?.status || typeof error.response.status === 'undefined') {
+
+      //   message.warning({ content: "Error de conectividad con el servidor", duration: 5 });
+      // } else {
+      //   if (error.response.status >= 400 && error.response.status <= 499) { // Errores del cliente
+      //     message.warning({ content: error.response.data.message, duration: 5 });
+      //   }
+      //   else if (error.response.status >= 500 && error.response.status <= 599) {
+      //     message.error({ content: error.response.data.message, duration: 5 });
+      //   } // Errores del servidor
+      //   else {
+      //     message.warning({ content: error.response.status + " - Error de conectividad con el servidor", duration: 5 });
+      //   }
+      // }
     }
   };
 
