@@ -6,7 +6,7 @@ const DraggerWrapper = styled.div``;
 
 const { Dragger } = Upload;
 
-const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
+const DragAndDropUploader = ({onUploadChange, maxImgs}) => {
   let status = null;
   const beforeUpload = (file) => {
 
@@ -44,21 +44,20 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       message.error(`${info.file.name} ha sido eliminada.`);
     }
   }
-    const listResult = value?.map((element)=>{
-      return {
-        uid: element.uid,
-        name: element.name,
-        thumbUrl: element.thumbUrl,
-        lastModified: element.lastModified,
-        lastModifiedDate: element.lastModifiedDate,
-        originFileObj: element.originFileObj,
-        percent: element.percent,
-        size: element.size,
-        status: element.status,
-        type: element.type
-      }
-    })
-    console.log(listResult);
+    // const listResult = value?.map((element)=>{
+    //   return {
+    //     uid: element.uid,
+    //     name: element.name,
+    //     thumbUrl: element.thumbUrl,
+    //     lastModified: element.lastModified,
+    //     lastModifiedDate: element.lastModifiedDate,
+    //     originFileObj: element.originFileObj,
+    //     percent: element.percent,
+    //     size: element.size,
+    //     status: element.status,
+    //     type: element.type
+    //   }
+    // })
   
   return (
     <DraggerWrapper className="drag_and_drop_uploader">
@@ -70,7 +69,7 @@ const DragAndDropUploader = ({value, onUploadChange, maxImgs}) => {
       multiple= {true}
       maxCount={maxImgs ? maxImgs : 8}
       onChange={handleOnChange}
-      defaultFileList={listResult}
+      //defaultFileList={listResult}
       >
         <div className="ant-upload-drag-icon">
           <IoIosCloudUpload />
