@@ -46,7 +46,6 @@ const searchSites = async (req, res) => {
                 .replace(/o/g, '[oóöò]')
                 .replace(/u/g, '[uüúù]');
 
-            // console.log("regexPattern: ", regexPattern)
             const regexArrayName = regexPattern.split(/[ ]+/g).map(element => new RegExp(element, "i"));
             const regexArrayLocalitiesAndNeighborhoods = regexPattern.split(/[ ]+/g).map(element => {
                 const aux = element.replace(/\[[^\[\]]*\]/g, 'a')
@@ -54,9 +53,6 @@ const searchSites = async (req, res) => {
             }).filter(regex => regex !== undefined);
 
 
-            // Aquí se inserta la búsqueda del nombre en la BD
-            // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
-            console.log("regexArrayName: ", regexArrayName)
             queryBuscar.$or.push({ "name": { $in: regexArrayName } })
             queryBuscar.$or.push({ "category": { $in: regexArrayName } })
 
@@ -70,7 +66,6 @@ const searchSites = async (req, res) => {
 
         if (req?.query?.elementos && req.query.elementos.length !== 0) {
 
-            // console.log("req.query.elementos: ", req.query.elementos)
             // Sanitizar las entradas:
             const patternToSearchV1 = req.query.elementos.replace(/[áàäâ]/g, 'a') // Para reemplazar las vocales con acentos por simplemente la vocal
                 .replace(/[éëè]/g, 'e')
@@ -99,21 +94,13 @@ const searchSites = async (req, res) => {
 
             const matchedElementsId = [];
 
-            // console.log("inclusiveElements: ", inclusiveElements)
-            // console.log("regexArray: ", regexArray)
-
             for (const element of regexArray) {
                 for (const iElement of inclusiveElements) {
                     if (element.test(iElement.name)) {
-                        // console.log("MATCH:", element, " = ", iElement.name);
                         matchedElementsId.push(iElement._id);
                     }
                 }
             }
-
-            // console.log("matchedElementsId: ", matchedElementsId);
-
-            // const exactMatch = `^${patternToSearchV2}$`;
 
 
             // Aquí se insertan los elementos en la BD
@@ -123,7 +110,7 @@ const searchSites = async (req, res) => {
         }
 
         if (req?.query?.categoria && req.query.categoria.length !== 0) {
-            // console.log("req?.query?.buscar: ", req.query.buscar)
+
             // Sanitizar las entradas:
             const patternToSearchV1 = req.query.categoria
                 .replace(/[áàäâ]/g, 'a')
@@ -150,15 +137,15 @@ const searchSites = async (req, res) => {
                 return new RegExp(exactMatchPattern, "i");
             });
 
-            // console.log("regexArray: ", regexArray)
+
 
             // Aquí se inserta la búsqueda del nombre en la BD
-            // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
+
             query.$and.push({ "category": { $in: regexArray } })
         }
 
         if (req?.query?.ubicacion && req.query.ubicacion.length !== 0) {
-            // console.log("req?.query?.buscar: ", req.query.buscar)
+
             // Sanitizar las entradas:
             const patternToSearchV1 = req.query.ubicacion
                 .replace(/[áàäâ]/g, 'a')
@@ -186,7 +173,6 @@ const searchSites = async (req, res) => {
                     return new RegExp(exactMatchPattern, "i");
                 });
 
-                // console.log("regexArray: ", regexArray)
 
                 if (patternToSearchV3[1].length > 0) {
                     query.$and.push({ "neighborhood": { $in: regexArray[1] } })
@@ -196,17 +182,9 @@ const searchSites = async (req, res) => {
                     query.$and.push({ "locality": { $in: regexArray[0] } })
                 }
 
-                // Aquí se inserta la búsqueda del nombre en la BD
-                // query.$and[0].$or.push({ "name": { $in: regexArrayName } });
             }
         }
 
-        
-        // let dataFound;
-        
-        // if(query.$and[0].$or.length === 0) { // Para resolver un bug
-        //     query.$and.shift(); // Remover el elemento en posición 0 de $and
-        // }
         
         let dataFound;
         
@@ -215,9 +193,6 @@ const searchSites = async (req, res) => {
         } else {
             dataFound = await Site.find(query).populate("inclusiveElements").select("_id name category inclusiveElements location locality neighborhood gallery siteAddress status schedule rating ratingCount")
         }
-
-
-        // console.log(dataFound);
 
         if (dataFound) {
             return res.json(dataFound)

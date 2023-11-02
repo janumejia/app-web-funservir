@@ -64,7 +64,6 @@ const deleteInclusiveSites = async (req, res) => {
             else res.status(400).json({ message: "No se encontró el sitio inclusivo" });
         })
         .catch((error) => {
-            console.log(error)
             res.status(500).json({ message: "No se pudo eliminar" });
         })
 }
